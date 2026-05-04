@@ -9,12 +9,6 @@
     <GenerateDependencyFile>false</GenerateDependencyFile>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Remove="propuestas_bc3\**" />
-    <EmbeddedResource Remove="propuestas_bc3\**" />
-    <None Remove="propuestas_bc3\**" />
-    <Page Remove="propuestas_bc3\**" />
-  </ItemGroup>
-  <ItemGroup>
     <None Remove="Resources\E3G-LOGO-.png" />
     <None Remove="Resources\icono_panel_128.png" />
     <None Remove="Resources\icono_panel_64.png" />
