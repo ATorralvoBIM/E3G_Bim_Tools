@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+<meta charset="UTF-8">
+<title>E3G BIM Tools — Protocols de mediciones (mockup)</title>
+<style>
+  :root {
+    --bg-base:        #ECF0F3;
+    --bg-card:        #FFFFFF;
+    --bg-light:       #F1F5F9;
+    --bg-sub:         #F8FAFC;
+    --accent-san:     #4A7A96;
+    --accent-san-700: #345C75;
+    --accent-good:    #1D9E75;
+    --accent-amber:   #D97706;
+    --accent-purple:  #7D3C98;
+    --text-primary:   #1F2A37;
+    --text-secondary: #475569;
+    --text-muted:     #94A3B8;
+    --border-light:   #E8ECF0;
+    --warn-bg:        #FEF3C7;
+    --warn-fg:        #92400E;
+    --info-bg:        #DBEAFE;
+    --info-fg:        #1E40AF;
+    --good-bg:        #DCFCE7;
+    --good-fg:        #166534;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    font-family: "Segoe UI", "SF Pro Text", "Inter", system-ui, sans-serif;
+    font-size: 13px;
+    color: var(--text-primary);
+    background: var(--bg-base);
+    padding: 24px;
+    min-height: 100vh;
+  }
+
+  .window {
+    width: 1180px; margin: 0 auto;
+    background: var(--bg-base); border-radius: 16px;
+    box-shadow: 12px 12px 30px rgba(163,177,198,.45), -12px -12px 30px rgba(255,255,255,.85);
+    overflow: hidden;
+  }
+  .titlebar {
+    height: 36px; background: linear-gradient(180deg,#fafbfd 0%,#eef1f5 100%);
+    display: flex; align-items: center; padding: 0 14px;
+    border-bottom: 1px solid var(--border-light);
+    font-size: 12px; color: var(--text-secondary);
+  }
+  .dots { display: flex; gap: 6px; margin-right: 14px; }
+  .dot { width: 11px; height: 11px; border-radius: 50%; }
+  .dot.r{background:#ED6A5E;} .dot.y{background:#F4BF50;} .dot.g{background:#61C554;}
+  .titlebar .title { font-weight: 600; color: var(--text-primary); }
+  .titlebar .sep { margin: 0 8px; color: #B6BEC8; }
+
+  .layout { display: grid; grid-template-columns: 240px 1fr; min-height: 760px; }
+
+  .sidebar { background: var(--bg-base); padding: 20px 14px; border-right: 1px solid var(--border-light); }
+  .group-label { font-size: 10px; font-weight: 700; letter-spacing: 1px; color: var(--text-muted); text-transform: uppercase; margin: 6px 8px 8px; }
+  .group-label.second { margin-top: 22px; }
+  .nav-btn {
+    display: flex; align-items: center; gap: 10px;
+    padding: 10px 12px; margin-bottom: 4px;
+    border-radius: 10px; font-size: 13px;
+    color: var(--text-secondary); cursor: default;
+    border: 1px solid transparent; background: transparent;
+  }
+  .nav-btn .ico { width: 18px; height: 18px; display: inline-flex; align-items: center; justify-content: center; color: var(--text-muted); }
+  .nav-btn:hover {
+    background: var(--bg-card); color: var(--text-primary);
+    box-shadow: 4px 4px 10px rgba(163,177,198,.25), -4px -4px 10px rgba(255,255,255,.85);
+  }
+  .nav-btn.active {
+    background: var(--bg-card); color: var(--accent-san); font-weight: 600;
+    box-shadow: inset 3px 3px 7px rgba(163,177,198,.35), inset -3px -3px 7px rgba(255,255,255,.9);
+    border-color: rgba(74,122,150,.18);
+  }
+  .nav-btn.active .ico { color: var(--accent-san); }
+  .nav-btn.new { position: relative; }
+  .nav-btn.new::after {
+    content: "NEW"; position: absolute; right: 10px; top: 50%; transform: translateY(-50%);
+    font-size: 9px; font-weight: 700; letter-spacing: .5px;
+    color: var(--accent-good); background: rgba(29,158,117,.12);
+    padding: 2px 6px; border-radius: 4px;
+  }
+
+  .content { padding: 24px 28px; overflow-y: auto; }
+  .breadcrumb { font-size: 12px; color: var(--text-muted); margin-bottom: 12px; }
+  .breadcrumb b { color: var(--text-secondary); font-weight: 600; }
+
+  .neu-card {
+    background: var(--bg-card); border-radius: 14px; padding: 18px 20px;
+    box-shadow: 8px 8px 18px rgba(163,177,198,.32), -8px -8px 18px rgba(255,255,255,.9);
+    margin-bottom: 16px;
+  }
+
+  .header h2 { margin: 0 0 4px; font-size: 15px; font-weight: 600; color: var(--text-primary); }
+  .header .desc { font-size: 11px; color: var(--text-secondary); line-height: 1.45; }
+
+  .divider { height: 1px; background: var(--border-light); margin: 12px 0; }
+
+  /* Two-column grid for level pickers */
+  .lvl-grid {
+    display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-top: 10px;
+  }
+  .lvl-pill {
+    display: flex; align-items: center; gap: 8px;
+    padding: 8px 12px; border-radius: 8px;
+    background: var(--bg-sub); border: 1px solid var(--border-light);
+    font-size: 12px; cursor: pointer; user-select: none;
+  }
+  .lvl-pill:hover { background: var(--bg-light); }
+  .lvl-pill input { margin: 0; cursor: pointer; }
+  .lvl-pill.checked.aparcamiento { background: rgba(212,118,6,.10); border-color: var(--accent-amber); color: var(--accent-amber); font-weight: 600; }
+  .lvl-pill.checked.viv { background: var(--good-bg); border-color: var(--accent-good); color: var(--good-fg); font-weight: 600; }
+  .lvl-elev { color: var(--text-muted); font-family: Consolas, monospace; font-size: 10px; margin-left: auto; }
+
+  .col-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-top: 12px; }
+  .field-label { display: block; font-size: 11px; font-weight: 600; color: var(--text-secondary); margin-bottom: 6px; }
+  .field-help  { font-size: 10px; color: var(--text-muted); margin-top: 4px; line-height: 1.4; }
+  .select, .input {
+    width: 100%; height: 32px; border-radius: 8px;
+    background: var(--bg-card); border: 1px solid var(--border-light);
+    box-shadow: inset 2px 2px 4px rgba(163,177,198,.20), inset -2px -2px 4px rgba(255,255,255,.95);
+    padding: 0 10px; font-size: 12px; color: var(--text-primary);
+  }
+  .select { appearance: none; background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'><path d='M1 1l4 4 4-4' stroke='%2394A3B8' stroke-width='1.5' fill='none' stroke-linecap='round'/></svg>"); background-repeat: no-repeat; background-position: right 10px center; padding-right: 28px; }
+
+  /* Group types list */
+  .grp-grid {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-top: 10px;
+  }
+  .grp-pill {
+    display: flex; align-items: center; gap: 8px;
+    padding: 9px 12px; border-radius: 8px;
+    background: var(--bg-sub); border: 1px solid var(--border-light);
+    font-size: 12px; cursor: pointer;
+  }
+  .grp-pill .ico { color: var(--text-muted); }
+  .grp-pill .count { margin-left: auto; font-size: 10px; color: var(--text-muted); font-family: Consolas, monospace; }
+  .grp-pill.checked { background: var(--good-bg); border-color: var(--accent-good); color: var(--good-fg); font-weight: 600; }
+  .grp-pill.checked .ico { color: var(--accent-good); }
+  .grp-pill.checked .count { color: var(--good-fg); }
+
+  /* Resume strip */
+  .resum {
+    display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px;
+    background: var(--bg-light); border-radius: 10px; padding: 12px 14px;
+    margin-top: 14px;
+  }
+  .resum-cell .lbl { font-size: 9px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: .5px; }
+  .resum-cell .val { font-size: 16px; font-weight: 700; color: var(--accent-san); margin-top: 2px; }
+
+  /* Footer buttons */
+  .footer-row { display: flex; justify-content: space-between; align-items: center; margin-top: 14px; }
+  .footer-help { font-size: 11px; color: var(--text-muted); }
+  .btn {
+    height: 34px; padding: 0 16px; border-radius: 10px;
+    background: var(--bg-card); border: 1px solid var(--border-light);
+    color: var(--text-secondary); font-size: 12px; font-weight: 500; cursor: pointer;
+    box-shadow: 4px 4px 10px rgba(163,177,198,.28), -4px -4px 10px rgba(255,255,255,.9);
+  }
+  .btn.primary {
+    background: linear-gradient(135deg, var(--accent-san) 0%, var(--accent-san-700) 100%);
+    color: white; border-color: transparent; font-weight: 600;
+  }
+  .btn.tertiary { background: transparent; box-shadow: none; border: none; color: var(--text-muted); }
+
+  /* Legend */
+  .legend {
+    margin: 24px auto 0; width: 1180px;
+    background: var(--bg-card); border-radius: 12px; padding: 14px 18px;
+    font-size: 11px; color: var(--text-secondary);
+    box-shadow: 6px 6px 14px rgba(163,177,198,.22);
+  }
+  .legend h3 { margin: 0 0 6px; font-size: 12px; color: var(--accent-san); text-transform: uppercase; letter-spacing: .5px; }
+  .legend ul { margin: 0; padding-left: 18px; }
+  .legend li { margin-bottom: 4px; line-height: 1.5; }
+  .legend code { font-family: Consolas, monospace; background: var(--bg-light); padding: 1px 5px; border-radius: 3px; font-size: 11px; color: var(--accent-san-700); }
+</style>
+</head>
+<body>
+
+<div class="window">
+  <div class="titlebar">
+    <div class="dots"><div class="dot r"></div><div class="dot y"></div><div class="dot g"></div></div>
+    <span class="title">E3G BIM Tools</span><span class="sep">›</span><span>Ajustes</span>
+  </div>
+
+  <div class="layout">
+    <aside class="sidebar">
+      <div class="group-label">General</div>
+      <div class="nav-btn"><span class="ico">🌐</span> Idioma</div>
+      <div class="nav-btn"><span class="ico">📏</span> Unitats</div>
+      <div class="nav-btn"><span class="ico">🏷️</span> Nomenclatura</div>
+      <div class="nav-btn"><span class="ico">⚙️</span> Classificació de sistemes</div>
+      <div class="nav-btn"><span class="ico">📋</span> Partides BC3</div>
+      <div class="nav-btn active new"><span class="ico">📐</span> Protocols de mediciones</div>
+
+      <div class="group-label second">Instal·lació</div>
+      <div class="nav-btn"><span class="ico">💧</span> Sanejament</div>
+      <div class="nav-btn"><span class="ico">🚰</span> Fontaneria</div>
+      <div class="nav-btn"><span class="ico">🔥</span> PCI</div>
+    </aside>
+
+    <main class="content">
+      <div class="breadcrumb">Ajustes <span style="margin:0 6px;">›</span> <b>General</b> <span style="margin:0 6px;">›</span> Protocols de mediciones</div>
+
+      <!-- ════════ HEADER ════════ -->
+      <section class="neu-card">
+        <div class="header">
+          <h2>Protocols de mediciones</h2>
+          <div class="desc">
+            Defineix com l'app classifica cada tub en un grup de medició: <b>Interior vivendes</b>,
+            <b>Bajantes</b>, <b>Colectores</b> o <b>Aparcamiento</b>. Aquesta classificació és la
+            mateixa que apareix al panell de Sanejament en pulsar "Medir" i és la que el BC3 utilitza
+            per agrupar les línies dins de cada partida.
+          </div>
+        </div>
+      </section>
+
+      <!-- ════════ CARD 1: NIVELLS ════════ -->
+      <section class="neu-card">
+        <div class="header">
+          <h2>1 · Nivells del projecte</h2>
+          <div class="desc">
+            Marca quins nivells són d'<b>aparcamiento</b> i quins fan de <b>referència</b> per
+            identificar bajantes (sostre del cas comú) i colectores (entre nivell inferior i superior).
+          </div>
+        </div>
+
+        <div class="divider"></div>
+
+        <label class="field-label">Nivells considerats Aparcamiento</label>
+        <div class="lvl-grid">
+          <label class="lvl-pill checked aparcamiento">
+            <input type="checkbox" checked> S03.A <span class="lvl-elev">−12,40 m</span>
+          </label>
+          <label class="lvl-pill checked aparcamiento">
+            <input type="checkbox" checked> S02.A <span class="lvl-elev">−9,30 m</span>
+          </label>
+          <label class="lvl-pill checked aparcamiento">
+            <input type="checkbox" checked> S01.A <span class="lvl-elev">−6,20 m</span>
+          </label>
+          <label class="lvl-pill">
+            <input type="checkbox"> P00.A <span class="lvl-elev">0,00 m</span>
+          </label>
+          <label class="lvl-pill">
+            <input type="checkbox"> P01.A <span class="lvl-elev">+3,15 m</span>
+          </label>
+          <label class="lvl-pill">
+            <input type="checkbox"> P02.A <span class="lvl-elev">+6,30 m</span>
+          </label>
+          <label class="lvl-pill">
+            <input type="checkbox"> P03.A <span class="lvl-elev">+9,45 m</span>
+          </label>
+          <label class="lvl-pill">
+            <input type="checkbox"> Coberta <span class="lvl-elev">+12,60 m</span>
+          </label>
+        </div>
+
+        <div class="col-3">
+          <div>
+            <label class="field-label">Nivell de referència — sostre del cas comú</label>
+            <select class="select">
+              <option>P00.A (0,00 m)</option>
+              <option>P01.A (+3,15 m)</option>
+              <option>S01.A (−6,20 m)</option>
+            </select>
+            <div class="field-help">Pipes verticals al damunt d'aquest nivell es consideren <b>Bajantes</b>.</div>
+          </div>
+          <div>
+            <label class="field-label">Colectores — nivell inferior</label>
+            <select class="select">
+              <option>P00.A (0,00 m)</option>
+              <option>S01.A (−6,20 m)</option>
+            </select>
+            <div class="field-help">Límit inferior del rang on busquem horitzontals.</div>
+          </div>
+          <div>
+            <label class="field-label">Colectores — nivell superior</label>
+            <select class="select">
+              <option>P01.A (+3,15 m)</option>
+              <option>P02.A (+6,30 m)</option>
+            </select>
+            <div class="field-help">Límit superior del rang on busquem horitzontals.</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ════════ CARD 2: GRUPS DE MODEL ════════ -->
+      <section class="neu-card">
+        <div class="header">
+          <h2>2 · Grups de model — Interior vivendes</h2>
+          <div class="desc">
+            Marca quins <b>tipus de Group de Revit</b> representen una vivenda. Els tubs dins d'aquests
+            grups es classificaran com <b>Interior vivendes</b>. Els grups de model que NO estiguin
+            marcats es tractaran com a tubs solts (poden caure a Bajantes/Colectores/Aparcamiento
+            segons la geometria).
+          </div>
+        </div>
+
+        <div class="divider"></div>
+
+        <div class="grp-grid">
+          <label class="grp-pill checked">
+            <input type="checkbox" checked>
+            <span class="ico">📦</span>
+            <span>M_Vivenda_T1</span>
+            <span class="count">12 inst.</span>
+          </label>
+          <label class="grp-pill checked">
+            <input type="checkbox" checked>
+            <span class="ico">📦</span>
+            <span>M_Vivenda_T2</span>
+            <span class="count">8 inst.</span>
+          </label>
+          <label class="grp-pill checked">
+            <input type="checkbox" checked>
+            <span class="ico">📦</span>
+            <span>M_Vivenda_T3</span>
+            <span class="count">4 inst.</span>
+          </label>
+          <label class="grp-pill">
+            <input type="checkbox">
+            <span class="ico">📦</span>
+            <span>M_Trastero_Tipus</span>
+            <span class="count">15 inst.</span>
+          </label>
+          <label class="grp-pill">
+            <input type="checkbox">
+            <span class="ico">📦</span>
+            <span>M_Comunitat_Esc</span>
+            <span class="count">2 inst.</span>
+          </label>
+          <label class="grp-pill">
+            <input type="checkbox">
+            <span class="ico">📦</span>
+            <span>M_Local_Comercial</span>
+            <span class="count">3 inst.</span>
+          </label>
+        </div>
+      </section>
+
+      <!-- ════════ CARD 3: CRITERIS GEOMÈTRICS ════════ -->
+      <section class="neu-card">
+        <div class="header">
+          <h2>3 · Criteris geomètrics</h2>
+          <div class="desc">
+            Detalls fins per decidir quan un tub vertical es considera realment una bajante,
+            i la tolerància admesa quan es comparen elevacions de nivells.
+          </div>
+        </div>
+
+        <div class="divider"></div>
+
+        <div class="col-3">
+          <div>
+            <label class="field-label">Bajantes — longitud mínima (m)</label>
+            <input class="input" type="text" value="1,00">
+            <div class="field-help">Pipes verticals més curts es consideren accessoris/connexions, no bajantes.</div>
+          </div>
+          <div>
+            <label class="field-label">Tolerància d'elevació (m)</label>
+            <input class="input" type="text" value="0,50">
+            <div class="field-help">Marge per comparar l'elevació del nivell del tub amb les referències P00.A / P01.A.</div>
+          </div>
+          <div>
+            <label class="field-label">Criteri vertical</label>
+            <select class="select">
+              <option>Δz &gt; Δxy (estàndard)</option>
+              <option>Δz &gt; 2 × Δxy (estricte)</option>
+              <option>Angle ≥ 60° (pendent)</option>
+            </select>
+            <div class="field-help">Com decidim que un tub és vertical en lloc de inclinat.</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ════════ RESUM + GUARDAR ════════ -->
+      <section class="neu-card" style="background:var(--bg-sub);">
+        <div class="header">
+          <h2>Resum del protocol actual</h2>
+          <div class="desc">Aquesta és la classificació que aplicarà tant el panell de Sanejament com l'exportació BC3.</div>
+        </div>
+        <div class="resum">
+          <div class="resum-cell"><div class="lbl">Aparcamiento</div><div class="val">S01.A · S02.A · S03.A</div></div>
+          <div class="resum-cell"><div class="lbl">Bajantes (sostre)</div><div class="val">≥ P00.A</div></div>
+          <div class="resum-cell"><div class="lbl">Colectores (rang)</div><div class="val">P00.A → P01.A</div></div>
+          <div class="resum-cell"><div class="lbl">Vivendes (grups)</div><div class="val">3 tipus</div></div>
+        </div>
+
+        <div class="footer-row">
+          <div class="footer-help">
+            Els canvis es desen al projecte (.rvt). Pots tornar als valors per defecte si experimentes
+            i vols revertir.
+          </div>
+          <div style="display:flex;gap:8px;">
+            <button class="btn tertiary">Restaurar per defecte</button>
+            <button class="btn">Cancel·lar</button>
+            <button class="btn primary">Desar protocol</button>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+</div>
+
+<div class="legend">
+  <h3>Notes del mockup — què és realista i què queda fora del primer release</h3>
+  <ul>
+    <li><b>Card 1 (Nivells)</b>: la llista esquerra es genera automàticament fent un <code>FilteredElementCollector(doc).OfClass(typeof(Level))</code> i ordenant per elevació. Els 3 selects llegeixen de la mateixa llista. <b>Realista 100%</b>, és el que ja fa el panell de Classificació de sistemes.</li>
+    <li><b>Card 2 (Grups de model)</b>: <code>FilteredElementCollector(doc).OfClass(typeof(GroupType))</code> per llistar tipus i comptar instàncies. Es desa la llista de IDs marcats. <b>Realista 100%</b>.</li>
+    <li><b>Card 3 (Criteris)</b>: tres camps simples (longitud mínima, tolerància, criteri vertical). <b>Realista 100%</b>, només cal validar que els valors són números positius.</li>
+    <li><b>Persistència</b>: tot l'objecte de protocol va a ExtensibleStorage del .rvt — mateix patró que ja fan Classificació de sistemes i Partides BC3. Reusa el codi de <code>PartidasStorage.cs</code> com a plantilla.</li>
+    <li><b>Que NO es fa al primer release</b>: visualitzador 3D que ressalti els tubs per categoria abans de desar (massa cost). Tampoc edició massiva de Levels (això és feina de Revit, no de la nostra app).</li>
+    <li><b>Integració amb codi actual</b>: <code>AgrupadorMediciones.ObtenerGrupo()</code> passa a llegir aquest protocol del .rvt en lloc de tenir els criteris hardcoded. Si no hi ha protocol guardat, fa servir els valors per defecte que tenim avui (S*.A → aparcamiento, P00.A → sostre, etc.).</li>
+  </ul>
+</div>
+
+</body>
+</html>

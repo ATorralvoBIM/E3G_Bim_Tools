@@ -1,0 +1,367 @@
+============================================================================
+SNIPPET XAML — Sección Ajustes › General › Partides i exportació BC3
+============================================================================
+
+Este archivo es DOCUMENTACIÓN, no código compilable. Visual Studio NUNCA
+intenta compilar archivos .txt, así que vive aquí sin dar problemas.
+
+Para integrar la sección, copia los DOS bloques siguientes a tu
+AjustesWindow.xaml en las posiciones indicadas.
+
+=========================================================================
+BLOQUE A — Botón sidebar (grupo GENERAL)
+=========================================================================
+Insertar dentro del <StackPanel> del grupo "GENERAL" del sidebar de
+Ajustes, justo DESPUÉS del botón "Classificació de sistemes":
+
+<Button x:Name="BtnNavPartides"
+        Style="{StaticResource SettingsNavBtn}"
+        Content="Partides BC3"
+        Click="BtnNavPartides_Click"/>
+
+
+=========================================================================
+BLOQUE B — Sección de contenido
+=========================================================================
+Insertar en el <StackPanel> de la columna derecha de Ajustes, DESPUÉS
+de SecClassificacio:
+
+<Border x:Name="SecPartides" Style="{StaticResource NeuCard}" Visibility="Collapsed">
+    <StackPanel>
+
+        <!-- Cabecera -->
+        <TextBlock Text="Partides i exportació BC3"
+                   FontSize="15" FontWeight="SemiBold"
+                   Foreground="{StaticResource TextPrimary}"/>
+        <TextBlock Text="Defineix N regles per categoria. Cada regla enllaça un grup d'elements amb una partida del catàleg i un criteri de mesurament. L'exportació BC3 viu al panell de Sanejament."
+                   FontSize="11"
+                   Foreground="{StaticResource TextSecondary}"
+                   TextWrapping="Wrap"
+                   Margin="0,2,0,0"/>
+
+        <Rectangle Height="1" Fill="#E8ECF0" Margin="0,12,0,12"/>
+
+        <!-- ─── CARD 1 — Catàlegs (multi-catàleg) ─────────────────── -->
+        <Border Background="#F8FAFC" CornerRadius="10" Padding="14,12" Margin="0,0,0,12">
+            <StackPanel>
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    <StackPanel Grid.Column="0">
+                        <TextBlock Text="Catàlegs carregats"
+                                   FontWeight="SemiBold" FontSize="13"
+                                   Foreground="{StaticResource TextPrimary}"/>
+                        <TextBlock x:Name="LblCatalogoResumen"
+                                   Text="Cap catàleg carregat. Importa un BC3 per començar (BEDEC, Precio Centro, plantilla del estudi…)."
+                                   FontSize="11"
+                                   Foreground="{StaticResource TextSecondary}"
+                                   TextWrapping="Wrap"
+                                   Margin="0,2,0,0"/>
+                    </StackPanel>
+                    <Button Grid.Column="1"
+                            x:Name="BtnImportarBc3"
+                            Style="{StaticResource SettingsNavBtn}"
+                            Content="+ Importar nou BC3…"
+                            Padding="10,5" FontSize="11"
+                            VerticalAlignment="Top"
+                            Click="BtnImportarBc3_Click"/>
+                </Grid>
+
+                <!-- Lista de catálogos -->
+                <ItemsControl ItemsSource="{Binding CatalogosUi}"
+                              Margin="0,8,0,0"
+                              Visibility="{Binding HayCatalogos, Converter={StaticResource BoolToVisibilityConverter}}">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <Border Background="#FFFFFF" BorderBrush="#E8ECF0" BorderThickness="1"
+                                    CornerRadius="8" Padding="10,8" Margin="0,0,0,4">
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto"/>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="Auto"/>
+                                    </Grid.ColumnDefinitions>
+
+                                    <Border Grid.Column="0"
+                                            Width="22" Height="22" CornerRadius="11"
+                                            VerticalAlignment="Center" Margin="0,0,10,0">
+                                        <Border.Style>
+                                            <Style TargetType="Border">
+                                                <Setter Property="Background" Value="#F1F5F9"/>
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding EsPrimario}" Value="True">
+                                                        <Setter Property="Background" Value="#1D9E75"/>
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </Border.Style>
+                                        <TextBlock FontSize="11" FontWeight="Bold"
+                                                   HorizontalAlignment="Center"
+                                                   VerticalAlignment="Center">
+                                            <TextBlock.Style>
+                                                <Style TargetType="TextBlock">
+                                                    <Setter Property="Text" Value="·"/>
+                                                    <Setter Property="Foreground" Value="#94A3B8"/>
+                                                    <Style.Triggers>
+                                                        <DataTrigger Binding="{Binding EsPrimario}" Value="True">
+                                                            <Setter Property="Text" Value="★"/>
+                                                            <Setter Property="Foreground" Value="White"/>
+                                                        </DataTrigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </TextBlock.Style>
+                                        </TextBlock>
+                                    </Border>
+
+                                    <StackPanel Grid.Column="1" VerticalAlignment="Center">
+                                        <TextBlock Text="{Binding Etiqueta}"
+                                                   FontWeight="SemiBold" FontSize="12"
+                                                   Foreground="{StaticResource TextPrimary}"/>
+                                        <TextBlock Text="{Binding Detalle}"
+                                                   FontSize="10"
+                                                   Foreground="{StaticResource TextSecondary}"/>
+                                    </StackPanel>
+
+                                    <StackPanel Grid.Column="2" Orientation="Horizontal" VerticalAlignment="Center">
+                                        <Button Content="Marcar primari"
+                                                Padding="8,4" FontSize="10"
+                                                Margin="0,0,4,0"
+                                                Click="BtnMarcarPrimario_Click"
+                                                Tag="{Binding Id}">
+                                            <Button.Style>
+                                                <Style TargetType="Button">
+                                                    <Style.Triggers>
+                                                        <DataTrigger Binding="{Binding EsPrimario}" Value="True">
+                                                            <Setter Property="Visibility" Value="Collapsed"/>
+                                                        </DataTrigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </Button.Style>
+                                        </Button>
+                                        <Button Content="✕"
+                                                Padding="6,4" FontSize="11"
+                                                Foreground="#B91C1C"
+                                                Background="Transparent" BorderThickness="0"
+                                                ToolTip="Eliminar aquest catàleg"
+                                                Click="BtnEliminarCatalogo_Click"
+                                                Tag="{Binding Id}"/>
+                                    </StackPanel>
+                                </Grid>
+                            </Border>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </StackPanel>
+        </Border>
+
+        <!-- ─── CARD 2 — Regles de mesurament ─────────────────────── -->
+        <Grid Margin="0,0,0,8">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+
+            <StackPanel Grid.Column="0">
+                <TextBlock Text="Regles de mesurament"
+                           FontSize="13" FontWeight="SemiBold"
+                           Foreground="{StaticResource TextPrimary}"/>
+                <TextBlock Text="Una regla enllaça un grup d'elements (per categoria + sub-filtre) amb una partida del catàleg."
+                           FontSize="11" Foreground="{StaticResource TextSecondary}"
+                           TextWrapping="Wrap" Margin="0,2,0,0"/>
+            </StackPanel>
+
+            <Border Grid.Column="1"
+                    Background="#F1F5F9" CornerRadius="8" Padding="10,6"
+                    VerticalAlignment="Top">
+                <TextBlock x:Name="LblContadorReglas"
+                           Text="0 regles"
+                           FontSize="11" FontWeight="SemiBold"
+                           Foreground="{StaticResource TextSecondary}"/>
+            </Border>
+        </Grid>
+
+        <ItemsControl x:Name="ItmGrupos" ItemsSource="{Binding GruposReglas}">
+            <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                    <Expander IsExpanded="True" Margin="0,0,0,6">
+                        <Expander.Header>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
+
+                                <Border Grid.Column="0"
+                                        Width="12" Height="12" CornerRadius="3"
+                                        Margin="0,0,8,0" VerticalAlignment="Center">
+                                    <Border.Background>
+                                        <SolidColorBrush Color="{Binding ColorHex, Converter={StaticResource HexToColorConverter}}"/>
+                                    </Border.Background>
+                                </Border>
+
+                                <TextBlock Grid.Column="1"
+                                           Text="{Binding NombreCategoria}"
+                                           FontWeight="SemiBold"
+                                           Foreground="{StaticResource TextPrimary}"/>
+
+                                <Border Grid.Column="2"
+                                        Background="#FFFFFF" BorderBrush="#E8ECF0" BorderThickness="1"
+                                        CornerRadius="12" Padding="8,3" Margin="0,0,6,0">
+                                    <TextBlock Text="{Binding PillContador}"
+                                               FontSize="10" FontWeight="SemiBold"
+                                               Foreground="{StaticResource TextSecondary}"/>
+                                </Border>
+
+                                <Border Grid.Column="3" CornerRadius="12" Padding="8,3">
+                                    <Border.Style>
+                                        <Style TargetType="Border">
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding PillEstadoTipo}" Value="good">
+                                                    <Setter Property="Background" Value="#DCFCE7"/>
+                                                </DataTrigger>
+                                                <DataTrigger Binding="{Binding PillEstadoTipo}" Value="warn">
+                                                    <Setter Property="Background" Value="#FEF3C7"/>
+                                                </DataTrigger>
+                                                <DataTrigger Binding="{Binding PillEstadoTipo}" Value="muted">
+                                                    <Setter Property="Background" Value="Transparent"/>
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </Border.Style>
+                                    <TextBlock Text="{Binding PillEstado}" FontSize="10" FontWeight="SemiBold">
+                                        <TextBlock.Style>
+                                            <Style TargetType="TextBlock">
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding PillEstadoTipo}" Value="good">
+                                                        <Setter Property="Foreground" Value="#166534"/>
+                                                    </DataTrigger>
+                                                    <DataTrigger Binding="{Binding PillEstadoTipo}" Value="warn">
+                                                        <Setter Property="Foreground" Value="#92400E"/>
+                                                    </DataTrigger>
+                                                    <DataTrigger Binding="{Binding PillEstadoTipo}" Value="muted">
+                                                        <Setter Property="Foreground" Value="{StaticResource TextMuted}"/>
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </TextBlock.Style>
+                                    </TextBlock>
+                                </Border>
+                            </Grid>
+                        </Expander.Header>
+
+                        <StackPanel>
+                            <DataGrid ItemsSource="{Binding Reglas}"
+                                      AutoGenerateColumns="False"
+                                      HeadersVisibility="Column"
+                                      GridLinesVisibility="Horizontal"
+                                      HorizontalGridLinesBrush="#E8ECF0"
+                                      Background="Transparent"
+                                      RowBackground="Transparent"
+                                      CanUserAddRows="False"
+                                      CanUserDeleteRows="False"
+                                      CanUserReorderColumns="False"
+                                      CanUserResizeRows="False"
+                                      IsReadOnly="True"
+                                      SelectionMode="Single"
+                                      SelectionUnit="FullRow"
+                                      RowHeight="36" ColumnHeaderHeight="28" FontSize="12"
+                                      MinHeight="0" Margin="0,4,0,0">
+                                <DataGrid.Columns>
+                                    <DataGridTextColumn Header="Nom" Binding="{Binding Nombre}" Width="240"/>
+                                    <DataGridTextColumn Header="Sub-filtre" Binding="{Binding SubFiltro.Descripcion}" Width="160"/>
+                                    <DataGridTextColumn Header="Criteri" Binding="{Binding Criterio.Descripcion}" Width="120"/>
+                                    <DataGridTextColumn Header="Partida" Binding="{Binding PartidaCodigo}" Width="*"/>
+                                    <DataGridTemplateColumn Header="" Width="70">
+                                        <DataGridTemplateColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <StackPanel Orientation="Horizontal">
+                                                    <Button Content="✎" ToolTip="Editar"
+                                                            Width="24" Height="24" Margin="2,0"
+                                                            Click="BtnEditarRegla_Click"
+                                                            Tag="{Binding Id}"
+                                                            Background="Transparent" BorderThickness="0"/>
+                                                    <Button Content="✕" ToolTip="Eliminar"
+                                                            Width="24" Height="24" Margin="2,0"
+                                                            Foreground="#B91C1C"
+                                                            Click="BtnEliminarRegla_Click"
+                                                            Tag="{Binding Id}"
+                                                            Background="Transparent" BorderThickness="0"/>
+                                                </StackPanel>
+                                            </DataTemplate>
+                                        </DataGridTemplateColumn.CellTemplate>
+                                    </DataGridTemplateColumn>
+                                </DataGrid.Columns>
+                            </DataGrid>
+
+                            <Button Content="+ Afegir regla a aquesta categoria"
+                                    Margin="0,8,0,0" Padding="0,6"
+                                    HorizontalAlignment="Stretch"
+                                    Background="#F1F8FB"
+                                    Foreground="{StaticResource AccentSan}"
+                                    BorderBrush="#A8C7D8" BorderThickness="1"
+                                    Click="BtnAnadirRegla_Click"
+                                    Tag="{Binding Categoria}"
+                                    FontSize="11"/>
+                        </StackPanel>
+                    </Expander>
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>
+
+        <!-- ─── CARD 3 — Pie ───────────────────────────────────────── -->
+        <Border Background="#F8FAFC" CornerRadius="10" Padding="14,12" Margin="0,12,0,0">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+
+                <TextBlock Grid.Column="0"
+                           Text="Els canvis es desen al projecte (.rvt). En el futur podràs exportar/importar plantilles entre projectes (.e3gtpl)."
+                           FontSize="11" Foreground="{StaticResource TextMuted}"
+                           VerticalAlignment="Center" TextWrapping="Wrap"/>
+
+                <StackPanel Grid.Column="1" Orientation="Horizontal">
+                    <Button Content="Aplicar regles suggerides"
+                            Style="{StaticResource SettingsNavBtn}"
+                            Padding="12,6" FontSize="11"
+                            Click="BtnAplicarSugeridas_Click"
+                            ToolTip="Carrega un conjunt de regles típiques per Sanejament (Apèndix A del disseny)"/>
+                </StackPanel>
+            </Grid>
+        </Border>
+
+    </StackPanel>
+</Border>
+
+
+=========================================================================
+HANDLERS REQUERIDOS EN AjustesWindow.xaml.cs
+=========================================================================
+Después de pegar los bloques A y B, necesitas estos handlers en el
+code-behind. Ver INTEGRACION.md, sección 2.4, para el código completo:
+
+  BtnNavPartides_Click        → muestra la sección
+  BtnImportarBc3_Click        → diálogo OpenFile + ViewModel.ImportarBc3
+  BtnMarcarPrimario_Click     → ViewModel.MarcarPrimario
+  BtnEliminarCatalogo_Click   → ViewModel.EliminarCatalogo
+  BtnAnadirRegla_Click        → abre ReglaEditorDialog
+  BtnEditarRegla_Click        → abre ReglaEditorDialog con regla existente
+  BtnEliminarRegla_Click      → ViewModel.EliminarRegla
+  BtnAplicarSugeridas_Click   → ViewModel.AplicarReglasSugeridasSaneamiento
+
+=========================================================================
+RECURSOS REQUERIDOS EN Page.Resources DE AjustesWindow.xaml
+=========================================================================
+Ya deberían estar (vienen de la propuesta Classificacio de sistemes):
+
+  <BooleanToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
+  <local:HexToColorConverter    x:Key="HexToColorConverter"/>
+
+Y en la <Page> raíz:
+
+  xmlns:local="clr-namespace:E3G.Saneamiento"

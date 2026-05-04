@@ -1,0 +1,20 @@
+~V|E3G_BIM_TOOLS\E3G\1.0\01-05-2026\FIEBDC-3/2024\\\
+~K|2\2\2\3\2\2\2\3\2\\|
+~C|##|||CATALEG TEST E3G — Sanejament|0|01-05-2026|
+~C|02SAN##|||SANEJAMENT|0|01-05-2026|
+~D|##|02SAN##\1\|
+~C|ED15B870|m|Bajante PVC SN-4 D=75 mm, junta elastica, instal·lada amb abracaderes|14.20|01-05-2026|
+~T|ED15B870|Tub de PVC sense plastificar, sèrie SN-4, de diàmetre nominal 75 mm. Junta elàstica. Inclou p.p. d'unions, abraçaderes i peces especials. Totalment instal·lada i provada.|
+~D|02SAN##|ED15B870\1\|
+~C|ED15B871|m|Bajante PVC SN-4 D=110 mm, junta elastica, instal·lada amb abracaderes|18.45|01-05-2026|
+~T|ED15B871|Tub de PVC sèrie SN-4 DN110. Junta elàstica. Abraçaderes isofòniques cada 1 m segons CTE DB-HS5. Pendent mínima 1%. Prova d'estanquitat.|
+~D|02SAN##|ED15B871\1\|
+~C|ED15B873|m|Bajante PVC SN-4 D=125 mm, junta elastica, instal·lada amb abracaderes|24.80|01-05-2026|
+~T|ED15B873|Tub de PVC sèrie SN-4 DN125. Junta elàstica. Pendents i abraçaderes segons CTE DB-HS5.|
+~D|02SAN##|ED15B873\1\|
+~C|ED15B881|m|Bajante PVC pluvial D=110 mm, exterior|16.90|01-05-2026|
+~T|ED15B881|Baixant exterior PVC pluvial DN110. Subjeccions cada 1.5 m. Inclou abraçadores i peces especials.|
+~D|02SAN##|ED15B881\1\|
+~C|ED15B883|m|Bajante PVC pluvial D=125 mm, exterior|22.40|01-05-2026|
+~T|ED15B883|Baixant exterior PVC pluvial DN125.|
+~D|02SAN##|ED15B883\1\|

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RevitAddIns>
+  <AddIn Type="Application">
+    <Name>E3G BIM Tools</Name>
+    <Assembly>C:\Dev\E3G_Saneamiento\bin\Release\net8.0-windows\E3G_Saneamiento.dll</Assembly>
+    <FullClassName>E3G.Saneamiento.App</FullClassName>
+    <ClientId>a1b2c3d4-e5f6-7890-abcd-ef1234567890</ClientId>
+    <VendorId>E3G</VendorId>
+  </AddIn>
+  <AddIn Type="Command">
+    <Text>E3G BIM Tools</Text>
+    <Assembly>C:\Dev\E3G_Saneamiento\bin\Release\net8.0-windows\E3G_Saneamiento.dll</Assembly>
+    <FullClassName>E3G.Saneamiento.CmdAbrirPanelMain</FullClassName>
+    <AddInId>f1c6d5e7-8a2b-4c3d-e456-7f9a0b1c2d34</AddInId>
+    <VendorId>E3G</VendorId>
+  </AddIn>
+</RevitAddIns>

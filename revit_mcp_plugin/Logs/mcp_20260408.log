@@ -1,0 +1,171 @@
+2026-04-08 11:39:03 [Info] 当前 Revit 版本: 2025
+Current Revit version: 2025
+2026-04-08 11:39:04 [Info] 已加载配置文件: C:\Users\Alopez\AppData\Roaming\Autodesk\Revit\Addins\2025\revit_mcp_plugin\Commands\commandRegistry.json
+Configuration file loaded: C:\Users\Alopez\AppData\Roaming\Autodesk\Revit\Addins\2025\revit_mcp_plugin\Commands\commandRegistry.json
+2026-04-08 11:39:04 [Info] 开始加载命令
+Start loading command.
+2026-04-08 11:39:04 [Info] 当前 Revit 版本: 2025
+Current Revit version: 2025
+2026-04-08 11:39:04 [Info] 创建命令实例失败 [say_hello]: RevitMCPCommandSet.dll
+Failed to create command instance [say_hello]: RevitMCPCommandSet.dll
+2026-04-08 11:39:04 [Info] 创建命令实例失败 [get_available_family_types]: RevitMCPCommandSet.dll
+Failed to create command instance [get_available_family_types]: RevitMCPCommandSet.dll
+2026-04-08 11:39:04 [Info] 创建命令实例失败 [get_current_view_elements]: RevitMCPCommandSet.dll
+Failed to create command instance [get_current_view_elements]: RevitMCPCommandSet.dll
+2026-04-08 11:39:04 [Info] 创建命令实例失败 [get_current_view_info]: RevitMCPCommandSet.dll
+Failed to create command instance [get_current_view_info]: RevitMCPCommandSet.dll
+2026-04-08 11:39:04 [Info] 创建命令实例失败 [get_selected_elements]: RevitMCPCommandSet.dll
+Failed to create command instance [get_selected_elements]: RevitMCPCommandSet.dll
+2026-04-08 11:39:04 [Info] 创建命令实例失败 [create_point_based_element]: RevitMCPCommandSet.dll
+Failed to create command instance [create_point_based_element]: RevitMCPCommandSet.dll
+2026-04-08 11:39:04 [Info] 创建命令实例失败 [create_line_based_element]: RevitMCPCommandSet.dll
+Failed to create command instance [create_line_based_element]: RevitMCPCommandSet.dll
+2026-04-08 11:39:04 [Info] 创建命令实例失败 [create_surface_based_element]: RevitMCPCommandSet.dll
+Failed to create command instance [create_surface_based_element]: RevitMCPCommandSet.dll
+2026-04-08 11:39:04 [Info] 创建命令实例失败 [color_splash]: RevitMCPCommandSet.dll
+Failed to create command instance [color_splash]: RevitMCPCommandSet.dll
+2026-04-08 11:39:04 [Info] 创建命令实例失败 [tag_walls]: RevitMCPCommandSet.dll
+Failed to create command instance [tag_walls]: RevitMCPCommandSet.dll
+2026-04-08 11:39:04 [Info] 创建命令实例失败 [delete_element]: RevitMCPCommandSet.dll
+Failed to create command instance [delete_element]: RevitMCPCommandSet.dll
+2026-04-08 11:39:04 [Info] 创建命令实例失败 [ai_element_filter]: RevitMCPCommandSet.dll
+Failed to create command instance [ai_element_filter]: RevitMCPCommandSet.dll
+2026-04-08 11:39:04 [Info] 创建命令实例失败 [operate_element]: RevitMCPCommandSet.dll
+Failed to create command instance [operate_element]: RevitMCPCommandSet.dll
+2026-04-08 11:39:04 [Info] 创建命令实例失败 [export_room_data]: RevitMCPCommandSet.dll
+Failed to create command instance [export_room_data]: RevitMCPCommandSet.dll
+2026-04-08 11:39:04 [Info] 创建命令实例失败 [get_material_quantities]: RevitMCPCommandSet.dll
+Failed to create command instance [get_material_quantities]: RevitMCPCommandSet.dll
+2026-04-08 11:39:04 [Info] 创建命令实例失败 [analyze_model_statistics]: RevitMCPCommandSet.dll
+Failed to create command instance [analyze_model_statistics]: RevitMCPCommandSet.dll
+2026-04-08 11:39:04 [Info] 创建命令实例失败 [create_grid]: RevitMCPCommandSet.dll
+Failed to create command instance [create_grid]: RevitMCPCommandSet.dll
+2026-04-08 11:39:04 [Info] 创建命令实例失败 [create_structural_framing_system]: RevitMCPCommandSet.dll
+Failed to create command instance [create_structural_framing_system]: RevitMCPCommandSet.dll
+2026-04-08 11:39:04 [Info] 创建命令实例失败 [create_room]: RevitMCPCommandSet.dll
+Failed to create command instance [create_room]: RevitMCPCommandSet.dll
+2026-04-08 11:39:04 [Info] 创建命令实例失败 [tag_rooms]: RevitMCPCommandSet.dll
+Failed to create command instance [tag_rooms]: RevitMCPCommandSet.dll
+2026-04-08 11:39:04 [Info] 创建命令实例失败 [create_level]: RevitMCPCommandSet.dll
+Failed to create command instance [create_level]: RevitMCPCommandSet.dll
+2026-04-08 11:39:04 [Info] 创建命令实例失败 [send_code_to_revit]: RevitMCPCommandSet.dll
+Failed to create command instance [send_code_to_revit]: RevitMCPCommandSet.dll
+2026-04-08 11:39:04 [Info] 创建命令实例失败 [create_dimensions]: RevitMCPCommandSet.dll
+Failed to create command instance [create_dimensions]: RevitMCPCommandSet.dll
+2026-04-08 11:39:04 [Info] 命令加载完成
+Command loading complete.
+2026-04-08 11:39:04 [Info] Socket service initialized on port 8080
+2026-04-08 14:52:26 [Info] 当前 Revit 版本: 2025
+Current Revit version: 2025
+2026-04-08 14:52:26 [Info] 已加载配置文件: C:\Users\Alopez\AppData\Roaming\Autodesk\Revit\Addins\2025\revit_mcp_plugin\Commands\commandRegistry.json
+Configuration file loaded: C:\Users\Alopez\AppData\Roaming\Autodesk\Revit\Addins\2025\revit_mcp_plugin\Commands\commandRegistry.json
+2026-04-08 14:52:26 [Info] 开始加载命令
+Start loading command.
+2026-04-08 14:52:26 [Info] 当前 Revit 版本: 2025
+Current Revit version: 2025
+2026-04-08 14:52:26 [Info] 创建命令实例失败 [say_hello]: RevitMCPCommandSet.dll
+Failed to create command instance [say_hello]: RevitMCPCommandSet.dll
+2026-04-08 14:52:26 [Info] 创建命令实例失败 [get_available_family_types]: RevitMCPCommandSet.dll
+Failed to create command instance [get_available_family_types]: RevitMCPCommandSet.dll
+2026-04-08 14:52:26 [Info] 创建命令实例失败 [get_current_view_elements]: RevitMCPCommandSet.dll
+Failed to create command instance [get_current_view_elements]: RevitMCPCommandSet.dll
+2026-04-08 14:52:26 [Info] 创建命令实例失败 [get_current_view_info]: RevitMCPCommandSet.dll
+Failed to create command instance [get_current_view_info]: RevitMCPCommandSet.dll
+2026-04-08 14:52:26 [Info] 创建命令实例失败 [get_selected_elements]: RevitMCPCommandSet.dll
+Failed to create command instance [get_selected_elements]: RevitMCPCommandSet.dll
+2026-04-08 14:52:26 [Info] 创建命令实例失败 [create_point_based_element]: RevitMCPCommandSet.dll
+Failed to create command instance [create_point_based_element]: RevitMCPCommandSet.dll
+2026-04-08 14:52:26 [Info] 创建命令实例失败 [create_line_based_element]: RevitMCPCommandSet.dll
+Failed to create command instance [create_line_based_element]: RevitMCPCommandSet.dll
+2026-04-08 14:52:26 [Info] 创建命令实例失败 [create_surface_based_element]: RevitMCPCommandSet.dll
+Failed to create command instance [create_surface_based_element]: RevitMCPCommandSet.dll
+2026-04-08 14:52:26 [Info] 创建命令实例失败 [color_splash]: RevitMCPCommandSet.dll
+Failed to create command instance [color_splash]: RevitMCPCommandSet.dll
+2026-04-08 14:52:26 [Info] 创建命令实例失败 [tag_walls]: RevitMCPCommandSet.dll
+Failed to create command instance [tag_walls]: RevitMCPCommandSet.dll
+2026-04-08 14:52:26 [Info] 创建命令实例失败 [delete_element]: RevitMCPCommandSet.dll
+Failed to create command instance [delete_element]: RevitMCPCommandSet.dll
+2026-04-08 14:52:26 [Info] 创建命令实例失败 [ai_element_filter]: RevitMCPCommandSet.dll
+Failed to create command instance [ai_element_filter]: RevitMCPCommandSet.dll
+2026-04-08 14:52:26 [Info] 创建命令实例失败 [operate_element]: RevitMCPCommandSet.dll
+Failed to create command instance [operate_element]: RevitMCPCommandSet.dll
+2026-04-08 14:52:26 [Info] 创建命令实例失败 [export_room_data]: RevitMCPCommandSet.dll
+Failed to create command instance [export_room_data]: RevitMCPCommandSet.dll
+2026-04-08 14:52:26 [Info] 创建命令实例失败 [get_material_quantities]: RevitMCPCommandSet.dll
+Failed to create command instance [get_material_quantities]: RevitMCPCommandSet.dll
+2026-04-08 14:52:26 [Info] 创建命令实例失败 [analyze_model_statistics]: RevitMCPCommandSet.dll
+Failed to create command instance [analyze_model_statistics]: RevitMCPCommandSet.dll
+2026-04-08 14:52:26 [Info] 创建命令实例失败 [create_grid]: RevitMCPCommandSet.dll
+Failed to create command instance [create_grid]: RevitMCPCommandSet.dll
+2026-04-08 14:52:26 [Info] 创建命令实例失败 [create_structural_framing_system]: RevitMCPCommandSet.dll
+Failed to create command instance [create_structural_framing_system]: RevitMCPCommandSet.dll
+2026-04-08 14:52:26 [Info] 创建命令实例失败 [create_room]: RevitMCPCommandSet.dll
+Failed to create command instance [create_room]: RevitMCPCommandSet.dll
+2026-04-08 14:52:26 [Info] 创建命令实例失败 [tag_rooms]: RevitMCPCommandSet.dll
+Failed to create command instance [tag_rooms]: RevitMCPCommandSet.dll
+2026-04-08 14:52:26 [Info] 创建命令实例失败 [create_level]: RevitMCPCommandSet.dll
+Failed to create command instance [create_level]: RevitMCPCommandSet.dll
+2026-04-08 14:52:26 [Info] 创建命令实例失败 [send_code_to_revit]: RevitMCPCommandSet.dll
+Failed to create command instance [send_code_to_revit]: RevitMCPCommandSet.dll
+2026-04-08 14:52:26 [Info] 创建命令实例失败 [create_dimensions]: RevitMCPCommandSet.dll
+Failed to create command instance [create_dimensions]: RevitMCPCommandSet.dll
+2026-04-08 14:52:26 [Info] 命令加载完成
+Command loading complete.
+2026-04-08 14:52:26 [Info] Socket service initialized on port 8080
+2026-04-08 16:13:56 [Info] 当前 Revit 版本: 2025
+Current Revit version: 2025
+2026-04-08 16:13:56 [Info] 已加载配置文件: C:\Users\Alopez\AppData\Roaming\Autodesk\Revit\Addins\2025\revit_mcp_plugin\Commands\commandRegistry.json
+Configuration file loaded: C:\Users\Alopez\AppData\Roaming\Autodesk\Revit\Addins\2025\revit_mcp_plugin\Commands\commandRegistry.json
+2026-04-08 16:13:56 [Info] 开始加载命令
+Start loading command.
+2026-04-08 16:13:56 [Info] 当前 Revit 版本: 2025
+Current Revit version: 2025
+2026-04-08 16:13:56 [Info] 创建命令实例失败 [say_hello]: RevitMCPCommandSet.dll
+Failed to create command instance [say_hello]: RevitMCPCommandSet.dll
+2026-04-08 16:13:56 [Info] 创建命令实例失败 [get_available_family_types]: RevitMCPCommandSet.dll
+Failed to create command instance [get_available_family_types]: RevitMCPCommandSet.dll
+2026-04-08 16:13:56 [Info] 创建命令实例失败 [get_current_view_elements]: RevitMCPCommandSet.dll
+Failed to create command instance [get_current_view_elements]: RevitMCPCommandSet.dll
+2026-04-08 16:13:56 [Info] 创建命令实例失败 [get_current_view_info]: RevitMCPCommandSet.dll
+Failed to create command instance [get_current_view_info]: RevitMCPCommandSet.dll
+2026-04-08 16:13:56 [Info] 创建命令实例失败 [get_selected_elements]: RevitMCPCommandSet.dll
+Failed to create command instance [get_selected_elements]: RevitMCPCommandSet.dll
+2026-04-08 16:13:56 [Info] 创建命令实例失败 [create_point_based_element]: RevitMCPCommandSet.dll
+Failed to create command instance [create_point_based_element]: RevitMCPCommandSet.dll
+2026-04-08 16:13:56 [Info] 创建命令实例失败 [create_line_based_element]: RevitMCPCommandSet.dll
+Failed to create command instance [create_line_based_element]: RevitMCPCommandSet.dll
+2026-04-08 16:13:56 [Info] 创建命令实例失败 [create_surface_based_element]: RevitMCPCommandSet.dll
+Failed to create command instance [create_surface_based_element]: RevitMCPCommandSet.dll
+2026-04-08 16:13:56 [Info] 创建命令实例失败 [color_splash]: RevitMCPCommandSet.dll
+Failed to create command instance [color_splash]: RevitMCPCommandSet.dll
+2026-04-08 16:13:56 [Info] 创建命令实例失败 [tag_walls]: RevitMCPCommandSet.dll
+Failed to create command instance [tag_walls]: RevitMCPCommandSet.dll
+2026-04-08 16:13:56 [Info] 创建命令实例失败 [delete_element]: RevitMCPCommandSet.dll
+Failed to create command instance [delete_element]: RevitMCPCommandSet.dll
+2026-04-08 16:13:56 [Info] 创建命令实例失败 [ai_element_filter]: RevitMCPCommandSet.dll
+Failed to create command instance [ai_element_filter]: RevitMCPCommandSet.dll
+2026-04-08 16:13:56 [Info] 创建命令实例失败 [operate_element]: RevitMCPCommandSet.dll
+Failed to create command instance [operate_element]: RevitMCPCommandSet.dll
+2026-04-08 16:13:56 [Info] 创建命令实例失败 [export_room_data]: RevitMCPCommandSet.dll
+Failed to create command instance [export_room_data]: RevitMCPCommandSet.dll
+2026-04-08 16:13:56 [Info] 创建命令实例失败 [get_material_quantities]: RevitMCPCommandSet.dll
+Failed to create command instance [get_material_quantities]: RevitMCPCommandSet.dll
+2026-04-08 16:13:56 [Info] 创建命令实例失败 [analyze_model_statistics]: RevitMCPCommandSet.dll
+Failed to create command instance [analyze_model_statistics]: RevitMCPCommandSet.dll
+2026-04-08 16:13:56 [Info] 创建命令实例失败 [create_grid]: RevitMCPCommandSet.dll
+Failed to create command instance [create_grid]: RevitMCPCommandSet.dll
+2026-04-08 16:13:56 [Info] 创建命令实例失败 [create_structural_framing_system]: RevitMCPCommandSet.dll
+Failed to create command instance [create_structural_framing_system]: RevitMCPCommandSet.dll
+2026-04-08 16:13:56 [Info] 创建命令实例失败 [create_room]: RevitMCPCommandSet.dll
+Failed to create command instance [create_room]: RevitMCPCommandSet.dll
+2026-04-08 16:13:56 [Info] 创建命令实例失败 [tag_rooms]: RevitMCPCommandSet.dll
+Failed to create command instance [tag_rooms]: RevitMCPCommandSet.dll
+2026-04-08 16:13:56 [Info] 创建命令实例失败 [create_level]: RevitMCPCommandSet.dll
+Failed to create command instance [create_level]: RevitMCPCommandSet.dll
+2026-04-08 16:13:56 [Info] 创建命令实例失败 [send_code_to_revit]: RevitMCPCommandSet.dll
+Failed to create command instance [send_code_to_revit]: RevitMCPCommandSet.dll
+2026-04-08 16:13:56 [Info] 创建命令实例失败 [create_dimensions]: RevitMCPCommandSet.dll
+Failed to create command instance [create_dimensions]: RevitMCPCommandSet.dll
+2026-04-08 16:13:56 [Info] 命令加载完成
+Command loading complete.
+2026-04-08 16:13:56 [Info] Socket service initialized on port 8080

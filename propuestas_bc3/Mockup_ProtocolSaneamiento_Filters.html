@@ -1,0 +1,611 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+<meta charset="UTF-8">
+<title>E3G BIM Tools — Protocol de mediciones Sanejament (filters style)</title>
+<style>
+  :root {
+    --bg-base:        #ECF0F3;
+    --bg-card:        #FFFFFF;
+    --bg-light:       #F1F5F9;
+    --bg-sub:         #F8FAFC;
+    --accent-san:     #4A7A96;
+    --accent-san-700: #345C75;
+    --accent-good:    #1D9E75;
+    --accent-amber:   #D97706;
+    --accent-purple:  #7D3C98;
+    --accent-rose:    #C0392B;
+    --text-primary:   #1F2A37;
+    --text-secondary: #475569;
+    --text-muted:     #94A3B8;
+    --border-light:   #E8ECF0;
+    --warn-bg:        #FEF3C7;
+    --warn-fg:        #92400E;
+    --info-bg:        #DBEAFE;
+    --info-fg:        #1E40AF;
+    --good-bg:        #DCFCE7;
+    --good-fg:        #166534;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    font-family: "Segoe UI", "SF Pro Text", "Inter", system-ui, sans-serif;
+    font-size: 13px; color: var(--text-primary); background: var(--bg-base);
+    padding: 24px; min-height: 100vh;
+  }
+
+  .window {
+    width: 1280px; margin: 0 auto;
+    background: var(--bg-base); border-radius: 16px;
+    box-shadow: 12px 12px 30px rgba(163,177,198,.45), -12px -12px 30px rgba(255,255,255,.85);
+    overflow: hidden;
+  }
+  .titlebar {
+    height: 36px; background: linear-gradient(180deg,#fafbfd 0%,#eef1f5 100%);
+    display: flex; align-items: center; padding: 0 14px;
+    border-bottom: 1px solid var(--border-light);
+    font-size: 12px; color: var(--text-secondary);
+  }
+  .dots { display: flex; gap: 6px; margin-right: 14px; }
+  .dot { width: 11px; height: 11px; border-radius: 50%; }
+  .dot.r{background:#ED6A5E;}.dot.y{background:#F4BF50;}.dot.g{background:#61C554;}
+  .titlebar .title { font-weight: 600; color: var(--text-primary); }
+  .titlebar .sep { margin: 0 8px; color: #B6BEC8; }
+
+  .layout { display: grid; grid-template-columns: 240px 1fr; min-height: 800px; }
+
+  .sidebar { background: var(--bg-base); padding: 20px 14px; border-right: 1px solid var(--border-light); }
+  .group-label { font-size: 10px; font-weight: 700; letter-spacing: 1px; color: var(--text-muted); text-transform: uppercase; margin: 6px 8px 8px; }
+  .group-label.second { margin-top: 22px; }
+  .nav-btn { display: flex; align-items: center; gap: 10px; padding: 10px 12px; margin-bottom: 4px; border-radius: 10px; font-size: 13px; color: var(--text-secondary); cursor: default; }
+  .nav-btn .ico { width: 18px; height: 18px; display: inline-flex; align-items: center; justify-content: center; color: var(--text-muted); }
+  .nav-btn:hover { background: var(--bg-card); }
+  .nav-btn.active { background: var(--bg-card); color: var(--accent-san); font-weight: 600; box-shadow: inset 3px 3px 7px rgba(163,177,198,.35), inset -3px -3px 7px rgba(255,255,255,.9); }
+  .nav-btn.active .ico { color: var(--accent-san); }
+  .nav-btn.new { position: relative; }
+  .nav-btn.new::after { content: "NEW"; position: absolute; right: 10px; top: 50%; transform: translateY(-50%); font-size: 9px; font-weight: 700; color: var(--accent-good); background: rgba(29,158,117,.12); padding: 2px 6px; border-radius: 4px; }
+
+  .content { padding: 24px 28px; overflow-y: auto; }
+  .breadcrumb { font-size: 12px; color: var(--text-muted); margin-bottom: 12px; }
+  .breadcrumb b { color: var(--text-secondary); font-weight: 600; }
+
+  /* Toolbar */
+  .toolbar {
+    background: var(--bg-card); border-radius: 14px; padding: 14px 18px;
+    box-shadow: 8px 8px 18px rgba(163,177,198,.30), -8px -8px 18px rgba(255,255,255,.9);
+    margin-bottom: 14px;
+    display: grid; grid-template-columns: 1fr auto; gap: 12px; align-items: center;
+  }
+  .protocol-name { font-size: 14px; font-weight: 600; }
+  .protocol-name .label { font-size: 10px; font-weight: 700; color: var(--text-muted); letter-spacing: .5px; text-transform: uppercase; display: block; margin-bottom: 2px; }
+  .protocol-actions { display: flex; gap: 6px; }
+
+  .btn { height: 32px; padding: 0 14px; border-radius: 10px; background: var(--bg-card); border: 1px solid var(--border-light); color: var(--text-secondary); font-size: 11px; font-weight: 500; cursor: pointer; box-shadow: 4px 4px 10px rgba(163,177,198,.28), -4px -4px 10px rgba(255,255,255,.9); display: inline-flex; align-items: center; gap: 6px; }
+  .btn:hover { color: var(--accent-san); }
+  .btn.primary { background: linear-gradient(135deg, var(--accent-san) 0%, var(--accent-san-700) 100%); color: white; border: none; font-weight: 600; }
+  .btn.small { height: 26px; padding: 0 10px; font-size: 10px; box-shadow: 2px 2px 6px rgba(163,177,198,.20); }
+  .btn.success { background: linear-gradient(135deg, var(--accent-good) 0%, #178660 100%); color: white; border: none; font-weight: 600; }
+  .btn.danger { color: var(--accent-rose); }
+
+  /* Diagnostic */
+  .diagnostic {
+    background: var(--bg-card); border-radius: 14px; padding: 16px 20px;
+    border: 2px solid var(--accent-san);
+    margin-bottom: 14px;
+  }
+  .diag-head { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 10px; }
+  .diag-head h3 { margin: 0; font-size: 14px; }
+  .diag-head .live { font-size: 10px; color: var(--accent-good); font-weight: 600; }
+  .diag-tree { font-family: Consolas, monospace; font-size: 11px; line-height: 1.7; }
+  .diag-tree .node { padding: 1px 0; }
+  .diag-tree .node b { color: var(--accent-san); }
+  .diag-tree .indent-1 { padding-left: 20px; }
+  .diag-tree .indent-2 { padding-left: 40px; color: var(--text-secondary); }
+  .diag-tree .indent-3 { padding-left: 60px; color: var(--text-muted); }
+  .diag-count { float: right; color: var(--text-secondary); font-weight: 600; }
+  .diag-tree .warn b { color: var(--warn-fg); }
+
+  /* Section */
+  .section {
+    background: var(--bg-card); border-radius: 14px;
+    box-shadow: 8px 8px 18px rgba(163,177,198,.30), -8px -8px 18px rgba(255,255,255,.9);
+    margin-bottom: 14px;
+    overflow: hidden;
+  }
+  .section-head { display: grid; grid-template-columns: auto 1fr auto auto; gap: 12px; align-items: center; padding: 14px 18px; cursor: pointer; user-select: none; }
+  .section-head:hover { background: rgba(74,122,150,.04); }
+  .section.collapsed .section-body { display: none; }
+  .section-num { width: 28px; height: 28px; border-radius: 8px; display: inline-flex; align-items: center; justify-content: center; background: var(--accent-san); color: white; font-weight: 700; font-size: 12px; }
+  .section-num.s2 { background: var(--accent-good); }
+  .section-num.s3 { background: var(--accent-amber); }
+  .section-num.s4 { background: var(--accent-purple); }
+  .section-num.s5 { background: var(--accent-rose); }
+  .section-title h3 { margin: 0; font-size: 14px; font-weight: 600; }
+  .section-title .desc { font-size: 11px; color: var(--text-muted); margin-top: 2px; }
+  .section-stats { background: var(--bg-light); border-radius: 8px; padding: 4px 10px; font-size: 10px; font-weight: 600; color: var(--text-secondary); font-family: Consolas, monospace; }
+  .section-stats.green { background: var(--good-bg); color: var(--good-fg); }
+  .chev { width: 14px; height: 14px; color: var(--text-muted); transition: transform .2s; }
+  .section.collapsed .chev { transform: rotate(-90deg); }
+  .section-body { padding: 0 18px 18px; border-top: 1px solid var(--border-light); }
+
+  /* Rule cards (filter-style) */
+  .rules { display: flex; flex-direction: column; gap: 8px; margin-top: 14px; }
+  .rule {
+    background: var(--bg-sub); border: 1px solid var(--border-light);
+    border-left: 3px solid var(--accent-san);
+    border-radius: 10px; padding: 12px 14px;
+  }
+  .rule.s2 { border-left-color: var(--accent-good); }
+  .rule.s3 { border-left-color: var(--accent-amber); }
+  .rule.s4 { border-left-color: var(--accent-purple); }
+  .rule.s5 { border-left-color: var(--accent-rose); }
+  .rule-head { display: grid; grid-template-columns: 1fr auto auto; gap: 12px; align-items: center; }
+  .rule-name { font-size: 13px; font-weight: 600; color: var(--text-primary); }
+  .rule-match { font-family: Consolas, monospace; font-size: 11px; color: var(--accent-good); font-weight: 600; }
+  .rule-actions { display: flex; gap: 4px; }
+  .icon-btn { width: 26px; height: 26px; border-radius: 6px; background: transparent; border: none; color: var(--text-muted); cursor: pointer; display: inline-flex; align-items: center; justify-content: center; font-size: 13px; }
+  .icon-btn:hover { background: var(--bg-light); color: var(--accent-san); }
+  .icon-btn.del:hover { color: var(--accent-rose); }
+
+  .conditions { margin-top: 8px; padding-top: 8px; border-top: 1px dashed var(--border-light); display: flex; flex-direction: column; gap: 4px; }
+  .condition {
+    display: grid; grid-template-columns: auto 1fr auto 1fr auto; gap: 8px; align-items: center;
+    font-size: 11px;
+  }
+  .condition .logic { font-weight: 700; color: var(--accent-san); font-size: 10px; min-width: 28px; text-align: center; }
+  .condition .param { font-family: Consolas, monospace; background: var(--bg-card); padding: 3px 8px; border-radius: 6px; border: 1px solid var(--border-light); color: var(--text-primary); }
+  .condition .op { background: var(--info-bg); color: var(--info-fg); padding: 3px 8px; border-radius: 6px; font-weight: 600; font-size: 10px; }
+  .condition .val { font-family: Consolas, monospace; background: var(--bg-card); padding: 3px 8px; border-radius: 6px; border: 1px solid var(--border-light); color: var(--accent-san); font-weight: 600; }
+  .condition .matched { color: var(--accent-good); font-size: 10px; font-family: Consolas, monospace; }
+
+  .add-rule {
+    margin-top: 10px; padding: 10px 14px;
+    background: rgba(74,122,150,.06); border: 1px dashed rgba(74,122,150,.4);
+    color: var(--accent-san); cursor: pointer; border-radius: 8px;
+    font-size: 12px; text-align: center; font-weight: 500;
+  }
+  .add-rule:hover { background: rgba(74,122,150,.1); }
+
+  /* === FORMULARI D'AFEGIR/EDITAR REGLA (estil Revit Filter) === */
+  .rule-form {
+    background: var(--bg-card); border: 2px solid var(--accent-san);
+    border-radius: 12px; padding: 16px;
+    margin-top: 12px;
+    box-shadow: 6px 6px 14px rgba(74,122,150,.15);
+  }
+  .rule-form h4 { margin: 0 0 12px; font-size: 13px; color: var(--accent-san); font-weight: 700; }
+  .rule-form-row { display: grid; grid-template-columns: 100px 1fr; gap: 10px; align-items: center; margin-bottom: 10px; }
+  .rule-form-row > label { font-size: 11px; font-weight: 600; color: var(--text-secondary); text-align: right; }
+  .form-input, .form-select {
+    height: 32px; padding: 0 10px; border-radius: 8px;
+    background: var(--bg-card); border: 1px solid var(--border-light);
+    box-shadow: inset 2px 2px 4px rgba(163,177,198,.20), inset -2px -2px 4px rgba(255,255,255,.95);
+    font-size: 12px; color: var(--text-primary); width: 100%;
+  }
+  .form-select { appearance: none; background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'><path d='M1 1l4 4 4-4' stroke='%2394A3B8' stroke-width='1.5' fill='none' stroke-linecap='round'/></svg>"); background-repeat: no-repeat; background-position: right 10px center; padding-right: 28px; }
+
+  .conditions-builder { background: var(--bg-sub); border-radius: 10px; padding: 12px; margin-top: 8px; }
+  .conditions-builder .cb-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+  .conditions-builder .cb-head .title { font-size: 11px; font-weight: 700; color: var(--text-secondary); text-transform: uppercase; letter-spacing: .5px; }
+  .conditions-builder .cb-head .combinador { display: flex; gap: 4px; }
+  .cb-pill { padding: 4px 10px; border-radius: 6px; background: var(--bg-card); border: 1px solid var(--border-light); cursor: pointer; font-size: 10px; font-weight: 600; color: var(--text-secondary); }
+  .cb-pill.active { background: var(--accent-san); color: white; border-color: var(--accent-san); }
+
+  .cb-row { display: grid; grid-template-columns: 1fr 1fr 1fr auto; gap: 8px; align-items: center; margin-bottom: 8px; }
+  .cb-row:last-child { margin-bottom: 0; }
+  .cb-row .label-mini { font-size: 9px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; display: block; margin-bottom: 3px; }
+
+  /* Live preview within the form */
+  .form-preview {
+    margin-top: 12px; padding: 10px 12px;
+    background: var(--info-bg); border-radius: 8px;
+    font-size: 11px; color: var(--info-fg);
+  }
+  .form-preview b { font-family: Consolas, monospace; }
+
+  .form-actions { display: flex; gap: 8px; justify-content: flex-end; margin-top: 14px; }
+
+  /* Legend at bottom */
+  .legend {
+    margin: 24px auto 0; width: 1280px;
+    background: var(--bg-card); border-radius: 12px; padding: 16px 20px;
+    font-size: 11px; color: var(--text-secondary);
+    box-shadow: 6px 6px 14px rgba(163,177,198,.22);
+  }
+  .legend h3 { margin: 0 0 8px; font-size: 12px; color: var(--accent-san); text-transform: uppercase; letter-spacing: .5px; }
+  .legend ul { margin: 0; padding-left: 18px; }
+  .legend li { margin-bottom: 5px; line-height: 1.5; }
+  .legend code { font-family: Consolas, monospace; font-size: 11px; background: var(--bg-light); padding: 1px 5px; border-radius: 3px; color: var(--accent-san-700); }
+  .legend .tag { display: inline-block; padding: 2px 8px; border-radius: 6px; font-size: 10px; font-weight: 600; margin-right: 4px; }
+  .legend .tag.api { background: var(--info-bg); color: var(--info-fg); font-family: Consolas, monospace; }
+</style>
+</head>
+<body>
+
+<div class="window">
+  <div class="titlebar">
+    <div class="dots"><div class="dot r"></div><div class="dot y"></div><div class="dot g"></div></div>
+    <span class="title">E3G BIM Tools</span><span class="sep">›</span><span>Ajustes</span>
+  </div>
+
+  <div class="layout">
+    <aside class="sidebar">
+      <div class="group-label">General</div>
+      <div class="nav-btn"><span class="ico">🌐</span> Idioma</div>
+      <div class="nav-btn"><span class="ico">📏</span> Unitats</div>
+      <div class="nav-btn"><span class="ico">🏷️</span> Nomenclatura</div>
+      <div class="nav-btn"><span class="ico">⚙️</span> Classificació de sistemes</div>
+      <div class="nav-btn"><span class="ico">📋</span> Partides BC3</div>
+
+      <div class="group-label second">Protocols (per instal·lació)</div>
+      <div class="nav-btn active new"><span class="ico">💧</span> Protocol Sanejament</div>
+      <div class="nav-btn"><span class="ico" style="color:#C8CDD2;">🚰</span> Protocol Fontaneria <span style="font-size:9px;color:#C8CDD2;margin-left:4px;">(futur)</span></div>
+      <div class="nav-btn"><span class="ico" style="color:#C8CDD2;">🔥</span> Protocol PCI <span style="font-size:9px;color:#C8CDD2;margin-left:4px;">(futur)</span></div>
+
+      <div class="group-label second">Instal·lació</div>
+      <div class="nav-btn"><span class="ico">💧</span> Sanejament</div>
+      <div class="nav-btn"><span class="ico">🚰</span> Fontaneria</div>
+    </aside>
+
+    <main class="content">
+      <div class="breadcrumb">Ajustes <span style="margin:0 6px;">›</span> <b>Protocols</b> <span style="margin:0 6px;">›</span> Sanejament</div>
+
+      <!-- TOOLBAR -->
+      <div class="toolbar">
+        <div>
+          <div class="protocol-name">
+            <span class="label">Protocol Sanejament — actiu</span>
+            E3G_Vivendes_Sanejament.e3gprot
+          </div>
+        </div>
+        <div class="protocol-actions">
+          <button class="btn">📂 Importar protocol…</button>
+          <button class="btn">💾 Exportar protocol…</button>
+          <button class="btn">↻ Auto-detectar</button>
+          <button class="btn primary">Desar canvis</button>
+        </div>
+      </div>
+
+      <!-- DIAGNOSTIC -->
+      <div class="diagnostic">
+        <div class="diag-head">
+          <h3>📊 Diagnòstic en viu — projecte actual amb el protocol actiu</h3>
+          <span class="live">● Recalcula a cada canvi</span>
+        </div>
+        <div class="diag-tree">
+          <div class="node"><b>📂 BlocSantAndreu_FaseE.rvt</b> — 45.178 elements de canonada<span class="diag-count">100%</span></div>
+          <div class="node indent-1"><b>🏢 Edifici A</b> — 28.451 elements<span class="diag-count">63%</span></div>
+          <div class="node indent-2">🏠 Interior vivendes — 14.220 elements<span class="diag-count">31%</span></div>
+          <div class="node indent-2">🏗 Zones comunes — 14.231 elements<span class="diag-count">32%</span></div>
+          <div class="node indent-3">↓ Bajantes — 4.230 · → Colectores — 3.124 · 🅿 Aparcamiento — 6.877</div>
+          <div class="node indent-1"><b>🏢 Edifici B</b> — 13.602 elements<span class="diag-count">30%</span></div>
+          <div class="node indent-2">🏠 Vivendes — 7.320 · 🏗 Comuns — 6.282</div>
+          <div class="node indent-1 warn"><b>⚠ No classificats</b> — 3.125 elements<span class="diag-count">7%</span></div>
+        </div>
+      </div>
+
+      <!-- ════════ SECTION 1: EDIFICIS ════════ -->
+      <section class="section">
+        <div class="section-head">
+          <span class="section-num">1</span>
+          <div class="section-title">
+            <h3>Identificació d'Edificis</h3>
+            <div class="desc">Cada regla defineix un edifici amb una o més condicions (paràmetre + operador + valor). Un pipe pertany a l'edifici si compleix la regla.</div>
+          </div>
+          <span class="section-stats green">2 edificis · 2 regles</span>
+          <svg class="chev" viewBox="0 0 16 16"><path d="M4 6l4 4 4-4" stroke="currentColor" stroke-width="2" fill="none"/></svg>
+        </div>
+        <div class="section-body">
+
+          <div class="rules">
+            <!-- REGLA 1 — Edifici A -->
+            <div class="rule">
+              <div class="rule-head">
+                <div class="rule-name">🏢 Edifici A</div>
+                <div class="rule-match">28.451 elements</div>
+                <div class="rule-actions"><button class="icon-btn" title="Editar">✎</button><button class="icon-btn del" title="Eliminar">✕</button></div>
+              </div>
+              <div class="conditions">
+                <div class="condition">
+                  <span class="logic">SI</span>
+                  <span class="param">Workset</span>
+                  <span class="op">EMPIEZA POR</span>
+                  <span class="val">EDIF_A</span>
+                  <span class="matched">✓ 28.451 match</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- REGLA 2 — Edifici B -->
+            <div class="rule">
+              <div class="rule-head">
+                <div class="rule-name">🏢 Edifici B</div>
+                <div class="rule-match">13.602 elements</div>
+                <div class="rule-actions"><button class="icon-btn">✎</button><button class="icon-btn del">✕</button></div>
+              </div>
+              <div class="conditions">
+                <div class="condition">
+                  <span class="logic">SI</span>
+                  <span class="param">Workset</span>
+                  <span class="op">EMPIEZA POR</span>
+                  <span class="val">EDIF_B</span>
+                  <span class="matched">✓ 13.602 match</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="add-rule">+ Afegir edifici</div>
+
+        </div>
+      </section>
+
+      <!-- ════════ SECTION 2: VIVENDES (amb formulari obert d'exemple) ════════ -->
+      <section class="section">
+        <div class="section-head">
+          <span class="section-num s2">2</span>
+          <div class="section-title">
+            <h3>Identificació d'Interior de Vivendes</h3>
+            <div class="desc">Quins Group Types representen una vivenda. Pipes dins d'aquests grups es consideren interior.</div>
+          </div>
+          <span class="section-stats green">1 regla · 30 grups</span>
+          <svg class="chev" viewBox="0 0 16 16"><path d="M4 6l4 4 4-4" stroke="currentColor" stroke-width="2" fill="none"/></svg>
+        </div>
+        <div class="section-body">
+
+          <div class="rules">
+            <!-- REGLA EXISTENT -->
+            <div class="rule s2">
+              <div class="rule-head">
+                <div class="rule-name">🏠 Vivendes (estandar E3G)</div>
+                <div class="rule-match">30 grups · 21.540 elements</div>
+                <div class="rule-actions"><button class="icon-btn">✎</button><button class="icon-btn del">✕</button></div>
+              </div>
+              <div class="conditions">
+                <div class="condition">
+                  <span class="logic">SI</span>
+                  <span class="param">Nom de Tipus</span>
+                  <span class="op">CONTÉ</span>
+                  <span class="val">VIV</span>
+                  <span class="matched">✓ 26 grups</span>
+                </div>
+                <div class="condition">
+                  <span class="logic">O BÉ</span>
+                  <span class="param">Nom de Tipus</span>
+                  <span class="op">CONTÉ</span>
+                  <span class="val">HABITATGE</span>
+                  <span class="matched">✓ 4 grups</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- ★★★ FORMULARI D'AFEGIR REGLA — desplegat com a exemple ★★★ -->
+          <div class="rule-form">
+            <h4>+ Nova regla per Interior Vivendes</h4>
+
+            <div class="rule-form-row">
+              <label>Nom de la regla</label>
+              <input class="form-input" type="text" placeholder="Ex: Vivendes 10_10" value="Sanejament 10_10">
+            </div>
+
+            <div class="rule-form-row">
+              <label>S'aplica a</label>
+              <select class="form-select">
+                <option>Group Types (grups de model)</option>
+              </select>
+            </div>
+
+            <div class="conditions-builder">
+              <div class="cb-head">
+                <span class="title">Condicions (cal complir-les totes / qualsevol)</span>
+                <div class="combinador">
+                  <span class="cb-pill active">TOTES (AND)</span>
+                  <span class="cb-pill">QUALSEVOL (OR)</span>
+                </div>
+              </div>
+
+              <!-- CONDICIÓ 1 -->
+              <div class="cb-row">
+                <div>
+                  <span class="label-mini">Paràmetre</span>
+                  <select class="form-select">
+                    <option>Nom de Tipus</option>
+                    <option>Marca de Tipus</option>
+                    <option>Comentaris de Tipus</option>
+                    <option>Workset</option>
+                    <option>—— Paràmetres compartits del projecte ——</option>
+                    <option>E3G_Codi_Sistema</option>
+                    <option>E3G_Codi_Edifici</option>
+                    <option>Categoria_Funcional</option>
+                  </select>
+                </div>
+                <div>
+                  <span class="label-mini">Operador</span>
+                  <select class="form-select">
+                    <option>és igual a</option>
+                    <option>no és igual a</option>
+                    <option selected>conté</option>
+                    <option>no conté</option>
+                    <option>comença per</option>
+                    <option>no comença per</option>
+                    <option>acaba per</option>
+                    <option>no acaba per</option>
+                    <option>té valor</option>
+                    <option>no té valor</option>
+                  </select>
+                </div>
+                <div>
+                  <span class="label-mini">Valor</span>
+                  <input class="form-input" type="text" value="10_10" placeholder="ex. 10_10">
+                </div>
+                <div style="padding-top:14px;">
+                  <button class="icon-btn del" title="Eliminar condició">✕</button>
+                </div>
+              </div>
+
+              <button class="btn small" style="margin-top:6px;">+ Afegir condició</button>
+            </div>
+
+            <!-- Live preview -->
+            <div class="form-preview">
+              <b>Preview en viu</b> — aquesta regla matcheja <b>3 group types</b> al projecte actual:
+              <code>10_10_Vivenda_T1</code>, <code>10_10_Vivenda_T2</code>, <code>10_10_Vivenda_T3</code>.
+              <br>
+              No matcheja: <code>10_20_Fontaneria_T1</code> (no conté "10_10"), <code>30_10_PCI_T1</code> (no conté "10_10").
+            </div>
+
+            <div class="form-actions">
+              <button class="btn">Cancel·lar</button>
+              <button class="btn success">✓ Desar regla</button>
+            </div>
+          </div>
+
+          <div class="add-rule">+ Afegir altra regla</div>
+
+        </div>
+      </section>
+
+      <!-- ════════ SECTION 3: BAJANTES ════════ -->
+      <section class="section collapsed">
+        <div class="section-head">
+          <span class="section-num s3">3</span>
+          <div class="section-title">
+            <h3>Bajantes</h3>
+            <div class="desc">Pipes verticals. Combina condicions sobre paràmetres + criteri geomètric (Δz &gt; Δxy, longitud min).</div>
+          </div>
+          <span class="section-stats">6.070 pipes</span>
+          <svg class="chev" viewBox="0 0 16 16"><path d="M4 6l4 4 4-4" stroke="currentColor" stroke-width="2" fill="none"/></svg>
+        </div>
+        <div class="section-body">
+          <div class="rules">
+            <div class="rule s3">
+              <div class="rule-head">
+                <div class="rule-name">↓ Bajantes (geometria + nivells)</div>
+                <div class="rule-match">6.070 pipes</div>
+                <div class="rule-actions"><button class="icon-btn">✎</button><button class="icon-btn del">✕</button></div>
+              </div>
+              <div class="conditions">
+                <div class="condition">
+                  <span class="logic">SI</span>
+                  <span class="param">[Geometria]</span>
+                  <span class="op">VERTICAL</span>
+                  <span class="val">Δz &gt; Δxy</span>
+                  <span class="matched">8.420 match</span>
+                </div>
+                <div class="condition">
+                  <span class="logic">I</span>
+                  <span class="param">Length</span>
+                  <span class="op">&gt;</span>
+                  <span class="val">1,00 m</span>
+                  <span class="matched">7.214 match</span>
+                </div>
+                <div class="condition">
+                  <span class="logic">I</span>
+                  <span class="param">Reference Level (elev)</span>
+                  <span class="op">≥</span>
+                  <span class="val">P00.A (0,00m)</span>
+                  <span class="matched">6.070 match</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="add-rule">+ Afegir regla</div>
+        </div>
+      </section>
+
+      <!-- ════════ SECTION 4: COLECTORES ════════ -->
+      <section class="section collapsed">
+        <div class="section-head">
+          <span class="section-num s4">4</span>
+          <div class="section-title">
+            <h3>Colectores</h3>
+            <div class="desc">Pipes horitzontals entre dos nivells de referència.</div>
+          </div>
+          <span class="section-stats">4.646 pipes</span>
+          <svg class="chev" viewBox="0 0 16 16"><path d="M4 6l4 4 4-4" stroke="currentColor" stroke-width="2" fill="none"/></svg>
+        </div>
+        <div class="section-body"></div>
+      </section>
+
+      <!-- ════════ SECTION 5: APARCAMIENTO ════════ -->
+      <section class="section collapsed">
+        <div class="section-head">
+          <span class="section-num s5">5</span>
+          <div class="section-title">
+            <h3>Aparcamiento</h3>
+            <div class="desc">Niveles de sòtan / pàrquing. Tots els pipes en aquests nivells.</div>
+          </div>
+          <span class="section-stats">9.797 pipes</span>
+          <svg class="chev" viewBox="0 0 16 16"><path d="M4 6l4 4 4-4" stroke="currentColor" stroke-width="2" fill="none"/></svg>
+        </div>
+        <div class="section-body">
+          <div class="rules">
+            <div class="rule s5">
+              <div class="rule-head">
+                <div class="rule-name">🅿 Aparcamiento per nom de nivell</div>
+                <div class="rule-match">4 nivells · 9.797 pipes</div>
+                <div class="rule-actions"><button class="icon-btn">✎</button><button class="icon-btn del">✕</button></div>
+              </div>
+              <div class="conditions">
+                <div class="condition">
+                  <span class="logic">SI</span>
+                  <span class="param">Reference Level (Name)</span>
+                  <span class="op">COMENÇA PER</span>
+                  <span class="val">S</span>
+                  <span class="matched">✓ 6 nivells</span>
+                </div>
+                <div class="condition">
+                  <span class="logic">I</span>
+                  <span class="param">Reference Level (Name)</span>
+                  <span class="op">CONTÉ</span>
+                  <span class="val">.A</span>
+                  <span class="matched">✓ 4 nivells</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="add-rule">+ Afegir regla</div>
+        </div>
+      </section>
+    </main>
+  </div>
+</div>
+
+<div class="legend">
+  <h3>Per què el patró "filter style" funciona realment</h3>
+  <ul>
+    <li><b>Reusa el paradigma de Revit</b>: és exactament el formulari de "Selection Filter" / "View Filter" de Revit. L'usuari ja sap utilitzar-lo, no aprèn cap concepte nou.</li>
+    <li><b>Funciona en qualsevol projecte</b>: els paràmetres (Workset, Reference Level, Name, Mark, paràmetres compartits...) existeixen a tots els .rvt. La regla s'avalua contra el .rvt actual i punt.</li>
+    <li><b>Implementació directa amb la API de Revit</b>:
+      <span class="tag api">ParameterFilterUtilities.GetFilterableParameters(doc, categoryId)</span> dóna la llista de paràmetres filtrables per categoria — el que omple el dropdown.
+      <span class="tag api">FilterStringContains</span>, <span class="tag api">FilterStringBeginsWith</span>, <span class="tag api">FilterDoubleRule</span>... avaluen els operadors. Tot és <i>built-in</i> a la API.
+    </li>
+    <li><b>Multi-condició AND/OR</b>: cada regla pot tenir N condicions. L'usuari tria si "totes" (AND) o "qualsevol" (OR) — equivalent als grups de filtres de Revit.</li>
+    <li><b>Preview en viu</b>: el formulari mostra mentre escrius quants elements del projecte actual matchejaria la regla. Això és el que falta a Revit i el que farà la UI nostra millor.</li>
+    <li><b>Casos especials geomètrics</b> (Bajantes "vertical", Colectores "horitzontal"): són paràmetres pseudo-virtuals que el helper calcula al moment. A la UI els mostrem com qualsevol altre paràmetre amb operador "VERTICAL"/"HORIZONTAL" — l'usuari els tria del mateix dropdown.</li>
+  </ul>
+
+  <h3 style="margin-top:14px;">Llista de paràmetres que apareixen al desplegable (per a Sanejament)</h3>
+  <ul>
+    <li><b>Per Pipes</b>: <code>Workset</code>, <code>Reference Level</code> (nom i elevació), <code>Length</code>, <code>Diameter</code>, <code>System Name</code>, <code>System Type</code>, <code>Mark</code>, <code>Comments</code>, més qualsevol Shared Parameter del projecte.</li>
+    <li><b>Per Group Types</b>: <code>Type Name</code>, <code>Type Mark</code>, <code>Type Comments</code>, més qualsevol Type Shared Parameter.</li>
+    <li><b>Per Levels</b>: <code>Name</code>, <code>Elevation</code>, més paràmetres custom.</li>
+    <li><b>Geometria pseudo-paràmetre</b> (només Bajantes/Colectores): <code>Orientació</code> (Vertical / Horizontal), <code>Length</code>, <code>Centre Z</code>.</li>
+  </ul>
+
+  <h3 style="margin-top:14px;">Estimació realista d'implementació</h3>
+  <ul>
+    <li><b>Modelo</b> (~3h): <code>FilterCondition</code> (param + operator + value), <code>Regla</code> (name + conditions[] + AND/OR), <code>Protocol</code> (regles per secció).</li>
+    <li><b>Avaluador</b> (~3h): donat un Element + Regla, retorna true/false. Llegeix paràmetres via <code>Element.LookupParameter</code> o <code>Element.get_Parameter(BuiltInParameter)</code>. Aplica operador. Combina amb AND/OR.</li>
+    <li><b>UI del formulari</b> (~5h): dropdown de paràmetres (carregat amb GetFilterableParameters), dropdown d'operadors (depèn del tipus del paràmetre — string vs number), input del valor, +Afegir condició, AND/OR toggle, preview en viu.</li>
+    <li><b>UI principal</b> (~3h): les 5 sections amb llista de regles, expansió/col·lapse, add/edit/delete.</li>
+    <li><b>Persistència JSON + Import/Export .e3gprot</b> (~2h): serialització polimòrfica.</li>
+    <li><b>Auto-detect inicial</b> (~2h): genera regles per defecte mirant el .rvt actual (Worksets típics, Levels per S/P, Group Types amb keywords típiques).</li>
+    <li><b>Integració amb AgrupadorMediciones</b> (~2h): el helper passa a llegir el Protocol; cada pipe s'avalua contra les regles per arribar al seu grup.</li>
+    <li><b>Total: ~20h.</b> Una mica més que el plan abstracte anterior pero molt més fiable. El cost extra es paga sol al primer projecte nou que obrim sense problemes.</li>
+  </ul>
+</div>
+
+</body>
+</html>

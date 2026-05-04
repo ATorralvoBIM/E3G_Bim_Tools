@@ -1,0 +1,548 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+<meta charset="UTF-8">
+<title>E3G BIM Tools — Protocol portable de mediciones</title>
+<style>
+  :root {
+    --bg-base:        #ECF0F3;
+    --bg-card:        #FFFFFF;
+    --bg-light:       #F1F5F9;
+    --bg-sub:         #F8FAFC;
+    --accent-san:     #4A7A96;
+    --accent-san-700: #345C75;
+    --accent-good:    #1D9E75;
+    --accent-amber:   #D97706;
+    --accent-purple:  #7D3C98;
+    --accent-rose:    #C0392B;
+    --text-primary:   #1F2A37;
+    --text-secondary: #475569;
+    --text-muted:     #94A3B8;
+    --border-light:   #E8ECF0;
+    --warn-bg:        #FEF3C7;
+    --warn-fg:        #92400E;
+    --info-bg:        #DBEAFE;
+    --info-fg:        #1E40AF;
+    --good-bg:        #DCFCE7;
+    --good-fg:        #166534;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    font-family: "Segoe UI", "SF Pro Text", "Inter", system-ui, sans-serif;
+    font-size: 13px; color: var(--text-primary); background: var(--bg-base);
+    padding: 24px; min-height: 100vh;
+  }
+
+  .window {
+    width: 1240px; margin: 0 auto;
+    background: var(--bg-base); border-radius: 16px;
+    box-shadow: 12px 12px 30px rgba(163,177,198,.45), -12px -12px 30px rgba(255,255,255,.85);
+    overflow: hidden;
+  }
+  .titlebar {
+    height: 36px; background: linear-gradient(180deg,#fafbfd 0%,#eef1f5 100%);
+    display: flex; align-items: center; padding: 0 14px;
+    border-bottom: 1px solid var(--border-light);
+    font-size: 12px; color: var(--text-secondary);
+  }
+  .dots { display: flex; gap: 6px; margin-right: 14px; }
+  .dot { width: 11px; height: 11px; border-radius: 50%; }
+  .dot.r{background:#ED6A5E;}.dot.y{background:#F4BF50;}.dot.g{background:#61C554;}
+  .titlebar .title { font-weight: 600; color: var(--text-primary); }
+  .titlebar .sep { margin: 0 8px; color: #B6BEC8; }
+
+  .layout { display: grid; grid-template-columns: 240px 1fr; min-height: 800px; }
+
+  .sidebar { background: var(--bg-base); padding: 20px 14px; border-right: 1px solid var(--border-light); }
+  .group-label { font-size: 10px; font-weight: 700; letter-spacing: 1px; color: var(--text-muted); text-transform: uppercase; margin: 6px 8px 8px; }
+  .group-label.second { margin-top: 22px; }
+  .nav-btn { display: flex; align-items: center; gap: 10px; padding: 10px 12px; margin-bottom: 4px; border-radius: 10px; font-size: 13px; color: var(--text-secondary); cursor: default; border: 1px solid transparent; background: transparent; }
+  .nav-btn .ico { width: 18px; height: 18px; display: inline-flex; align-items: center; justify-content: center; color: var(--text-muted); }
+  .nav-btn:hover { background: var(--bg-card); color: var(--text-primary); box-shadow: 4px 4px 10px rgba(163,177,198,.25), -4px -4px 10px rgba(255,255,255,.85); }
+  .nav-btn.active { background: var(--bg-card); color: var(--accent-san); font-weight: 600; box-shadow: inset 3px 3px 7px rgba(163,177,198,.35), inset -3px -3px 7px rgba(255,255,255,.9); border-color: rgba(74,122,150,.18); }
+  .nav-btn.active .ico { color: var(--accent-san); }
+  .nav-btn.new { position: relative; }
+  .nav-btn.new::after { content: "NEW"; position: absolute; right: 10px; top: 50%; transform: translateY(-50%); font-size: 9px; font-weight: 700; letter-spacing: .5px; color: var(--accent-good); background: rgba(29,158,117,.12); padding: 2px 6px; border-radius: 4px; }
+
+  .content { padding: 24px 28px; overflow-y: auto; }
+  .breadcrumb { font-size: 12px; color: var(--text-muted); margin-bottom: 12px; }
+  .breadcrumb b { color: var(--text-secondary); font-weight: 600; }
+
+  /* Header strip with import/export */
+  .protocol-bar {
+    background: var(--bg-card); border-radius: 14px; padding: 14px 18px;
+    box-shadow: 8px 8px 18px rgba(163,177,198,.30), -8px -8px 18px rgba(255,255,255,.9);
+    margin-bottom: 16px;
+    display: grid; grid-template-columns: 1fr auto; gap: 12px; align-items: center;
+  }
+  .protocol-name { font-size: 14px; font-weight: 600; }
+  .protocol-name .label { font-size: 10px; font-weight: 700; color: var(--text-muted); letter-spacing: .5px; text-transform: uppercase; display: block; margin-bottom: 2px; }
+  .protocol-actions { display: flex; gap: 6px; }
+  .btn { height: 32px; padding: 0 14px; border-radius: 10px; background: var(--bg-card); border: 1px solid var(--border-light); color: var(--text-secondary); font-size: 11px; font-weight: 500; cursor: pointer; box-shadow: 4px 4px 10px rgba(163,177,198,.28), -4px -4px 10px rgba(255,255,255,.9); display: inline-flex; align-items: center; gap: 6px; }
+  .btn:hover { color: var(--accent-san); }
+  .btn.primary { background: linear-gradient(135deg, var(--accent-san) 0%, var(--accent-san-700) 100%); color: white; border: none; font-weight: 600; }
+
+  /* Section card */
+  .section {
+    background: var(--bg-card); border-radius: 14px;
+    box-shadow: 8px 8px 18px rgba(163,177,198,.30), -8px -8px 18px rgba(255,255,255,.9);
+    margin-bottom: 14px;
+    overflow: hidden;
+  }
+  .section-head {
+    display: grid; grid-template-columns: auto 1fr auto auto; gap: 12px;
+    align-items: center; padding: 14px 18px; cursor: pointer; user-select: none;
+  }
+  .section-head:hover { background: rgba(74,122,150,.04); }
+  .section.collapsed .section-body { display: none; }
+  .section-num {
+    width: 28px; height: 28px; border-radius: 8px;
+    display: inline-flex; align-items: center; justify-content: center;
+    background: var(--accent-san); color: white; font-weight: 700; font-size: 12px;
+  }
+  .section-num.s2 { background: var(--accent-good); }
+  .section-num.s3 { background: var(--accent-amber); }
+  .section-num.s4 { background: var(--accent-purple); }
+  .section-num.s5 { background: var(--accent-rose); }
+  .section-title h3 { margin: 0; font-size: 14px; font-weight: 600; }
+  .section-title .desc { font-size: 11px; color: var(--text-muted); margin-top: 2px; }
+  .section-stats {
+    background: var(--bg-light); border-radius: 8px; padding: 4px 10px;
+    font-size: 10px; font-weight: 600; color: var(--text-secondary);
+    font-family: Consolas, monospace;
+  }
+  .section-stats.green { background: var(--good-bg); color: var(--good-fg); }
+  .section-stats.amber { background: var(--warn-bg); color: var(--warn-fg); }
+  .chev { width: 14px; height: 14px; color: var(--text-muted); transition: transform .2s; }
+  .section.collapsed .chev { transform: rotate(-90deg); }
+
+  .section-body { padding: 0 18px 18px; border-top: 1px solid var(--border-light); }
+
+  /* Rule card */
+  .rules { display: flex; flex-direction: column; gap: 8px; margin-top: 14px; }
+  .rule {
+    background: var(--bg-sub); border: 1px solid var(--border-light);
+    border-left: 3px solid var(--accent-san);
+    border-radius: 8px; padding: 12px 14px;
+    display: grid; grid-template-columns: auto 1fr auto auto; gap: 12px; align-items: center;
+  }
+  .rule.s2 { border-left-color: var(--accent-good); }
+  .rule.s3 { border-left-color: var(--accent-amber); }
+  .rule.s4 { border-left-color: var(--accent-purple); }
+  .rule.s5 { border-left-color: var(--accent-rose); }
+  .rule-icon { font-size: 18px; }
+  .rule-info .name { font-size: 12px; font-weight: 600; color: var(--text-primary); margin-bottom: 2px; }
+  .rule-info .when { font-size: 11px; color: var(--text-secondary); }
+  .rule-info .when code { font-family: Consolas, monospace; background: var(--bg-light); padding: 1px 5px; border-radius: 3px; font-size: 10px; color: var(--accent-san-700); }
+  .rule-match { font-family: Consolas, monospace; font-size: 11px; color: var(--accent-good); font-weight: 600; min-width: 70px; text-align: right; }
+  .rule-match.zero { color: var(--text-muted); }
+  .rule-actions { display: flex; gap: 4px; }
+  .icon-btn { width: 24px; height: 24px; border-radius: 6px; background: transparent; border: none; color: var(--text-muted); cursor: pointer; display: inline-flex; align-items: center; justify-content: center; font-size: 13px; }
+  .icon-btn:hover { background: var(--bg-light); color: var(--accent-san); }
+  .icon-btn.del:hover { color: var(--accent-rose); }
+
+  .add-rule { margin-top: 10px; padding: 8px 12px; background: rgba(74,122,150,.06); border: 1px dashed rgba(74,122,150,.4); color: var(--accent-san); cursor: pointer; border-radius: 8px; font-size: 11px; text-align: center; }
+
+  /* Table for groups within a section */
+  .building-list { margin-top: 12px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+  .building-card { background: var(--bg-sub); border: 1px solid var(--border-light); border-radius: 10px; padding: 12px 14px; }
+  .building-card .head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+  .building-card .head .name { font-weight: 700; font-size: 13px; color: var(--accent-san); }
+  .building-card .head .count { font-size: 10px; font-family: Consolas, monospace; color: var(--text-muted); }
+  .building-card .levels { font-size: 11px; color: var(--text-secondary); line-height: 1.4; }
+  .building-card .levels b { color: var(--text-primary); }
+
+  /* Diagnostic panel */
+  .diagnostic {
+    background: var(--bg-card); border-radius: 14px; padding: 18px 20px;
+    box-shadow: inset 2px 2px 6px rgba(163,177,198,.30), inset -2px -2px 6px rgba(255,255,255,.9);
+    border: 2px solid var(--accent-san);
+    margin-bottom: 14px;
+  }
+  .diag-head { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 12px; }
+  .diag-head h3 { margin: 0; font-size: 14px; }
+  .diag-head .live { font-size: 10px; color: var(--accent-good); font-weight: 600; }
+  .diag-tree { font-family: Consolas, monospace; font-size: 11px; line-height: 1.7; color: var(--text-primary); }
+  .diag-tree .node { padding: 2px 0; }
+  .diag-tree .node b { color: var(--accent-san); font-weight: 600; }
+  .diag-tree .node.warn b { color: var(--warn-fg); }
+  .diag-tree .indent-1 { padding-left: 20px; }
+  .diag-tree .indent-2 { padding-left: 40px; color: var(--text-secondary); }
+  .diag-tree .indent-3 { padding-left: 60px; color: var(--text-muted); }
+  .diag-count { float: right; color: var(--text-secondary); font-weight: 600; }
+
+  /* Pills */
+  .pill { display: inline-block; padding: 2px 8px; border-radius: 8px; font-size: 10px; font-weight: 600; }
+  .pill.exact { background: var(--good-bg); color: var(--good-fg); }
+  .pill.fuzzy { background: var(--warn-bg); color: var(--warn-fg); }
+  .pill.miss { background: #FEE2E2; color: #B91C1C; }
+  .pill.method { background: var(--info-bg); color: var(--info-fg); font-family: Consolas, monospace; }
+
+  .footer-actions { display: flex; justify-content: flex-end; gap: 8px; padding: 14px 0 0; }
+
+  .legend {
+    margin: 24px auto 0; width: 1240px;
+    background: var(--bg-card); border-radius: 12px; padding: 16px 20px;
+    font-size: 11px; color: var(--text-secondary);
+    box-shadow: 6px 6px 14px rgba(163,177,198,.22);
+  }
+  .legend h3 { margin: 0 0 8px; font-size: 12px; color: var(--accent-san); text-transform: uppercase; letter-spacing: .5px; }
+  .legend ul { margin: 0; padding-left: 18px; }
+  .legend li { margin-bottom: 5px; line-height: 1.5; }
+  .legend code { font-family: Consolas, monospace; font-size: 11px; background: var(--bg-light); padding: 1px 5px; border-radius: 3px; color: var(--accent-san-700); }
+  .legend .arch {
+    margin-top: 14px; padding: 12px 16px; background: var(--bg-sub); border-radius: 8px;
+    font-family: Consolas, monospace; font-size: 11px; line-height: 1.6; color: var(--text-secondary);
+    overflow-x: auto;
+  }
+</style>
+</head>
+<body>
+
+<div class="window">
+  <div class="titlebar">
+    <div class="dots"><div class="dot r"></div><div class="dot y"></div><div class="dot g"></div></div>
+    <span class="title">E3G BIM Tools</span><span class="sep">›</span><span>Ajustes</span>
+  </div>
+
+  <div class="layout">
+    <aside class="sidebar">
+      <div class="group-label">General</div>
+      <div class="nav-btn"><span class="ico">🌐</span> Idioma</div>
+      <div class="nav-btn"><span class="ico">📏</span> Unitats</div>
+      <div class="nav-btn"><span class="ico">🏷️</span> Nomenclatura</div>
+      <div class="nav-btn"><span class="ico">⚙️</span> Classificació de sistemes</div>
+      <div class="nav-btn"><span class="ico">📋</span> Partides BC3</div>
+      <div class="nav-btn active new"><span class="ico">📐</span> Protocol de mediciones</div>
+
+      <div class="group-label second">Instal·lació</div>
+      <div class="nav-btn"><span class="ico">💧</span> Sanejament</div>
+      <div class="nav-btn"><span class="ico">🚰</span> Fontaneria</div>
+      <div class="nav-btn"><span class="ico">🔥</span> PCI</div>
+    </aside>
+
+    <main class="content">
+      <div class="breadcrumb">Ajustes <span style="margin:0 6px;">›</span> <b>General</b> <span style="margin:0 6px;">›</span> Protocol de mediciones</div>
+
+      <!-- ════════ PROTOCOL BAR ════════ -->
+      <div class="protocol-bar">
+        <div>
+          <div class="protocol-name">
+            <span class="label">Protocol actiu</span>
+            E3G_Vivendes_2026.e3gprot
+          </div>
+        </div>
+        <div class="protocol-actions">
+          <button class="btn">📂 Importar protocol…</button>
+          <button class="btn">💾 Exportar protocol…</button>
+          <button class="btn">↻ Auto-detectar</button>
+          <button class="btn primary">Desar canvis</button>
+        </div>
+      </div>
+
+      <!-- ════════ DIAGNOSTIC LIVE ════════ -->
+      <div class="diagnostic">
+        <div class="diag-head">
+          <h3>📊 Diagnòstic en viu — què passa al projecte actual amb aquest protocol</h3>
+          <span class="live">● Actualitzant cada canvi</span>
+        </div>
+        <div class="diag-tree">
+          <div class="node"><b>📂 Projecte actual: BlocSantAndreu_FaseE.rvt</b> — 45.178 elements de canonada<span class="diag-count">100%</span></div>
+          <div class="node indent-1"><b>🏢 Edifici A</b> · 12 nivells · 28.451 elements<span class="diag-count">63%</span></div>
+          <div class="node indent-2">🏠 Interior vivendes — 18 grups · 14.220 elements<span class="diag-count">31%</span></div>
+          <div class="node indent-2">🏗 Zones comunes — 14.231 elements<span class="diag-count">32%</span></div>
+          <div class="node indent-3">↓ Bajantes — 4.230 elements<span class="diag-count">9,4%</span></div>
+          <div class="node indent-3">→ Colectores P00.A → P01.A — 3.124 elements<span class="diag-count">6,9%</span></div>
+          <div class="node indent-3">🅿 Aparcamiento (S01.A, S02.A, S03.A) — 6.877 elements<span class="diag-count">15,2%</span></div>
+          <div class="node indent-1"><b>🏢 Edifici B</b> · 9 nivells · 13.602 elements<span class="diag-count">30%</span></div>
+          <div class="node indent-2">🏠 Interior vivendes — 12 grups · 7.320 elements<span class="diag-count">16%</span></div>
+          <div class="node indent-2">🏗 Zones comunes — 6.282 elements<span class="diag-count">14%</span></div>
+          <div class="node indent-3">↓ Bajantes — 1.840 elements</div>
+          <div class="node indent-3">→ Colectores — 1.522 elements</div>
+          <div class="node indent-3">🅿 Aparcamiento — 2.920 elements</div>
+          <div class="node indent-1 warn"><b>⚠ No classificats</b> — 3.125 elements<span class="diag-count">7%</span></div>
+          <div class="node indent-2">Possible motiu: pipes en niveles que no encaixen amb cap regla. Revisa Card 4-5.</div>
+        </div>
+      </div>
+
+      <!-- ════════ SECTION 1: EDIFICIS ════════ -->
+      <section class="section">
+        <div class="section-head">
+          <span class="section-num">1</span>
+          <div class="section-title">
+            <h3>Identificació d'Edificis</h3>
+            <div class="desc">Com l'app separa els pipes en Edifici A, B, C... Per cada Edifici defineix una regla.</div>
+          </div>
+          <span class="section-stats green">2 edificis · 100% pipes assignats</span>
+          <svg class="chev" viewBox="0 0 16 16"><path d="M4 6l4 4 4-4" stroke="currentColor" stroke-width="2" fill="none"/></svg>
+        </div>
+        <div class="section-body">
+
+          <div class="building-list">
+            <div class="building-card">
+              <div class="head">
+                <span class="name">🏢 Edifici A</span>
+                <span class="count">28.451 elements</span>
+              </div>
+              <div class="levels">
+                <b>Detecció:</b> per Workset <span class="pill method">EDIF_A_*</span><br>
+                <b>Nivells:</b> S03.A, S02.A, S01.A, P00.A, P01.A, P02.A, P03.A, P04.A, P05.A, Coberta_A
+              </div>
+            </div>
+            <div class="building-card">
+              <div class="head">
+                <span class="name">🏢 Edifici B</span>
+                <span class="count">13.602 elements</span>
+              </div>
+              <div class="levels">
+                <b>Detecció:</b> per Workset <span class="pill method">EDIF_B_*</span><br>
+                <b>Nivells:</b> S01.B, P00.B, P01.B, P02.B, P03.B, P04.B, Coberta_B
+              </div>
+            </div>
+            <div class="building-card" style="border:1px dashed rgba(74,122,150,.4);background:rgba(74,122,150,.04);text-align:center;color:var(--accent-san);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:600;">
+              + Afegir edifici
+            </div>
+          </div>
+
+          <div class="rules" style="margin-top:14px;">
+            <div class="rule">
+              <span class="rule-icon">🔧</span>
+              <div class="rule-info">
+                <div class="name">Mètode de detecció primari</div>
+                <div class="when">Per <code>Workset</code>. Si el Workset del pipe coincideix amb un patró → assigna a l'edifici correspondent.</div>
+              </div>
+              <span class="rule-match">100% match</span>
+              <div class="rule-actions"><button class="icon-btn">⚙</button></div>
+            </div>
+            <div class="rule">
+              <span class="rule-icon">🔧</span>
+              <div class="rule-info">
+                <div class="name">Mètode alternatiu (si Workset no aplica)</div>
+                <div class="when">Per <code>prefix de Level</code>. Levels acabats en <code>.A</code> → Edifici A; en <code>.B</code> → Edifici B.</div>
+              </div>
+              <span class="rule-match zero">0% (no s'usa)</span>
+              <div class="rule-actions"><button class="icon-btn">⚙</button><button class="icon-btn del">✕</button></div>
+            </div>
+          </div>
+
+          <div class="add-rule">+ Afegir regla alternativa de detecció</div>
+
+        </div>
+      </section>
+
+      <!-- ════════ SECTION 2: VIVENDES ════════ -->
+      <section class="section">
+        <div class="section-head">
+          <span class="section-num s2">2</span>
+          <div class="section-title">
+            <h3>Identificació d'Interior de Vivendes</h3>
+            <div class="desc">Quins Group Types representen una vivenda. Els pipes dins d'aquests grups es classifiquen com a interior.</div>
+          </div>
+          <span class="section-stats green">30 grups detectats · 21.540 elements</span>
+          <svg class="chev" viewBox="0 0 16 16"><path d="M4 6l4 4 4-4" stroke="currentColor" stroke-width="2" fill="none"/></svg>
+        </div>
+        <div class="section-body">
+          <div class="rules">
+            <div class="rule s2">
+              <span class="rule-icon">📦</span>
+              <div class="rule-info">
+                <div class="name">Vivendes per patró de nom</div>
+                <div class="when">GroupType.Name conté <code>VIV</code> o <code>VIVENDA</code> o <code>HABITATGE</code> (case-insensitive).</div>
+              </div>
+              <span class="rule-match">26 grups</span>
+              <div class="rule-actions"><button class="icon-btn">⚙</button><button class="icon-btn del">✕</button></div>
+            </div>
+            <div class="rule s2">
+              <span class="rule-icon">📦</span>
+              <div class="rule-info">
+                <div class="name">Vivendes per regex</div>
+                <div class="when">Match: <code>^M_(?:Vivenda|Apartament)_T\d+$</code></div>
+              </div>
+              <span class="rule-match">4 grups</span>
+              <div class="rule-actions"><button class="icon-btn">⚙</button><button class="icon-btn del">✕</button></div>
+            </div>
+            <div class="rule s2" style="opacity:0.5;">
+              <span class="rule-icon">📦</span>
+              <div class="rule-info">
+                <div class="name">Vivendes per llista manual (desactivat)</div>
+                <div class="when">Llista d'IDs marcats explícitament. Útil quan els noms no segueixen cap patró.</div>
+              </div>
+              <span class="rule-match zero">0 grups</span>
+              <div class="rule-actions"><button class="icon-btn">⚙</button></div>
+            </div>
+          </div>
+          <div class="add-rule">+ Afegir regla de detecció de vivenda</div>
+        </div>
+      </section>
+
+      <!-- ════════ SECTION 3: BAJANTES ════════ -->
+      <section class="section">
+        <div class="section-head">
+          <span class="section-num s3">3</span>
+          <div class="section-title">
+            <h3>Bajantes</h3>
+            <div class="desc">Pipes verticals que connecten plantes. Criteri geomètric + nivell mínim/màxim on poden aparèixer.</div>
+          </div>
+          <span class="section-stats">6.070 pipes</span>
+          <svg class="chev" viewBox="0 0 16 16"><path d="M4 6l4 4 4-4" stroke="currentColor" stroke-width="2" fill="none"/></svg>
+        </div>
+        <div class="section-body">
+          <div class="rules">
+            <div class="rule s3">
+              <span class="rule-icon">📐</span>
+              <div class="rule-info">
+                <div class="name">Criteri geomètric</div>
+                <div class="when">És vertical: <code>Δz &gt; Δxy</code>. Longitud mínima: <code>1,00 m</code>. Tolerància: <code>±0,5 m</code>.</div>
+              </div>
+              <span class="rule-match">—</span>
+              <div class="rule-actions"><button class="icon-btn">⚙</button></div>
+            </div>
+            <div class="rule s3">
+              <span class="rule-icon">📍</span>
+              <div class="rule-info">
+                <div class="name">Niveles vàlids per bajantes</div>
+                <div class="when">Tots els niveles que NO siguin Aparcamiento. Sostre del cas comú = primer nivell amb elev ≥ 0,00 m (= P00.A / P00.B).</div>
+              </div>
+              <span class="rule-match">14 niveles</span>
+              <div class="rule-actions"><button class="icon-btn">⚙</button></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ════════ SECTION 4: COLECTORES ════════ -->
+      <section class="section">
+        <div class="section-head">
+          <span class="section-num s4">4</span>
+          <div class="section-title">
+            <h3>Colectores</h3>
+            <div class="desc">Pipes horizontals entre dos niveles de referència (típicament P00.A → P01.A).</div>
+          </div>
+          <span class="section-stats">4.646 pipes</span>
+          <svg class="chev" viewBox="0 0 16 16"><path d="M4 6l4 4 4-4" stroke="currentColor" stroke-width="2" fill="none"/></svg>
+        </div>
+        <div class="section-body">
+          <div class="rules">
+            <div class="rule s4">
+              <span class="rule-icon">📐</span>
+              <div class="rule-info">
+                <div class="name">Criteri geomètric</div>
+                <div class="when">És horizontal: <code>Δxy &gt; Δz</code>.</div>
+              </div>
+              <span class="rule-match">—</span>
+              <div class="rule-actions"><button class="icon-btn">⚙</button></div>
+            </div>
+            <div class="rule s4">
+              <span class="rule-icon">📍</span>
+              <div class="rule-info">
+                <div class="name">Rang de niveles</div>
+                <div class="when">Inferior: <code>P00.A / P00.B</code> · Superior: <code>P01.A / P01.B</code>. Tolerància <code>±0,5 m</code>.</div>
+              </div>
+              <span class="rule-match">4 niveles</span>
+              <div class="rule-actions"><button class="icon-btn">⚙</button></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ════════ SECTION 5: APARCAMIENTO ════════ -->
+      <section class="section">
+        <div class="section-head">
+          <span class="section-num s5">5</span>
+          <div class="section-title">
+            <h3>Aparcamiento</h3>
+            <div class="desc">Niveles de sòtan / pàrquing. Tots els pipes en aquests niveles van a aparcamiento.</div>
+          </div>
+          <span class="section-stats">9.797 pipes</span>
+          <svg class="chev" viewBox="0 0 16 16"><path d="M4 6l4 4 4-4" stroke="currentColor" stroke-width="2" fill="none"/></svg>
+        </div>
+        <div class="section-body">
+          <div class="rules">
+            <div class="rule s5">
+              <span class="rule-icon">📍</span>
+              <div class="rule-info">
+                <div class="name">Aparcamiento per patró de nom</div>
+                <div class="when">Level.Name comença per <code>S</code> seguit de dígits (ex: <code>S01.A</code>, <code>S2.B</code>). Equivalent al regex <code>^S\d+\.[AB]$</code>.</div>
+              </div>
+              <span class="rule-match">4 niveles</span>
+              <div class="rule-actions"><button class="icon-btn">⚙</button><button class="icon-btn del">✕</button></div>
+            </div>
+            <div class="rule s5">
+              <span class="rule-icon">📍</span>
+              <div class="rule-info">
+                <div class="name">Aparcamiento per elevació</div>
+                <div class="when">Niveles amb elevació &lt; <code>0,00 m</code> es consideren aparcamiento.</div>
+              </div>
+              <span class="rule-match">4 niveles</span>
+              <div class="rule-actions"><button class="icon-btn">⚙</button></div>
+            </div>
+          </div>
+          <div class="add-rule">+ Afegir regla addicional</div>
+        </div>
+      </section>
+
+      <div class="footer-actions">
+        <button class="btn">Cancel·lar</button>
+        <button class="btn primary">Desar protocol al projecte</button>
+      </div>
+    </main>
+  </div>
+</div>
+
+<div class="legend">
+  <h3>Com funciona la portabilitat</h3>
+  <ul>
+    <li><b>El Protocol és un conjunt de regles, no de IDs.</b> Cada regla diu "si es compleix X, l'element pertany a Y". X pot ser: nom de Workset, patró/regex de nom, keyword, rang d'elevació, parámetre custom, o llista manual com a últim recurs.</li>
+    <li><b>Auto-detecció en obrir un projecte nou:</b> l'app aplica les regles del Protocol a tot el .rvt actual. Per cada Level i GroupType comprova quina regla matchea i l'assigna a la categoria. El Diagnòstic en viu mostra el resultat: <span class="pill exact">match exacte</span>, <span class="pill fuzzy">match aproximat</span>, <span class="pill miss">no classificat</span>.</li>
+    <li><b>Si una regla no matchea res</b> (típic en projecte amb nomenclatura diferent): la app destaca els elements sense classificar al panell de Diagnòstic. L'usuari afegeix una regla nova ("els meus levels comencen per <code>BlocA_</code>" → afegeix patró <code>^BlocA_*</code>) i tot queda classificat.</li>
+    <li><b>Export/Import.e3gprot:</b> el Protocol es desa com JSON portable. Un estudi pot tenir un protocol "ResidencialEstandard.e3gprot" amb les seves regles habituals i un altre "Industrial.e3gprot". En projecte nou: import → l'app intenta aplicar — si totes les regles matchean, cero clics; si alguna no, l'usuari completa.</li>
+    <li><b>Estructura jerárquica:</b> Edifici (1) → Interior vivendes / Zones comunes (2) → dins de Zones comunes: Bajantes / Colectores / Aparcamiento (3). Cada pipe acaba en una fulla d'aquesta jerarquia. El Diagnòstic la mostra en arbre.</li>
+  </ul>
+
+  <h3 style="margin-top:18px;">Exemple del JSON del .e3gprot</h3>
+  <div class="arch">{<br>
+&nbsp;&nbsp;"nom": "E3G_Vivendes_2026",<br>
+&nbsp;&nbsp;"edificis": [<br>
+&nbsp;&nbsp;&nbsp;&nbsp;{ "id": "A", "nom": "Edifici A", "regles": [<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{ "tipus": "workset", "patro": "EDIF_A_*" },<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{ "tipus": "levelSuffix", "valor": ".A" }<br>
+&nbsp;&nbsp;&nbsp;&nbsp;] },<br>
+&nbsp;&nbsp;&nbsp;&nbsp;{ "id": "B", "nom": "Edifici B", "regles": [...] }<br>
+&nbsp;&nbsp;],<br>
+&nbsp;&nbsp;"vivendes": {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;"regles": [<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{ "tipus": "groupKeyword", "paraules": ["VIV", "VIVENDA", "HABITATGE"] },<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{ "tipus": "groupRegex", "patro": "^M_(?:Vivenda|Apartament)_T\\d+$" }<br>
+&nbsp;&nbsp;&nbsp;&nbsp;]<br>
+&nbsp;&nbsp;},<br>
+&nbsp;&nbsp;"bajantes": {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;"geometria": { "verticalQuant": "dz_gt_dxy", "longitudMinM": 1.0 },<br>
+&nbsp;&nbsp;&nbsp;&nbsp;"toleranciaM": 0.5<br>
+&nbsp;&nbsp;},<br>
+&nbsp;&nbsp;"colectores": {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;"nivellInferior": { "tipus": "levelPattern", "valor": "P00.*" },<br>
+&nbsp;&nbsp;&nbsp;&nbsp;"nivellSuperior": { "tipus": "levelPattern", "valor": "P01.*" },<br>
+&nbsp;&nbsp;&nbsp;&nbsp;"toleranciaM": 0.5<br>
+&nbsp;&nbsp;},<br>
+&nbsp;&nbsp;"aparcamiento": {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;"regles": [<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{ "tipus": "levelRegex", "patro": "^S\\d+\\.[AB]$" },<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{ "tipus": "elevacioMaxim", "valorM": 0.0 }<br>
+&nbsp;&nbsp;&nbsp;&nbsp;]<br>
+&nbsp;&nbsp;}<br>
+}</div>
+
+  <h3 style="margin-top:18px;">Plan d'implementació realista (per a quan vulguis arrencar-lo)</h3>
+  <ul>
+    <li><b>Fase 1 — Modelo de Protocol</b> (~3h): classes <code>Protocol</code>, <code>ReglaDeteccio</code> (interfície + implementacions: ReglaWorkset, ReglaPatroNom, ReglaRegex, ReglaKeyword, ReglaElevacio). Tests unitaris contra noms d'exemple.</li>
+    <li><b>Fase 2 — Persistència i export</b> (~2h): JSON serialization polimòrfica (mateix patró que <code>SubFiltroJsonConverter</code>). Export/Import del .e3gprot com fitxer.</li>
+    <li><b>Fase 3 — Auto-detecció</b> (~3h): donat un Document Revit, generar un Protocol inicial mirant els Levels, GroupTypes i Worksets reals. Heurístiques per pre-marcar el què cuadra.</li>
+    <li><b>Fase 4 — UI</b> (~5h): la pantalla d'aquest mockup. 5 sections + diagnòstic en viu. Recompute del diagnòstic en cada canvi.</li>
+    <li><b>Fase 5 — Integració amb AgrupadorMediciones</b> (~2h): el helper actual passa a llegir el Protocol guardat (caché en memòria) en lloc de tenir criteris hardcoded.</li>
+    <li><b>Total: ~15h</b> de desenvolupament + testing. La caché de protocol per sessió és un patró ja validat (<code>PartidasSession</code>, <code>ClasificacionSession</code>).</li>
+  </ul>
+</div>
+
+</body>
+</html>

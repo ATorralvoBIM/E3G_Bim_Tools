@@ -1,0 +1,702 @@
+﻿<Page x:Class="E3G.Saneamiento.SaneamientoWindow"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:local="clr-namespace:E3G.Saneamiento"
+      Background="#E8ECF0">
+
+    <Page.Resources>
+
+        <Style x:Key="BtnPrimary" TargetType="Button">
+            <Setter Property="Background" Value="#4a7a96"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Padding" Value="13,10"/>
+            <Setter Property="FontSize" Value="12"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="HorizontalContentAlignment" Value="Left"/>
+            <Setter Property="Effect">
+                <Setter.Value>
+                    <DropShadowEffect Color="#C8CDD2" BlurRadius="10" ShadowDepth="5" Direction="315" Opacity="1"/>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}" CornerRadius="12" Padding="{TemplateBinding Padding}">
+                            <ContentPresenter/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background" Value="#3a6a86"/>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter Property="Background" Value="#2d5a74"/>
+                                <Setter Property="Effect">
+                                    <Setter.Value>
+                                        <DropShadowEffect Color="#C8CDD2" BlurRadius="3" ShadowDepth="1" Direction="315" Opacity="0.5"/>
+                                    </Setter.Value>
+                                </Setter>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="BtnSecondary" TargetType="Button">
+            <Setter Property="Background" Value="#7aaabb"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Padding" Value="13,10"/>
+            <Setter Property="FontSize" Value="12"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="HorizontalContentAlignment" Value="Left"/>
+            <Setter Property="Effect">
+                <Setter.Value>
+                    <DropShadowEffect Color="#C8CDD2" BlurRadius="10" ShadowDepth="5" Direction="315" Opacity="1"/>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}" CornerRadius="12" Padding="{TemplateBinding Padding}">
+                            <ContentPresenter/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background" Value="#6a9aab"/>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter Property="Background" Value="#5a8a9b"/>
+                                <Setter Property="Effect">
+                                    <Setter.Value>
+                                        <DropShadowEffect Color="#C8CDD2" BlurRadius="3" ShadowDepth="1" Direction="315" Opacity="0.6"/>
+                                    </Setter.Value>
+                                </Setter>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="TabBtn" TargetType="RadioButton">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="BorderThickness" Value="0,0,0,2"/>
+            <Setter Property="BorderBrush" Value="Transparent"/>
+            <Setter Property="Foreground" Value="#94A3B8"/>
+            <Setter Property="FontSize" Value="12"/>
+            <Setter Property="FontWeight" Value="Medium"/>
+            <Setter Property="Padding" Value="16,10"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="RadioButton">
+                        <Border Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                Padding="{TemplateBinding Padding}">
+                            <ContentPresenter/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsChecked" Value="True">
+                                <Setter Property="BorderBrush" Value="#4a7a96"/>
+                                <Setter Property="Foreground" Value="#4a7a96"/>
+                                <Setter Property="FontWeight" Value="SemiBold"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="SisBtnBase" TargetType="Button">
+            <Setter Property="Background" Value="#E8ECF0"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="FontSize" Value="11"/>
+            <Setter Property="FontWeight" Value="Medium"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Padding" Value="8,9"/>
+            <Setter Property="Effect">
+                <Setter.Value>
+                    <DropShadowEffect Color="#C8CDD2" BlurRadius="5" ShadowDepth="3" Direction="315" Opacity="0.8"/>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}"
+                                CornerRadius="10"
+                                Padding="{TemplateBinding Padding}">
+                            <ContentPresenter HorizontalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter Property="Effect">
+                                    <Setter.Value>
+                                        <DropShadowEffect Color="#C8CDD2" BlurRadius="2" ShadowDepth="1" Direction="315" Opacity="0.4"/>
+                                    </Setter.Value>
+                                </Setter>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="NormPillBtn" TargetType="Button">
+            <Setter Property="Background" Value="#E8ECF0"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Padding" Value="10,6"/>
+            <Setter Property="Effect">
+                <Setter.Value>
+                    <DropShadowEffect Color="#C8CDD2" BlurRadius="5" ShadowDepth="2" Direction="315" Opacity="0.7"/>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="White"
+                                CornerRadius="10"
+                                Padding="{TemplateBinding Padding}">
+                            <ContentPresenter/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background" Value="#DDE1E5"/>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter Property="Effect">
+                                    <Setter.Value>
+                                        <DropShadowEffect Color="#C8CDD2" BlurRadius="2" ShadowDepth="1" Direction="315" Opacity="0.4"/>
+                                    </Setter.Value>
+                                </Setter>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+    </Page.Resources>
+
+    <Grid>
+        <ScrollViewer VerticalScrollBarVisibility="Auto">
+            <StackPanel Margin="10">
+
+                <!-- TOPBAR -->
+            <Border Background="White" CornerRadius="18" Padding="16,12" Margin="0,0,0,10">
+                <Border.Effect>
+                    <DropShadowEffect Color="#C8CDD2" BlurRadius="8" ShadowDepth="4" Direction="315" Opacity="0.9"/>
+                </Border.Effect>
+                <DockPanel>
+                    <StackPanel DockPanel.Dock="Left" Orientation="Vertical" Margin="0,0,12,0">
+                        <TextBlock Text="E3G" FontSize="20" FontWeight="Medium" Foreground="#4a7a96"/>
+                        <TextBlock Text="ENGINYERIA I ENERGIA" FontSize="7" Foreground="#94A3B8"/>
+                    </StackPanel>
+                    <Rectangle DockPanel.Dock="Left" Width="1" Fill="#C8CDD2" Margin="0,4,12,4"/>
+                    <StackPanel DockPanel.Dock="Left" VerticalAlignment="Center">
+                        <TextBlock Text="Saneamiento" FontSize="28" FontWeight="Medium" Foreground="#4a7a96" Height="38" RenderTransformOrigin="0.533,0.444" Width="228"/>
+                    </StackPanel>
+                    <Border DockPanel.Dock="Right" Background="White" CornerRadius="6" Padding="8,3"
+                            HorizontalAlignment="Right" VerticalAlignment="Center" RenderTransformOrigin="0.798,0.641">
+                        <Border.Effect>
+                            <DropShadowEffect Color="#C8CDD2" BlurRadius="3" ShadowDepth="1" Direction="135" Opacity="0.6"/>
+                        </Border.Effect>
+                        <TextBlock Text="v1.0.0" FontSize="10" Foreground="#64748B"/>
+                    </Border>
+                </DockPanel>
+            </Border>
+
+            <!-- PESTANYES -->
+            <Border Background="White" CornerRadius="14" Margin="0,0,0,10">
+                <Border.Effect>
+                    <DropShadowEffect Color="#C8CDD2" BlurRadius="6" ShadowDepth="3" Direction="315" Opacity="0.7"/>
+                </Border.Effect>
+                <StackPanel Orientation="Horizontal" Margin="4,0,0,0">
+                    <RadioButton x:Name="TabVerificacion" Content="Verificación colectores"
+                                 Style="{StaticResource TabBtn}" IsChecked="True"
+                                 Checked="TabVerificacion_Checked"/>
+                    <RadioButton x:Name="TabMediciones" Content="Mediciones"
+                                 Style="{StaticResource TabBtn}"
+                                 Checked="TabMediciones_Checked"/>
+                    <RadioButton x:Name="TabEsquema" Content="Esquema Principi"
+                                 Style="{StaticResource TabBtn}"
+                                 Checked="TabEsquema_Checked"/>
+                </StackPanel>
+            </Border>
+
+            <!-- SELECTOR NORMATIVA -->
+            <Border x:Name="SelectorNormativa" Background="White" CornerRadius="14" Padding="14,10" Margin="0,0,0,10">
+                <Border.Effect>
+                    <DropShadowEffect Color="#C8CDD2" BlurRadius="6" ShadowDepth="3" Direction="315" Opacity="0.7"/>
+                </Border.Effect>
+                <DockPanel>
+                    <TextBlock DockPanel.Dock="Left" Text="Normativa" FontSize="10" Foreground="#94A3B8"
+                               FontWeight="Medium" VerticalAlignment="Center" Margin="0,0,10,0"/>
+                    <Button Style="{StaticResource NormPillBtn}" Click="BtnNormativa_Click">
+                        <DockPanel>
+                            <TextBlock DockPanel.Dock="Right" x:Name="NormChevron" Text="▼"
+                                       FontSize="9" Foreground="#7aaabb" Margin="8,0,0,0"
+                                       VerticalAlignment="Center"/>
+                            <StackPanel Orientation="Horizontal">
+                                <Border Width="16" Height="16" CornerRadius="4"
+                                        Background="#D6E8F0" Margin="0,0,8,0" VerticalAlignment="Center">
+                                    <TextBlock Text="≡" FontSize="10" Foreground="#4a7a96"
+                                               HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                </Border>
+                                <StackPanel>
+                                    <TextBlock x:Name="NormTitulo" Text="Tabla 4.5 CTE DB-HS5"
+                                               FontSize="11" FontWeight="Medium" Foreground="#2D5F7A"/>
+                                    <TextBlock x:Name="NormSubtitulo" Text="Colectores Suspendidos · pendiente 1%"
+                                               FontSize="10" Foreground="#7aaabb"/>
+                                </StackPanel>
+                            </StackPanel>
+                        </DockPanel>
+                    </Button>
+                </DockPanel>
+            </Border>
+
+            <!-- DROPDOWN NORMATIVA -->
+            <Border x:Name="NormDropdown" Visibility="Collapsed"
+                    Background="#E8ECF0" CornerRadius="14" Margin="0,0,0,10">
+                <Border.Effect>
+                    <DropShadowEffect Color="#C8CDD2" BlurRadius="8" ShadowDepth="4" Direction="315" Opacity="0.8"/>
+                </Border.Effect>
+                <StackPanel>
+                    <Border x:Name="NormOpt1" Background="#DDE1E5" Padding="14,10" Cursor="Hand"
+                            CornerRadius="14,14,0,0" MouseLeftButtonUp="NormOpt1_Click">
+                        <DockPanel>
+                            <TextBlock DockPanel.Dock="Right" Text="activa" FontSize="9"
+                                       Background="#C8D8E0" Foreground="#4a7a96" Padding="5,2"
+                                       VerticalAlignment="Center" Margin="8,0,0,0"/>
+                            <TextBlock DockPanel.Dock="Left" Text="✓" FontSize="10" Foreground="#4a7a96"
+                                       Width="16" VerticalAlignment="Center"/>
+                            <StackPanel>
+                                <TextBlock Text="Tabla 4.5 CTE DB-HS5" FontSize="11" FontWeight="Medium"
+                                           Foreground="#2D5F7A"/>
+                                <TextBlock Text="Colectores Suspendidos · pendiente 1%"
+                                           FontSize="10" Foreground="#94A3B8"/>
+                            </StackPanel>
+                        </DockPanel>
+                    </Border>
+                    <Border BorderBrush="#C8CDD2" BorderThickness="0,0.5,0,0" Padding="14,10"
+                            CornerRadius="0,0,14,14">
+                        <DockPanel>
+                            <TextBlock DockPanel.Dock="Right" Text="pronto" FontSize="9"
+                                       Background="#DDE1E5" Foreground="#CBD5E1" Padding="5,2"
+                                       VerticalAlignment="Center" Margin="8,0,0,0"/>
+                            <TextBlock DockPanel.Dock="Left" Text="" FontSize="10"
+                                       Width="16" VerticalAlignment="Center"/>
+                            <StackPanel>
+                                <TextBlock Text="Próximamente más opciones" FontSize="11" Foreground="#CBD5E1"/>
+                                <TextBlock Text="Nuevas tablas en desarrollo" FontSize="10" Foreground="#CBD5E1"/>
+                            </StackPanel>
+                        </DockPanel>
+                    </Border>
+                </StackPanel>
+            </Border>
+
+            <!-- TAB VERIFICACIÓN -->
+            <StackPanel x:Name="PanelVerificacion">
+
+                <Grid Margin="0,0,0,10">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="8"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="8"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Border Grid.Column="0" Background="White" CornerRadius="14" Padding="12,10">
+                        <Border.Effect>
+                            <DropShadowEffect Color="#C8CDD2" BlurRadius="6" ShadowDepth="3" Direction="315" Opacity="0.8"/>
+                        </Border.Effect>
+                        <StackPanel>
+                            <TextBlock Text="Analizadas" FontSize="10" Foreground="#94A3B8" FontWeight="Medium"/>
+                            <TextBlock x:Name="CardTotal" Text="—" FontSize="22" FontWeight="Light" Foreground="#1E293B"/>
+                        </StackPanel>
+                    </Border>
+                    <Border Grid.Column="2" Background="White" CornerRadius="14" Padding="12,10">
+                        <Border.Effect>
+                            <DropShadowEffect Color="#C8CDD2" BlurRadius="6" ShadowDepth="3" Direction="315" Opacity="0.8"/>
+                        </Border.Effect>
+                        <StackPanel>
+                            <TextBlock Text="Correctas" FontSize="10" Foreground="#94A3B8" FontWeight="Medium"/>
+                            <TextBlock x:Name="CardOk" Text="—" FontSize="22" FontWeight="Light" Foreground="#3B6D11"/>
+                        </StackPanel>
+                    </Border>
+                    <Border Grid.Column="4" Background="White" CornerRadius="14" Padding="12,10">
+                        <Border.Effect>
+                            <DropShadowEffect Color="#C8CDD2" BlurRadius="6" ShadowDepth="3" Direction="315" Opacity="0.8"/>
+                        </Border.Effect>
+                        <StackPanel>
+                            <TextBlock Text="KO" FontSize="10" Foreground="#94A3B8" FontWeight="Medium"/>
+                            <TextBlock x:Name="CardKo" Text="—" FontSize="22" FontWeight="Light" Foreground="#C0392B"/>
+                        </StackPanel>
+                    </Border>
+                </Grid>
+
+                <!-- Llegenda -->
+                <Border Background="White" CornerRadius="14" Padding="14,12" Margin="0,0,0,10">
+                    <Border.Effect>
+                        <DropShadowEffect Color="#C8CDD2" BlurRadius="6" ShadowDepth="3" Direction="315" Opacity="0.7"/>
+                    </Border.Effect>
+                    <StackPanel>
+                        <TextBlock Text="Leyenda — colores DN según CTE DB-HS5"
+                                   FontSize="10" Foreground="#94A3B8" FontWeight="Medium" Margin="0,0,0,8"/>
+                        <UniformGrid Columns="4" Rows="2">
+                            <StackPanel Orientation="Horizontal" Margin="0,2">
+                                <Border Width="14" Height="14" CornerRadius="3" Background="#E24B4A" Margin="0,0,5,0"/>
+                                <TextBlock Text="ø90"  FontSize="11" Foreground="#475569" VerticalAlignment="Center"/>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal" Margin="0,2">
+                                <Border Width="14" Height="14" CornerRadius="3" Background="#EF9F27" Margin="0,0,5,0"/>
+                                <TextBlock Text="ø110" FontSize="11" Foreground="#475569" VerticalAlignment="Center"/>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal" Margin="0,2">
+                                <Border Width="14" Height="14" CornerRadius="3" Background="#E8D800" Margin="0,0,5,0"/>
+                                <TextBlock Text="ø125" FontSize="11" Foreground="#475569" VerticalAlignment="Center"/>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal" Margin="0,2">
+                                <Border Width="14" Height="14" CornerRadius="3" Background="#A0522D" Margin="0,0,5,0"/>
+                                <TextBlock Text="ø160" FontSize="11" Foreground="#475569" VerticalAlignment="Center"/>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal" Margin="0,2">
+                                <Border Width="14" Height="14" CornerRadius="3" Background="#378ADD" Margin="0,0,5,0"/>
+                                <TextBlock Text="ø200" FontSize="11" Foreground="#475569" VerticalAlignment="Center"/>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal" Margin="0,2">
+                                <Border Width="14" Height="14" CornerRadius="3" Background="#7F77DD" Margin="0,0,5,0"/>
+                                <TextBlock Text="ø250" FontSize="11" Foreground="#475569" VerticalAlignment="Center"/>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal" Margin="0,2">
+                                <Border Width="14" Height="14" CornerRadius="3" Background="#1AB3C4" Margin="0,0,5,0"/>
+                                <TextBlock Text="ø315" FontSize="11" Foreground="#475569" VerticalAlignment="Center"/>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal" Margin="0,2">
+                                <Border Width="14" Height="14" CornerRadius="3" Background="#E0E0E0" Margin="0,0,5,0"/>
+                                <TextBlock Text="ø350" FontSize="11" Foreground="#475569" VerticalAlignment="Center"/>
+                            </StackPanel>
+                        </UniformGrid>
+                    </StackPanel>
+                </Border>
+
+                <!-- Grup OK -->
+                <Border x:Name="GrupoOkBorder" Background="White" CornerRadius="14"
+                        Margin="0,0,0,8" ClipToBounds="True">
+                    <Border.Effect>
+                        <DropShadowEffect Color="#C8CDD2" BlurRadius="6" ShadowDepth="3" Direction="315" Opacity="0.7"/>
+                    </Border.Effect>
+                    <StackPanel>
+                        <Border Padding="14,11" Cursor="Hand" MouseLeftButtonUp="GrupoOk_Click">
+                            <DockPanel>
+                                <TextBlock DockPanel.Dock="Right" x:Name="ArrowOk" Text="▶"
+                                           FontSize="10" Foreground="#94A3B8" VerticalAlignment="Center"/>
+                                <StackPanel Orientation="Horizontal">
+                                    <Border Width="22" Height="22" CornerRadius="6"
+                                            Background="#C8E6B8" Margin="0,0,8,0" VerticalAlignment="Center">
+                                        <TextBlock Text="✓" FontSize="11" Foreground="#3B6D11"
+                                                   HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                    </Border>
+                                    <TextBlock Text="Diámetro correcto" FontSize="12" FontWeight="Medium"
+                                               Foreground="#1E293B" VerticalAlignment="Center" Margin="0,0,8,0"/>
+                                    <Border Background="#C8E6B8" CornerRadius="99" Padding="8,2" VerticalAlignment="Center">
+                                        <TextBlock x:Name="BadgeOk" Text="0 segmentos" FontSize="10"
+                                                   Foreground="#3B6D11" FontWeight="Medium"/>
+                                    </Border>
+                                </StackPanel>
+                            </DockPanel>
+                        </Border>
+                        <Border x:Name="BodyOk" Visibility="Collapsed"
+                                BorderBrush="#C8CDD2" BorderThickness="0,0.5,0,0" Background="#DDE1E5">
+                            <DataGrid x:Name="TablaOk" AutoGenerateColumns="False" IsReadOnly="True"
+                                      HeadersVisibility="Column" GridLinesVisibility="Horizontal"
+                                      HorizontalGridLinesBrush="#C8CDD2" BorderThickness="0"
+                                      Background="#DDE1E5" RowBackground="#DDE1E5" FontSize="11" MaxHeight="220">
+                                <DataGrid.ColumnHeaderStyle>
+                                    <Style TargetType="DataGridColumnHeader">
+                                        <Setter Property="Background" Value="#E8ECF0"/>
+                                        <Setter Property="Foreground" Value="#64748B"/>
+                                        <Setter Property="FontSize" Value="10"/>
+                                        <Setter Property="FontWeight" Value="Medium"/>
+                                        <Setter Property="Padding" Value="8,6"/>
+                                        <Setter Property="BorderThickness" Value="0"/>
+                                    </Style>
+                                </DataGrid.ColumnHeaderStyle>
+                                <DataGrid.Columns>
+                                    <DataGridTextColumn Header="ID"        Binding="{Binding IdStr}"      Width="75"/>
+                                    <DataGridTextColumn Header="DN actual" Binding="{Binding DNActualStr}" Width="70"/>
+                                    <DataGridTextColumn Header="UD"        Binding="{Binding UDStr}"       Width="55"/>
+                                    <DataGridTextColumn Header="DN HS5"    Binding="{Binding DNHs5Str}"    Width="80"/>
+                                    <DataGridTemplateColumn Header="Color" Width="*">
+                                        <DataGridTemplateColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                                    <Border Width="12" Height="12" CornerRadius="2" Background="{Binding ColorHex}" Margin="2,0,5,0"/>
+                                                    <TextBlock Text="{Binding NombreColor}" FontSize="11" Foreground="#334155"/>
+                                                </StackPanel>
+                                            </DataTemplate>
+                                        </DataGridTemplateColumn.CellTemplate>
+                                    </DataGridTemplateColumn>
+                                </DataGrid.Columns>
+                            </DataGrid>
+                        </Border>
+                    </StackPanel>
+                </Border>
+
+                <!-- Grup KO -->
+                <Border x:Name="GrupoKoBorder" Background="White" CornerRadius="14"
+                        Margin="0,0,0,12" ClipToBounds="True">
+                    <Border.Effect>
+                        <DropShadowEffect Color="#C8CDD2" BlurRadius="6" ShadowDepth="3" Direction="315" Opacity="0.7"/>
+                    </Border.Effect>
+                    <StackPanel>
+                        <Border Padding="14,11" Cursor="Hand" MouseLeftButtonUp="GrupoKo_Click">
+                            <DockPanel>
+                                <TextBlock DockPanel.Dock="Right" x:Name="ArrowKo" Text="▶"
+                                           FontSize="10" Foreground="#94A3B8" VerticalAlignment="Center"/>
+                                <StackPanel Orientation="Horizontal">
+                                    <Border Width="22" Height="22" CornerRadius="6"
+                                            Background="#FACACA" Margin="0,0,8,0" VerticalAlignment="Center">
+                                        <TextBlock Text="✕" FontSize="11" Foreground="#C0392B"
+                                                   HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                    </Border>
+                                    <TextBlock Text="Necesitan corrección" FontSize="12" FontWeight="Medium"
+                                               Foreground="#1E293B" VerticalAlignment="Center" Margin="0,0,8,0"/>
+                                    <Border Background="#FACACA" CornerRadius="99" Padding="8,2" VerticalAlignment="Center">
+                                        <TextBlock x:Name="BadgeKo" Text="0 segmentos" FontSize="10"
+                                                   Foreground="#C0392B" FontWeight="Medium"/>
+                                    </Border>
+                                </StackPanel>
+                            </DockPanel>
+                        </Border>
+                        <Border x:Name="BodyKo" Visibility="Collapsed"
+                                BorderBrush="#C8CDD2" BorderThickness="0,0.5,0,0" Background="#F5DEDE">
+                            <DataGrid x:Name="TablaKo" AutoGenerateColumns="False" IsReadOnly="True"
+                                      HeadersVisibility="Column" GridLinesVisibility="Horizontal"
+                                      HorizontalGridLinesBrush="#C8CDD2" BorderThickness="0"
+                                      Background="#F5DEDE" RowBackground="#F5DEDE" FontSize="11" MaxHeight="220">
+                                <DataGrid.ColumnHeaderStyle>
+                                    <Style TargetType="DataGridColumnHeader">
+                                        <Setter Property="Background" Value="#E8ECF0"/>
+                                        <Setter Property="Foreground" Value="#64748B"/>
+                                        <Setter Property="FontSize" Value="10"/>
+                                        <Setter Property="FontWeight" Value="Medium"/>
+                                        <Setter Property="Padding" Value="8,6"/>
+                                        <Setter Property="BorderThickness" Value="0"/>
+                                    </Style>
+                                </DataGrid.ColumnHeaderStyle>
+                                <DataGrid.Columns>
+                                    <DataGridTextColumn Header="ID"        Binding="{Binding IdStr}"      Width="75"/>
+                                    <DataGridTextColumn Header="DN actual" Binding="{Binding DNActualStr}" Width="70"/>
+                                    <DataGridTextColumn Header="UD"        Binding="{Binding UDStr}"       Width="55"/>
+                                    <DataGridTextColumn Header="DN HS5"    Binding="{Binding DNHs5Str}"    Width="80"/>
+                                    <DataGridTemplateColumn Header="Color" Width="*">
+                                        <DataGridTemplateColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                                    <Border Width="12" Height="12" CornerRadius="2" Background="{Binding ColorHex}" Margin="2,0,5,0"/>
+                                                    <TextBlock Text="{Binding NombreColor}" FontSize="11" Foreground="#C0392B"/>
+                                                </StackPanel>
+                                            </DataTemplate>
+                                        </DataGridTemplateColumn.CellTemplate>
+                                    </DataGridTemplateColumn>
+                                </DataGrid.Columns>
+                            </DataGrid>
+                        </Border>
+                    </StackPanel>
+                </Border>
+
+                <!-- Botons acció -->
+                <TextBlock Text="Acciones" FontSize="10" Foreground="#94A3B8" FontWeight="Medium" Margin="0,0,0,8"/>
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="8"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="8"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    <Button Grid.Column="0" Grid.Row="0" Style="{StaticResource BtnPrimary}" Click="BtnAnalizar_Click">
+                        <StackPanel>
+                            <TextBlock Text="Iniciar análisis" FontWeight="SemiBold" Foreground="White"/>
+                            <TextBlock Text="Selecciona tuberías y ejecuta" FontSize="10" Foreground="White" Opacity="0.85"/>
+                        </StackPanel>
+                    </Button>
+                    <Button Grid.Column="2" Grid.Row="0" Style="{StaticResource BtnPrimary}" Click="BtnActualizar_Click">
+                        <StackPanel>
+                            <TextBlock Text="Actualizar" FontWeight="SemiBold" Foreground="White"/>
+                            <TextBlock Text="Relée IDs del último análisis" FontSize="10" Foreground="White" Opacity="0.85"/>
+                        </StackPanel>
+                    </Button>
+                    <Button Grid.Column="0" Grid.Row="2" Style="{StaticResource BtnSecondary}" Click="BtnTabla_Click">
+                        <StackPanel>
+                            <TextBlock Text="Ver tabla CTE DB-HS5" FontWeight="SemiBold" Foreground="White"/>
+                            <TextBlock Text="Valores de referencia" FontSize="10" Foreground="White" Opacity="0.85"/>
+                        </StackPanel>
+                    </Button>
+                    <Button Grid.Column="2" Grid.Row="2" Style="{StaticResource BtnSecondary}" Click="BtnRestaurar_Click">
+                        <StackPanel>
+                            <TextBlock Text="Restaurar colores" FontWeight="SemiBold" Foreground="White"/>
+                            <TextBlock Text="Devuelve color de sistema" FontSize="10" Foreground="White" Opacity="0.85"/>
+                        </StackPanel>
+                    </Button>
+                </Grid>
+
+                <TextBlock Text="E3G BIM Tools · Enginyeria i Energia" FontSize="10" Foreground="#B0B8C4"
+                           HorizontalAlignment="Right" Margin="0,12,0,0"/>
+            </StackPanel>
+                <!-- TAB MEDICIONES -->
+                <StackPanel x:Name="PanelMediciones" Visibility="Collapsed">
+
+                    <Grid Margin="0,0,0,12">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="8"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="8"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <Button x:Name="BtnSisFecales" Grid.Column="0"
+                            Background="#E8ECF0" 
+                            Style="{StaticResource SisBtnBase}" Click="BtnSisFecales_Click">
+                            <TextBlock Text="Fecales" FontSize="11" FontWeight="Medium" Foreground="#3d8a5e"/>
+                        </Button>
+                        <Button x:Name="BtnSisPluviales" Grid.Column="2"
+                            Background="#E8ECF0" 
+                            Style="{StaticResource SisBtnBase}" Click="BtnSisPluviales_Click">
+                            <TextBlock Text="Pluviales" FontSize="11" FontWeight="Medium" Foreground="#2e6da4"/>
+                        </Button>
+                        <Button x:Name="BtnSisGrises" Grid.Column="4"
+                            Background="#E8ECF0" 
+                            Style="{StaticResource SisBtnBase}" Click="BtnSisGrises_Click">
+                            <TextBlock Text="Grises" FontSize="11" FontWeight="Medium" Foreground="#7e52a0"/>
+                        </Button>
+                    </Grid>
+
+                    <StackPanel x:Name="PanelSisFecales">
+                        <Border BorderBrush="#3d8a5e" BorderThickness="0,0,0,1.5" Margin="0,0,0,10" Padding="0,0,0,6">
+                            <TextBlock Text="EDIFICIO A" FontSize="11" FontWeight="Medium" Foreground="#3d8a5e"/>
+                        </Border>
+                        <StackPanel x:Name="PanelFecalesContenido"/>
+                        <Grid Margin="0,6,0,0">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="8"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <Button Grid.Column="0" Style="{StaticResource BtnPrimary}" Click="BtnMedirFecales_Click">
+                                <StackPanel>
+                                    <TextBlock Text="Medir" FontWeight="SemiBold" Foreground="White"/>
+                                    <TextBlock Text="Escanea todo el modelo" FontSize="10" Foreground="White" Opacity="0.85"/>
+                                </StackPanel>
+                            </Button>
+                            <Button Grid.Column="2" Style="{StaticResource BtnSecondary}" Click="BtnExportarFecales_Click">
+                                <StackPanel>
+                                    <TextBlock Text="Exportar CSV" FontWeight="SemiBold" Foreground="White"/>
+                                    <TextBlock Text="Guardar mediciones" FontSize="10" Foreground="White" Opacity="0.85"/>
+                                </StackPanel>
+                            </Button>
+                        </Grid>
+                    </StackPanel>
+
+                    <StackPanel x:Name="PanelSisPluviales" Visibility="Collapsed">
+                        <Border BorderBrush="#2e6da4" BorderThickness="0,0,0,1.5" Margin="0,0,0,10" Padding="0,0,0,6">
+                            <TextBlock Text="EDIFICIO A" FontSize="11" FontWeight="Medium" Foreground="#2e6da4"/>
+                        </Border>
+                        <StackPanel x:Name="PanelPluvialsContenido"/>
+                        <Grid Margin="0,6,0,0">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="8"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <Button Grid.Column="0" Style="{StaticResource BtnPrimary}" Click="BtnMedirPluvials_Click">
+                                <StackPanel>
+                                    <TextBlock Text="Medir" FontWeight="SemiBold" Foreground="White"/>
+                                    <TextBlock Text="Escanea todo el modelo" FontSize="10" Foreground="White" Opacity="0.85"/>
+                                </StackPanel>
+                            </Button>
+                            <Button Grid.Column="2" Style="{StaticResource BtnSecondary}" Click="BtnExportarPluvials_Click">
+                                <StackPanel>
+                                    <TextBlock Text="Exportar CSV" FontWeight="SemiBold" Foreground="White"/>
+                                    <TextBlock Text="Guardar mediciones" FontSize="10" Foreground="White" Opacity="0.85"/>
+                                </StackPanel>
+                            </Button>
+                        </Grid>
+                    </StackPanel>
+
+                    <StackPanel x:Name="PanelSisGrises" Visibility="Collapsed">
+                        <Border BorderBrush="#7e52a0" BorderThickness="0,0,0,1.5" Margin="0,0,0,10" Padding="0,0,0,6">
+                            <TextBlock Text="EDIFICIO A" FontSize="11" FontWeight="Medium" Foreground="#7e52a0"/>
+                        </Border>
+                        <StackPanel x:Name="PanelGrisesContenido"/>
+                        <Grid Margin="0,6,0,0">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="8"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <Button Grid.Column="0" Style="{StaticResource BtnPrimary}" Click="BtnMedirGrises_Click">
+                                <StackPanel>
+                                    <TextBlock Text="Medir" FontWeight="SemiBold" Foreground="White"/>
+                                    <TextBlock Text="Escanea todo el modelo" FontSize="10" Foreground="White" Opacity="0.85"/>
+                                </StackPanel>
+                            </Button>
+                            <Button Grid.Column="2" Style="{StaticResource BtnSecondary}" Click="BtnExportarGrises_Click">
+                                <StackPanel>
+                                    <TextBlock Text="Exportar CSV" FontWeight="SemiBold" Foreground="White"/>
+                                    <TextBlock Text="Guardar mediciones" FontSize="10" Foreground="White" Opacity="0.85"/>
+                                </StackPanel>
+                            </Button>
+                        </Grid>
+                    </StackPanel>
+                    <!-- Exportació BC3 conjunta de tot el sanejament -->
+                    <Border Background="#F8FAFC" BorderBrush="#E8ECF0" BorderThickness="1"
+        CornerRadius="10" Padding="14,12" Margin="0,16,0,0">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <StackPanel Grid.Column="0" VerticalAlignment="Center">
+                                <TextBlock Text="Exportar BC3 (FIEBDC-3)" FontWeight="SemiBold" FontSize="13"/>
+                                <TextBlock Text="Genera un BC3 amb totes les partides de Sanejament (Fecals + Pluvials + Grises) segons les regles configurades a Ajustes › Partides BC3."
+                       FontSize="10" Foreground="#6B7280" Margin="0,2,0,0" TextWrapping="Wrap"/>
+                            </StackPanel>
+                            <Button Grid.Column="1" Style="{StaticResource BtnPrimary}"
+                Click="BtnExportarBc3_Click" Padding="16,8"
+                VerticalAlignment="Center" Margin="12,0,0,0">
+                                <StackPanel>
+                                    <TextBlock Text="Exportar BC3" FontWeight="SemiBold" Foreground="White"/>
+                                    <TextBlock Text="presupuesto.bc3" FontSize="10" Foreground="White" Opacity="0.85"/>
+                                </StackPanel>
+                            </Button>
+                        </Grid>
+                    </Border>
+                    <TextBlock Text="E3G BIM Tools · Enginyeria i Energia" FontSize="10" Foreground="#B0B8C4"
+                           HorizontalAlignment="Right" Margin="0,12,0,0"/>
+                </StackPanel>
+
+                <StackPanel x:Name="PanelEsquema" Visibility="Collapsed" Margin="0,0,0,10">
+                    <local:EsquemaPrincipiControl x:Name="tabEsquema"/>
+                </StackPanel>
+
+            </StackPanel>
+        </ScrollViewer>
+        <local:SpinnerButton x:Name="FabPrincipal"
+                         AccentColor="#4a7a96"
+                         VerticalAlignment="Bottom"
+                         HorizontalAlignment="Right"
+                         Margin="0,0,16,16"
+                         Clicked="FabPrincipal_Clicked"
+                         ToolTip="Iniciar análisis"/>
+    </Grid>
+</Page>

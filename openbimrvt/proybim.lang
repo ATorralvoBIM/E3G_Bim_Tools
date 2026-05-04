@@ -1,0 +1,2128 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Texts>
+	<cybim_NombreComplemento>
+		<Castellano>Colaboración Open BIM</Castellano>
+		<Frances>Collaboration Open BIM</Frances>
+		<Portugues>Colaboração Open BIM</Portugues>
+		<Catalan>Col·laboració Open BIM</Catalan>
+		<Italiano>Collaborazione Open BIM</Italiano>
+		<Brasileiro>Colaboração Open BIM</Brasileiro>
+		<Argentino>Colaboración Open BIM</Argentino>
+		<Mexicano>Colaboración Open BIM</Mexicano>
+		<Ingles>Open BIM collaboration</Ingles>
+		<Rumano>Colaborarea Open BIM</Rumano>
+		<Chino>Open BIM 协作</Chino>
+		<Aleman>Open BIM Kollaboration</Aleman>
+		<Ruso>Сотрудничество Open BIM</Ruso>
+		<Polaco>Współpraca Open BIM</Polaco>
+		<Japones>Open BIMコラボレーション</Japones>
+	</cybim_NombreComplemento>
+	<Configurar>
+		<Castellano>Configurar</Castellano>
+		<Frances>Configurer</Frances>
+		<Portugues>Configurar</Portugues>
+		<Catalan>Configurar</Catalan>
+		<Italiano>Configurare</Italiano>
+		<Brasileiro>Configurar</Brasileiro>
+		<Argentino>Configurar</Argentino>
+		<Mexicano>Configurar</Mexicano>
+		<Ingles>Configure</Ingles>
+		<Rumano>Configurează</Rumano>
+		<Chino>设置</Chino>
+		<Aleman>Konfiguriere</Aleman>
+		<Ruso>Настроить</Ruso>
+		<Polaco>Konfiguracja</Polaco>
+		<Japones>設定</Japones>
+	</Configurar>
+	<Aceptar>
+		<Castellano>Aceptar</Castellano>
+		<Frances>Accepter</Frances>
+		<Portugues>Aceitar</Portugues>
+		<Catalan>Acceptar</Catalan>
+		<Italiano>Accettare</Italiano>
+		<Brasileiro>Aceitar</Brasileiro>
+		<Argentino>Aceptar</Argentino>
+		<Mexicano>Aceptar</Mexicano>
+		<Ingles>Accept</Ingles>
+		<Rumano>Acceptă</Rumano>
+		<Chino>确定</Chino>
+		<Aleman>Akzeptieren</Aleman>
+		<Ruso>Принять</Ruso>
+		<Polaco>Akceptuj</Polaco>
+		<Japones>OK</Japones>
+	</Aceptar>
+	<Cancelar>
+		<Castellano>Cancelar</Castellano>
+		<Frances>Annuler</Frances>
+		<Portugues>Cancelar</Portugues>
+		<Catalan>Cancel·lar</Catalan>
+		<Italiano>Annullare</Italiano>
+		<Brasileiro>Cancelar</Brasileiro>
+		<Argentino>Cancelar</Argentino>
+		<Mexicano>Cancelar</Mexicano>
+		<Ingles>Cancel</Ingles>
+		<Rumano>Anulați</Rumano>
+		<Chino>取消</Chino>
+		<Aleman>Abbrechen</Aleman>
+		<Ruso>Отмена</Ruso>
+		<Polaco>Anuluj</Polaco>
+		<Japones>キャンセル</Japones>
+	</Cancelar>
+	<cybim_NecesitaActualizar>
+		<Castellano>El complemento necesita actualizarse. Para actualizar el complemento, debe salir de Revit y ejecutar el programa de instalación del mismo.</Castellano>
+		<Frances>Le complément doit être actualisé. Pour actualiser le complément, vous devez sortir de Revit et démarrer le programme d'installation de celui-ci.</Frances>
+		<Portugues>O suplemento necessita ser actualizado. Para actualizar o suplemeno, deve sair do Revit e executar o programa de instalação do mesmo.</Portugues>
+		<Catalan>El complement es necessita actualitzar. Per actualitzar el complement, ha de sortir de Revit i executar el programa d'instal·lació d'aquest.</Catalan>
+		<Italiano>È necessario aggiornare il plugin. Per aggiornarlo, è necessario uscire da Revit ed eseguire il programma di installazione del plugin.</Italiano>
+		<Brasileiro>O suplemento necessita ser actualizado. Para actualizar o suplemeno, deve sair do Revit e executar o programa de instalação do mesmo.</Brasileiro>
+		<Argentino>El complemento necesita actualizarse. Para actualizar el complemento, debe salir de Revit y ejecutar el programa de instalación del mismo.</Argentino>
+		<Mexicano>El complemento necesita actualizarse. Para actualizar el complemento, debe salir de Revit y ejecutar el programa de instalación del mismo.</Mexicano>
+		<Ingles>The add-in has to be updated. To update the add-in, you must exit Revit and launch its installation program.</Ingles>
+		<Rumano>Programul de completare trebuie actualizat. Pentru a actualiza adăugarile ,trebuie să ieșiți din Revit și să lansați programul de instalare a acestuia.</Rumano>
+		<Chino>附加模块需要更新。 要更新附加模块，请先退出Revit再启动附加模块安装。</Chino>
+		<Aleman>Das Komplement muss aktualisiert werden. Um das Komplement zu aktualisieren, müssen Sie Revit schließen und die Installationsdatei ausführen.</Aleman>
+		<Ruso>Расширение должно быть обновлено. Чтобы обновить расширение, Вам необходимо выйти из Revit и запустить программу установки.</Ruso>
+		<Polaco>Wtyczka musi zostać zaktualizowana. Aby zaktualizować wtyczkę, należy wyjść z programu Revit i uruchomić instalator wtyczki.</Polaco>
+		<Japones>アドインを更新する必要があります。更新するにはRevitを終了し インストレーションプログラムを起動してください。</Japones>
+	</cybim_NecesitaActualizar>
+	<cybim_Compartir>
+		<Castellano>Compartir el modelo de Revit</Castellano>
+		<Frances>Partager le modèle Revit</Frances>
+		<Portugues>Partilhar o modelo do Revit</Portugues>
+		<Catalan>Compartir el model de Revit</Catalan>
+		<Italiano>Condividi il modello di Revit</Italiano>
+		<Brasileiro>Partilhar o modelo do Revit</Brasileiro>
+		<Argentino>Compartir el modelo de Revit</Argentino>
+		<Mexicano>Compartir el modelo de Revit</Mexicano>
+		<Ingles>Share the Revit model</Ingles>
+		<Rumano>Distribuiți modelul Revit</Rumano>
+		<Chino>共享 Revit 模型</Chino>
+		<Aleman>Das Modell von Revit teilen</Aleman>
+		<Ruso>Поделиться моделью Revit</Ruso>
+		<Polaco>Udostępnij model programu Revit</Polaco>
+		<Japones>Revitのモデルをシェア</Japones>
+	</cybim_Compartir>
+	<cybim_CompartirExt>
+		<Castellano>Puede seleccionar un destino local para el proyecto o emplear BIMserver.center para compartir el proyecto con otros colaboradores.</Castellano>
+		<Frances>Vous pouvez sélectionner une destination locale pour le projet ou utiliser BIMserver.center pour partager le projet avec d'autres collaborateurs.</Frances>
+		<Portugues>Pode seleccionar um destino local para o projecto ou utilizar BIMserver.center para partilhar o projecto com outros colaboradores.</Portugues>
+		<Catalan>Pot seleccionar una destinació local per al projecte o emprar BIMserver.center per compartir el projecte amb altres col·laboradors.</Catalan>
+		<Italiano>È possibile selezionare una destinazione locale per il progetto o impiegare BIMserver.center per condividere il progetto con altri collaboratori.</Italiano>
+		<Brasileiro>Pode seleccionar um destino local para o projecto ou utilizar BIMserver.center para partilhar o projecto com outros colaboradores.</Brasileiro>
+		<Argentino>Puede seleccionar un destino local para el proyecto o emplear BIMserver.center para compartir el proyecto con otros colaboradores.</Argentino>
+		<Mexicano>Puede seleccionar un destino local para el proyecto o emplear BIMserver.center para compartir el proyecto con otros colaboradores.</Mexicano>
+		<Ingles>A local location can be selected for the project or you can use the BIMserver.center to share the project with other collaborators.</Ingles>
+		<Rumano>Puteți selecta o destinație locală pentru proiect sau puteți folosi BIMserver.center pentru a partaja proiectul cu alți colaboratori.</Rumano>
+		<Chino>您可以选择本地保存项目，或使用 BIMserver.center 与其他协作者分享项目。</Chino>
+		<Aleman>Sie können einen lokalen Speicherort für das Projekt auswählen oder BIMserver.center benutzen, um das Projekt mit anderen Teilnehmern zu teilen.</Aleman>
+		<Ruso>Вы можете выбрать локальное назначение для проекта или использовать BIMserver.center для того, чтобы поделится проектом с другими соразработчиками.</Ruso>
+		<Polaco>Możesz wybrać lokalne miejsce docelowe projektu lub skorzystać z BIMserver.center aby udostępnić projekt innym współpracownikom.</Polaco>
+		<Japones>プロジェクトにローカル位置を選択、またはBIMserver.centerを適用して 他のコラボレーターとプロジェクトを共有することができます。</Japones>
+	</cybim_CompartirExt>
+	<cybim_CompartirExt2>
+		<Castellano>Una vez creado el proyecto, se generará un fichero IFC del modelo actual.</Castellano>
+		<Frances>Une fois que le projet est créé, un fichier IFC du modèle actuel sera généré.</Frances>
+		<Portugues>Após criado o projecto, será gerado um ficheiro IFC do modelo actual.</Portugues>
+		<Catalan>Un cop creat el projecte, es generarà un fitxer IFC del model actual.</Catalan>
+		<Italiano>Una volta creato il progetto verrà generato un file IFC del modello attuale.</Italiano>
+		<Brasileiro>Após criado o projecto, será gerado um ficheiro IFC do modelo actual.</Brasileiro>
+		<Argentino>Una vez creado el proyecto, se generará un fichero IFC del modelo actual.</Argentino>
+		<Mexicano>Una vez creado el proyecto, se generará un fichero IFC del modelo actual.</Mexicano>
+		<Ingles>Once the project has been created, an IFC file of the current model will be generated.</Ingles>
+		<Rumano>Odată ce proiectul a fost creat, se va genera un fișier IFC al modelului curent.</Rumano>
+		<Chino>当项目创建之后，将会生成当前模型的IFC文件。</Chino>
+		<Aleman>Wenn das Projekt schon erstellt worden ist, wird auch eine IFC Datei des aktuellen Modells erstellt werden.</Aleman>
+		<Ruso>После создания проекта, будет создан IFC файл актуальной модели.</Ruso>
+		<Polaco>Po utworzeniu projektu zostanie wygenerowany plik IFC aktualnego modelu.</Polaco>
+		<Japones>一度プロジェクトが作成されると、現在のモデルのIFCファイルが 作成されます。</Japones>
+	</cybim_CompartirExt2>
+	<cybim_Vincular>
+		<Castellano>Vincular a proyecto Open BIM</Castellano>
+		<Frances>Lier au projet Open BIM</Frances>
+		<Portugues>Víncular para o projecto Open BIM</Portugues>
+		<Catalan>Vincular projecte Open BIM</Catalan>
+		<Italiano>Vincolare progetto Open BIM</Italiano>
+		<Brasileiro>Víncular para o projecto Open BIM</Brasileiro>
+		<Argentino>Vincular a proyecto Open BIM</Argentino>
+		<Mexicano>Vincular a proyecto Open BIM</Mexicano>
+		<Ingles>Link to Open BIM project</Ingles>
+		<Rumano>Link-ul proiectului Open BIM</Rumano>
+		<Chino>连接 Open BIM 项目</Chino>
+		<Aleman>Open BIM Projekt verbinden</Aleman>
+		<Ruso>Связать проект Open BIM</Ruso>
+		<Polaco>Połącz projekt Open BIM</Polaco>
+		<Japones>Open BIMにリンクする</Japones>
+	</cybim_Vincular>
+	<cybim_VincularExt>
+		<Castellano>Se conecta a un proyecto Open BIM existente, local o alojado en BIMserver.center.</Castellano>
+		<Frances>Connexion à un projet Open BIM existant, local ou hébergé sur BIMserver.center.</Frances>
+		<Portugues>Conecta-se a um projecto Open BIM existente, local ou alojado em BIMserver.center.</Portugues>
+		<Catalan>Es connecta a un projecte Open BIM existent, local o allotjat en BIMserver.center.</Catalan>
+		<Italiano>Si connette ad un progetto Open BIM esistente, locale o ubicato nel BIMserver.center.</Italiano>
+		<Brasileiro>Conecta-se a um projecto Open BIM existente, local ou alojado em BIMserver.center.</Brasileiro>
+		<Argentino>Se conecta a un proyecto Open BIM existente, local o alojado en BIMserver.center.</Argentino>
+		<Mexicano>Se conecta a un proyecto Open BIM existente, local o alojado en BIMserver.center.</Mexicano>
+		<Ingles>You can connect to an existing Open BIM project in a local directory or located in the BIMserver.center.</Ingles>
+		<Rumano>Se conectează la un proiect Open BIM existent,local sau găzduit în BIMserver.center.</Rumano>
+		<Chino>您可以连接本地目录或 BIMserver.center 中现有的 Open BIM 项目。</Chino>
+		<Aleman>Sie können eine Verbindung mit einem bestehenden Open BIM Projekt in einem lokalen Speicherort oder in BIMserver.center herstellen.</Aleman>
+		<Ruso>Устанавливает связь с существующим Open BIM проектом, локальным или сохранённым в BIMserver.center.</Ruso>
+		<Polaco>Łączy się z istniejącym projektem Open BIM, lokalnym lub hostowanym na BIMserver.center.</Polaco>
+		<Japones>ローカルディレクトリまたはBIMserver.centerに現存するOpen BIMプロジェクトに接続できます。</Japones>
+	</cybim_VincularExt>
+	<cybim_VincularExt2>
+		<Castellano>Una vez seleccionado el proyecto, se crea un vínculo para cada fichero IFC seleccionado.</Castellano>
+		<Frances>Une fois que le projet est sélectionné, un lien est créé pour chaque fichier IFC sélectionné.</Frances>
+		<Portugues>Uma vez seleccionado o projecto, cria-se um vínculo para cada ficheiro IFC seleccionado.</Portugues>
+		<Catalan>Una cop seleccionat el projecte, es crea un vincle per a cada fitxer IFC seleccionat.</Catalan>
+		<Italiano>Una volta selezionato il progetto, viene realizzato un vincolo per ogni file IFC selezionato.</Italiano>
+		<Brasileiro>Uma vez seleccionado o projecto, cria-se um vínculo para cada ficheiro IFC seleccionado.</Brasileiro>
+		<Argentino>Una vez seleccionado el proyecto, se crea un vínculo para cada fichero IFC seleccionado.</Argentino>
+		<Mexicano>Una vez seleccionado el proyecto, se crea un vínculo para cada fichero IFC seleccionado.</Mexicano>
+		<Ingles>Once the project has been selected, a link is created for each IFC file that has been selected.</Ingles>
+		<Rumano>Odată selectat proiectul, se crează un link pentru fiecare fișier IFC selectat.</Rumano>
+		<Chino>选定项目后，将为选定的每个IFC文件创建一个链接。</Chino>
+		<Aleman>Wenn das Projekt schon ausgewählt worden ist, wird ein Verknüpfung für jede ausgewählte IFC Datei erstellt.</Aleman>
+		<Ruso>После выбора проекта, будет создана ссылка для каждого выбранного IFC файла.</Ruso>
+		<Polaco>Po wybraniu projektu tworzone jest łącze dla każdego wybranego pliku IFC.</Polaco>
+		<Japones>一度プロジェクトが選択されると、選択された各IFCファイルにリンクが 作成されます。</Japones>
+	</cybim_VincularExt2>
+	<cybim_Consultar>
+		<Castellano>Consultar estado del proyecto</Castellano>
+		<Frances>Consulter l'état du projet</Frances>
+		<Portugues>Consultar estado do projecto</Portugues>
+		<Catalan>Consultar estat del projecte</Catalan>
+		<Italiano>Consultare lo stato del progetto</Italiano>
+		<Brasileiro>Consultar estado do projecto</Brasileiro>
+		<Argentino>Consultar estado del proyecto</Argentino>
+		<Mexicano>Consultar estado del proyecto</Mexicano>
+		<Ingles>Consult project status</Ingles>
+		<Rumano>Consultați stadiul proiectului</Rumano>
+		<Chino>查看项目状态</Chino>
+		<Aleman>Status des Projekts abfragen</Aleman>
+		<Ruso>Проверить состояние проекта</Ruso>
+		<Polaco>Sprawdź status projektu</Polaco>
+		<Japones>プロジェクトのステータスを問い合わせる</Japones>
+	</cybim_Consultar>
+	<cybim_ConsultarExt>
+		<Castellano>Se conecta al proyecto Open BIM para comprobar posibles cambios en los ficheros IFC del proyecto.</Castellano>
+		<Frances>Connexion au projet Open BIM pour vérifier des éventuels changements dans les fichiers IFC du projet.</Frances>
+		<Portugues>Conecta-se ao projecto Open BIM para verificar possíveis alterações nos ficheiros IFC do projecto.</Portugues>
+		<Catalan>Es connecta al projecte Open BIM per comprovar possibles canvis en els fitxers IFC del projecte.</Catalan>
+		<Italiano>Si connette al progetto Open BIM per verificare possibili modifiche nei file IFC del progetto.</Italiano>
+		<Brasileiro>Conecta-se ao projecto Open BIM para verificar possíveis alterações nos ficheiros IFC do projecto.</Brasileiro>
+		<Argentino>Se conecta al proyecto Open BIM para comprobar posibles cambios en los ficheros IFC del proyecto.</Argentino>
+		<Mexicano>Se conecta al proyecto Open BIM para comprobar posibles cambios en los ficheros IFC del proyecto.</Mexicano>
+		<Ingles>The program connects with the Open BIM project to check whether there are any changes in the IFC files of the project.</Ingles>
+		<Rumano>Se conectează la proiectul Open BIM pentru a verifica posibilele modificări ale fișierelor din proiectul IFC.</Rumano>
+		<Chino>该程序与 Open BIM 项目连接，以检查项目的IFC文件是否有任何更变。</Chino>
+		<Aleman>Die Anwendung stellt eine Verbindung mit dem Open BIM Projekt her, damit mögliche Änderungen der IFC Dateien des Projekts festgestellt werden können.</Aleman>
+		<Ruso>Программа подключается к проекту Open BIM для проверки возможных изменений в IFC файлах проекта.</Ruso>
+		<Polaco>Łączy się z projektem Open BIM w celu sprawdzenia ewentualnych zmian w plikach IFC projektu.</Polaco>
+		<Japones>プログラムはプロジェクトのIFCファイルのどこに変更があるか確認するために Open BIMプロジェクトに接続します。</Japones>
+	</cybim_ConsultarExt>
+	<cybim_ConsultarExt2>
+		<Castellano>Puede seleccionar ficheros IFC todavía no vinculados o eliminar algunos de los que ha vinculado previamente.</Castellano>
+		<Frances>Vous pouvez sélectionner des fichiers IFC qui ne sont pas encore reliés ou supprimer certains liés préalablement.</Frances>
+		<Portugues>Pode seleccionar ficheiros IFC que ainda não estão vinculados ou eliminar alguns dos que vinculou previamente.</Portugues>
+		<Catalan>Pot seleccionar fitxers IFC encara no vinculats o eliminar alguns dels que ha vinculat prèviament.</Catalan>
+		<Italiano>È possibile selezionare file IFC non ancora vincolati o eliminare alcuni tra quelli vincolati in precedenza.</Italiano>
+		<Brasileiro>Pode seleccionar ficheiros IFC que ainda não estão vinculados ou eliminar alguns dos que vinculou previamente.</Brasileiro>
+		<Argentino>Puede seleccionar ficheros IFC todavía no vinculados o eliminar algunos de los que ha vinculado previamente.</Argentino>
+		<Mexicano>Puede seleccionar ficheros IFC todavía no vinculados o eliminar algunos de los que ha vinculado previamente.</Mexicano>
+		<Ingles>IFC files that have not yet been linked can be selected, and some of those which have been previously linked can be deleted.</Ingles>
+		<Rumano>Puteți selecta fișierele IFC care nu au lost încă legate sau eliminați cele care nu au fost legate anterior.</Rumano>
+		<Chino>可以选择尚未连接的IFC文件，也可以删除之前连接过的文件。</Chino>
+		<Aleman>Sie können noch nicht verbundene IFC Dateien auswählen oder einige der vorher verbundenen Dateien löschen.</Aleman>
+		<Ruso>Вы можете выбрать IFC файлы, которые ещё пока не прикреплены или удалить некоторые файлы, которые были прикреплены ранее.</Ruso>
+		<Polaco>Możesz wybrać pliki IFC, które nie zostały jeszcze połączone lub usunąć niektóre pliki, które zostały wcześniej połączone.</Polaco>
+		<Japones>まだリンクされていないIFCファイルを選択、または以前にリンクしたファイルを削除することができます。</Japones>
+	</cybim_ConsultarExt2>
+	<cybim_ActualizarProyecto>
+		<Castellano>Actualizar el proyecto Open BIM</Castellano>
+		<Frances>Actualiser le projet Open BIM</Frances>
+		<Portugues>Actualizar projecto Open BIM</Portugues>
+		<Catalan>Actualitzar projecte Open BIM</Catalan>
+		<Italiano>Aggiornare il progetto Open BIM</Italiano>
+		<Brasileiro>Actualizar projecto Open BIM</Brasileiro>
+		<Argentino>Actualizar el proyecto Open BIM</Argentino>
+		<Mexicano>Actualizar el proyecto Open BIM</Mexicano>
+		<Ingles>Update Open BIM project</Ingles>
+		<Rumano>Actualizarea proiectului</Rumano>
+		<Chino>更新 Open BIM 项目</Chino>
+		<Aleman>Open BIM Projekt aktualisieren</Aleman>
+		<Ruso>Обновить проект Open BIM</Ruso>
+		<Polaco>Aktualizuj projekt Open BIM</Polaco>
+		<Japones>Open BIMプロジェクトを更新する</Japones>
+	</cybim_ActualizarProyecto>
+	<cybim_ActualizarProyectoExt>
+		<Castellano>Vuelve a cargar los ficheros IFC del proyecto Open BIM modificados por otros colaboradores.</Castellano>
+		<Frances>Recharge les fichiers IFC du projet Open BIM modifiés par les autres collaborateurs.</Frances>
+		<Portugues>Volta a carregar os ficheiros IFC do projecto Open BIM modificados por outros colaboradores.</Portugues>
+		<Catalan>Torna a carregar els fitxers IFC del projecte Open BIM modificats per altres col·laboradors.</Catalan>
+		<Italiano>Ricarica i file IFC del progetto Open BIM modificati da altri collaboratori.</Italiano>
+		<Brasileiro>Volta a carregar os ficheiros IFC do projecto Open BIM modificados por outros colaboradores.</Brasileiro>
+		<Argentino>Vuelve a cargar los ficheros IFC del proyecto Open BIM modificados por otros colaboradores.</Argentino>
+		<Mexicano>Vuelve a cargar los ficheros IFC del proyecto Open BIM modificados por otros colaboradores.</Mexicano>
+		<Ingles>Reloads the IFC files of the Open BIM project that have been modified by other collaborators.</Ingles>
+		<Rumano>Reîncărcați fișierele IFC din proiectul Open BIM modificate de alți colaboratori.</Rumano>
+		<Chino>重新加载 Open BIM 项目中其他协作者修改的IFC文件。</Chino>
+		<Aleman>Aktualisiert die IFC Dateien des Open BIM Projekts, die von anderen Benutzern bearbeitet worden sind.</Aleman>
+		<Ruso>Загрузите снова IFC файлы проекта Open BIM изменённые другими соразработчиками.</Ruso>
+		<Polaco>Wczytaj ponownie pliki IFC projektu Open BIM zmodyfikowane przez innych współpracowników.</Polaco>
+		<Japones>まだ他のコラボレーターに変更されていないOpen BIMプロジェクトのIFCファイルを リロードしてください。</Japones>
+	</cybim_ActualizarProyectoExt>
+	<cybim_CancelarColaboracion>
+		<Castellano>Cancelar colaboración en proyecto Open BIM</Castellano>
+		<Frances>Annuler la collaboration au projet Open BIM</Frances>
+		<Portugues>Cancelar colaboração em projecto Open BIM</Portugues>
+		<Catalan>Actualitzar projecte Open BIM</Catalan>
+		<Italiano>Cancellare la collaborazione nel progetto Open BIM</Italiano>
+		<Brasileiro>Cancelar colaboração em projecto Open BIM</Brasileiro>
+		<Argentino>Cancelar colaboración en proyecto Open BIM</Argentino>
+		<Mexicano>Cancelar colaboración en proyecto Open BIM</Mexicano>
+		<Ingles>Cancel collaboration in Open BIM project</Ingles>
+		<Rumano>Anulați colaborarea în proiectul Open BIM</Rumano>
+		<Chino>取消 Open BIM 项目协作</Chino>
+		<Aleman>Kollaboration in Open BIM Projekt abbrechen</Aleman>
+		<Ruso>Отменить сотрудничество в проекте Open BIM</Ruso>
+		<Polaco>Anuluj współpracę nad projektem Open BIM</Polaco>
+		<Japones>Open BIMプロジェクトでのコラボレーションをキャンセルする</Japones>
+	</cybim_CancelarColaboracion>
+	<cybim_CancelarColaboracionExt>
+		<Castellano>Desactiva los mensajes de colaboración con el proyecto Open BIM y elimina, opcionalmente, todos los vínculos con ficheros IFC.</Castellano>
+		<Frances>Désactive les messages de collaboration avec le projet Open BIM et supprime, optionnellement, tous les liens avec les fichiers IFC.</Frances>
+		<Portugues>Desactiva as mensagens de colaboração com o projecto Open BIM e elimina, opcionalmente, todos os vínculos com ficheiros IFC.</Portugues>
+		<Catalan>Desactiva els missatges de col·laboració amb el projecte Open BIM i elimina, opcionalment, tots els vincles amb fitxers IFC.</Catalan>
+		<Italiano>Disattiva i messaggi di collaborazione con il progetto Open BIM e permette di eliminare tutti i vincoli con files IFC.</Italiano>
+		<Brasileiro>Desactiva as mensagens de colaboração com o projecto Open BIM e elimina, opcionalmente, todos os vínculos com ficheiros IFC.</Brasileiro>
+		<Argentino>Desactiva los mensajes de colaboración con el proyecto Open BIM y elimina, opcionalmente, todos los vínculos con ficheros IFC.</Argentino>
+		<Mexicano>Desactiva los mensajes de colaboración con el proyecto Open BIM y elimina, opcionalmente, todos los vínculos con ficheros IFC.</Mexicano>
+		<Ingles>Deactivates collaboration messages with the Open BIM project, and optionally deletes all links to IFC files.</Ingles>
+		<Rumano>Dezactivați mesajele de colaborare cu proiectul Open BIM și elimină, opțional, toate link-urile către fișierele IFC.</Rumano>
+		<Chino>停用 Open BIM 项目协作信息，并可选择性地删除 IFC 文件的所有连接。</Chino>
+		<Aleman>Deaktiviert Kollaborationsnachrichte des Open BIM Projekts und kann alle Verknüpfungen zu den IFC Dateien löschen.</Aleman>
+		<Ruso>Отключите сообщения об участии в проекте Open BIM и удалите, на Ваше усмотрение, все ссылки с IFC файлами.</Ruso>
+		<Polaco>Dezaktywuj wiadomości dotyczące współpracy nad projektem Open BIM i opcjonalnie usuń wszystkie łącza do plików IFC.</Polaco>
+		<Japones>Open BIMプロジェクトとのコラボレーションメッセージを無効にし、任意で IFCファイルのすべてのリンクを削除します。</Japones>
+	</cybim_CancelarColaboracionExt>
+	<cybim_PregEliminarVinculosIFC>
+		<Castellano>Además de desactivar los mensajes de colaboración con el proyecto Open BIM, ¿desea eliminar también los vínculos con los ficheros IFC?</Castellano>
+		<Frances>En plus de désactiver les messages de collaboration avec le projet Open BIM, souhaitez-vous supprimer aussi les liens avec les fichiers IFC?</Frances>
+		<Portugues>Além de desactivar as mensagens de colaboração com o projecto Open BIM, deseja eliminar também os vínculos com os ficheiros IFC?</Portugues>
+		<Catalan>A més de desactivar els missatges de col·laboració amb el projecte Open BIM, desitja eliminar també els vincles amb els fitxers IFC?</Catalan>
+		<Italiano>Si desidera anche eliminare i vincoli con i files IFC, oltre a disattivare i messaggi di collaborazione con il progetto Open BIM?</Italiano>
+		<Brasileiro>Além de desactivar as mensagens de colaboração com o projecto Open BIM, deseja eliminar também os vínculos com os ficheiros IFC?</Brasileiro>
+		<Argentino>Además de desactivar los mensajes de colaboración con el proyecto Open BIM, ¿desea eliminar también los vínculos con los ficheros IFC?</Argentino>
+		<Mexicano>Además de desactivar los mensajes de colaboración con el proyecto Open BIM, ¿desea eliminar también los vínculos con los ficheros IFC?</Mexicano>
+		<Ingles>As well as deactivating collaboration messages with the Open BIM project, do you also wish to delete the links to IFC files?</Ingles>
+		<Rumano>Pe lângă dezactivarea mesajelor de colaborare cu proiectul Open BIM, doriți să eliminați de asemenea link-ul către fișirele IFC?</Rumano>
+		<Chino>除了停用 Open BIM 项目协作消息之外，您是否还要删除IFC文件的连接？</Chino>
+		<Aleman>Wollen Sie die Kollaborationsnachrichte des Open BIM Projekts deaktivieren, und außerdem alle Verknüpfungen zu den IFC Dateien löschen?</Aleman>
+		<Ruso>Кроме отключения сообщений об участии в проекте Open BIM, Вы также хотите удалить ссылки с IFC файлами?</Ruso>
+		<Polaco>Oprócz dezaktywowania wiadomości dotyczących współpracy nad projektem Open BIM, chcesz również usunąć łącza do plików IFC?</Polaco>
+		<Japones>Open BIMプロジェクトとのコラボレーションメッセージを無効にすると同様、IFC ファイルへのリンクも削除しますか？</Japones>
+	</cybim_PregEliminarVinculosIFC>
+	<cybim_MostrarPanel>
+		<Castellano>Mostrar panel de información del proyecto Open BIM</Castellano>
+		<Frances>Afficher le panneau d'information du projet Open BIM</Frances>
+		<Portugues>Mostrar painel de informação do projecto Open BIM</Portugues>
+		<Catalan>Mostrar panell d'informació del projecte Open BIM</Catalan>
+		<Italiano>Mostrare pannello di informazione del progetto Open BIM</Italiano>
+		<Brasileiro>Mostrar painel de informação do projecto Open BIM</Brasileiro>
+		<Argentino>Mostrar panel de información del proyecto Open BIM</Argentino>
+		<Mexicano>Mostrar panel de información del proyecto Open BIM</Mexicano>
+		<Ingles>Show Open BIM project information panel</Ingles>
+		<Rumano>Arătați panoul cu informații despre proiectul Open BIM</Rumano>
+		<Chino>显示Open BIM项目信息面板</Chino>
+		<Aleman>Informationstafel des Open BIM Projekts anzeigen</Aleman>
+		<Ruso>Показывать панель информации проекта Open BIM</Ruso>
+		<Polaco>Pokaż panel informacyjny projektu Open BIM</Polaco>
+		<Japones>インフォメーションパネルにOpen BIMプロジェクトを表示する</Japones>
+	</cybim_MostrarPanel>
+	<cybim_DirTrabajo>
+		<Castellano>Directorio de trabajo</Castellano>
+		<Frances>Répertoire de travail</Frances>
+		<Portugues>Directoria de trabalho</Portugues>
+		<Catalan>Directori de treball</Catalan>
+		<Italiano>Directory di lavoro</Italiano>
+		<Brasileiro>Pasta de trabalho</Brasileiro>
+		<Argentino>Directorio de trabajo</Argentino>
+		<Mexicano>Directorio de trabajo</Mexicano>
+		<Ingles>Work directory</Ingles>
+		<Rumano>Catalogul locurilor de muncă</Rumano>
+		<Chino>工作目录</Chino>
+		<Aleman>Arbeitsverzeichnis</Aleman>
+		<Ruso>Рабочая папка</Ruso>
+		<Polaco>Folder roboczy</Polaco>
+		<Japones>作業ディレクトリ</Japones>
+	</cybim_DirTrabajo>
+	<cybim_Proyecto>
+		<Castellano>Proyecto</Castellano>
+		<Frances>Projet</Frances>
+		<Portugues>Projecto</Portugues>
+		<Catalan>Projecte</Catalan>
+		<Italiano>Progetto</Italiano>
+		<Brasileiro>Projeto</Brasileiro>
+		<Argentino>Proyecto</Argentino>
+		<Mexicano>Proyecto</Mexicano>
+		<Ingles>Project</Ingles>
+		<Rumano>Proiect</Rumano>
+		<Chino>项目</Chino>
+		<Aleman>Projekt</Aleman>
+		<Ruso>Проект</Ruso>
+		<Polaco>Projekt</Polaco>
+		<Japones>プロジェクト</Japones>
+	</cybim_Proyecto>
+	<cybim_Vinculos>
+		<Castellano>Vínculos IFC</Castellano>
+		<Frances>Liens IFC</Frances>
+		<Portugues>Vínculos IFC</Portugues>
+		<Catalan>Vincles IFC</Catalan>
+		<Italiano>Vincoli IFC</Italiano>
+		<Brasileiro>Vínculos IFC</Brasileiro>
+		<Argentino>Vínculos IFC</Argentino>
+		<Mexicano>Vínculos IFC</Mexicano>
+		<Ingles>IFC links</Ingles>
+		<Rumano>Linkuri IFC</Rumano>
+		<Chino>IFC连接</Chino>
+		<Aleman>IFC Verknüpfungen</Aleman>
+		<Ruso>Ссылки IFC</Ruso>
+		<Polaco>Łącza IFC</Polaco>
+		<Japones>IFCリンク</Japones>
+	</cybim_Vinculos>
+	<cybim_ActualizarVinculoIFC>
+		<Castellano>Actualizar fichero IFC del proyecto</Castellano>
+		<Frances>Actualiser le fichier IFC du projet</Frances>
+		<Portugues>Actualizar ficheiro IFC do projecto</Portugues>
+		<Catalan>Actualitzar fitxer IFC del projecte</Catalan>
+		<Italiano>Aggiornare file IFC del progetto</Italiano>
+		<Brasileiro>Actualizar ficheiro IFC do projecto</Brasileiro>
+		<Argentino>Actualizar fichero IFC del proyecto</Argentino>
+		<Mexicano>Actualizar fichero IFC del proyecto</Mexicano>
+		<Ingles>Update IFC file of the project</Ingles>
+		<Rumano>Actualizați fișierul IFC ale proiectului</Rumano>
+		<Chino>更新项目的IFC文件</Chino>
+		<Aleman>IFC Datei des Projekts aktualisieren</Aleman>
+		<Ruso>Обновить IFC файл проекта</Ruso>
+		<Polaco>Aktualizuj plik IFC projektu</Polaco>
+		<Japones>プロジェクトのIFCファイルを更新する</Japones>
+	</cybim_ActualizarVinculoIFC>
+	<cybim_EliminarVinculoIFC>
+		<Castellano>Eliminar fichero IFC del proyecto</Castellano>
+		<Frances>Supprimer le fichier IFC du projet</Frances>
+		<Portugues>Eliminar ficheiro IFC do projecto</Portugues>
+		<Catalan>Eliminar fitxer IFC del projecte</Catalan>
+		<Italiano>Eliminare file IFC del progetto</Italiano>
+		<Brasileiro>Eliminar ficheiro IFC do projecto</Brasileiro>
+		<Argentino>Eliminar fichero IFC del proyecto</Argentino>
+		<Mexicano>Eliminar fichero IFC del proyecto</Mexicano>
+		<Ingles>Delete IFC file of the project</Ingles>
+		<Rumano>Eliminați fișierul IFC al proiectului</Rumano>
+		<Chino>删除项目的IFC文件</Chino>
+		<Aleman>IFC Datei vom Projekt löschen</Aleman>
+		<Ruso>Удалить IFC файл проекта</Ruso>
+		<Polaco>Usuń plik IFC projektu</Polaco>
+		<Japones>プロジェクトのIFCファイルを削除する</Japones>
+	</cybim_EliminarVinculoIFC>
+	<cybim_ExportarIFC>
+		<Castellano>Volver a exportar IFC</Castellano>
+		<Frances>Réexporter le fichier IFC</Frances>
+		<Portugues>Voltar a exportar IFC</Portugues>
+		<Catalan>Tornar a exportar IFC</Catalan>
+		<Italiano>Esportare nuovamente IFC</Italiano>
+		<Brasileiro>Voltar a exportar IFC</Brasileiro>
+		<Argentino>Volver a exportar IFC</Argentino>
+		<Mexicano>Volver a exportar IFC</Mexicano>
+		<Ingles>Export the IFC file again</Ingles>
+		<Rumano>Exportați fișierul IFC din nou</Rumano>
+		<Chino>再次导出IFC文件</Chino>
+		<Aleman>IFC Datei wieder exportieren</Aleman>
+		<Ruso>Заново экспортировать IFC файл</Ruso>
+		<Polaco>Ponów eksport IFC</Polaco>
+		<Japones>もう一度IFCファイルをエクスポートする</Japones>
+	</cybim_ExportarIFC>
+	<cybim_AvisoInstalarIFCRevit>
+		<Castellano>Necesita instalar el complemento 'IFC for Revit', que se puede descargar desde //http://sourceforge.net/projects/ifcexporter.</Castellano>
+		<Frances>Vous devez installer le complément 'IFC for Revit', qui peut être téléchargé depuis //http://sourceforge.net/projects/ifcexporter.</Frances>
+		<Portugues>Necessita instalar o suplemento 'IFC for Revit', que pode ser descarregado desde //http://sourceforge.net/projects/ifcexporter.</Portugues>
+		<Catalan>Necessita instal·lar el complement 'IFC for Revit', que es pot descarregar des de //http://sourceforge.net/projects/ifcexporter.</Catalan>
+		<Italiano>È necessario installare il complemento 'IFC for Revit', scaricabile da //http://sourceforge.net/projects/ifcexporter.</Italiano>
+		<Brasileiro>Necessita instalar o suplemento 'IFC for Revit', que pode ser descarregado desde //http://sourceforge.net/projects/ifcexporter.</Brasileiro>
+		<Argentino>Necesita instalar el complemento 'IFC for Revit', que se puede descargar desde //http://sourceforge.net/projects/ifcexporter.</Argentino>
+		<Mexicano>Necesita instalar el complemento 'IFC for Revit', que se puede descargar desde //http://sourceforge.net/projects/ifcexporter.</Mexicano>
+		<Ingles>The add-in 'IFC for Revit' has to be installed. It can be downloaded from //http://sourceforge.net/projects/ifcexporter.</Ingles>
+		<Rumano>Este necesar instalarea programului de completare 'IFC for Revit' , care se poate descărca de la //http://sourceforge.net/projects/ifcexporter.</Rumano>
+		<Chino>必须安装补码'IFC for Revit'。 它可以从//http://sourceforge.net/projects/ifcexporter下载。</Chino>
+		<Aleman>Das Komplement 'IFC for Revit' muss installiert werden. Es kann von //http://sourceforge.net/projects/ifcexporter heruntergeladen werden.</Aleman>
+		<Ruso>Вам необходимо установить расширение 'IFC for Revit', которое можно скачать с //http://sourceforge.net/projects/ifcexporter.</Ruso>
+		<Polaco>Musisz zainstalować wtyczkę 'IFC for Revit', którą można pobrać z //http://sourceforge.net/projects/ifcexporter.</Polaco>
+		<Japones>アドイン「IFC for Revit」をインストールする必要があります。//http://sourceforge.net/projects/ifcexporterからダウンロードすることができます。</Japones>
+	</cybim_AvisoInstalarIFCRevit>
+	<cybim_SinDocActivo>
+		<Castellano>No hay ningún documento activo.</Castellano>
+		<Frances>Il n'y a aucun document actif.</Frances>
+		<Portugues>Não existe nenhum documento activo.</Portugues>
+		<Catalan>No hi ha cap document actiu.</Catalan>
+		<Italiano>Non è presente alcun documento attivo.</Italiano>
+		<Brasileiro>Não existe nenhum documento activo.</Brasileiro>
+		<Argentino>No hay ningún documento activo.</Argentino>
+		<Mexicano>No hay ningún documento activo.</Mexicano>
+		<Ingles>There are no active documents.</Ingles>
+		<Rumano>Nu există nici un document activ.</Rumano>
+		<Chino>没有活动文件。</Chino>
+		<Aleman>Es gibt keine aktive Dokumente.</Aleman>
+		<Ruso>Нет активных документов.</Ruso>
+		<Polaco>Nie ma żadnego aktywnego dokumentu.</Polaco>
+		<Japones>有効なドキュメントが1つもありません。</Japones>
+	</cybim_SinDocActivo>
+	<cybim_DocActivoNoProyecto>
+		<Castellano>El documento activo no es de tipo proyecto.</Castellano>
+		<Frances>Le document actif n'est pas de type projet.</Frances>
+		<Portugues>O documento activo não é de tipo projecto.</Portugues>
+		<Catalan>El document actiu no és de tipus projecte.</Catalan>
+		<Italiano>Il documento attivo non è di tipo progetto.</Italiano>
+		<Brasileiro>O documento activo não é de tipo projecto.</Brasileiro>
+		<Argentino>El documento activo no es de tipo proyecto.</Argentino>
+		<Mexicano>El documento activo no es de tipo proyecto.</Mexicano>
+		<Ingles>The active document is not a project-type document.</Ingles>
+		<Rumano>Documentul activ nu este un tip de proiect.</Rumano>
+		<Chino>活动文档不是项目类型文档。</Chino>
+		<Aleman>Das aktive Dokument ist nicht der Art Projekt.</Aleman>
+		<Ruso>Активный документ не является типовым документом проекта.</Ruso>
+		<Polaco>Aktywny dokument nie jest typu projekt.</Polaco>
+		<Japones>有効なドキュメントはプロジェクトタイプのドキュメントではありません。</Japones>
+	</cybim_DocActivoNoProyecto>
+	<cybim_DocSinFichero>
+		<Castellano>El documento activo no ha sido grabado. Necesita grabarlo para disponer de su ruta de acceso.</Castellano>
+		<Frances>Le document actif n'est pas enregistré. L'enregistrement est nécessaire pour la disponibilité du chemin d'accès.</Frances>
+		<Portugues>O documento activo não foi gravado. É necessário ser gravado para obter o seu caminho de acesso.</Portugues>
+		<Catalan>El document actiu no ha estat gravat. El necessita gravar per disposar de la seva ruta d'accés.</Catalan>
+		<Italiano>Il documento attivo non è stato salvato. Per poter disporre della directory di accesso è necessario salvarlo.</Italiano>
+		<Brasileiro>O documento activo não foi gravado. É necessário ser gravado para obter o seu caminho de acesso.</Brasileiro>
+		<Argentino>El documento activo no ha sido grabado. Necesita grabarlo para disponer de su ruta de acceso.</Argentino>
+		<Mexicano>El documento activo no ha sido grabado. Necesita grabarlo para disponer de su ruta de acceso.</Mexicano>
+		<Ingles>The active document has not been saved. It must be saved to have its access route.</Ingles>
+		<Rumano>Documentul activ nu a fost salvat. Trebuie salvat pentru a avea acces la el.</Rumano>
+		<Chino>活动文档尚未保存。必须保存它才能有访问路径.</Chino>
+		<Aleman>Das aktive Dokument ist nicht gespeichert worden. Es muss gespeichert werden, damit seiner Speicherort verfügbar wird.</Aleman>
+		<Ruso>Активный документ не был сохранён. Вам необходимо сохранить его для того, чтобы иметь в наличии его путь доступа.</Ruso>
+		<Polaco>Aktywny dokument nie został zapisany. Musisz go zapisać, aby móc dysponować jego ścieżką dostępu.</Polaco>
+		<Japones>有効なドキュメントは保存されませんでした。アクセスルートを持つために保存する 必要があります。</Japones>
+	</cybim_DocSinFichero>
+	<cybim_DocActivoNoValido>
+		<Castellano>El documento activo no es apto para la colaboración Open BIM. Compruebe que no está protegido contra escritura y que está en un directorio local accesible, no protegido contra escritura.</Castellano>
+		<Frances>Le document actif n'est pas apte à la collaboration Open BIM. Vérifiez qu'il n'est pas protégé en écriture et qu'il se trouve dans un répertoire local accessible, non protégé en écriture.</Frances>
+		<Portugues>O documento activo não é apto para a colaboração Open BIM. Verifique que não está protegido contra escrita e que está numa directoria local acessível, não protegido contra escrita.</Portugues>
+		<Catalan>El document actiu no és apte per a la col·laboració Open BIM. Comproveu que no està protegit contra escriptura i que està en un directori local accessible, no protegit contra escriptura.</Catalan>
+		<Italiano>Il documento attivo non è adatto per la collaborazione Open BIM. Verifichi che non sia protetto da scrittura e che sia in una directory locale accessibile, non protetta da scrittura.</Italiano>
+		<Brasileiro>O documento activo não é apto para a colaboração Open BIM. Verifique que não está protegido contra escrita e que está numa directoria local acessível, não protegido contra escrita.</Brasileiro>
+		<Argentino>El documento activo no es apto para la colaboración Open BIM. Compruebe que no está protegido contra escritura y que está en un directorio local accesible, no protegido contra escritura.</Argentino>
+		<Mexicano>El documento activo no es apto para la colaboración Open BIM. Compruebe que no está protegido contra escritura y que está en un directorio local accesible, no protegido contra escritura.</Mexicano>
+		<Ingles>The active document is not suitable for Open BIM collaboration. Verify that it is not write protected and that it is in a local accessible directory, which is not write protected.</Ingles>
+		<Rumano>Documentul activ nu este potrivit pentru colaborarea Open BIM. Verificați că nu este protejat la scriere și că este într-un folder accesibil local, nu protejat la scriere.</Rumano>
+		<Chino>所选文档不适用于Open BIM协作。 请确保文件没有被写保护，并位于本地可访问的目录中，且目录也没有被写保护。</Chino>
+		<Aleman>Das aktive Dokument ist nicht für die Zusammenarbeit mit Open BIM geeignet. Prüfen Sie, dass es nicht schreibgeschützt ist und dass es sich in einem zugänglichen und nicht schreibgeschützten lokalen Verzeichnis befindet.</Aleman>
+		<Ruso>Активированный документ не подходит для совместной работы с Open BIM. Проверьте, что он не он не защищен от записи и находится в доступной локальной папке, не защищенной от записи.</Ruso>
+		<Polaco>Aktywny dokument nie jest odpowiedni do kolaboracji Open BIM. Sprawdź, czy nie jest on zabezpieczony przed zapisem i czy znajduje się w dostępnym katalogu lokalnym, który nie jest zabezpieczony przed zapisem.</Polaco>
+		<Japones>有効なドキュメントがOpen BIM コラボレーションに適していません。 書き込み保護されていないこと、書き込み保護されていないローカルアクセス可能な ディレクトリにあることを確認してください。</Japones>
+	</cybim_DocActivoNoValido>
+	<cybim_IniciarSesion>
+		<Castellano>Iniciar sesión</Castellano>
+		<Frances>Se connecter</Frances>
+		<Portugues>Iniciar sessão</Portugues>
+		<Catalan>Iniciar sessió</Catalan>
+		<Italiano>Iniziare sessione</Italiano>
+		<Brasileiro>Iniciar sessão</Brasileiro>
+		<Argentino>Iniciar sesión</Argentino>
+		<Mexicano>Iniciar sesión</Mexicano>
+		<Ingles>Login</Ingles>
+		<Rumano>Autentificare</Rumano>
+		<Chino>登入</Chino>
+		<Aleman>Einloggen</Aleman>
+		<Ruso>Начать сеанс</Ruso>
+		<Polaco>Logowanie</Polaco>
+		<Japones>ログイン</Japones>
+	</cybim_IniciarSesion>
+	<cybim_Recargando>
+		<Castellano>Recargando</Castellano>
+		<Frances>Rechargement</Frances>
+		<Portugues>A recarregar</Portugues>
+		<Catalan>Recarregant</Catalan>
+		<Italiano>Ricaricando</Italiano>
+		<Brasileiro>A recarregar</Brasileiro>
+		<Argentino>Recargando</Argentino>
+		<Mexicano>Recargando</Mexicano>
+		<Ingles>Recharging</Ingles>
+		<Rumano>Reincărcare</Rumano>
+		<Chino>充值</Chino>
+		<Aleman>Neu laden</Aleman>
+		<Ruso>Выполняется перезагрузка</Ruso>
+		<Polaco>Ponowne ładowanie</Polaco>
+		<Japones>充電中</Japones>
+	</cybim_Recargando>
+	<cybim_OpcionesExportIFC>
+		<Castellano>Opciones de exportación a IFC</Castellano>
+		<Frances>Options d'exportation sous format IFC</Frances>
+		<Portugues>Opções de exportação a IFC</Portugues>
+		<Catalan>Opcions d'exportació a IFC</Catalan>
+		<Italiano>Opzioni di esportazione in IFC</Italiano>
+		<Brasileiro>Opções de exportação a IFC</Brasileiro>
+		<Argentino>Opciones de exportación a IFC</Argentino>
+		<Mexicano>Opciones de exportación a IFC</Mexicano>
+		<Ingles>Export to IFC options</Ingles>
+		<Rumano>Opțiuni de exportare a IFC</Rumano>
+		<Chino>导出到IFC选项</Chino>
+		<Aleman>IFC-Export Einstellung</Aleman>
+		<Ruso>Параметры экспорта в IFC</Ruso>
+		<Polaco>Opcje eksportu do IFC</Polaco>
+		<Japones>IFCへエクスポートするオプション</Japones>
+	</cybim_OpcionesExportIFC>
+	<cybim_Exportar>
+		<Castellano>Exportar</Castellano>
+		<Frances>Exporter</Frances>
+		<Portugues>Exportar</Portugues>
+		<Catalan>Exportar</Catalan>
+		<Italiano>Esportare</Italiano>
+		<Brasileiro>Exportar</Brasileiro>
+		<Argentino>Exportar</Argentino>
+		<Mexicano>Exportar</Mexicano>
+		<Ingles>Export</Ingles>
+		<Rumano>Export</Rumano>
+		<Chino>导出</Chino>
+		<Aleman>Exportieren</Aleman>
+		<Ruso>Экспорт</Ruso>
+		<Polaco>Eksportuj</Polaco>
+		<Japones>エクスポート</Japones>
+	</cybim_Exportar>
+	<cybim_ExportarVinculos>
+		<Castellano>Exportar vínculos</Castellano>
+		<Frances>Exporter les liens</Frances>
+		<Portugues>Exportar vínculos</Portugues>
+		<Catalan>Exportar vincles</Catalan>
+		<Italiano>Esportare vincoli</Italiano>
+		<Brasileiro>Exportar vínculos</Brasileiro>
+		<Argentino>Exportar vínculos</Argentino>
+		<Mexicano>Exportar vínculos</Mexicano>
+		<Ingles>Export links</Ingles>
+		<Rumano>Link- uri de export</Rumano>
+		<Chino>导出链接</Chino>
+		<Aleman>Verknüpfungen exportieren</Aleman>
+		<Ruso>Экспортировать ссылки</Ruso>
+		<Polaco>Eksportuj łącza</Polaco>
+		<Japones>リンクをエクスポートする</Japones>
+	</cybim_ExportarVinculos>
+	<cybim_OpcionesDefecto>
+		<Castellano>Opciones por defecto</Castellano>
+		<Frances>Options par défaut</Frances>
+		<Portugues>Opções por defeito</Portugues>
+		<Catalan>Opcions per defecte</Catalan>
+		<Italiano>Opzioni di default</Italiano>
+		<Brasileiro>Opções por defeito</Brasileiro>
+		<Argentino>Opciones por defecto</Argentino>
+		<Mexicano>Opciones por defecto</Mexicano>
+		<Ingles>Default options</Ingles>
+		<Rumano>Opțiuni implicite</Rumano>
+		<Chino>默认选项</Chino>
+		<Aleman>Standardoptionen</Aleman>
+		<Ruso>Параметры по умолчанию</Ruso>
+		<Polaco>Domyślne opcje</Polaco>
+		<Japones>既定のオプション</Japones>
+	</cybim_OpcionesDefecto>
+	<cybim_OpcionesPluginIFCforRevit>
+		<Castellano>Opciones del complemento 'IFC for Revit'</Castellano>
+		<Frances>Options du complément 'IFC for Revit'</Frances>
+		<Portugues>Opções do suplemento 'IFC for Revit'</Portugues>
+		<Catalan>Opcions del complement 'IFC for Revit'</Catalan>
+		<Italiano>Opzioni del plugin 'IFC per Revit'</Italiano>
+		<Brasileiro>Opções do suplemento 'IFC for Revit'</Brasileiro>
+		<Argentino>Opciones del complemento 'IFC for Revit'</Argentino>
+		<Mexicano>Opciones del complemento 'IFC for Revit'</Mexicano>
+		<Ingles>Options of the 'IFC for Revit' add-in</Ingles>
+		<Rumano>Opțiuni ale programului de completare 'IFC for Revit'</Rumano>
+		<Chino>'用于Revit的IFC'的选项补充</Chino>
+		<Aleman>Einstellung des 'IFC für Revit' Komplements</Aleman>
+		<Ruso>Параметры расширения 'IFC для Revit'</Ruso>
+		<Polaco>Opcje wtyczki 'IFC for Revit'</Polaco>
+		<Japones>「IFC for Revit」アドインのオプション</Japones>
+	</cybim_OpcionesPluginIFCforRevit>
+	<cybim_SelVinculosExportarIFC>
+		<Castellano>Selección de vínculos a exportar a IFC</Castellano>
+		<Frances>Sélection de liens à exporter sous format IFC</Frances>
+		<Portugues>Selecção de vínculos a exportar a IFC</Portugues>
+		<Catalan>Selecció de vincles a exportar a IFC</Catalan>
+		<Italiano>Selezione dei vincoli da esportare in IFC</Italiano>
+		<Brasileiro>Selecção de vínculos a exportar a IFC</Brasileiro>
+		<Argentino>Selección de vínculos a exportar a IFC</Argentino>
+		<Mexicano>Selección de vínculos a exportar a IFC</Mexicano>
+		<Ingles>Selection of links to export to IFC</Ingles>
+		<Rumano>Selectarea link-urilor exportate în IFC</Rumano>
+		<Chino>选择要导出到IFC的链接</Chino>
+		<Aleman>Auswahl der Verknüpfungen zu IFC Exportieren</Aleman>
+		<Ruso>Выбрать ссылки для экспорта в IFC</Ruso>
+		<Polaco>Wybór linków do eksportu do IFC</Polaco>
+		<Japones>IFCへエクスポートするリンクの選択</Japones>
+	</cybim_SelVinculosExportarIFC>
+	<cybim_ErroresExportacionIFC>
+		<Castellano>Errores en la exportación a IFC</Castellano>
+		<Frances>Erreurs dans l'exportation sous format IFC</Frances>
+		<Portugues>Erros na exportação a IFC</Portugues>
+		<Catalan>Errors en l'exportació a IFC</Catalan>
+		<Italiano>Errori nella esportazione in IFC</Italiano>
+		<Brasileiro>Erros na exportação a IFC</Brasileiro>
+		<Argentino>Errores en la exportación a IFC</Argentino>
+		<Mexicano>Errores en la exportación a IFC</Mexicano>
+		<Ingles>Export to IFC errors</Ingles>
+		<Rumano>Erori la export-ul către IFC</Rumano>
+		<Chino>导出到IFC错误</Chino>
+		<Aleman>Fehler des IFC Exports</Aleman>
+		<Ruso>Произошли ошибки во время экспорта в IFC</Ruso>
+		<Polaco>Błąd przy eksportowaniu do IFC</Polaco>
+		<Japones>IFCへのエクスポートエラー</Japones>
+	</cybim_ErroresExportacionIFC>
+	<cybim_Vinculo>
+		<Castellano>Vínculo</Castellano>
+		<Frances>Lien</Frances>
+		<Portugues>Vínculo</Portugues>
+		<Catalan>Vincle</Catalan>
+		<Italiano>Legame</Italiano>
+		<Brasileiro>Vínculo</Brasileiro>
+		<Argentino>Vínculo</Argentino>
+		<Mexicano>Vínculo</Mexicano>
+		<Ingles>Link</Ingles>
+		<Rumano>Link</Rumano>
+		<Chino>链接</Chino>
+		<Aleman>Verknüpfung</Aleman>
+		<Ruso>Ссылка</Ruso>
+		<Polaco>Łącze</Polaco>
+		<Japones>リンク</Japones>
+	</cybim_Vinculo>
+	<cybim_Instancias>
+		<Castellano>Ejemplares</Castellano>
+		<Frances>Occurrences</Frances>
+		<Portugues>Exemplares</Portugues>
+		<Catalan>Exemplars</Catalan>
+		<Italiano>Istanze</Italiano>
+		<Brasileiro>Exemplares</Brasileiro>
+		<Argentino>Ejemplares</Argentino>
+		<Mexicano>Ejemplares</Mexicano>
+		<Ingles>Instances</Ingles>
+		<Rumano>Exemplare</Rumano>
+		<Chino>实例</Chino>
+		<Aleman>Exemplare</Aleman>
+		<Ruso>экземпляров</Ruso>
+		<Polaco>Instancje</Polaco>
+		<Japones>例</Japones>
+	</cybim_Instancias>
+	<cybim_Observaciones>
+		<Castellano>Observaciones</Castellano>
+		<Frances>Observations</Frances>
+		<Portugues>Observações</Portugues>
+		<Catalan>Observacions</Catalan>
+		<Italiano>Osservazioni</Italiano>
+		<Brasileiro>Observações</Brasileiro>
+		<Argentino>Observaciones</Argentino>
+		<Mexicano>Observaciones</Mexicano>
+		<Ingles>Observations</Ingles>
+		<Rumano>Observații</Rumano>
+		<Chino>观察</Chino>
+		<Aleman>Hinweise</Aleman>
+		<Ruso>Наблюдения</Ruso>
+		<Polaco>Obserwacje</Polaco>
+		<Japones>観測データ</Japones>
+	</cybim_Observaciones>
+	<cybim_GenerarModelo3D>
+		<Castellano>Generar modelo 3D (.glTF)</Castellano>
+		<Frances>Générer modèle 3D (.glTF)</Frances>
+		<Portugues>Gerar modelo 3D (.glTF)</Portugues>
+		<Catalan>Generar model 3D (.glTF)</Catalan>
+		<Italiano>Generare modello 3D (.glTF)</Italiano>
+		<Brasileiro>Gerar modelo 3D (.glTF)</Brasileiro>
+		<Argentino>Generar modelo 3D (.glTF)</Argentino>
+		<Mexicano>Generar modelo 3D (.glTF)</Mexicano>
+		<Ingles>Generate 3D model (.glTF)</Ingles>
+		<Rumano>Generare modele 3D (.glTF)</Rumano>
+		<Chino>生成3D模型（.glTF）</Chino>
+		<Aleman>3D model erstellen (.glTF)</Aleman>
+		<Ruso>Создать 3D модель (.glTF)</Ruso>
+		<Polaco>Utwórz model 3D (.glTF)</Polaco>
+		<Japones>3Dモデルを作成する(.glTF)</Japones>
+	</cybim_GenerarModelo3D>
+	<cybim_ErroresColaboracion>
+		<Castellano>Incidencias</Castellano>
+		<Frances>Incidents</Frances>
+		<Portugues>Ocorrências</Portugues>
+		<Catalan>Incidències</Catalan>
+		<Italiano>Conflitti</Italiano>
+		<Brasileiro>Incidências</Brasileiro>
+		<Argentino>Incidencias</Argentino>
+		<Mexicano>Incidencias</Mexicano>
+		<Ingles>Issues</Ingles>
+		<Rumano>Probleme</Rumano>
+		<Chino>问题</Chino>
+		<Aleman>Ereignisse</Aleman>
+		<Ruso>Ошибки</Ruso>
+		<Polaco>Problemy</Polaco>
+		<Japones>イシュー</Japones>
+	</cybim_ErroresColaboracion>
+	<Fecha>
+		<Castellano>Fecha</Castellano>
+		<Frances>Date</Frances>
+		<Portugues>Data</Portugues>
+		<Catalan>Data</Catalan>
+		<Italiano>Data</Italiano>
+		<Brasileiro>Data</Brasileiro>
+		<Argentino>Fecha</Argentino>
+		<Mexicano>Fecha</Mexicano>
+		<Ingles>Date</Ingles>
+		<Rumano>Data</Rumano>
+		<Chino>日期</Chino>
+		<Aleman>Datum</Aleman>
+		<Ruso>Дата</Ruso>
+		<Polaco>Data</Polaco>
+		<Japones>日付</Japones>
+	</Fecha>
+	<Titulo>
+		<Castellano>Título</Castellano>
+		<Frances>Titre</Frances>
+		<Portugues>Título</Portugues>
+		<Catalan>Títol</Catalan>
+		<Italiano>Titolo</Italiano>
+		<Brasileiro>Título</Brasileiro>
+		<Argentino>Título</Argentino>
+		<Mexicano>Título</Mexicano>
+		<Ingles>Title</Ingles>
+		<Rumano>Titlu</Rumano>
+		<Chino>标题</Chino>
+		<Aleman>Titel</Aleman>
+		<Ruso>Заглавие</Ruso>
+		<Polaco>Tytuł</Polaco>
+		<Japones>タイトル</Japones>
+	</Titulo>
+	<Descripcion>
+		<Castellano>Descripción</Castellano>
+		<Frances>Description</Frances>
+		<Portugues>Descrição</Portugues>
+		<Catalan>Descripció</Catalan>
+		<Italiano>Descrizione</Italiano>
+		<Brasileiro>Descrição</Brasileiro>
+		<Argentino>Descripción</Argentino>
+		<Mexicano>Descripción</Mexicano>
+		<Ingles>Description</Ingles>
+		<Rumano>Descriere</Rumano>
+		<Chino>描述</Chino>
+		<Aleman>Beschreibung</Aleman>
+		<Ruso>Описание</Ruso>
+		<Polaco>Opis</Polaco>
+		<Japones>説明</Japones>
+	</Descripcion>
+	<Autor>
+		<Castellano>Autor</Castellano>
+		<Frances>Auteur</Frances>
+		<Portugues>Autor</Portugues>
+		<Catalan>Autor</Catalan>
+		<Italiano>Autore</Italiano>
+		<Brasileiro>Autor</Brasileiro>
+		<Argentino>Autor</Argentino>
+		<Mexicano>Autor</Mexicano>
+		<Ingles>Author</Ingles>
+		<Rumano>Autor</Rumano>
+		<Chino>作者</Chino>
+		<Aleman>Autor</Aleman>
+		<Ruso>Автор</Ruso>
+		<Polaco>Autor</Polaco>
+		<Japones>作者</Japones>
+	</Autor>
+	<TextoBoton_Mapa>
+		<Castellano>Mapeado</Castellano>
+		<Frances>Mapping</Frances>
+		<Portugues>Mapeamento</Portugues>
+		<Catalan>Mapejat</Catalan>
+		<Italiano>Mappatura</Italiano>
+		<Brasileiro>Mapeamento</Brasileiro>
+		<Argentino>Mapeado</Argentino>
+		<Mexicano>Mapeado</Mexicano>
+		<Ingles>Mapping</Ingles>
+		<Rumano>Cartografiere</Rumano>
+		<Chino>映射</Chino>
+		<Aleman>Zuordnung</Aleman>
+		<Ruso>Картирование</Ruso>
+		<Polaco>Mapowanie</Polaco>
+		<Japones>マッピング</Japones>
+	</TextoBoton_Mapa>
+	<TextoBoton_Ayuda>
+		<Castellano>Ayuda</Castellano>
+		<Frances>Aide</Frances>
+		<Portugues>Ajuda</Portugues>
+		<Catalan>Ajuda</Catalan>
+		<Italiano>Help</Italiano>
+		<Brasileiro>Ajuda</Brasileiro>
+		<Argentino>Ayuda</Argentino>
+		<Mexicano>Ayuda</Mexicano>
+		<Ingles>Help</Ingles>
+		<Rumano>Ajutor</Rumano>
+		<Chino>帮助</Chino>
+		<Aleman>Hilfe</Aleman>
+		<Ruso>Помощь</Ruso>
+		<Polaco>Pomoc</Polaco>
+		<Japones>ヘルプ</Japones>
+	</TextoBoton_Ayuda>
+	<TablaMapeado_Ok>
+		<Castellano>Aceptar</Castellano>
+		<Frances>Accepter</Frances>
+		<Portugues>Aceitar</Portugues>
+		<Catalan>Acceptar</Catalan>
+		<Italiano>Accettare</Italiano>
+		<Brasileiro>Aceitar</Brasileiro>
+		<Argentino>Aceptar</Argentino>
+		<Mexicano>Aceptar</Mexicano>
+		<Ingles>Accept</Ingles>
+		<Rumano>Acceptă</Rumano>
+		<Chino>确定</Chino>
+		<Aleman>Akzeptieren</Aleman>
+		<Ruso>Принять</Ruso>
+		<Polaco>Akceptuj</Polaco>
+		<Japones>OK</Japones>
+	</TablaMapeado_Ok>
+	<TablaMapeado_Cargar>
+		<Castellano>Cargar</Castellano>
+		<Frances>Charger</Frances>
+		<Portugues>Carregar</Portugues>
+		<Catalan>Carregar</Catalan>
+		<Italiano>Caricare</Italiano>
+		<Brasileiro>Carregar</Brasileiro>
+		<Argentino>Cargar</Argentino>
+		<Mexicano>Cargar</Mexicano>
+		<Ingles>Load</Ingles>
+		<Rumano>Încărcare</Rumano>
+		<Chino>加载</Chino>
+		<Aleman>Laden</Aleman>
+		<Ruso>Загрузить</Ruso>
+		<Polaco>Ładuj</Polaco>
+		<Japones>ロード</Japones>
+	</TablaMapeado_Cargar>
+	<TablaMapeado_Guardar>
+		<Castellano>Guardar</Castellano>
+		<Frances>Enregistrer</Frances>
+		<Portugues>Guardar</Portugues>
+		<Catalan>Guardar</Catalan>
+		<Italiano>Salvare</Italiano>
+		<Brasileiro>Salvar</Brasileiro>
+		<Argentino>Guardar</Argentino>
+		<Mexicano>Guardar</Mexicano>
+		<Ingles>Save</Ingles>
+		<Rumano>Salvați</Rumano>
+		<Chino>保存</Chino>
+		<Aleman>Speichern</Aleman>
+		<Ruso>Сохранить</Ruso>
+		<Polaco>Zapisz</Polaco>
+		<Japones>保存</Japones>
+	</TablaMapeado_Guardar>
+	<TablaMapeado_Titulo>
+		<Castellano>Mapeado</Castellano>
+		<Frances>Mapping</Frances>
+		<Portugues>Mapeamento</Portugues>
+		<Catalan>Mapejat</Catalan>
+		<Italiano>Mappatura</Italiano>
+		<Brasileiro>Mapeamento</Brasileiro>
+		<Argentino>Mapeado</Argentino>
+		<Mexicano>Mapeado</Mexicano>
+		<Ingles>Mapping</Ingles>
+		<Rumano>Cartografiere</Rumano>
+		<Chino>映射</Chino>
+		<Aleman>Zuordnung</Aleman>
+		<Ruso>Картирование</Ruso>
+		<Polaco>Mapowanie</Polaco>
+		<Japones>マッピング</Japones>
+	</TablaMapeado_Titulo>
+	<TablaMapeado_TituloColumna_Mapear>
+		<Castellano>Aplicar</Castellano>
+		<Frances>Appliquer</Frances>
+		<Portugues>Aplicar</Portugues>
+		<Catalan>Aplicar</Catalan>
+		<Italiano>Applicare</Italiano>
+		<Brasileiro>Aplicar</Brasileiro>
+		<Argentino>Aplicar</Argentino>
+		<Mexicano>Aplicar</Mexicano>
+		<Ingles>Apply</Ingles>
+		<Rumano>Aplicare</Rumano>
+		<Chino>应用</Chino>
+		<Aleman>Umsetzen</Aleman>
+		<Ruso>Применить</Ruso>
+		<Polaco>Zastosuj</Polaco>
+		<Japones>適用する</Japones>
+	</TablaMapeado_TituloColumna_Mapear>
+	<TablaMapeado_TituloColumna_ClaseIfc>
+		<Castellano>Clase IFC</Castellano>
+		<Frances>Classe IFC</Frances>
+		<Portugues>Classe IFC</Portugues>
+		<Catalan>Classe IFC</Catalan>
+		<Italiano>Classe IFC</Italiano>
+		<Brasileiro>Classe IFC</Brasileiro>
+		<Argentino>Clase IFC</Argentino>
+		<Mexicano>Clase IFC</Mexicano>
+		<Ingles>IFC class</Ingles>
+		<Rumano>Clasa IFC</Rumano>
+		<Chino>IFC 类型</Chino>
+		<Aleman>IFC-Klasse</Aleman>
+		<Ruso>Класс IFC</Ruso>
+		<Polaco>Klasa IFC</Polaco>
+		<Japones>IFCクラス</Japones>
+	</TablaMapeado_TituloColumna_ClaseIfc>
+	<TablaMapeado_TituloColumna_ParametrosIfc>
+		<Castellano>Parámetro IFC</Castellano>
+		<Frances>Paramètre IFC</Frances>
+		<Portugues>Parâmetro IFC</Portugues>
+		<Catalan>Paràmetre IFC</Catalan>
+		<Italiano>Parametro IFC</Italiano>
+		<Brasileiro>Parâmetro IFC</Brasileiro>
+		<Argentino>Parámetro IFC</Argentino>
+		<Mexicano>Parámetro IFC</Mexicano>
+		<Ingles>IFC parameter</Ingles>
+		<Rumano>Parametru IFC</Rumano>
+		<Chino>IFC 参数</Chino>
+		<Aleman>IFC-Parameter</Aleman>
+		<Ruso>IFC параметр</Ruso>
+		<Polaco>Parametr IFC</Polaco>
+		<Japones>IFCパラメーター</Japones>
+	</TablaMapeado_TituloColumna_ParametrosIfc>
+	<TablaMapeado_TituloColumna_TipoRvt>
+		<Castellano>Tipo</Castellano>
+		<Frances>Type</Frances>
+		<Portugues>Tipo</Portugues>
+		<Catalan>Tipus</Catalan>
+		<Italiano>Tipo</Italiano>
+		<Brasileiro>Tipo</Brasileiro>
+		<Argentino>Tipo</Argentino>
+		<Mexicano>Tipo</Mexicano>
+		<Ingles>Type</Ingles>
+		<Rumano>Tip</Rumano>
+		<Chino>类型</Chino>
+		<Aleman>Typ</Aleman>
+		<Ruso>Тип</Ruso>
+		<Polaco>Typ</Polaco>
+		<Japones>タイプ</Japones>
+	</TablaMapeado_TituloColumna_TipoRvt>
+	<TablaMapeado_TituloColumna_TipoDeParametro>
+		<Castellano>Tipo de parámetro</Castellano>
+		<Frances>Type de paramètre</Frances>
+		<Portugues>Tipo de parâmetro</Portugues>
+		<Catalan>Tipus de paràmetre</Catalan>
+		<Italiano>Tipo di parametro</Italiano>
+		<Brasileiro>Tipo de parâmetro</Brasileiro>
+		<Argentino>Tipo de parámetro</Argentino>
+		<Mexicano>Tipo de parámetro</Mexicano>
+		<Ingles>Type of parameter</Ingles>
+		<Rumano>Tip de parametru</Rumano>
+		<Chino>参数类型</Chino>
+		<Aleman>Parametertyp</Aleman>
+		<Ruso>Тип параметра</Ruso>
+		<Polaco>Typ parametru</Polaco>
+		<Japones>パラメーターのタイプ</Japones>
+	</TablaMapeado_TituloColumna_TipoDeParametro>
+	<TablaMapeado_TituloColumna_Geometria>
+		<Castellano>Geometría</Castellano>
+		<Frances>Géométrie</Frances>
+		<Portugues>Geometria</Portugues>
+		<Catalan>Geometria</Catalan>
+		<Italiano>Geometria</Italiano>
+		<Brasileiro>Geometria</Brasileiro>
+		<Argentino>Geometría</Argentino>
+		<Mexicano>Geometría</Mexicano>
+		<Ingles>Geometry</Ingles>
+		<Rumano>Geometrie</Rumano>
+		<Chino>几何</Chino>
+		<Aleman>Geometrie</Aleman>
+		<Ruso>Геометрия</Ruso>
+		<Polaco>Geometria</Polaco>
+		<Japones>ジオメトリ</Japones>
+	</TablaMapeado_TituloColumna_Geometria>
+	<TablaMapeado_TituloColumna_ParametrosRvt>
+		<Castellano>Parámetros en Revit®</Castellano>
+		<Frances>Paramètres dans Revit®</Frances>
+		<Portugues>Parâmetros em Revit®</Portugues>
+		<Catalan>Paràmetres en Revit®</Catalan>
+		<Italiano>Parametri in Revit®</Italiano>
+		<Brasileiro>Parâmetros em Revit®</Brasileiro>
+		<Argentino>Parámetros en Revit®</Argentino>
+		<Mexicano>Parámetros en Revit®</Mexicano>
+		<Ingles>Parameters in Revit®</Ingles>
+		<Rumano>Parametrii în Revit®</Rumano>
+		<Chino>Revit® 中的参数</Chino>
+		<Aleman>Parameter in Revit®</Aleman>
+		<Ruso>Параметры в Revit®</Ruso>
+		<Polaco>Parametry w Revit®</Polaco>
+		<Japones>Revit®でのパラメーター</Japones>
+	</TablaMapeado_TituloColumna_ParametrosRvt>
+	<TablaMapeado_TituloColumna_ParametroRvt>
+		<Castellano>Parámetro en Revit®</Castellano>
+		<Frances>Paramètre dans Revit®</Frances>
+		<Portugues>Parâmetro em Revit®</Portugues>
+		<Catalan>Paràmetre en Revit®</Catalan>
+		<Italiano>Parametro in Revit®</Italiano>
+		<Brasileiro>Parâmetro em Revit®</Brasileiro>
+		<Argentino>Parámetro en Revit®</Argentino>
+		<Mexicano>Parámetro en Revit®</Mexicano>
+		<Ingles>Parameter in Revit®</Ingles>
+		<Rumano>Parametru în Revit®</Rumano>
+		<Chino>Revit® 中的参数</Chino>
+		<Aleman>Parameter in Revit®</Aleman>
+		<Ruso>Параметр Revit®</Ruso>
+		<Polaco>Parametr w Revit®</Polaco>
+		<Japones>Revit®でのパラメーター</Japones>
+	</TablaMapeado_TituloColumna_ParametroRvt>
+	<TablaMapeado_TituloColumna_VinculosIfc>
+		<Castellano>Vínculos</Castellano>
+		<Frances>Liens</Frances>
+		<Portugues>Vínculos</Portugues>
+		<Catalan>Vincles</Catalan>
+		<Italiano>Víncoli</Italiano>
+		<Brasileiro>Vínculos</Brasileiro>
+		<Argentino>Vínculos</Argentino>
+		<Mexicano>Vínculos</Mexicano>
+		<Ingles>Links</Ingles>
+		<Rumano>Link-uri</Rumano>
+		<Chino>链接</Chino>
+		<Aleman>Verknüpfungen</Aleman>
+		<Ruso>Ссылки</Ruso>
+		<Polaco>Łącza</Polaco>
+		<Japones>リンク</Japones>
+	</TablaMapeado_TituloColumna_VinculosIfc>
+	<TablaMapeadoParametros_Titulo>
+		<Castellano>Mapeado de parámetros</Castellano>
+		<Frances>Mapping de paramètres</Frances>
+		<Portugues>Mapeamento de parâmetros</Portugues>
+		<Catalan>Mapejat de paràmetres</Catalan>
+		<Italiano>Mappatura di parametri</Italiano>
+		<Brasileiro>Mapeamento de parâmetros</Brasileiro>
+		<Argentino>Mapeado de parámetros</Argentino>
+		<Mexicano>Mapeado de parámetros</Mexicano>
+		<Ingles>Parameter mapping</Ingles>
+		<Rumano>Cartografierea parametrilor</Rumano>
+		<Chino>参数映射</Chino>
+		<Aleman>Parameterzuordnung</Aleman>
+		<Ruso>Параметр картирования</Ruso>
+		<Polaco>Mapping parametrów</Polaco>
+		<Japones>パラメーターマッピング</Japones>
+	</TablaMapeadoParametros_Titulo>
+	<TipoDeGeometria_Rectangular>
+		<Castellano>Rectangular</Castellano>
+		<Frances>Rectangulaire</Frances>
+		<Portugues>Rectangular</Portugues>
+		<Catalan>Rectangular</Catalan>
+		<Italiano>Rettangolare</Italiano>
+		<Brasileiro>Rectangular</Brasileiro>
+		<Argentino>Rectangular</Argentino>
+		<Mexicano>Rectangular</Mexicano>
+		<Ingles>Rectangular</Ingles>
+		<Rumano>Dreptunghiulară</Rumano>
+		<Chino>长方形</Chino>
+		<Aleman>Rechteckig</Aleman>
+		<Ruso>Прямоугольный</Ruso>
+		<Polaco>Prostokątny</Polaco>
+		<Japones>長方形</Japones>
+	</TipoDeGeometria_Rectangular>
+	<TipoDeGeometria_Circular>
+		<Castellano>Circular</Castellano>
+		<Frances>Ronde</Frances>
+		<Portugues>Circular</Portugues>
+		<Catalan>Circular</Catalan>
+		<Italiano>Circolare</Italiano>
+		<Brasileiro>Circular</Brasileiro>
+		<Argentino>Circular</Argentino>
+		<Mexicano>Circular</Mexicano>
+		<Ingles>Round</Ingles>
+		<Rumano>Rotundă</Rumano>
+		<Chino>圆形</Chino>
+		<Aleman>Runde</Aleman>
+		<Ruso>Круглый</Ruso>
+		<Polaco>Okrągły</Polaco>
+		<Japones>円形</Japones>
+	</TipoDeGeometria_Circular>
+	<TipoDeParametro_Tipo>
+		<Castellano>Parámetro de tipo</Castellano>
+		<Frances>Paramètre de type</Frances>
+		<Portugues>Parâmetro de tipo</Portugues>
+		<Catalan>Paràmetre de tipus</Catalan>
+		<Italiano>Parametro del tipo</Italiano>
+		<Brasileiro>Parâmetro de tipo</Brasileiro>
+		<Argentino>Parámetro de tipo</Argentino>
+		<Mexicano>Parámetro de tipo</Mexicano>
+		<Ingles>Type parameter</Ingles>
+		<Rumano>Parametru tip</Rumano>
+		<Chino>类型的参数</Chino>
+		<Aleman>Typenparameter</Aleman>
+		<Ruso>Типовой параметр</Ruso>
+		<Polaco>Parametr typu</Polaco>
+		<Japones>タイプパラメーター</Japones>
+	</TipoDeParametro_Tipo>
+	<TipoDeParametro_Ejemplar>
+		<Castellano>Parámetro de ejemplar</Castellano>
+		<Frances>Paramètre d'occurrence</Frances>
+		<Portugues>Parâmetro de exemplar</Portugues>
+		<Catalan>Paràmetre d'exemplar</Catalan>
+		<Italiano>Parametro di istanza</Italiano>
+		<Brasileiro>Parâmetro de exemplar</Brasileiro>
+		<Argentino>Parámetro de ejemplar</Argentino>
+		<Mexicano>Parámetro de ejemplar</Mexicano>
+		<Ingles>Instance parameter</Ingles>
+		<Rumano>Parametrul exemplarului</Rumano>
+		<Chino>实例参数</Chino>
+		<Aleman>Exemplarparameter</Aleman>
+		<Ruso>Параметр экземпляра</Ruso>
+		<Polaco>Parametr instancji</Polaco>
+		<Japones>インスタンスパラメーター</Japones>
+	</TipoDeParametro_Ejemplar>
+	<SeleccionarVinculoIfc>
+		<Castellano>Vínculos IFC</Castellano>
+		<Frances>Liens IFC</Frances>
+		<Portugues>Vínculos IFC</Portugues>
+		<Catalan>Vincles IFC</Catalan>
+		<Italiano>Víncoli IFC</Italiano>
+		<Brasileiro>Vínculos IFC</Brasileiro>
+		<Argentino>Vínculos IFC</Argentino>
+		<Mexicano>Vínculos IFC</Mexicano>
+		<Ingles>IFC links</Ingles>
+		<Rumano>Link-uri IFC</Rumano>
+		<Chino>IFC 链接</Chino>
+		<Aleman>IFC Verknüpfungen</Aleman>
+		<Ruso>Ссылки IFC</Ruso>
+		<Polaco>Łącza IFC</Polaco>
+		<Japones>IFCリンク</Japones>
+	</SeleccionarVinculoIfc>
+	<NingunVinculoSeleccionado>
+		<Castellano>Debe seleccionar los vínculos IFC a los que desea aplicar el mapeado.</Castellano>
+		<Frances>Vous devez sélectionner les liens IFC auxquels vous souhaitez appliquer le mapping.</Frances>
+		<Portugues>Deve seleccionar os vínculos IFC aos que pretende aplicar o mapeamento.</Portugues>
+		<Catalan>Ha de seleccionar els vincles IFC als quals desitja aplicar el mapejat.</Catalan>
+		<Italiano>Deve selezionare i vincoli IFC ai quali desidera applicare la mappatura.</Italiano>
+		<Brasileiro>Deve seleccionar os vínculos IFC aos que pretende aplicar o mapeamento.</Brasileiro>
+		<Argentino>Debe seleccionar los vínculos IFC a los que desea aplicar el mapeado.</Argentino>
+		<Mexicano>Debe seleccionar los vínculos IFC a los que desea aplicar el mapeado.</Mexicano>
+		<Ingles>You must select the IFC links to which the mapping is to be applied.</Ingles>
+		<Rumano>Trebuie să selectați link-urile IFC la care doriți aplicarea cartografierii.</Rumano>
+		<Chino>必须选择将要应用映射的 IFC链接。</Chino>
+		<Aleman>Sie müssen die IFC-Verknüpfungen auswählen, auf die die Zuordnung angewendet werden soll.</Aleman>
+		<Ruso>Вам необходимо выбрать ссылки IFC к которым Вы хотите применить картирование.</Ruso>
+		<Polaco>Musisz wybrać łącza IFC, do których chcesz zastosować mapowanie.</Polaco>
+		<Japones>マッピングが適用されるIFCリンクを選択する必要があります。</Japones>
+	</NingunVinculoSeleccionado>
+	<MarcaRegistradaRevitAutodesk>
+		<Castellano>Revit® es una marca registrada de Autodesk, Inc.</Castellano>
+		<Frances>Revit® est une marque déposée de Autodesk, Inc.</Frances>
+		<Portugues>Revit® é uma marca registada de Autodesk, Inc.</Portugues>
+		<Catalan>Revit® és una marca registrada de Autodesk, Inc.</Catalan>
+		<Italiano>Revit® é un marchio registrato di Autodesk, Inc.</Italiano>
+		<Brasileiro>Revit® é uma marca registada de Autodesk, Inc.</Brasileiro>
+		<Argentino>Revit® es una marca registrada de Autodesk, Inc.</Argentino>
+		<Mexicano>Revit® es una marca registrada de Autodesk, Inc.</Mexicano>
+		<Ingles>Revit® is a registered trademark of Autodesk, Inc.</Ingles>
+		<Rumano>Revit® este o marcă înregistrată Autodesk, Inc.</Rumano>
+		<Chino>Revit® 是 Autodesk, Inc. 注册的商标</Chino>
+		<Aleman>Revit® ist ein eingetragenes Warenzeichen von Autodesk, Inc.</Aleman>
+		<Ruso>Revit® является зарегистрированной маркой Autodesk, Inc.</Ruso>
+		<Polaco>Revit® jest zarejestrowanym znakiem towarowym Autodesk, Inc.</Polaco>
+		<Japones>Revit®はAutodesk, Inc.のトレードマークに登録されています。</Japones>
+	</MarcaRegistradaRevitAutodesk>
+	<OpcionesIFC>
+		<Castellano>Opciones IFC</Castellano>
+		<Frances>Options IFC</Frances>
+		<Portugues>Opções IFC</Portugues>
+		<Catalan>Opcions IFC</Catalan>
+		<Italiano>Opzioni IFC</Italiano>
+		<Brasileiro>Opções IFC</Brasileiro>
+		<Argentino>Opciones IFC</Argentino>
+		<Mexicano>Opciones IFC</Mexicano>
+		<Ingles>IFC Options</Ingles>
+		<Rumano>Opțiuni IFC</Rumano>
+		<Chino>IFC 选项</Chino>
+		<Aleman>IFC-Optionen</Aleman>
+		<Ruso>Параметры IFC</Ruso>
+		<Polaco>Opcje IFC</Polaco>
+		<Japones>IFCオプション</Japones>
+	</OpcionesIFC>
+	<OpcionesExportacionIFC>
+		<Castellano>Opciones de exportación</Castellano>
+		<Frances>Options d'exportation</Frances>
+		<Portugues>Exportar opções</Portugues>
+		<Catalan>Opcions d'exportació</Catalan>
+		<Italiano>Opzioni di esportazione</Italiano>
+		<Brasileiro>Exportar opções</Brasileiro>
+		<Argentino>Opciones de exportación</Argentino>
+		<Mexicano>Opciones de exportación</Mexicano>
+		<Ingles>Export Options</Ingles>
+		<Rumano>Opțiuni de export</Rumano>
+		<Chino>导出选项</Chino>
+		<Aleman>Optionen Exportieren</Aleman>
+		<Ruso>Параметры экспорта</Ruso>
+		<Polaco>Opcje eksportu</Polaco>
+		<Japones>エクスポートオプション</Japones>
+	</OpcionesExportacionIFC>
+	<MapeadoImportacionIFC>
+		<Castellano>Opciones de importación IFC</Castellano>
+		<Frances>Options d'importation IFC</Frances>
+		<Portugues>Importar opções IFC</Portugues>
+		<Catalan>Opcions d'importació IFC</Catalan>
+		<Italiano>Opzioni di importazione IFC</Italiano>
+		<Brasileiro>Importar opções IFC</Brasileiro>
+		<Argentino>Opciones de importación IFC</Argentino>
+		<Mexicano>Opciones de importación IFC</Mexicano>
+		<Ingles>Import IFC Options</Ingles>
+		<Rumano>Opțiuni de import IFC</Rumano>
+		<Chino>IFC 导入选项</Chino>
+		<Aleman>IFC-Optionen importieren</Aleman>
+		<Ruso>Параметры импорта IFC</Ruso>
+		<Polaco>Opcje importowania IFC</Polaco>
+		<Japones>インポートIFCオプション</Japones>
+	</MapeadoImportacionIFC>
+	<MapeadoExportacionIFC>
+		<Castellano>Clases de exportación IFC</Castellano>
+		<Frances>Classes d'exportation IFC</Frances>
+		<Portugues>Exportar classes IFC</Portugues>
+		<Catalan>Classes d'exportació IFC</Catalan>
+		<Italiano>Classi di esportazione IFC</Italiano>
+		<Brasileiro>Exportar classes IFC</Brasileiro>
+		<Argentino>Clases de exportación IFC</Argentino>
+		<Mexicano>Clases de exportación IFC</Mexicano>
+		<Ingles>IFC Export Classes</Ingles>
+		<Rumano>Clase de export IFC</Rumano>
+		<Chino>IFC 导出类别</Chino>
+		<Aleman>IFC-Exportklassen</Aleman>
+		<Ruso>Классы экспорта IFC</Ruso>
+		<Polaco>Klasy eksportowania IFC</Polaco>
+		<Japones>IFCエクスポートクラス</Japones>
+	</MapeadoExportacionIFC>
+	<SeleccionarCategoria>
+		<Castellano>Seleccionar categoría</Castellano>
+		<Frances>Sélectionner une catégorie</Frances>
+		<Portugues>Selecione a categoria</Portugues>
+		<Catalan>Seleccionar categoría</Catalan>
+		<Italiano>Seleziona categoria</Italiano>
+		<Brasileiro>Selecione a categoria</Brasileiro>
+		<Argentino>Seleccionar categoría</Argentino>
+		<Mexicano>Seleccionar categoría</Mexicano>
+		<Ingles>Choose category</Ingles>
+		<Rumano>Selectați categoria</Rumano>
+		<Chino>选择类别</Chino>
+		<Aleman>Kategorie wählen</Aleman>
+		<Ruso>Выбрать категорию</Ruso>
+		<Polaco>Wybierz kategorię</Polaco>
+		<Japones>カテゴリーを選択</Japones>
+	</SeleccionarCategoria>
+	<CategoriaRevit>
+		<Castellano>Categoría de Revit</Castellano>
+		<Frances>Catégorie Revit</Frances>
+		<Portugues>Categoria do Revit</Portugues>
+		<Catalan>Categoria de Revit</Catalan>
+		<Italiano>Categoria Revit</Italiano>
+		<Brasileiro>Categoria do Revit</Brasileiro>
+		<Argentino>Categoría de Revit</Argentino>
+		<Mexicano>Categoría de Revit</Mexicano>
+		<Ingles>Revit Category</Ingles>
+		<Rumano>Categoria Revit</Rumano>
+		<Chino>Revit 类别</Chino>
+		<Aleman>Revit-Kategorie</Aleman>
+		<Ruso>Категория Revit</Ruso>
+		<Polaco>Kategoria programu Revit</Polaco>
+		<Japones>Revitカテゴリー</Japones>
+	</CategoriaRevit>
+	<SubcategoriaRevit>
+		<Castellano>Subcategoría de Revit</Castellano>
+		<Frances>Sous-catégorie Revit</Frances>
+		<Portugues>Subcategoria do Revit</Portugues>
+		<Catalan>Subcategoria de Revit</Catalan>
+		<Italiano>Sottocategoria di Revit</Italiano>
+		<Brasileiro>Subcategoria do Revit</Brasileiro>
+		<Argentino>Subcategoría de Revit</Argentino>
+		<Mexicano>Subcategoría de Revit</Mexicano>
+		<Ingles>Revit Sub-Category</Ingles>
+		<Rumano>Subcategoria Revit</Rumano>
+		<Chino>Revit 子类别</Chino>
+		<Aleman>Revit-Underkategorie</Aleman>
+		<Ruso>Подкатегория Revit</Ruso>
+		<Polaco>Podkategoria programu Revit</Polaco>
+		<Japones>Revitサブカテゴリー</Japones>
+	</SubcategoriaRevit>
+	<ClaseIFC>
+		<Castellano>Nombre de clase IFC</Castellano>
+		<Frances>Nom de classe IFC</Frances>
+		<Portugues>Nome da classe IFC</Portugues>
+		<Catalan>Nom de classe IFC</Catalan>
+		<Italiano>Nome classe IFC</Italiano>
+		<Brasileiro>Nome da classe IFC</Brasileiro>
+		<Argentino>Nombre de clase IFC</Argentino>
+		<Mexicano>Nombre de clase IFC</Mexicano>
+		<Ingles>IFC Class Name</Ingles>
+		<Rumano>Numele clasei IFC</Rumano>
+		<Chino>IFC 类名</Chino>
+		<Aleman>IFC-Klassenname</Aleman>
+		<Ruso>Название класса IFC</Ruso>
+		<Polaco>Nazwa klasy IFC</Polaco>
+		<Japones>IFCクラス名</Japones>
+	</ClaseIFC>
+	<TipoIFC>
+		<Castellano>Tipo IFC</Castellano>
+		<Frances>Type IFC</Frances>
+		<Portugues>Tipo IFC</Portugues>
+		<Catalan>Tipus IFC</Catalan>
+		<Italiano>Tipo IFC</Italiano>
+		<Brasileiro>Tipo IFC</Brasileiro>
+		<Argentino>Tipo IFC</Argentino>
+		<Mexicano>Tipo IFC</Mexicano>
+		<Ingles>IFC Type</Ingles>
+		<Rumano>Tip IFC</Rumano>
+		<Chino>IFC 类型</Chino>
+		<Aleman>IFC-Typ</Aleman>
+		<Ruso>Тип IFC</Ruso>
+		<Polaco>Typ IFC</Polaco>
+		<Japones>IFCタイプ</Japones>
+	</TipoIFC>
+	<Entidad_IFC_desconocida>
+		<Castellano>Tipo IFC desconocido</Castellano>
+		<Frances>Type IFC inconnu</Frances>
+		<Portugues>Tipo IFC desconhecida</Portugues>
+		<Catalan>Tipus IFC desconegut</Catalan>
+		<Italiano>Tipo IFC sconosciuto</Italiano>
+		<Brasileiro>Tipo IFC desconhecida</Brasileiro>
+		<Argentino>Tipo IFC desconocido</Argentino>
+		<Mexicano>Tipo IFC desconocido</Mexicano>
+		<Ingles>Unknown IFC Type</Ingles>
+		<Rumano>Tip IFC necunoscut</Rumano>
+		<Chino>未知 IFC 类型</Chino>
+		<Aleman>Unbekannter IFC-Typ</Aleman>
+		<Ruso>Тип IFC неизвестен</Ruso>
+		<Polaco>Nieznany typ IFC</Polaco>
+		<Japones>不明のIFCタイプ</Japones>
+	</Entidad_IFC_desconocida>
+	<Categoria_Desconocida>
+		<Castellano>Categoría desconocida</Castellano>
+		<Frances>Catégorie inconnue</Frances>
+		<Portugues>Categoria desconhecida</Portugues>
+		<Catalan>Categoria desconeguda</Catalan>
+		<Italiano>Categoria sconosciuta</Italiano>
+		<Brasileiro>Categoria desconhecida</Brasileiro>
+		<Argentino>Categoría desconocida</Argentino>
+		<Mexicano>Categoría desconocida</Mexicano>
+		<Ingles>Unknown Category</Ingles>
+		<Rumano>Categoria necunoscută</Rumano>
+		<Chino>未知类别</Chino>
+		<Aleman>Unbekannte Kategorie</Aleman>
+		<Ruso>Неизвестная Категория</Ruso>
+		<Polaco>Nieznana kategoria</Polaco>
+		<Japones>不明のカテゴリー</Japones>
+	</Categoria_Desconocida>
+	<Subcategoria_Desconocida>
+		<Castellano>Subcategoría desconocida</Castellano>
+		<Frances>Sous-catégorie inconnue</Frances>
+		<Portugues>Subcategoria desconhecida</Portugues>
+		<Catalan>Subcategoria desconeguda</Catalan>
+		<Italiano>Sottocategoria sconosciuta</Italiano>
+		<Brasileiro>Subcategoria desconhecida</Brasileiro>
+		<Argentino>Subcategoría desconocida</Argentino>
+		<Mexicano>Subcategoría desconocida</Mexicano>
+		<Ingles>Unknown Sub-Category</Ingles>
+		<Rumano>Subcategorie necunoscută</Rumano>
+		<Chino>未知子类别</Chino>
+		<Aleman>Unbekannte Unterkategorie</Aleman>
+		<Ruso>Неизвестная Подкатегория</Ruso>
+		<Polaco>Nieznana podkategoria</Polaco>
+		<Japones>不明のサブカテゴリー</Japones>
+	</Subcategoria_Desconocida>
+	<Mensaje_ActualizadaConfiguracion>
+		<Castellano>Se ha actualizado la configuración de Revit.</Castellano>
+		<Frances>Les paramètres de Revit ont été mis à jour.</Frances>
+		<Portugues>As configurações do Revit foram atualizadas.</Portugues>
+		<Catalan>S'ha actualitzat la configuració de Revit.</Catalan>
+		<Italiano>Le impostazioni di Revit sono state aggiornate.</Italiano>
+		<Brasileiro>As configurações do Revit foram atualizadas.</Brasileiro>
+		<Argentino>Se ha actualizado la configuración de Revit.</Argentino>
+		<Mexicano>Se ha actualizado la configuración de Revit.</Mexicano>
+		<Ingles>Revit settings have been updated.</Ingles>
+		<Rumano>Configurarea Revit a fost actualizată.</Rumano>
+		<Chino>Revit 设置已更新。</Chino>
+		<Aleman>Die Revit-Einstellungen wurden aktualisiert.</Aleman>
+		<Ruso>Конфигурация Revit обновлена.</Ruso>
+		<Polaco>Konfiguracja programu Revit została zaktualizowana.</Polaco>
+		<Japones>Revit設定が更新されました。</Japones>
+	</Mensaje_ActualizadaConfiguracion>
+	<Mensaje_ReiniciarAplicarCambios>
+		<Castellano>Debe reiniciar Revit para aplicar los cambios.</Castellano>
+		<Frances>Vous devez redémarrer Revit pour appliquer les modifications.</Frances>
+		<Portugues>Você deve reiniciar o Revit para aplicar as alterações.</Portugues>
+		<Catalan>Ha de reiniciar Revit per aplicar els canvis.</Catalan>
+		<Italiano>È necessario riavviare Revit per applicare le modifiche.</Italiano>
+		<Brasileiro>Você deve reiniciar o Revit para aplicar as alterações.</Brasileiro>
+		<Argentino>Debe reiniciar Revit para aplicar los cambios.</Argentino>
+		<Mexicano>Debe reiniciar Revit para aplicar los cambios.</Mexicano>
+		<Ingles>You must restart Revit to apply the changes.</Ingles>
+		<Rumano>Trebuie repornit Revit pentru a aplica modificările.</Rumano>
+		<Chino>必须重新启动 Revit 才能应用更改。</Chino>
+		<Aleman>Sie müssen Revit neu starten, um die Änderungen zu übernehmen.</Aleman>
+		<Ruso>Необходимо перезапустить Revit, чтобы применить изменения.</Ruso>
+		<Polaco>Należy ponownie uruchomić program Revit, aby zastosować zmiany.</Polaco>
+		<Japones>変更を適用するにはRevitを再起動する必要があります。</Japones>
+	</Mensaje_ReiniciarAplicarCambios>
+	<Mensaje_ReiniciarContinuarTrabajando>
+		<Castellano>Debe reiniciar Revit para continuar trabajando con el complemento.</Castellano>
+		<Frances>Vous devez redémarrer Revit pour continuer à utiliser le complément.</Frances>
+		<Portugues>Você deve reiniciar o Revit para continuar trabalhando com o suplemento.</Portugues>
+		<Catalan>Ha de reiniciar Revit per continuar treballant amb el complement.</Catalan>
+		<Italiano>È necessario riavviare Revit per continuare a lavorare con il modulo aggiuntivo.</Italiano>
+		<Brasileiro>Você deve reiniciar o Revit para continuar trabalhando com o suplemento.</Brasileiro>
+		<Argentino>Debe reiniciar Revit para continuar trabajando con el complemento.</Argentino>
+		<Mexicano>Debe reiniciar Revit para continuar trabajando con el complemento.</Mexicano>
+		<Ingles>You must restart Revit to continue working with the add-in.</Ingles>
+		<Rumano>Trebuie repornit Revit pentru a continua să lucrați cu programul de completare.</Rumano>
+		<Chino>必须重新启动 Revit 才能继续使用附加模块。</Chino>
+		<Aleman>Sie müssen Revit neu starten, um die Arbeit mit dem Zusatzmodul fortzusetzen.</Aleman>
+		<Ruso>Для продолжения работы с расширением необходимо перезапустить Revit.</Ruso>
+		<Polaco>Należy ponownie uruchomić program Revit, aby kontynuować pracę z dodatkiem.</Polaco>
+		<Japones>アドインで作業を続けるにはRevitを再起動する必要があります。</Japones>
+	</Mensaje_ReiniciarContinuarTrabajando>
+	<InformacionVinculo>
+		<Castellano>Información del vínculo</Castellano>
+		<Frances>Information du lien</Frances>
+		<Portugues>Informação do vínculo</Portugues>
+		<Catalan>Informació del vincle</Catalan>
+		<Italiano>Informazioni del vincolo</Italiano>
+		<Brasileiro>Informação do vínculo</Brasileiro>
+		<Argentino>Información del vínculo</Argentino>
+		<Mexicano>Información del vínculo</Mexicano>
+		<Ingles>Link information</Ingles>
+		<Rumano>Informație despre link</Rumano>
+		<Chino>链接信息</Chino>
+		<Aleman>Link-Informationen</Aleman>
+		<Ruso>Информация о ссылке</Ruso>
+		<Polaco>Informacja o linku</Polaco>
+		<Japones>リンク情報</Japones>
+	</InformacionVinculo>
+	<SeleccionarVinculo>
+		<Castellano>Seleccionar vínculo</Castellano>
+		<Frances>Sélectionner le lien</Frances>
+		<Portugues>Selecione o vínculo</Portugues>
+		<Catalan>Seleccioni vincle</Catalan>
+		<Italiano>Seleziona collegamento</Italiano>
+		<Brasileiro>Selecione o vínculo</Brasileiro>
+		<Argentino>Seleccionar vínculo</Argentino>
+		<Mexicano>Seleccionar vínculo</Mexicano>
+		<Ingles>Select link</Ingles>
+		<Rumano>Selectați link</Rumano>
+		<Chino>请选择链接</Chino>
+		<Aleman>Verknüpfung auswählen</Aleman>
+		<Ruso>Выберите ссылку</Ruso>
+		<Polaco>Wybierz link</Polaco>
+		<Japones>リンクの選択</Japones>
+	</SeleccionarVinculo>
+	<SeleccionarTodosEjemplares>
+		<Castellano>Seleccionar todos los ejemplares</Castellano>
+		<Frances>Sélectionner toutes les occurrences</Frances>
+		<Portugues>Seleccionar todos os exemplares</Portugues>
+		<Catalan>Seleccionar tots els exemplars</Catalan>
+		<Italiano>Selezionare tutte le istanze</Italiano>
+		<Brasileiro>Seleccionar todos os exemplares</Brasileiro>
+		<Argentino>Seleccionar todos los ejemplares</Argentino>
+		<Mexicano>Seleccionar todos los ejemplares</Mexicano>
+		<Ingles>Select all the instances</Ingles>
+		<Rumano>Selectați toate exemplarele</Rumano>
+		<Chino>选择所有实例</Chino>
+		<Aleman>Alle Instanzen auswählen</Aleman>
+		<Ruso>Выбрать все экземпляры</Ruso>
+		<Polaco>Wybierz wszystkie instancje</Polaco>
+		<Japones>すべての例を選択</Japones>
+	</SeleccionarTodosEjemplares>
+	<VolverACargar>
+		<Castellano>Volver a cargar</Castellano>
+		<Frances>Recharger le lien</Frances>
+		<Portugues>Recarregar</Portugues>
+		<Catalan>Tornar a carregar</Catalan>
+		<Italiano>Ricarica collegamento</Italiano>
+		<Brasileiro>Recarregar</Brasileiro>
+		<Argentino>Volver a cargar</Argentino>
+		<Mexicano>Volver a cargar</Mexicano>
+		<Ingles>Reload link</Ingles>
+		<Rumano>Reîncărcați</Rumano>
+		<Chino>重新加载</Chino>
+		<Aleman>Link neu laden</Aleman>
+		<Ruso>Повторная загрузка</Ruso>
+		<Polaco>Załaduj ponownie</Polaco>
+		<Japones>リンクをリロードする</Japones>
+	</VolverACargar>
+	<Descargar>
+		<Castellano>Descargar</Castellano>
+		<Frances>Décharger</Frances>
+		<Portugues>Descarregar</Portugues>
+		<Catalan>Descarregar</Catalan>
+		<Italiano>Caricare</Italiano>
+		<Brasileiro>Descarregar</Brasileiro>
+		<Argentino>Descargar</Argentino>
+		<Mexicano>Descargar</Mexicano>
+		<Ingles>Unload</Ingles>
+		<Rumano>Descărcați</Rumano>
+		<Chino>卸载</Chino>
+		<Aleman>Entladen</Aleman>
+		<Ruso>Выгрузить</Ruso>
+		<Polaco>Usuń</Polaco>
+		<Japones>アンロード</Japones>
+	</Descargar>
+	<MostrarEnCarpeta>
+		<Castellano>Mostrar en carpeta</Castellano>
+		<Frances>Afficher dans le dossier</Frances>
+		<Portugues>Mostrar na pasta</Portugues>
+		<Catalan>Mostrar en carpeta</Catalan>
+		<Italiano>Mostrare nella cartella</Italiano>
+		<Brasileiro>Mostrar na pasta</Brasileiro>
+		<Argentino>Mostrar en carpeta</Argentino>
+		<Mexicano>Mostrar en carpeta</Mexicano>
+		<Ingles>Show in folder</Ingles>
+		<Rumano>Afișați în folder</Rumano>
+		<Chino>在文件夹中显示</Chino>
+		<Aleman>Im Ordner anzeigen</Aleman>
+		<Ruso>Показать в папке</Ruso>
+		<Polaco>Pokaż w folderze</Polaco>
+		<Japones>フォルダーに表示</Japones>
+	</MostrarEnCarpeta>
+	<ExtraerANativoVinculosIFC>
+		<Castellano>Extraer contenido de los vínculos IFC al documento</Castellano>
+		<Frances>Extraire le contenu des liens IFC vers le document</Frances>
+		<Portugues>Extrair conteúdo dos vínculos IFC para o documento</Portugues>
+		<Catalan>Extreure contingut dels vincles IFC al document</Catalan>
+		<Italiano>Estrarre il contenuto dai collegamenti IFC al documento</Italiano>
+		<Brasileiro>Extrair conteúdo dos vínculos IFC para o documento</Brasileiro>
+		<Argentino>Extraer contenido de los vínculos IFC al documento</Argentino>
+		<Mexicano>Extraer contenido de los vínculos IFC al documento</Mexicano>
+		<Ingles>Extract content from IFC links to the document</Ingles>
+		<Rumano>Extragerea conținutului din link-urile IFC către document</Rumano>
+		<Chino>从 IFC 链接中提取内容到文档</Chino>
+		<Aleman>Extrahieren Sie Inhalte aus IFC-Verknüpfungen zum Dokument</Aleman>
+		<Ruso>Извлечение содержимого ссылок IFC на документ</Ruso>
+		<Polaco>Wyodrębnij do dokumentu zawartość łączy do IFC</Polaco>
+		<Japones>IFCリンクからドキュメントへコンテンツを抽出する</Japones>
+	</ExtraerANativoVinculosIFC>
+	<ExtraerNativo>
+		<Castellano>Extraer contenido del vínculo al documento</Castellano>
+		<Frances>Extraire le contenu du lien vers le document</Frances>
+		<Portugues>Extrair o conteúdo do vínculo para o documento</Portugues>
+		<Catalan>Extreure contingut del vincle al document</Catalan>
+		<Italiano>Estrarre il contenuto dal collegamento al documento</Italiano>
+		<Brasileiro>Extrair o conteúdo do vínculo para o documento</Brasileiro>
+		<Argentino>Extraer contenido del vínculo al documento</Argentino>
+		<Mexicano>Extraer contenido del vínculo al documento</Mexicano>
+		<Ingles>Extract content from the link to the document</Ingles>
+		<Rumano>Extragerea conținutului din link-ul documentului</Rumano>
+		<Chino>从链接中提取内容到文档</Chino>
+		<Aleman>Extrahieren Sie den Inhalt aus der Verknüpfung zum Dokument</Aleman>
+		<Ruso>Извлечь содержимое ссылки на документ</Ruso>
+		<Polaco>Wyodrębnij do dokumentu zawartość łącza</Polaco>
+		<Japones>リンクからドキュメントへコンテンツを抽出する</Japones>
+	</ExtraerNativo>
+	<ExtraerNativoFamilias>
+		<Castellano>Extraer contenido del vínculo y asignarlo a familias</Castellano>
+		<Frances>Extraire le contenu du lien et l'attribuer aux familles</Frances>
+		<Portugues>Extrair conteúdo do vínculo e atribui-lo a famílias</Portugues>
+		<Catalan>Extreure contingut de l'enllaç i assignar-lo a famílies</Catalan>
+		<Italiano>Estrarre il contenuto del collegamento e assegnarlo alle famiglie</Italiano>
+		<Brasileiro>Extrair conteúdo do vínculo e atribui-lo a famílias</Brasileiro>
+		<Argentino>Extraer contenido del vínculo y asignarlo a familias</Argentino>
+		<Mexicano>Extraer contenido del vínculo y asignarlo a familias</Mexicano>
+		<Ingles>Extract contents of the link and assign it to families</Ingles>
+		<Rumano>Extrageți conținutul linkului și atribuiți-l familiilor</Rumano>
+		<Chino>提取链接内容并将其分配于各族</Chino>
+		<Aleman>Linkinhalte entnehmen und Familien zuordnen</Aleman>
+		<Ruso>Извлечь содержимое ссылок и присваиваивать его семействам</Ruso>
+		<Polaco>Wyodrębnij zawartość linku i przypisz ją do rodzin</Polaco>
+		<Japones>リンクの内容を抽出し、ファミリーに割り当て</Japones>
+	</ExtraerNativoFamilias>
+	<DirectShapesAFamilias>
+		<Castellano>Asignar a familias el contenido extraído del vínculo</Castellano>
+		<Frances>Attribuer aux familles un contenu extrait du lien</Frances>
+		<Portugues>Atribuir a famílias o conteúdo extraído do vínculo</Portugues>
+		<Catalan>Assignar a famílies el contingut extret de l'enllaç</Catalan>
+		<Italiano>Assegnare a famiglie il contenuto estratto del collegamento</Italiano>
+		<Brasileiro>Atribuir a famílias o conteúdo extraído do vínculo</Brasileiro>
+		<Argentino>Asignar a familias el contenido extraído del vínculo</Argentino>
+		<Mexicano>Asignar a familias el contenido extraído del vínculo</Mexicano>
+		<Ingles>Assign the contents extracted from the link to families</Ingles>
+		<Rumano>Atribuiți familiilor conținutul extras din link</Rumano>
+		<Chino>将链接中提取的内容分配于各族</Chino>
+		<Aleman>Aus dem Link entnommene Inhalte Familien zuordnen</Aleman>
+		<Ruso>Присвоить семействам содержимое, извлеченное из ссылки</Ruso>
+		<Polaco>Przypisz zawartość wyodrębnioną z linku do rodzin</Polaco>
+		<Japones>リンクから抽出したコンテンツを、ファミリーに割り当て</Japones>
+	</DirectShapesAFamilias>
+	<RevertirExtraccionVinculos>
+		<Castellano>Revertir la extracción de contenido de todos los vínculos</Castellano>
+		<Frances>Inverser l'extraction du contenu de tous les liens</Frances>
+		<Portugues>Reverter a extracção de conteúdo de todos os vínculos</Portugues>
+		<Catalan>Revertir l'extracció de contingut de tots els vincles</Catalan>
+		<Italiano>Invertire l'estrazione del contenuto da tutti i collegamenti</Italiano>
+		<Brasileiro>Reverter a extracção de conteúdo de todos os vínculos</Brasileiro>
+		<Argentino>Revertir la extracción de contenido de todos los vínculos</Argentino>
+		<Mexicano>Revertir la extracción de contenido de todos los vínculos</Mexicano>
+		<Ingles>Revert the content extraction of all the links</Ingles>
+		<Rumano>Reveniți la extragerea conținutului din toate link-urile</Rumano>
+		<Chino>撤销所有链接的内容提取</Chino>
+		<Aleman>Die Entfernung des Inhalts aller Verknüpfungen rückgängig machen</Aleman>
+		<Ruso>Отменить извлечение содержимого всех ссылок</Ruso>
+		<Polaco>Odwróć wyodrębnianie treści ze wszystkich linków</Polaco>
+		<Japones>すべてのリンクのコンテンツ抽出を戻す</Japones>
+	</RevertirExtraccionVinculos>
+	<RevertirExtraccionANativo>
+		<Castellano>Revertir la extracción de contenido del vínculo</Castellano>
+		<Frances>Inverser l'extraction du contenu du lien</Frances>
+		<Portugues>Reverter a extracção de conteúdo do vínculo</Portugues>
+		<Catalan>Revertir l'extracció de contingut del vincle</Catalan>
+		<Italiano>Estrazione del contenuto del collegamento inverso</Italiano>
+		<Brasileiro>Reverter a extracção de conteúdo do vínculo</Brasileiro>
+		<Argentino>Revertir la extracción de contenido del vínculo</Argentino>
+		<Mexicano>Revertir la extracción de contenido del vínculo</Mexicano>
+		<Ingles>Revert the content extraction of the link</Ingles>
+		<Rumano>Reveniți la extragerea conținutului din link</Rumano>
+		<Chino>撤销链接的内容提取</Chino>
+		<Aleman>Die Löschung des Inhalts der Verknüpfung rückgängig machen</Aleman>
+		<Ruso>Отменить извлечение содержимого ссылки</Ruso>
+		<Polaco>Odwróć wyodrębnianie treści z linku</Polaco>
+		<Japones>リンクのコンテンツ抽出を戻す</Japones>
+	</RevertirExtraccionANativo>
+	<UnificarParametrosCompartidos>
+		<Castellano>Unificar parámetros compartidos</Castellano>
+		<Frances>Unifier les paramètres partagés</Frances>
+		<Portugues>Unificar parâmetros partilhados</Portugues>
+		<Catalan>Unificar paràmetres compartits</Catalan>
+		<Italiano>Unificare parametri condivisi</Italiano>
+		<Brasileiro>Unificar parâmetros partilhados</Brasileiro>
+		<Argentino>Unificar parámetros compartidos</Argentino>
+		<Mexicano>Unificar parámetros compartidos</Mexicano>
+		<Ingles>Unify shared parameters</Ingles>
+		<Rumano>Unificarea parametrilor partajați</Rumano>
+		<Chino>统一共享参数</Chino>
+		<Aleman>Vereinheitlichung gemeinsamer Parameter</Aleman>
+		<Ruso>Унификация общих параметров</Ruso>
+		<Polaco>Ujednolicenie współdzielonych parametrów</Polaco>
+		<Japones>共有されたパラメーターを統合する</Japones>
+	</UnificarParametrosCompartidos>
+	<VolverAImportarIFC>
+		<Castellano>Volver a importar IFC</Castellano>
+		<Frances>Réimporter IFC</Frances>
+		<Portugues>Voltar a importar IFC</Portugues>
+		<Catalan>Tornar a importar IFC</Catalan>
+		<Italiano>Importare di nuovo IFC</Italiano>
+		<Brasileiro>Voltar a importar IFC</Brasileiro>
+		<Argentino>Volver a importar IFC</Argentino>
+		<Mexicano>Volver a importar IFC</Mexicano>
+		<Ingles>Re-import IFC</Ingles>
+		<Rumano>Reimportați IFC</Rumano>
+		<Chino>重新导入IFC</Chino>
+		<Aleman>IFC erneut importieren</Aleman>
+		<Ruso>Вернуться к импорту IFC</Ruso>
+		<Polaco>Ponownie zaimportuj IFC</Polaco>
+		<Japones>IFCを再インポート</Japones>
+	</VolverAImportarIFC>
+	<VolverAExtraerNativo>
+		<Castellano>Volver a extraer contenido del vínculo al documento</Castellano>
+		<Frances>Ré-extraire le contenu du lien au document</Frances>
+		<Portugues>Voltar a extrair conteúdo do vínculo ao documento</Portugues>
+		<Catalan>Torneu a extreure contingut de l'enllaç al document</Catalan>
+		<Italiano>Estrarre di nuovo il contenuto dal link del documento</Italiano>
+		<Brasileiro>Voltar a extrair conteúdo do vínculo ao documento</Brasileiro>
+		<Argentino>Volver a extraer contenido del vínculo al documento</Argentino>
+		<Mexicano>Volver a extraer contenido del vínculo al documento</Mexicano>
+		<Ingles>Re-extract content from link to the document</Ingles>
+		<Rumano>Extrageți din nou conținutul linkului în document</Rumano>
+		<Chino>从文档链接中重新提取内容</Chino>
+		<Aleman>Inhalte erneut von Link in das Dokument extrahieren</Aleman>
+		<Ruso>Повторное извлечение содержимого из ссылки на документ</Ruso>
+		<Polaco>Ponowne wyodrębnij zawartość z linku do dokumentu</Polaco>
+		<Japones>ドキュメントへのリンクからコンテンツを再抽出</Japones>
+	</VolverAExtraerNativo>
+	<BloqueoActualizIFC>
+		<Castellano>Bloquear actualización de IFC</Castellano>
+		<Frances>Bloquer l'actualisation d'IFC</Frances>
+		<Portugues>Bloquear actualização de IFC</Portugues>
+		<Catalan>Bloquejar actualització d'IFC</Catalan>
+		<Italiano>Bloccare l'aggiornamento di IFC</Italiano>
+		<Brasileiro>Bloquear actualização de IFC</Brasileiro>
+		<Argentino>Bloquear actualización de IFC</Argentino>
+		<Mexicano>Bloquear actualización de IFC</Mexicano>
+		<Ingles>Lock IFC update</Ingles>
+		<Rumano>Blocați actualizarea IFC</Rumano>
+		<Chino>锁定IFC更新</Chino>
+		<Aleman>IFC-Aktualisierung sperren</Aleman>
+		<Ruso>Заблокировать обновление IFC</Ruso>
+		<Polaco>Zablokuj aktualizację IFC</Polaco>
+		<Japones>IFCの更新をロック</Japones>
+	</BloqueoActualizIFC>
+	<DesbloqueoActualizIFC>
+		<Castellano>Desbloquear actualización de IFC</Castellano>
+		<Frances>Débloquer l'actualisation d'IFC</Frances>
+		<Portugues>Desbloquear actualização de IFC</Portugues>
+		<Catalan>Desbloquejar actualització d'IFC</Catalan>
+		<Italiano>Sbloccare l'aggiornamento di IFC</Italiano>
+		<Brasileiro>Desbloquear actualização de IFC</Brasileiro>
+		<Argentino>Desbloquear actualización de IFC</Argentino>
+		<Mexicano>Desbloquear actualización de IFC</Mexicano>
+		<Ingles>Unlock IFC update</Ingles>
+		<Rumano>Deblocați actualizarea IFC</Rumano>
+		<Chino>取消锁定IFC更新</Chino>
+		<Aleman>IFC-Aktualisierung freischalten</Aleman>
+		<Ruso>Разблокировать обновление IFC</Ruso>
+		<Polaco>Odblokuj aktualizację IFC</Polaco>
+		<Japones>IFCの更新ロックを解除</Japones>
+	</DesbloqueoActualizIFC>
+	<BloqueoContenidoNativo>
+		<Castellano>Bloquear el contenido extraído</Castellano>
+		<Frances>Bloquer le contenu extrait</Frances>
+		<Portugues>Bloquear o conteúdo extraido</Portugues>
+		<Catalan>Bloquejar el contingut extret</Catalan>
+		<Italiano>Bloccare il contenuto estratto</Italiano>
+		<Brasileiro>Bloquear o conteúdo extraido</Brasileiro>
+		<Argentino>Bloquear el contenido extraído</Argentino>
+		<Mexicano>Bloquear el contenido extraído</Mexicano>
+		<Ingles>Lock extracted content</Ingles>
+		<Rumano>Blocați conținutul extras</Rumano>
+		<Chino>锁定提取的内容</Chino>
+		<Aleman>Extrahierte Inhalte sperren</Aleman>
+		<Ruso>Заблокировать извлеченное содержимое</Ruso>
+		<Polaco>Zablokuj wyodrębnioną zawartość</Polaco>
+		<Japones>抽出されたコンテンツをロック</Japones>
+	</BloqueoContenidoNativo>
+	<DesbloqueoContenidoNativo>
+		<Castellano>Desbloquear el contenido extraído</Castellano>
+		<Frances>Débloquer le contenu extrait</Frances>
+		<Portugues>Desbloquear o conteúdo extraido</Portugues>
+		<Catalan>Desbloquejar el contingut extret</Catalan>
+		<Italiano>Sbloccare il contenuto estratto</Italiano>
+		<Brasileiro>Desbloquear o conteúdo extraido</Brasileiro>
+		<Argentino>Desbloquear el contenido extraído</Argentino>
+		<Mexicano>Desbloquear el contenido extraído</Mexicano>
+		<Ingles>Unlock extracted content</Ingles>
+		<Rumano>Deblocați conținutul extras</Rumano>
+		<Chino>取消锁定提取的内容</Chino>
+		<Aleman>Extrahierte Inhalte freischalten</Aleman>
+		<Ruso>Разблокировать извлеченный контент</Ruso>
+		<Polaco>Odblokuj wyodrębnioną zawartość</Polaco>
+		<Japones>抽出されたコンテンツのロックを解除</Japones>
+	</DesbloqueoContenidoNativo>
+	<ActualizarContenido>
+		<Castellano>Actualizar el contenido extraído</Castellano>
+		<Frances>Actualiser le contenu extrait</Frances>
+		<Portugues>Actualizar o conteúdo extraido</Portugues>
+		<Catalan>Actualitzar el contingut extret</Catalan>
+		<Italiano>Aggiornare il contenuto estratto</Italiano>
+		<Brasileiro>Actualizar o conteúdo extraido</Brasileiro>
+		<Argentino>Actualizar el contenido extraído</Argentino>
+		<Mexicano>Actualizar el contenido extraído</Mexicano>
+		<Ingles>Update extracted content</Ingles>
+		<Rumano>Actualizați conținutul extras</Rumano>
+		<Chino>更新提取的内容</Chino>
+		<Aleman>Extrahierte Inhalte aktualisieren</Aleman>
+		<Ruso>Обновить извлеченное содержимое</Ruso>
+		<Polaco>Aktualizuj wyodrębnioną zawartość</Polaco>
+		<Japones>抽出されたコンテンツの更新</Japones>
+	</ActualizarContenido>
+	<EliminarVinculoYContenido>
+		<Castellano>Eliminar el vínculo y el contenido extraído</Castellano>
+		<Frances>Supprimer le lien et le contenu extrait</Frances>
+		<Portugues>Eliminar o vínculo e o conteúdo extraído</Portugues>
+		<Catalan>Eliminar l'enllaç i el contingut extret</Catalan>
+		<Italiano>Eliminare il vincolo e il contenuto estratto</Italiano>
+		<Brasileiro>Eliminar o vínculo e o conteúdo extraído</Brasileiro>
+		<Argentino>Eliminar el vínculo y el contenido extraído</Argentino>
+		<Mexicano>Eliminar el vínculo y el contenido extraído</Mexicano>
+		<Ingles>Delete link and extracted content</Ingles>
+		<Rumano>Eliminați linkul și conținutul extras</Rumano>
+		<Chino>删除链接以及提取的内容</Chino>
+		<Aleman>Link und extrahierte Inhalte löschen</Aleman>
+		<Ruso>Удалить ссылку и извлеченное содержимое</Ruso>
+		<Polaco>Usuń link i wyodrębnioną zawartość</Polaco>
+		<Japones>リンクおよび抽出されたコンテンツを削除</Japones>
+	</EliminarVinculoYContenido>
+	<EliminarVinculoConservandoContenido>
+		<Castellano>Eliminar el vínculo conservando el contenido extraído</Castellano>
+		<Frances>Supprimer le lien en conservant le contenu extrait</Frances>
+		<Portugues>Eliminar o vínculo conservando o conteúdo extraído</Portugues>
+		<Catalan>Eliminar l'enllaç conservant el contingut extret</Catalan>
+		<Italiano>Eliminare il vincolo conservando il contenuto estratto</Italiano>
+		<Brasileiro>Eliminar o vínculo conservando o conteúdo extraído</Brasileiro>
+		<Argentino>Eliminar el vínculo conservando el contenido extraído</Argentino>
+		<Mexicano>Eliminar el vínculo conservando el contenido extraído</Mexicano>
+		<Ingles>Delete link but keep the extracted content</Ingles>
+		<Rumano>Eliminați linkul păstrând conținutul extras</Rumano>
+		<Chino>删除链接但保留提取的内容</Chino>
+		<Aleman>Link löschen unter Beibehaltung der extrahierten Inhalte</Aleman>
+		<Ruso>Удалить ссылку, сохранив извлеченное содержимое</Ruso>
+		<Polaco>Usuń link, zachowując wyodrębnioną zawartość</Polaco>
+		<Japones>リンクは削除するが、抽出されたコンテンツは保存</Japones>
+	</EliminarVinculoConservandoContenido>
+	<Conversor>
+		<Castellano>Convertir en</Castellano>
+		<Frances>Convertir en</Frances>
+		<Portugues>Converter em</Portugues>
+		<Catalan>Convertir en</Catalan>
+		<Italiano>Convertire in</Italiano>
+		<Brasileiro>Converter em</Brasileiro>
+		<Argentino>Convertir en</Argentino>
+		<Mexicano>Convertir en</Mexicano>
+		<Ingles>Convert to</Ingles>
+		<Rumano>Transformați în</Rumano>
+		<Chino>转换为</Chino>
+		<Aleman>Verwandeln in</Aleman>
+		<Ruso>Преобразовать в</Ruso>
+		<Polaco>Konwertuj na</Polaco>
+		<Japones>以下へ変換</Japones>
+	</Conversor>
+	<EjemplaresConversor>
+		<Castellano>Ejemplares a convertir</Castellano>
+		<Frances>Occurrences à convertir</Frances>
+		<Portugues>Exemplares a converter</Portugues>
+		<Catalan>Exemplars a convertir</Catalan>
+		<Italiano>Istanze da convertire</Italiano>
+		<Brasileiro>Exemplares a converter</Brasileiro>
+		<Argentino>Ejemplares a convertir</Argentino>
+		<Mexicano>Ejemplares a convertir</Mexicano>
+		<Ingles>Instances to convert</Ingles>
+		<Rumano>Exemplare: instanțe</Rumano>
+		<Chino>待转换实例</Chino>
+		<Aleman>Zu verwandelnde Instanzen</Aleman>
+		<Ruso>Экземпляры, подлежащие преобразованию</Ruso>
+		<Polaco>Instancje przeznaczone do konwersji</Polaco>
+		<Japones>変換するインスタンス</Japones>
+	</EjemplaresConversor>
+	<EjemplaresTipo>
+		<Castellano>Ejemplares del tipo</Castellano>
+		<Frances>Occurrences du type</Frances>
+		<Portugues>Exemplares do tipo</Portugues>
+		<Catalan>Exemplars del tipus</Catalan>
+		<Italiano>Istanze del tipo</Italiano>
+		<Brasileiro>Exemplares do tipo</Brasileiro>
+		<Argentino>Ejemplares del tipo</Argentino>
+		<Mexicano>Ejemplares del tipo</Mexicano>
+		<Ingles>Instances of type</Ingles>
+		<Rumano>Exemplare de tip</Rumano>
+		<Chino>类型中的实例</Chino>
+		<Aleman>Instanzen des Typs</Aleman>
+		<Ruso>Экземпляры типа</Ruso>
+		<Polaco>Instancje typu</Polaco>
+		<Japones>タイプのインスタンス</Japones>
+	</EjemplaresTipo>
+	<Seccion>
+		<Castellano>Tipo de sección</Castellano>
+		<Frances>Type de section</Frances>
+		<Portugues>Tipo de secção</Portugues>
+		<Catalan>Tipus de secció</Catalan>
+		<Italiano>Tipo di sezione</Italiano>
+		<Brasileiro>Tipo de secção</Brasileiro>
+		<Argentino>Tipo de sección</Argentino>
+		<Mexicano>Tipo de sección</Mexicano>
+		<Ingles>Type of section</Ingles>
+		<Rumano>Tip de secțiune</Rumano>
+		<Chino>截面类型</Chino>
+		<Aleman>Querschnittstyp</Aleman>
+		<Ruso>Тип сечения</Ruso>
+		<Polaco>Rodzaj przekroju</Polaco>
+		<Japones>断面のタイプ</Japones>
+	</Seccion>
+	<Duplicar>
+		<Castellano>Crear duplicados</Castellano>
+		<Frances>Créer des doubles</Frances>
+		<Portugues>Criar duplicados</Portugues>
+		<Catalan>Crear duplicats</Catalan>
+		<Italiano>Creare duplicati</Italiano>
+		<Brasileiro>Criar duplicados</Brasileiro>
+		<Argentino>Crear duplicados</Argentino>
+		<Mexicano>Crear duplicados</Mexicano>
+		<Ingles>Create duplicates</Ingles>
+		<Rumano>Creați dubluri</Rumano>
+		<Chino>创建副本</Chino>
+		<Aleman>Duplikate erstellen</Aleman>
+		<Ruso>Создавать дубликаты</Ruso>
+		<Polaco>Twórz duplikaty</Polaco>
+		<Japones>複製の作成</Japones>
+	</Duplicar>
+	<Tooltip_duplicar>
+		<Castellano>Crear tipos nuevos si varían las dimensiones</Castellano>
+		<Frances>Créer de nouveaux types si les dimensions varient</Frances>
+		<Portugues>Criar tipos novos se variam as dimensões</Portugues>
+		<Catalan>Crear tipus nous si varien les dimensions</Catalan>
+		<Italiano>Creare tipi nuovi se variano le dimensioni</Italiano>
+		<Brasileiro>Criar tipos novos se variam as dimensões</Brasileiro>
+		<Argentino>Crear tipos nuevos si varían las dimensiones</Argentino>
+		<Mexicano>Crear tipos nuevos si varían las dimensiones</Mexicano>
+		<Ingles>Create new types if the dimensions vary</Ingles>
+		<Rumano>Creați tipuri noi dacă variază dimensiunile</Rumano>
+		<Chino>如果尺寸不同，则创建新类型</Chino>
+		<Aleman>Neue Typen erstellen, wenn die Abmessungen variieren</Aleman>
+		<Ruso>Создавать новые типы при изменении размеров</Ruso>
+		<Polaco>Utwórz nowe typy, jeśli wymiary się różnią</Polaco>
+		<Japones>寸法が異なる場合の新しいタイプを作成</Japones>
+	</Tooltip_duplicar>
+	<Armaduras>
+		<Castellano>Armaduras</Castellano>
+		<Frances>Armatures</Frances>
+		<Portugues>Armaduras</Portugues>
+		<Catalan>Armadures</Catalan>
+		<Italiano>Armature</Italiano>
+		<Brasileiro>Armaduras</Brasileiro>
+		<Argentino>Armados</Argentino>
+		<Mexicano>Armados</Mexicano>
+		<Ingles>Reinforcement</Ingles>
+		<Rumano>Armatură</Rumano>
+		<Chino>配筋</Chino>
+		<Aleman>Bewehrungen</Aleman>
+		<Ruso>Армирование</Ruso>
+		<Polaco>Zbrojenie</Polaco>
+		<Japones>配筋</Japones>
+	</Armaduras>
+	<Armadura>
+		<Castellano>Armadura</Castellano>
+		<Frances>Armature</Frances>
+		<Portugues>Armadura</Portugues>
+		<Catalan>Armadura</Catalan>
+		<Italiano>Armatura</Italiano>
+		<Brasileiro>Armadura</Brasileiro>
+		<Argentino>Armadura</Argentino>
+		<Mexicano>Armado</Mexicano>
+		<Ingles>Reinforcement</Ingles>
+		<Rumano>Armătură</Rumano>
+		<Chino>配筋</Chino>
+		<Aleman>Bewehrung</Aleman>
+		<Ruso>Армирование</Ruso>
+		<Polaco>Zbrojenie</Polaco>
+		<Japones>配筋</Japones>
+	</Armadura>
+	<SinReferencia>
+		<Castellano>Sin referencia</Castellano>
+		<Frances>Sans référence</Frances>
+		<Portugues>Sem referência</Portugues>
+		<Catalan>Sense referència</Catalan>
+		<Italiano>Senza riferimento</Italiano>
+		<Brasileiro>Sem referência</Brasileiro>
+		<Argentino>Sin referencia</Argentino>
+		<Mexicano>Sin referencia</Mexicano>
+		<Ingles>Without reference</Ingles>
+		<Rumano>Fără referință</Rumano>
+		<Chino>无参考</Chino>
+		<Aleman>Keine Referenz</Aleman>
+		<Ruso>Без ссылки</Ruso>
+		<Polaco>Bez odniesienia</Polaco>
+		<Japones>参照なし</Japones>
+	</SinReferencia>
+	<GenerandoArmaduras>
+		<Castellano>Generando armaduras</Castellano>
+		<Frances>Génération des armatures</Frances>
+		<Portugues>A gerar armaduras</Portugues>
+		<Catalan>Generant armadures</Catalan>
+		<Italiano>Generazione in corso armature</Italiano>
+		<Brasileiro>A gerar armaduras</Brasileiro>
+		<Argentino>Generando armaduras</Argentino>
+		<Mexicano>Generando armaduras</Mexicano>
+		<Ingles>Generating reinforcement</Ingles>
+		<Rumano>Generând armături</Rumano>
+		<Chino>正在生成钢筋</Chino>
+		<Aleman>Bewehrungen werden generiert</Aleman>
+		<Ruso>Генерирование армирования</Ruso>
+		<Polaco>Generowanie zbrojenia</Polaco>
+		<Japones>鉄筋を生成</Japones>
+	</GenerandoArmaduras>
+	<TipoAcero>
+		<Castellano>Tipo de acero</Castellano>
+		<Frances>Type d'acier</Frances>
+		<Portugues>Tipo de aço</Portugues>
+		<Catalan>Tipus d'acer</Catalan>
+		<Italiano>Tipo di acciaio</Italiano>
+		<Brasileiro>Tipo de aço</Brasileiro>
+		<Argentino>Tipo de acero</Argentino>
+		<Mexicano>Tipo de acero</Mexicano>
+		<Ingles>Steel type</Ingles>
+		<Rumano>Tip de oțel</Rumano>
+		<Chino>钢材类型</Chino>
+		<Aleman>Stahltyp</Aleman>
+		<Ruso>Тип стали</Ruso>
+		<Polaco>Rodzaj stali</Polaco>
+		<Japones>鋼タイプ</Japones>
+	</TipoAcero>
+	<DiametroBarra>
+		<Castellano>Diámetro de la barra</Castellano>
+		<Frances>Diamètre de la barre</Frances>
+		<Portugues>Diâmetro do varão</Portugues>
+		<Catalan>Diàmetre de la barra</Catalan>
+		<Italiano>Diametro della barra</Italiano>
+		<Brasileiro>Diâmetro do varão</Brasileiro>
+		<Argentino>Diámetro de la barra</Argentino>
+		<Mexicano>Diámetro de la barra</Mexicano>
+		<Ingles>Bar diameter</Ingles>
+		<Rumano>Diametrul barei de armătură</Rumano>
+		<Chino>钢筋直径</Chino>
+		<Aleman>Durchmesser eines Bewehrungsstabes</Aleman>
+		<Ruso>Диаметр арматурного стержня</Ruso>
+		<Polaco>Średnica pręta zbrojeniowego</Polaco>
+		<Japones>鉄筋径</Japones>
+	</DiametroBarra>
+	<DiametroMandril>
+		<Castellano>Diámetro del mandril</Castellano>
+		<Frances>Diamètre du mandrin</Frances>
+		<Portugues>Diâmetro do mandril</Portugues>
+		<Catalan>Diàmetre del mandrí</Catalan>
+		<Italiano>Diametro del mandrino</Italiano>
+		<Brasileiro>Diâmetro do mandril</Brasileiro>
+		<Argentino>Diámetro del mandril</Argentino>
+		<Mexicano>Diámetro del mandril</Mexicano>
+		<Ingles>Mandrel diameter</Ingles>
+		<Rumano>Diametrul mandrinei</Rumano>
+		<Chino>芯轴直径</Chino>
+		<Aleman>Durchmesser des Dorns</Aleman>
+		<Ruso>Диаметр отправки</Ruso>
+		<Polaco>Średnica wewnętrznego zagięcia</Polaco>
+		<Japones>心棒の直径</Japones>
+	</DiametroMandril>
+	<NumBarras>
+		<Castellano>Nº barras</Castellano>
+		<Frances>Nº barres</Frances>
+		<Portugues>Num. varões</Portugues>
+		<Catalan>Num barres</Catalan>
+		<Italiano>Nº barre</Italiano>
+		<Brasileiro>Nº barras</Brasileiro>
+		<Argentino>Nº barras</Argentino>
+		<Mexicano>Nº barras</Mexicano>
+		<Ingles>Nº bars</Ingles>
+		<Rumano>Nr. bare</Rumano>
+		<Chino>钢筋数量</Chino>
+		<Aleman>Stäbeanzahl</Aleman>
+		<Ruso>Nº стержни</Ruso>
+		<Polaco>Lb. prętów</Polaco>
+		<Japones>Nº 鉄筋</Japones>
+	</NumBarras>
+	<LongitudTotal>
+		<Castellano>Longitud total</Castellano>
+		<Frances>Longueur totale</Frances>
+		<Portugues>Comprimento total</Portugues>
+		<Catalan>Longitud total</Catalan>
+		<Italiano>Lunghezza totale</Italiano>
+		<Brasileiro>Comprimento total</Brasileiro>
+		<Argentino>Longitud total</Argentino>
+		<Mexicano>Longitud total</Mexicano>
+		<Ingles>Total length</Ingles>
+		<Rumano>Lungimea totală</Rumano>
+		<Chino>总长度</Chino>
+		<Aleman>Gesamtlänge</Aleman>
+		<Ruso>Общая длина</Ruso>
+		<Polaco>Całkowita długość</Polaco>
+		<Japones>全長</Japones>
+	</LongitudTotal>
+	<PesoTotal>
+		<Castellano>Peso total</Castellano>
+		<Frances>Poids total</Frances>
+		<Portugues>Peso total</Portugues>
+		<Catalan>Pes total</Catalan>
+		<Italiano>Peso totale</Italiano>
+		<Brasileiro>Peso total</Brasileiro>
+		<Argentino>Peso total</Argentino>
+		<Mexicano>Peso total</Mexicano>
+		<Ingles>Total weight</Ingles>
+		<Rumano>Greutatea totală</Rumano>
+		<Chino>总重量</Chino>
+		<Aleman>Gesamtgewicht</Aleman>
+		<Ruso>Общий вес</Ruso>
+		<Polaco>Ciężar całkowity</Polaco>
+		<Japones>総重量</Japones>
+	</PesoTotal>
+</Texts>
