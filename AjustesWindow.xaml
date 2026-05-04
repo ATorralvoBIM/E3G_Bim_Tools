@@ -3,6 +3,7 @@
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+      xmlns:local="clr-namespace:E3G.Saneamiento"
       mc:Ignorable="d"
       d:DesignHeight="700" d:DesignWidth="860"
       Background="#E8ECF0">
@@ -190,6 +191,10 @@
                         Style="{StaticResource SettingsNavBtn}"
                         Content="🧾  Partides BC3"
                         Click="BtnNavPartides_Click"/>
+                <Button x:Name="BtnNavProtocol"
+                        Content="Protocol de classificació"
+                        Style="{StaticResource SettingsNavBtn}"
+                        Click="BtnNavProtocol_Click"/>
 
                 <Rectangle Height="1" Fill="#C8CDD2" Margin="8,10"/>
 
@@ -1263,6 +1268,69 @@
                                       Style="{StaticResource ToggleStyle}" IsChecked="True"
                                       VerticalAlignment="Center"/>
                         </Grid>
+                    </StackPanel>
+                </Border>
+                <Border x:Name="SecProtocol" Visibility="Collapsed">
+                    <StackPanel>
+                        <TextBlock Text="Protocol de classificació — Sanejament"
+                   FontWeight="SemiBold" FontSize="14"
+                   Foreground="{StaticResource TextPrimary}"
+                   Margin="0,0,0,4"/>
+                        <TextBlock Text="Defineix regles per identificar automàticament el tipus de cada element del model. Les regles funcionen com els filtres natius de Revit."
+                   FontSize="11" Foreground="{StaticResource TextSecondary}"
+                   TextWrapping="Wrap" Margin="0,0,0,16"/>
+
+                        <!-- Diagnòstic live -->
+                        <Border x:Name="PnlDiagnostic" Background="#F0FDF4" BorderBrush="#86EFAC"
+                BorderThickness="1" CornerRadius="8" Padding="12,8" Margin="0,0,0,12">
+                            <TextBlock x:Name="TxtDiagnostic" FontSize="11"
+                       Foreground="#166534" TextWrapping="Wrap"
+                       Text="Obre un projecte de Revit per veure el diagnòstic."/>
+                        </Border>
+
+                        <!-- Botons acció -->
+                        <StackPanel Orientation="Horizontal" Margin="0,0,0,16">
+                            <Button Content="↺ Auto-detectar" Padding="10,6" FontSize="11"
+                    Margin="0,0,8,0" Click="BtnAutoDetectar_Click"/>
+                            <Button Content="💾 Desar protocol" Padding="10,6" FontSize="11"
+                    Margin="0,0,8,0" Click="BtnDesarProtocol_Click"/>
+                            <Button Content="📤 Exportar .e3gprot" Padding="10,6" FontSize="11"
+                    Margin="0,0,8,0" Click="BtnExportarProtocol_Click"/>
+                            <Button Content="📥 Importar .e3gprot" Padding="10,6" FontSize="11"
+                    Click="BtnImportarProtocol_Click"/>
+                        </StackPanel>
+
+                        <!-- Les 5 seccions de regles -->
+                        <local:ProtocolSeccioControl x:Name="CtrlVivendes"   Titol="Interior vivendes" />
+                        <local:ProtocolSeccioControl x:Name="CtrlAparcament" Titol="Aparcament" />
+                        <local:ProtocolSeccioControl x:Name="CtrlBajants"    Titol="Bajants" />
+                        <local:ProtocolSeccioControl x:Name="CtrlColectors"  Titol="Col·lectors P00-P01" />
+                        <local:ProtocolSeccioControl x:Name="CtrlEdificis"   Titol="Edificis" />
+
+                        <!-- Paràmetres geomètrics globals -->
+                        <Border Background="#F8FAFC" CornerRadius="10" Padding="14,12" Margin="0,12,0,0">
+                            <StackPanel>
+                                <TextBlock Text="Criteris geomètrics globals"
+                           FontWeight="SemiBold" FontSize="12"
+                           Foreground="{StaticResource TextPrimary}" Margin="0,0,0,8"/>
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
+                                    <StackPanel Grid.Column="0" Margin="0,0,8,0">
+                                        <TextBlock Text="Longitud mínima bajant (m)"
+                                   FontSize="11" Margin="0,0,0,4"/>
+                                        <TextBox x:Name="TxtBajantLongMin" Text="1.0" FontSize="12"/>
+                                    </StackPanel>
+                                    <StackPanel Grid.Column="1">
+                                        <TextBlock Text="Tolerància elevació (m)"
+                                   FontSize="11" Margin="0,0,0,4"/>
+                                        <TextBox x:Name="TxtToleranciaElev" Text="0.5" FontSize="12"/>
+                                    </StackPanel>
+                                </Grid>
+                            </StackPanel>
+                        </Border>
                     </StackPanel>
                 </Border>
 

@@ -1,0 +1,49 @@
+<UserControl x:Class="E3G.Saneamiento.ProtocolSeccioControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <Border Background="#F8FAFC" CornerRadius="10" Padding="14,12" Margin="0,0,0,8">
+        <StackPanel>
+            <Grid Margin="0,0,0,8">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <TextBlock x:Name="TxtTitol" FontWeight="SemiBold" FontSize="12"
+                           Foreground="#1E293B" VerticalAlignment="Center"/>
+                <Button Grid.Column="1" Content="+ Afegir regla"
+                        Padding="8,4" FontSize="10" Click="BtnAfegir_Click"/>
+            </Grid>
+            <ItemsControl x:Name="LstRegles">
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Border Background="#FFFFFF" BorderBrush="#E8ECF0" BorderThickness="1"
+                                CornerRadius="6" Padding="10,8" Margin="0,0,0,4">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
+                                <StackPanel Grid.Column="0">
+                                    <TextBlock Text="{Binding Nom}" FontWeight="SemiBold" FontSize="11"/>
+                                    <TextBlock Text="{Binding Resum}" FontSize="10"
+                                               Foreground="#6B7280" TextWrapping="Wrap"/>
+                                </StackPanel>
+                                <StackPanel Grid.Column="1" Orientation="Horizontal">
+                                    <Button Content="✎" Width="24" Height="24"
+                                            Background="Transparent" BorderThickness="0"
+                                            Click="BtnEditar_Click" Tag="{Binding Id}"/>
+                                    <Button Content="✕" Width="24" Height="24"
+                                            Foreground="#B91C1C" Background="Transparent"
+                                            BorderThickness="0"
+                                            Click="BtnEliminar_Click" Tag="{Binding Id}"/>
+                                </StackPanel>
+                            </Grid>
+                        </Border>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+            <TextBlock x:Name="TxtBuit" Text="Cap regla. Prem «+ Afegir regla» o usa Auto-detectar."
+                       FontSize="10" Foreground="#9CA3AF" Margin="0,4,0,0"/>
+        </StackPanel>
+    </Border>
+</UserControl>

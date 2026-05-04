@@ -358,7 +358,8 @@ namespace E3G.Saneamiento
             SecConfirmaciones.Visibility = WpfVisibility.Collapsed;
             SecNomenclatura.Visibility = WpfVisibility.Collapsed;
             SecClassificacio.Visibility = WpfVisibility.Collapsed;
-            SecPartides.Visibility = WpfVisibility.Collapsed;   
+            SecPartides.Visibility = WpfVisibility.Collapsed;
+            SecProtocol.Visibility = WpfVisibility.Collapsed;
             SecSaneamiento.Visibility = WpfVisibility.Collapsed;
             SecFontaneria.Visibility = WpfVisibility.Collapsed;
         }
@@ -512,6 +513,148 @@ namespace E3G.Saneamiento
             foreach (ComboBoxItem item in cbx.Items)
                 if (item.Content?.ToString() == valor)
                 { cbx.SelectedItem = item; return; }
+        }
+        // ════════════════════════════════════════════════
+        // PROTOCOL DE CLASSIFICACIÓ
+        // ════════════════════════════════════════════════
+
+        private void BtnNavProtocol_Click(object sender, RoutedEventArgs e)
+        {
+            NavegarA(SecProtocol, BtnNavProtocol);
+            CarregarProtocol();
+        }
+
+        private void CarregarProtocol()
+        {
+            var protocol = Protocol.ProtocolSession.ObtenerOBuit();
+            CtrlVivendes.CarregarRegles(protocol.Vivendes.Regles);
+            CtrlAparcament.CarregarRegles(protocol.Aparcament.Regles);
+            CtrlBajants.CarregarRegles(protocol.Bajants.Regles);
+            CtrlColectors.CarregarRegles(protocol.Colectors.Regles);
+            CtrlEdificis.CarregarRegles(protocol.Edificis.Regles);
+
+            if (double.TryParse(protocol.BajantLongitudMinM.ToString("G"), out _))
+                TxtBajantLongMin.Text = protocol.BajantLongitudMinM.ToString("G");
+            if (double.TryParse(protocol.ToleranciaElevacioM.ToString("G"), out _))
+                TxtToleranciaElev.Text = protocol.ToleranciaElevacioM.ToString("G");
+
+            ActualitzarDiagnosticProtocol(protocol);
+        }
+
+        private void BtnAutoDetectar_Click(object sender, RoutedEventArgs e)
+        {
+            var doc = (_uiApp ?? SaneamientoSession.UiApp)?.ActiveUIDocument?.Document;
+            if (doc == null)
+            {
+                MessageBox.Show("Obre un projecte de Revit primer.", "Sense document",
+                    MessageBoxButton.OK, MessageBoxImage.Information);
+                return;
+            }
+            var protocol = Protocol.ProtocolAutoDetect.Suggerir(doc);
+            Protocol.ProtocolSession.ProtocolActual = protocol;
+            CarregarProtocol();
+            MessageBox.Show("Protocol auto-detectat. Revisa les regles i desa si estàs d'acord.",
+                "Auto-detecció completada", MessageBoxButton.OK, MessageBoxImage.Information);
+        }
+
+        private void BtnDesarProtocol_Click(object sender, RoutedEventArgs e)
+        {
+            var doc = (_uiApp ?? SaneamientoSession.UiApp)?.ActiveUIDocument?.Document;
+            if (doc == null)
+            {
+                MessageBox.Show("Obre un projecte de Revit primer.", "Sense document",
+                    MessageBoxButton.OK, MessageBoxImage.Information);
+                return;
+            }
+
+            if (!double.TryParse(TxtBajantLongMin.Text, out var longMin)) longMin = 1.0;
+            if (!double.TryParse(TxtToleranciaElev.Text, out var tolElev)) tolElev = 0.5;
+
+            var protocol = new Protocol.ProtocolInstalacio
+            {
+                Instalacio = "Sanejament",
+                Vivendes = new Protocol.ProtocolSeccio
+                { Etiqueta = "Interior vivendes", Regles = CtrlVivendes.ObtenirRegles() },
+                Aparcament = new Protocol.ProtocolSeccio
+                { Etiqueta = "Aparcament", Regles = CtrlAparcament.ObtenirRegles() },
+                Bajants = new Protocol.ProtocolSeccio
+                { Etiqueta = "Bajants", Regles = CtrlBajants.ObtenirRegles() },
+                Colectors = new Protocol.ProtocolSeccio
+                { Etiqueta = "Col·lectors P00-P01", Regles = CtrlColectors.ObtenirRegles() },
+                Edificis = new Protocol.ProtocolSeccio
+                { Etiqueta = "Edificis", Regles = CtrlEdificis.ObtenirRegles() },
+                BajantLongitudMinM = longMin,
+                ToleranciaElevacioM = tolElev
+            };
+
+            Protocol.ProtocolSession.ProtocolActual = protocol;
+            var storage = new Protocol.ProtocolStorage();
+            bool ok = storage.Guardar(doc, protocol);
+            MessageBox.Show(
+                ok ? "Protocol desat al projecte (.rvt)."
+                   : "Error en desar. Comprova que el projecte no és de sols lectura.",
+                "Desar protocol",
+                MessageBoxButton.OK,
+                ok ? MessageBoxImage.Information : MessageBoxImage.Error);
+        }
+
+        private void BtnExportarProtocol_Click(object sender, RoutedEventArgs e)
+        {
+            var protocol = Protocol.ProtocolSession.ProtocolActual;
+            if (protocol == null)
+            {
+                MessageBox.Show("No hi ha cap protocol carregat.", "Exportar protocol",
+                    MessageBoxButton.OK, MessageBoxImage.Information);
+                return;
+            }
+            var sfd = new Microsoft.Win32.SaveFileDialog
+            {
+                Filter = "Protocol E3G (*.e3gprot)|*.e3gprot",
+                FileName = "Protocol_Sanejament.e3gprot"
+            };
+            if (sfd.ShowDialog() != true) return;
+            var json = System.Text.Json.JsonSerializer.Serialize(protocol,
+                       new System.Text.Json.JsonSerializerOptions { WriteIndented = true });
+            System.IO.File.WriteAllText(sfd.FileName, json);
+            MessageBox.Show("Protocol exportat correctament.", "Exportar protocol",
+                MessageBoxButton.OK, MessageBoxImage.Information);
+        }
+
+        private void BtnImportarProtocol_Click(object sender, RoutedEventArgs e)
+        {
+            var ofd = new Microsoft.Win32.OpenFileDialog
+            {
+                Filter = "Protocol E3G (*.e3gprot)|*.e3gprot|Tots (*.*)|*.*"
+            };
+            if (ofd.ShowDialog() != true) return;
+            try
+            {
+                var json = System.IO.File.ReadAllText(ofd.FileName);
+                var protocol = System.Text.Json.JsonSerializer
+                               .Deserialize<Protocol.ProtocolInstalacio>(json);
+                if (protocol == null) throw new System.Exception("Format no vàlid.");
+                Protocol.ProtocolSession.ProtocolActual = protocol;
+                CarregarProtocol();
+                MessageBox.Show("Protocol importat. Revisa les regles i desa si vols aplicar-les al projecte.",
+                    "Importar protocol", MessageBoxButton.OK, MessageBoxImage.Information);
+            }
+            catch (System.Exception ex)
+            {
+                MessageBox.Show($"No s'ha pogut importar el protocol:\n{ex.Message}",
+                    "Error en importar", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
+        private void ActualitzarDiagnosticProtocol(Protocol.ProtocolInstalacio protocol)
+        {
+            int totalRegles = protocol.Vivendes.Regles.Count
+                            + protocol.Aparcament.Regles.Count
+                            + protocol.Bajants.Regles.Count
+                            + protocol.Colectors.Regles.Count
+                            + protocol.Edificis.Regles.Count;
+            TxtDiagnostic.Text = totalRegles > 0
+                ? $"✓ Protocol amb {totalRegles} regles configurat. Desa per persistir al .rvt."
+                : "⚠ Cap regla configurada. Prem «Auto-detectar» per generar suggerències.";
         }
     }
 

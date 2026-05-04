@@ -4,11 +4,12 @@
 //  de medición + cantidad total para el registro ~M del BC3.
 // ============================================================================
 
+using Autodesk.Revit.DB;
+using Autodesk.Revit.DB.Plumbing;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Autodesk.Revit.DB;
-using Autodesk.Revit.DB.Plumbing;
+using System.Windows.Controls;
 
 namespace E3G.Saneamiento.Presupuesto.Modelo
 {
@@ -40,7 +41,7 @@ namespace E3G.Saneamiento.Presupuesto.Modelo
                     if (longitudM <= 0) continue;
                     lineas.Add(new LineaMedicion
                     {
-                        Comentario = ConstruirComentario(pipe),
+                        Comentario = ConstruirComentario(pipe, doc),
                         Unidades = 1m,
                         Longitud = (decimal)Math.Round(longitudM, 3),
                         ElementoOrigen = pipe.Id
@@ -63,45 +64,36 @@ namespace E3G.Saneamiento.Presupuesto.Modelo
         ///         "[Interior vivendes · P02.A] Pipe Id 12345"
         ///         "[SAN-Fecals B-01 · P01.A] Pipe B01-1"  (fallback)
         /// </summary>
-        private static string ConstruirComentario(Pipe p)
+        private static string ConstruirComentario(Pipe p, Document doc)
         {
-            // Identificador del pipe: Mark si existeix, si no Id
             var mark = p.LookupParameter("Mark")?.AsString();
             var idEl = p.Id != null ? p.Id.Value.ToString() : "?";
             var ident = !string.IsNullOrEmpty(mark) ? $"Pipe {mark}" : $"Pipe Id {idEl}";
 
-            // Nivell de referència (sempre s'usa, com a 2n nivell d'agrupació)
             var nivel = p.ReferenceLevel?.Name ?? "";
 
-            // Prioritat 1: classificació oficial del panell (si Sesion.UltimasMediciones existeix)
-            var grupoPanel = E3G.Saneamiento.Presupuesto.Storage.AgrupadorMediciones.ObtenerGrupo(p);
+            var grupoPanel = E3G.Saneamiento.Protocol.AgrupadorMedicions.ObtenerGrupo(p, doc);
 
             var partsPrefix = new System.Collections.Generic.List<string>();
 
             if (!string.IsNullOrEmpty(grupoPanel))
             {
-                // Usar el grup oficial del panell
                 partsPrefix.Add(grupoPanel);
                 if (!string.IsNullOrEmpty(nivel)) partsPrefix.Add(nivel);
             }
             else
             {
-                // Fallback: Sistema MEP + Nivell
                 string sistema = "";
-                try
-                {
-                    var sys = p.MEPSystem;
-                    if (sys != null) sistema = sys.Name ?? "";
-                }
-                catch { /* algunes versions no exposen MEPSystem si està orphan */ }
+                try { var sys = p.MEPSystem; if (sys != null) sistema = sys.Name ?? ""; }
+                catch { }
 
                 if (!string.IsNullOrEmpty(sistema)) partsPrefix.Add(sistema);
-                if (!string.IsNullOrEmpty(nivel))   partsPrefix.Add(nivel);
+                if (!string.IsNullOrEmpty(nivel)) partsPrefix.Add(nivel);
             }
 
-            if (partsPrefix.Count > 0)
-                return $"[{string.Join(" · ", partsPrefix)}] {ident}";
-            return ident;
+            return partsPrefix.Count > 0
+                ? $"[{string.Join(" · ", partsPrefix)}] {ident}"
+                : ident;
         }
     }
 
@@ -131,17 +123,25 @@ namespace E3G.Saneamiento.Presupuesto.Modelo
             }
             return lista.Select(e => new LineaMedicion
             {
-                Comentario = ConstruirComentario(e),
+                Comentario = ConstruirComentario(e, doc),
                 Unidades = 1m,
                 ElementoOrigen = e.Id
             }).ToList();
         }
 
-        private static string ConstruirComentario(Element e)
+        private string ConstruirComentario(Element element, Document doc)
         {
-            var name = e.Name ?? e.Category?.Name ?? "Element";
-            var mark = e.LookupParameter("Mark")?.AsString();
-            return string.IsNullOrEmpty(mark) ? name : $"{name} {mark}";
+            try
+            {
+                var grup = E3G.Saneamiento.Protocol.AgrupadorMedicions.ObtenerGrupo(element, doc);
+                var nivell = element.LookupParameter("Reference Level")
+                          ?? element.get_Parameter(BuiltInParameter.RBS_START_LEVEL_PARAM);
+                var nivellNom = nivell?.AsValueString() ?? "—";
+                var mark = element.LookupParameter("Mark")?.AsString();
+                var id = string.IsNullOrEmpty(mark) ? element.Id.IntegerValue.ToString() : mark;
+                return $"[{grup} · {nivellNom}] Pipe {id}";
+            }
+            catch { return $"Pipe {element?.Id?.IntegerValue}"; }
         }
     }
 

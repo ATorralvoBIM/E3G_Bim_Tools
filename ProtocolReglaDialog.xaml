@@ -1,0 +1,55 @@
+<Window x:Class="E3G.Saneamiento.ProtocolReglaDialog"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Editar regla" Height="520" Width="560"
+        WindowStartupLocation="CenterOwner" ResizeMode="CanResize">
+    <Grid Margin="20">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <!-- Capçalera -->
+        <StackPanel Grid.Row="0" Margin="0,0,0,16">
+            <TextBlock Text="Nom de la regla" FontSize="11" Margin="0,0,0,4"/>
+            <TextBox x:Name="TxtNom" FontSize="13" Padding="8,6"/>
+            <StackPanel Orientation="Horizontal" Margin="0,12,0,0">
+                <TextBlock Text="S'aplica a:" FontSize="11" VerticalAlignment="Center" Margin="0,0,8,0"/>
+                <ComboBox x:Name="CmbAplicaA" FontSize="11" Padding="6,4" Width="140">
+                    <ComboBoxItem Content="Canonada"   Tag="0"/>
+                    <ComboBoxItem Content="Grup tipus" Tag="1" IsSelected="True"/>
+                    <ComboBoxItem Content="Nivell"     Tag="2"/>
+                    <ComboBoxItem Content="Workset"    Tag="3"/>
+                </ComboBox>
+                <TextBlock Text="Combinar condicions:" FontSize="11"
+                           VerticalAlignment="Center" Margin="16,0,8,0"/>
+                <ComboBox x:Name="CmbLogica" FontSize="11" Padding="6,4" Width="110">
+                    <ComboBoxItem Content="TOTES (AND)" IsSelected="True" Tag="0"/>
+                    <ComboBoxItem Content="QUALSEVOL (OR)" Tag="1"/>
+                </ComboBox>
+            </StackPanel>
+        </StackPanel>
+
+        <!-- Condicions -->
+        <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
+            <StackPanel>
+                <TextBlock Text="Condicions:" FontWeight="SemiBold" FontSize="12" Margin="0,0,0,8"/>
+                <ItemsControl x:Name="LstCondicions"/>
+                <Button Content="+ Afegir condició" Padding="10,6" FontSize="11"
+                        HorizontalAlignment="Left" Margin="0,8,0,0"
+                        Click="BtnAfegirCondicio_Click"/>
+            </StackPanel>
+        </ScrollViewer>
+
+        <!-- Botons -->
+        <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right"
+                    Margin="0,16,0,0">
+            <Button Content="Cancel·lar" Padding="12,6" Margin="0,0,8,0"
+                    Click="BtnCancelar_Click"/>
+            <Button Content="Desar regla" Padding="12,6"
+                    Background="#4a7a96" Foreground="White"
+                    Click="BtnDesar_Click"/>
+        </StackPanel>
+    </Grid>
+</Window>

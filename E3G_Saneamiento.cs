@@ -1123,8 +1123,26 @@ namespace E3G.Saneamiento
                     {
                         SaneamientoSession.UiApp = ui;
                         app.Idling -= capturarIdling;
+
+                        // Carregar Protocol de Classificació si no hi ha cap en memòria
+                        try
+                        {
+                            var doc = ui.ActiveUIDocument?.Document;
+                            if (doc != null && Protocol.ProtocolSession.ProtocolActual == null)
+                            {
+                                var storage = new Protocol.ProtocolStorage();
+                                var protocol = storage.Cargar(doc);
+                                // Si el .rvt no té res guardat, genera les suggerències automàtiques
+                                if (protocol.Vivendes.Regles.Count == 0 &&
+                                    protocol.Aparcament.Regles.Count == 0)
+                                    protocol = Protocol.ProtocolAutoDetect.Suggerir(doc);
+                                Protocol.ProtocolSession.ProtocolActual = protocol;
+                            }
+                        }
+                        catch { /* Si falla, no blocqueja l'arrencada */ }
                     }
                 };
+
                 app.Idling += capturarIdling;
 
                 EventHandler<Autodesk.Revit.UI.Events.ViewActivatedEventArgs> capturarVista = null;
