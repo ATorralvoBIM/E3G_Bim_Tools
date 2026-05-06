@@ -11,6 +11,7 @@ namespace E3G.Saneamiento
     public partial class ProtocolSeccioControl : UserControl
     {
         private readonly ObservableCollection<ReglaViewModel> _regles = new();
+        public Action<List<ProtocolRegla>>? OnReglesCanviades { get; set; }
 
         public string Titol
         {
@@ -52,6 +53,7 @@ namespace E3G.Saneamiento
             {
                 _regles.Add(new ReglaViewModel(dlg.ReglaEditada));
                 ActualitzarBuit();
+                OnReglesCanviades?.Invoke(ObtenirRegles());
             }
         }
 
@@ -66,6 +68,7 @@ namespace E3G.Saneamiento
             {
                 var idx = _regles.IndexOf(vm);
                 if (idx >= 0) _regles[idx] = new ReglaViewModel(dlg.ReglaEditada);
+                OnReglesCanviades?.Invoke(ObtenirRegles());
             }
         }
 
@@ -76,6 +79,7 @@ namespace E3G.Saneamiento
                 MessageBoxButton.YesNo, MessageBoxImage.Question) != MessageBoxResult.Yes) return;
             _regles.Remove(vm);
             ActualitzarBuit();
+            OnReglesCanviades?.Invoke(ObtenirRegles());
         }
     }
 

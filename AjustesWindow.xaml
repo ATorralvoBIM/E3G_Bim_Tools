@@ -1276,7 +1276,7 @@
                    FontWeight="SemiBold" FontSize="14"
                    Foreground="{StaticResource TextPrimary}"
                    Margin="0,0,0,4"/>
-                        <TextBlock Text="Defineix regles per identificar automàticament el tipus de cada element del model. Les regles funcionen com els filtres natius de Revit."
+                        <TextBlock Text="Defineix seccions d'agrupació i les regles de cada una. Les seccions i els seus noms són editables i es poden afegir o eliminar."
                    FontSize="11" Foreground="{StaticResource TextSecondary}"
                    TextWrapping="Wrap" Margin="0,0,0,16"/>
 
@@ -1300,15 +1300,17 @@
                     Click="BtnImportarProtocol_Click"/>
                         </StackPanel>
 
-                        <!-- Les 5 seccions de regles -->
-                        <local:ProtocolSeccioControl x:Name="CtrlVivendes"   Titol="Interior vivendes" />
-                        <local:ProtocolSeccioControl x:Name="CtrlAparcament" Titol="Aparcament" />
-                        <local:ProtocolSeccioControl x:Name="CtrlBajants"    Titol="Bajants" />
-                        <local:ProtocolSeccioControl x:Name="CtrlColectors"  Titol="Col·lectors P00-P01" />
-                        <local:ProtocolSeccioControl x:Name="CtrlEdificis"   Titol="Edificis" />
+                        <!-- Seccions dinàmiques -->
+                        <ItemsControl x:Name="LstSeccions"/>
+
+                        <!-- Afegir secció nova -->
+                        <Button Content="+ Afegir secció d'agrupació" Padding="10,7" FontSize="11"
+                HorizontalAlignment="Left" Margin="0,8,0,12"
+                Background="#E8ECF0" BorderThickness="0"
+                Click="BtnAfegirSeccio_Click"/>
 
                         <!-- Paràmetres geomètrics globals -->
-                        <Border Background="#F8FAFC" CornerRadius="10" Padding="14,12" Margin="0,12,0,0">
+                        <Border Background="#F8FAFC" CornerRadius="10" Padding="14,12" Margin="0,4,0,0">
                             <StackPanel>
                                 <TextBlock Text="Criteris geomètrics globals"
                            FontWeight="SemiBold" FontSize="12"

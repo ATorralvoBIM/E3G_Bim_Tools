@@ -1,6 +1,7 @@
 ﻿using Autodesk.Revit.DB;
 using Autodesk.Revit.UI;
 using E3G.Saneamiento;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
@@ -12,6 +13,9 @@ using MediaColors = System.Windows.Media.Colors;
 using WpfComboBox = System.Windows.Controls.ComboBox;
 using WpfComboBoxItem = System.Windows.Controls.ComboBoxItem;
 using WpfVisibility = System.Windows.Visibility;
+using WpfGrid = System.Windows.Controls.Grid;
+using WpfTextBox = System.Windows.Controls.TextBox;
+using WpfThickness = System.Windows.Thickness;
 
 namespace E3G.Saneamiento
 {
@@ -527,11 +531,7 @@ namespace E3G.Saneamiento
         private void CarregarProtocol()
         {
             var protocol = Protocol.ProtocolSession.ObtenerOBuit();
-            CtrlVivendes.CarregarRegles(protocol.Vivendes.Regles);
-            CtrlAparcament.CarregarRegles(protocol.Aparcament.Regles);
-            CtrlBajants.CarregarRegles(protocol.Bajants.Regles);
-            CtrlColectors.CarregarRegles(protocol.Colectors.Regles);
-            CtrlEdificis.CarregarRegles(protocol.Edificis.Regles);
+            RenderitzarSeccions(protocol);
 
             if (double.TryParse(protocol.BajantLongitudMinM.ToString("G"), out _))
                 TxtBajantLongMin.Text = protocol.BajantLongitudMinM.ToString("G");
@@ -539,6 +539,77 @@ namespace E3G.Saneamiento
                 TxtToleranciaElev.Text = protocol.ToleranciaElevacioM.ToString("G");
 
             ActualitzarDiagnosticProtocol(protocol);
+        }
+
+        private void RenderitzarSeccions(Protocol.ProtocolInstalacio protocol)
+        {
+            var panel = new System.Windows.Controls.StackPanel();
+
+            foreach (var seccio in protocol.Seccions)
+            {
+                var capcalera = new WpfGrid { Margin = new WpfThickness(0, 0, 0, 4) };
+                capcalera.ColumnDefinitions.Add(new System.Windows.Controls.ColumnDefinition
+                { Width = new System.Windows.GridLength(1, System.Windows.GridUnitType.Star) });
+                capcalera.ColumnDefinitions.Add(new System.Windows.Controls.ColumnDefinition
+                { Width = System.Windows.GridLength.Auto });
+
+                var txtNom = new WpfTextBox
+                {
+                    Text = seccio.Etiqueta,
+                    FontWeight = FontWeights.SemiBold,
+                    FontSize = 13,
+                    Foreground = new MediaBrush((MediaColor)MediaColorConverter.ConvertFromString("#1E293B")),
+                    Background = System.Windows.Media.Brushes.Transparent,
+                    BorderThickness = new WpfThickness(0, 0, 0, 1),
+                    BorderBrush = new MediaBrush((MediaColor)MediaColorConverter.ConvertFromString("#C8CDD2")),
+                    Padding = new WpfThickness(0, 2, 0, 2),
+                    Margin = new WpfThickness(0, 0, 8, 0)
+                };
+                txtNom.TextChanged += (s, _) => seccio.Etiqueta = txtNom.Text;
+                WpfGrid.SetColumn(txtNom, 0);
+                capcalera.Children.Add(txtNom);
+
+                var btnEliminar = new Button
+                {
+                    Content = "✕ Eliminar secció",
+                    FontSize = 10,
+                    Foreground = new MediaBrush((MediaColor)MediaColorConverter.ConvertFromString("#B91C1C")),
+                    Background = System.Windows.Media.Brushes.Transparent,
+                    BorderThickness = new WpfThickness(0),
+                    Padding = new WpfThickness(6, 2, 0, 2),
+                    Tag = seccio
+                };
+                btnEliminar.Click += (s, _) =>
+                {
+                    protocol.Seccions.Remove(seccio);
+                    RenderitzarSeccions(protocol);
+                };
+                WpfGrid.SetColumn(btnEliminar, 1);
+                capcalera.Children.Add(btnEliminar);
+
+                var ctrl = new ProtocolSeccioControl();
+                ctrl.CarregarRegles(seccio.Regles);
+                ctrl.OnReglesCanviades = regles => seccio.Regles = regles;
+
+                var contenidor = new System.Windows.Controls.StackPanel
+                { Margin = new WpfThickness(0, 0, 0, 12) };
+                contenidor.Children.Add(capcalera);
+                contenidor.Children.Add(ctrl);
+                panel.Children.Add(contenidor);
+            }
+
+            LstSeccions.ItemsSource = null;
+            LstSeccions.Items.Clear();
+            LstSeccions.Items.Add(panel);
+
+            Protocol.ProtocolSession.ProtocolActual = protocol;
+        }
+
+        private void BtnAfegirSeccio_Click(object sender, RoutedEventArgs e)
+        {
+            var protocol = Protocol.ProtocolSession.ObtenerOBuit();
+            protocol.Seccions.Add(new Protocol.ProtocolSeccio { Etiqueta = "Nova secció" });
+            RenderitzarSeccions(protocol);
         }
 
         private void BtnAutoDetectar_Click(object sender, RoutedEventArgs e)
@@ -553,7 +624,7 @@ namespace E3G.Saneamiento
             var protocol = Protocol.ProtocolAutoDetect.Suggerir(doc);
             Protocol.ProtocolSession.ProtocolActual = protocol;
             CarregarProtocol();
-            MessageBox.Show("Protocol auto-detectat. Revisa les regles i desa si estàs d'acord.",
+            MessageBox.Show("Protocol auto-detectat. Revisa les seccions i desa si estàs d'acord.",
                 "Auto-detecció completada", MessageBoxButton.OK, MessageBoxImage.Information);
         }
 
@@ -570,31 +641,16 @@ namespace E3G.Saneamiento
             if (!double.TryParse(TxtBajantLongMin.Text, out var longMin)) longMin = 1.0;
             if (!double.TryParse(TxtToleranciaElev.Text, out var tolElev)) tolElev = 0.5;
 
-            var protocol = new Protocol.ProtocolInstalacio
-            {
-                Instalacio = "Sanejament",
-                Vivendes = new Protocol.ProtocolSeccio
-                { Etiqueta = "Interior vivendes", Regles = CtrlVivendes.ObtenirRegles() },
-                Aparcament = new Protocol.ProtocolSeccio
-                { Etiqueta = "Aparcament", Regles = CtrlAparcament.ObtenirRegles() },
-                Bajants = new Protocol.ProtocolSeccio
-                { Etiqueta = "Bajants", Regles = CtrlBajants.ObtenirRegles() },
-                Colectors = new Protocol.ProtocolSeccio
-                { Etiqueta = "Col·lectors P00-P01", Regles = CtrlColectors.ObtenirRegles() },
-                Edificis = new Protocol.ProtocolSeccio
-                { Etiqueta = "Edificis", Regles = CtrlEdificis.ObtenirRegles() },
-                BajantLongitudMinM = longMin,
-                ToleranciaElevacioM = tolElev
-            };
+            var protocol = Protocol.ProtocolSession.ObtenerOBuit();
+            protocol.BajantLongitudMinM = longMin;
+            protocol.ToleranciaElevacioM = tolElev;
 
-            Protocol.ProtocolSession.ProtocolActual = protocol;
             var storage = new Protocol.ProtocolStorage();
             bool ok = storage.Guardar(doc, protocol);
             MessageBox.Show(
                 ok ? "Protocol desat al projecte (.rvt)."
                    : "Error en desar. Comprova que el projecte no és de sols lectura.",
-                "Desar protocol",
-                MessageBoxButton.OK,
+                "Desar protocol", MessageBoxButton.OK,
                 ok ? MessageBoxImage.Information : MessageBoxImage.Error);
         }
 
@@ -632,96 +688,93 @@ namespace E3G.Saneamiento
                 var json = System.IO.File.ReadAllText(ofd.FileName);
                 var protocol = System.Text.Json.JsonSerializer
                                .Deserialize<Protocol.ProtocolInstalacio>(json);
-                if (protocol == null) throw new System.Exception("Format no vàlid.");
+                if (protocol == null) throw new Exception("Format no vàlid.");
                 Protocol.ProtocolSession.ProtocolActual = protocol;
                 CarregarProtocol();
-                MessageBox.Show("Protocol importat. Revisa les regles i desa si vols aplicar-les al projecte.",
+                MessageBox.Show("Protocol importat. Revisa les seccions i desa si vols aplicar-les.",
                     "Importar protocol", MessageBoxButton.OK, MessageBoxImage.Information);
             }
-            catch (System.Exception ex)
+            catch (Exception ex)
             {
-                MessageBox.Show($"No s'ha pogut importar el protocol:\n{ex.Message}",
+                MessageBox.Show($"No s'ha pogut importar:\n{ex.Message}",
                     "Error en importar", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 
         private void ActualitzarDiagnosticProtocol(Protocol.ProtocolInstalacio protocol)
         {
-            int totalRegles = protocol.Vivendes.Regles.Count
-                            + protocol.Aparcament.Regles.Count
-                            + protocol.Bajants.Regles.Count
-                            + protocol.Colectors.Regles.Count
-                            + protocol.Edificis.Regles.Count;
+            int totalRegles = protocol.Seccions.Sum(s => s.Regles.Count);
+            int totalSeccions = protocol.Seccions.Count;
             TxtDiagnostic.Text = totalRegles > 0
-                ? $"✓ Protocol amb {totalRegles} regles configurat. Desa per persistir al .rvt."
+                ? $"✓ Protocol amb {totalSeccions} seccions i {totalRegles} regles. Desa per persistir al .rvt."
                 : "⚠ Cap regla configurada. Prem «Auto-detectar» per generar suggerències.";
         }
-    }
 
-    // ════════════════════════════════════════════════
-    // MODEL DE DADES
-    // ════════════════════════════════════════════════
-    public class AjustesConfig
-    {
-        // Idioma
-        public string IdiomaPlugin { get; set; } = "Català";
-        public string IdiomaReporte { get; set; } = "Igual que interfície";
-        public bool NombresTecnics { get; set; } = true;
+        // ════════════════════════════════════════════════
+        // MODEL DE DADES
+        // ════════════════════════════════════════════════
+        public class AjustesConfig
+        {
+            // Idioma
+            public string IdiomaPlugin { get; set; } = "Català";
+            public string IdiomaReporte { get; set; } = "Igual que interfície";
+            public bool NombresTecnics { get; set; } = true;
 
-        // Unitats
-        public string UnitatLongitud { get; set; } = "Metres (m)";
-        public int Decimals { get; set; } = 2;
-        public string UnitatDiametre { get; set; } = "Mil·límetres (mm)";
-        public string FormatPendent { get; set; } = "Percentatge (%)";
-        public bool CabeceraExportacio { get; set; } = true;
+            // Unitats
+            public string UnitatLongitud { get; set; } = "Metres (m)";
+            public int Decimals { get; set; } = 2;
+            public string UnitatDiametre { get; set; } = "Mil·límetres (mm)";
+            public string FormatPendent { get; set; } = "Percentatge (%)";
+            public bool CabeceraExportacio { get; set; } = true;
 
-        // Confirmacions
-        public bool ConfirmarEliminar { get; set; } = true;
-        public bool ConfirmarVistes { get; set; } = true;
-        public bool ConfirmarCopia { get; set; } = true;
-        public int UmbralConfirmacio { get; set; } = 200;
-        public bool Verbose { get; set; } = false;
+            // Confirmacions
+            public bool ConfirmarEliminar { get; set; } = true;
+            public bool ConfirmarVistes { get; set; } = true;
+            public bool ConfirmarCopia { get; set; } = true;
+            public int UmbralConfirmacio { get; set; } = 200;
+            public bool Verbose { get; set; } = false;
 
-        // Nomenclatura
-        public string FormatPlanta { get; set; } = "P##.EDIF";
-        public string FormatSoterrani { get; set; } = "S##.EDIF";
-        public string SeparadorEdifici { get; set; } = "Punt ( . )";
-        public string IdsEdifici { get; set; } = "A, B1, B2";
-        public string PrefijoE3G { get; set; } = "MC_E3G_";
-        public bool AvisarFamilies { get; set; } = true;
+            // Nomenclatura
+            public string FormatPlanta { get; set; } = "P##.EDIF";
+            public string FormatSoterrani { get; set; } = "S##.EDIF";
+            public string SeparadorEdifici { get; set; } = "Punt ( . )";
+            public string IdsEdifici { get; set; } = "A, B1, B2";
+            public string PrefijoE3G { get; set; } = "MC_E3G_";
+            public bool AvisarFamilies { get; set; } = true;
 
-        // Saneament
-        public bool MedirBr { get; set; } = true;
-        public bool MedirBp { get; set; } = true;
-        public string SistemaBr { get; set; } = "Bajante residual";
-        public string SistemaBp { get; set; } = "Bajante pluvial";
-        public bool SanAgruparNivell { get; set; } = true;
-        public bool MedirColRes { get; set; } = true;
-        public bool MedirColPlu { get; set; } = true;
-        public string SistemaColRes { get; set; } = "Colector residual";
-        public string SistemaColPlu { get; set; } = "Colector pluvial";
-        public double PendentMinima { get; set; } = 2.0;
-        public bool SanValidarPendent { get; set; } = true;
-        public bool SanAgruparDiametre { get; set; } = true;
-        public bool SanCatTuberias { get; set; } = true;
-        public bool SanCatUnions { get; set; } = true;
-        public bool SanCatArquetes { get; set; } = true;
+            // Saneament
+            public bool MedirBr { get; set; } = true;
+            public bool MedirBp { get; set; } = true;
+            public string SistemaBr { get; set; } = "Bajante residual";
+            public string SistemaBp { get; set; } = "Bajante pluvial";
+            public bool SanAgruparNivell { get; set; } = true;
+            public bool MedirColRes { get; set; } = true;
+            public bool MedirColPlu { get; set; } = true;
+            public string SistemaColRes { get; set; } = "Colector residual";
+            public string SistemaColPlu { get; set; } = "Colector pluvial";
+            public double PendentMinima { get; set; } = 2.0;
+            public bool SanValidarPendent { get; set; } = true;
+            public bool SanAgruparDiametre { get; set; } = true;
+            public bool SanCatTuberias { get; set; } = true;
+            public bool SanCatUnions { get; set; } = true;
+            public bool SanCatArquetes { get; set; } = true;
 
-        // Fontaneria
-        public bool MedirAfs { get; set; } = true;
-        public bool MedirAcs { get; set; } = true;
-        public bool MedirAr { get; set; } = true;
-        public string ParamLongitudFont { get; set; } = "Longitud";
-        public string ParamSistemaFont { get; set; } = "Nombre del sistema";
-        public string ParamDiametreFont { get; set; } = "Diámetro";
-        public string ParamMaterial { get; set; } = "Material";
-        public string FamiliaAfs { get; set; } = "MC_E3G_PEX";
-        public string FamiliaAcs { get; set; } = "MC_E3G_PPR_FIBER BLUE";
-        public bool FontAgruparDiametre { get; set; } = true;
-        public bool FontMontants { get; set; } = true;
-        public bool FontAccessoris { get; set; } = true;
-        public bool FontAgruparNivell { get; set; } = false;
-        public bool FontFiltrarVista { get; set; } = false;
-        public bool FontAvisarCategoria { get; set; } = true;
+            // Fontaneria
+            public bool MedirAfs { get; set; } = true;
+            public bool MedirAcs { get; set; } = true;
+            public bool MedirAr { get; set; } = true;
+            public string ParamLongitudFont { get; set; } = "Longitud";
+            public string ParamSistemaFont { get; set; } = "Nombre del sistema";
+            public string ParamDiametreFont { get; set; } = "Diámetro";
+            public string ParamMaterial { get; set; } = "Material";
+            public string FamiliaAfs { get; set; } = "MC_E3G_PEX";
+            public string FamiliaAcs { get; set; } = "MC_E3G_PPR_FIBER BLUE";
+            public bool FontAgruparDiametre { get; set; } = true;
+            public bool FontMontants { get; set; } = true;
+            public bool FontAccessoris { get; set; } = true;
+            public bool FontAgruparNivell { get; set; } = false;
+            public bool FontFiltrarVista { get; set; } = false;
+            public bool FontAvisarCategoria { get; set; } = true;
+        }
     }
 }

@@ -14,18 +14,17 @@ namespace E3G.Saneamiento.Protocol
     {
         public static ProtocolInstalacio Suggerir(Document doc)
         {
-            var vivendes = SuggerirVivendes(doc);
-            var aparcament = SuggerirAparcament(doc);
-            var bajants = SuggerirBajants();
-            var colectors = SuggerirColectors(doc);
-
             return new ProtocolInstalacio
             {
                 Instalacio = "Sanejament",
-                Vivendes = vivendes,
-                Aparcament = aparcament,
-                Bajants = bajants,
-                Colectors = colectors,
+                Seccions = new List<ProtocolSeccio>
+        {
+            SuggerirVivendes(doc),
+            SuggerirAparcament(doc),
+            SuggerirBajants(),
+            SuggerirColectors(doc),
+            new ProtocolSeccio { Etiqueta = "Edificis" }
+        },
                 BajantLongitudMinM = 1.0,
                 ToleranciaElevacioM = 0.5
             };
