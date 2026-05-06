@@ -47,7 +47,8 @@ namespace E3G.Saneamiento
             var doc = SaneamientoSession.UiApp?.ActiveUIDocument?.Document;
             var dlg = new ProtocolReglaDialog(null, doc);
             dlg.Owner = Window.GetWindow(this);
-            if (dlg.ShowDialog() == true && dlg.ReglaEditada != null)
+            dlg.ShowDialog();
+            if (dlg.Desat && dlg.ReglaEditada != null)
             {
                 _regles.Add(new ReglaViewModel(dlg.ReglaEditada));
                 ActualitzarBuit();
@@ -60,7 +61,8 @@ namespace E3G.Saneamiento
             var doc = SaneamientoSession.UiApp?.ActiveUIDocument?.Document;
             var dlg = new ProtocolReglaDialog(vm.Regla, doc);
             dlg.Owner = Window.GetWindow(this);
-            if (dlg.ShowDialog() == true && dlg.ReglaEditada != null)
+            dlg.ShowDialog();
+            if (dlg.Desat && dlg.ReglaEditada != null)
             {
                 var idx = _regles.IndexOf(vm);
                 if (idx >= 0) _regles[idx] = new ReglaViewModel(dlg.ReglaEditada);

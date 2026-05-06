@@ -28,20 +28,15 @@
 			</Grid.ColumnDefinitions>
 			<StackPanel Grid.Column="0" Margin="0,0,8,0">
 				<TextBlock Text="S'aplica a:" FontSize="11" FontWeight="SemiBold"
-                           Foreground="#1E293B" Margin="0,0,0,4"/>
-				<ComboBox x:Name="CmbAplicaA" FontSize="11" Padding="6,4">
-					<ComboBoxItem Content="Canonada (Pipe)"   Tag="0" IsSelected="True"/>
-					<ComboBoxItem Content="Grup tipus (GroupType)" Tag="1"/>
-					<ComboBoxItem Content="Nivell (Level)"    Tag="2"/>
-					<ComboBoxItem Content="Workset"           Tag="3"/>
-				</ComboBox>
+						   Foreground="#1E293B" Margin="0,0,0,4"/>
+				<ComboBox x:Name="CmbAplicaA" FontSize="11" Padding="6,4"/>
 			</StackPanel>
 			<StackPanel Grid.Column="1">
 				<TextBlock Text="Combinar condicions:" FontSize="11" FontWeight="SemiBold"
-                           Foreground="#1E293B" Margin="0,0,0,4"/>
+						   Foreground="#1E293B" Margin="0,0,0,4"/>
 				<ComboBox x:Name="CmbLogica" FontSize="11" Padding="6,4">
 					<ComboBoxItem Content="TOTES (AND)" IsSelected="True" Tag="0"/>
-					<ComboBoxItem Content="QUALSEVOL (OR)"             Tag="1"/>
+					<ComboBoxItem Content="QUALSEVOL (OR)" Tag="1"/>
 				</ComboBox>
 			</StackPanel>
 		</Grid>

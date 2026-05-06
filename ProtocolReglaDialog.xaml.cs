@@ -18,6 +18,44 @@ namespace E3G.Saneamiento
         public ProtocolReglaDialog(ProtocolRegla? regla, Document? doc = null)
         {
             InitializeComponent();
+            // Categories disponibles
+            var categories = new List<CategoriaRevitItem>
+            {
+                new() { Nom = "Canonada (OST_PipeCurves)",        Valor = (int)ElementTipus.Canonada },
+                new() { Nom = "Grup tipus (GroupType)",            Valor = (int)ElementTipus.GrupTipus },
+                new() { Nom = "Nivell (Level)",                    Valor = (int)ElementTipus.Nivell },
+                new() { Nom = "Workset",                           Valor = (int)ElementTipus.Workset },
+            };
+
+            // Si tenim document, afegim categories MEP del projecte
+            if (doc != null)
+            {
+                try
+                {
+                    var catsMEP = new Autodesk.Revit.DB.FilteredElementCollector(doc)
+                        .OfClass(typeof(Autodesk.Revit.DB.MEPCurve))
+                        .Cast<Element>()
+                        .Select(e => e.Category?.Name)
+                        .Where(n => !string.IsNullOrEmpty(n))
+                        .Distinct()
+                        .OrderBy(n => n);
+                    foreach (var cat in catsMEP)
+                        if (!categories.Any(c => c.Nom.Contains(cat!)))
+                            categories.Add(new() { Nom = cat!, Valor = (int)ElementTipus.Canonada });
+                }
+                catch { }
+            }
+
+            CmbAplicaA.ItemsSource = categories;
+            CmbAplicaA.SelectedIndex = 0;
+
+            // Seleccionar la categoria de la regla existent si n'hi ha
+            if (regla != null)
+            {
+                var item = categories.FirstOrDefault(c => c.Valor == (int)regla.Aplica);
+                if (item != null) CmbAplicaA.SelectedItem = item;
+            }
+
             _doc = doc;
             LstCondicions.ItemsSource = _condicions;
 
@@ -47,6 +85,8 @@ namespace E3G.Saneamiento
                 _condicions.Remove(vm);
         }
 
+        public bool Desat { get; private set; } = false;
+
         private void BtnDesar_Click(object sender, RoutedEventArgs e)
         {
             if (string.IsNullOrWhiteSpace(TxtNom.Text))
@@ -56,7 +96,7 @@ namespace E3G.Saneamiento
                 return;
             }
 
-            var aplica = (ElementTipus)(int)((CmbAplicaA.SelectedItem as ComboBoxItem)?.Tag ?? 0);
+            var aplica = (ElementTipus)((CmbAplicaA.SelectedItem as CategoriaRevitItem)?.Valor ?? 0);
             var logica = (LogicaCondicions)(int)((CmbLogica.SelectedItem as ComboBoxItem)?.Tag ?? 0);
 
             ReglaEditada = new ProtocolRegla
@@ -73,16 +113,26 @@ namespace E3G.Saneamiento
                 }).ToList()
             };
 
-            DialogResult = true;
+            Desat = true;
+            try { DialogResult = true; } catch { }
             Close();
         }
 
         private void BtnCancelar_Click(object sender, RoutedEventArgs e)
         {
-            DialogResult = false;
+            Desat = false;
+            try { DialogResult = false; } catch { }
             Close();
         }
     }
+
+    // Afegeix aquesta classe al fitxer (fora de ProtocolReglaDialog)
+    public class CategoriaRevitItem
+    {
+        public string Nom { get; set; } = "";
+        public int Valor { get; set; }
+    }
+
 
     public class CondicioViewModel : System.ComponentModel.INotifyPropertyChanged
     {
