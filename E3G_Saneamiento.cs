@@ -466,30 +466,69 @@ namespace E3G.Saneamiento
 
                 double elevNivel = nivelesDic.ContainsKey(nivel) ? nivelesDic[nivel] : 0;
 
+                // Classificació via Protocol (si hi ha protocol actiu) o fallback hardcoded
                 string categoria;
-                if (EsAparcamiento(nivel))
+                string grupProtocol = Protocol.AgrupadorMedicions.ObtenerGrupo(e, doc);
+
+                if (!string.IsNullOrEmpty(grupProtocol))
                 {
-                    categoria = "Aparcamiento";
-                    resultado.AparcamientoM += len;
-                    resultado.IdsAparcamiento.Add(e.Id.IntegerValue);
-                }
-                else if (orient == "V" && len > 1.0 && elevNivel >= Z_P00A - TOL)
-                {
-                    categoria = "Bajantes";
-                    resultado.BajantesM += len;
-                    resultado.IdsBajantes.Add(e.Id.IntegerValue);
-                }
-                else if (orient == "H" && elevNivel >= Z_P00A - TOL && elevNivel <= Z_P01A + TOL)
-                {
-                    categoria = "Colectores (P00-P01)";
-                    resultado.ColectoresM += len;
-                    resultado.IdsColectores.Add(e.Id.IntegerValue);
+                    // El Protocol ha identificat el grup — el mapegem a les categories internes
+                    categoria = grupProtocol switch
+                    {
+                        "Bajants" => "Bajantes",
+                        "Col·lectors P00-P01" => "Colectores (P00-P01)",
+                        "Aparcament" => "Aparcamiento",
+                        "Interior vivendes" => "Interior vivendes",
+                        _ => grupProtocol   // edifici o custom
+                    };
+
+                    switch (categoria)
+                    {
+                        case "Bajantes":
+                            resultado.BajantesM += len;
+                            resultado.IdsBajantes.Add(e.Id.IntegerValue);
+                            break;
+                        case "Colectores (P00-P01)":
+                            resultado.ColectoresM += len;
+                            resultado.IdsColectores.Add(e.Id.IntegerValue);
+                            break;
+                        case "Aparcamiento":
+                            resultado.AparcamientoM += len;
+                            resultado.IdsAparcamiento.Add(e.Id.IntegerValue);
+                            break;
+                        default:
+                            resultado.ColectoresM += len;
+                            resultado.IdsColectores.Add(e.Id.IntegerValue);
+                            break;
+                    }
                 }
                 else
                 {
-                    categoria = "Servicios comunes";
-                    resultado.ColectoresM += len;
-                    resultado.IdsColectores.Add(e.Id.IntegerValue);
+                    // Fallback hardcoded (sense Protocol configurat)
+                    if (EsAparcamiento(nivel))
+                    {
+                        categoria = "Aparcamiento";
+                        resultado.AparcamientoM += len;
+                        resultado.IdsAparcamiento.Add(e.Id.IntegerValue);
+                    }
+                    else if (orient == "V" && len > 1.0 && elevNivel >= Z_P00A - TOL)
+                    {
+                        categoria = "Bajantes";
+                        resultado.BajantesM += len;
+                        resultado.IdsBajantes.Add(e.Id.IntegerValue);
+                    }
+                    else if (orient == "H" && elevNivel >= Z_P00A - TOL && elevNivel <= Z_P01A + TOL)
+                    {
+                        categoria = "Colectores (P00-P01)";
+                        resultado.ColectoresM += len;
+                        resultado.IdsColectores.Add(e.Id.IntegerValue);
+                    }
+                    else
+                    {
+                        categoria = "Servicios comunes";
+                        resultado.ColectoresM += len;
+                        resultado.IdsColectores.Add(e.Id.IntegerValue);
+                    }
                 }
 
                 resultado.TotalM += len;

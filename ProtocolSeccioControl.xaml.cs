@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
@@ -9,7 +10,7 @@ namespace E3G.Saneamiento
 {
     public partial class ProtocolSeccioControl : UserControl
     {
-        private List<ProtocolRegla> _regles = new();
+        private readonly ObservableCollection<ReglaViewModel> _regles = new();
 
         public string Titol
         {
@@ -17,63 +18,75 @@ namespace E3G.Saneamiento
             set => TxtTitol.Text = value;
         }
 
-        public ProtocolSeccioControl() => InitializeComponent();
+        public ProtocolSeccioControl()
+        {
+            InitializeComponent();
+            LstRegles.ItemsSource = _regles;
+            ActualitzarBuit();
+        }
 
         public void CarregarRegles(List<ProtocolRegla> regles)
         {
-            _regles = new List<ProtocolRegla>(regles);
-            Refrescar();
+            _regles.Clear();
+            foreach (var r in regles)
+                _regles.Add(new ReglaViewModel(r));
+            ActualitzarBuit();
         }
 
-        public List<ProtocolRegla> ObtenirRegles() => new(_regles);
+        public List<ProtocolRegla> ObtenirRegles()
+            => _regles.Select(vm => vm.Regla).ToList();
 
-        private void Refrescar()
+        private void ActualitzarBuit()
         {
-            LstRegles.ItemsSource = _regles.Select(r => new
-            {
-                r.Id,
-                r.Nom,
-                Resum = r.Condicions.Count == 0
-                    ? "(cap condició)"
-                    : string.Join(r.Logica == LogicaCondicions.Totes ? " I " : " O ",
-                                  r.Condicions.Select(c => $"{c.ParamNom} {c.Operador.Etiqueta()} \"{c.Valor}\""))
-            }).ToList();
-            TxtBuit.Visibility = _regles.Count == 0 ? Visibility.Visible : Visibility.Collapsed;
+            TxtBuit.Visibility = _regles.Count == 0
+                ? Visibility.Visible : Visibility.Collapsed;
         }
 
         private void BtnAfegir_Click(object sender, RoutedEventArgs e)
         {
-            var dlg = new ProtocolReglaDialog(null);
+            var doc = SaneamientoSession.UiApp?.ActiveUIDocument?.Document;
+            var dlg = new ProtocolReglaDialog(null, doc);
             dlg.Owner = Window.GetWindow(this);
-            if (dlg.ShowDialog() == true)
+            if (dlg.ShowDialog() == true && dlg.ReglaEditada != null)
             {
-                _regles.Add(dlg.ReglaEditada!);
-                Refrescar();
+                _regles.Add(new ReglaViewModel(dlg.ReglaEditada));
+                ActualitzarBuit();
             }
         }
 
         private void BtnEditar_Click(object sender, RoutedEventArgs e)
         {
-            if ((sender as Button)?.Tag is not Guid id) return;
-            var regla = _regles.FirstOrDefault(r => r.Id == id);
-            if (regla == null) return;
-            var dlg = new ProtocolReglaDialog(regla);
+            if ((sender as Button)?.Tag is not ReglaViewModel vm) return;
+            var doc = SaneamientoSession.UiApp?.ActiveUIDocument?.Document;
+            var dlg = new ProtocolReglaDialog(vm.Regla, doc);
             dlg.Owner = Window.GetWindow(this);
-            if (dlg.ShowDialog() == true)
+            if (dlg.ShowDialog() == true && dlg.ReglaEditada != null)
             {
-                var idx = _regles.IndexOf(regla);
-                _regles[idx] = dlg.ReglaEditada!;
-                Refrescar();
+                var idx = _regles.IndexOf(vm);
+                if (idx >= 0) _regles[idx] = new ReglaViewModel(dlg.ReglaEditada);
             }
         }
 
         private void BtnEliminar_Click(object sender, RoutedEventArgs e)
         {
-            if ((sender as Button)?.Tag is not Guid id) return;
-            if (MessageBox.Show("Eliminar aquesta regla?", "Confirmar",
-                MessageBoxButton.YesNo) != MessageBoxResult.Yes) return;
-            _regles.RemoveAll(r => r.Id == id);
-            Refrescar();
+            if ((sender as Button)?.Tag is not ReglaViewModel vm) return;
+            if (MessageBox.Show($"Eliminar la regla «{vm.Nom}»?", "Confirmar",
+                MessageBoxButton.YesNo, MessageBoxImage.Question) != MessageBoxResult.Yes) return;
+            _regles.Remove(vm);
+            ActualitzarBuit();
         }
+    }
+
+    public class ReglaViewModel
+    {
+        public ProtocolRegla Regla { get; }
+        public string Nom => Regla.Nom;
+        public string Resum => Regla.Condicions.Count == 0
+            ? "(cap condició)"
+            : string.Join(Regla.Logica == LogicaCondicions.Totes ? " I " : " O ",
+                Regla.Condicions.Select(c =>
+                    $"{c.ParamNom} {c.Operador.Etiqueta()} \"{c.Valor}\""));
+
+        public ReglaViewModel(ProtocolRegla r) => Regla = r;
     }
 }

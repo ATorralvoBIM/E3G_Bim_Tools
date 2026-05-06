@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Autodesk.Revit.DB;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -12,34 +13,33 @@ namespace E3G.Saneamiento
     {
         public ProtocolRegla? ReglaEditada { get; private set; }
         private readonly ObservableCollection<CondicioViewModel> _condicions = new();
+        private readonly Document? _doc;
 
-        public ProtocolReglaDialog(ProtocolRegla? regla)
+        public ProtocolReglaDialog(ProtocolRegla? regla, Document? doc = null)
         {
             InitializeComponent();
+            _doc = doc;
             LstCondicions.ItemsSource = _condicions;
 
             if (regla != null)
             {
                 TxtNom.Text = regla.Nom;
-                // Aplica
                 foreach (ComboBoxItem item in CmbAplicaA.Items)
                     if ((int)(item.Tag ?? 0) == (int)regla.Aplica)
                     { item.IsSelected = true; break; }
-                // Lògica
                 foreach (ComboBoxItem item in CmbLogica.Items)
                     if ((int)(item.Tag ?? 0) == (int)regla.Logica)
                     { item.IsSelected = true; break; }
-                // Condicions
                 foreach (var c in regla.Condicions)
-                    _condicions.Add(new CondicioViewModel(c));
+                    _condicions.Add(new CondicioViewModel(c, doc));
             }
 
             if (_condicions.Count == 0)
-                _condicions.Add(new CondicioViewModel(null));
+                _condicions.Add(new CondicioViewModel(null, doc));
         }
 
         private void BtnAfegirCondicio_Click(object sender, RoutedEventArgs e)
-            => _condicions.Add(new CondicioViewModel(null));
+            => _condicions.Add(new CondicioViewModel(null, _doc));
 
         private void BtnEliminarCondicio_Click(object sender, RoutedEventArgs e)
         {
@@ -84,7 +84,6 @@ namespace E3G.Saneamiento
         }
     }
 
-    // ViewModel per a cada condició — INotifyPropertyChanged perquè el binding funcioni
     public class CondicioViewModel : System.ComponentModel.INotifyPropertyChanged
     {
         public event System.ComponentModel.PropertyChangedEventHandler? PropertyChanged;
@@ -97,7 +96,7 @@ namespace E3G.Saneamiento
         public string Param
         {
             get => _param;
-            set { _param = value; Notify(nameof(Param)); }
+            set { _param = value; Notify(nameof(Param)); ActualitzarSuggeriments(); }
         }
         public FilterOperator Operador
         {
@@ -110,19 +109,97 @@ namespace E3G.Saneamiento
             set { _valor = value; Notify(nameof(Valor)); }
         }
 
-        // Per al ComboBox d'operadors
         public IEnumerable<OperadorItem> Operadors { get; } =
             Enum.GetValues(typeof(FilterOperator))
                 .Cast<FilterOperator>()
                 .Select(op => new OperadorItem(op))
                 .ToList();
 
-        public CondicioViewModel(FilterCondicio? c)
+        // Paràmetres disponibles al projecte
+        public ObservableCollection<string> ParamsDisponibles { get; } = new();
+
+        // Suggeriments de valor (worksets, nivells, etc.)
+        public ObservableCollection<string> ValorsSuggerits { get; } = new();
+
+        private readonly Document? _doc;
+
+        public CondicioViewModel(FilterCondicio? c, Document? doc)
         {
+            _doc = doc;
             if (c != null) { _param = c.ParamNom; _operador = c.Operador; _valor = c.Valor; }
+            CarregarParams();
+            ActualitzarSuggeriments();
+        }
+
+        private void CarregarParams()
+        {
+            // Paràmetres fixos sempre disponibles
+            var fixos = new[]
+            {
+            "Type Name", "Name", "Comments", "Mark", "Workset", "Reference Level",
+            "Nombre de sistema", "Tamaño",
+            Protocol.ParamVirtual.Vertical, Protocol.ParamVirtual.Horitzontal,
+            Protocol.ParamVirtual.LongitudM, Protocol.ParamVirtual.ElevacioNivell_M
+        };
+            foreach (var p in fixos)
+                ParamsDisponibles.Add(p);
+
+            // Paràmetres compartits del projecte obert
+            if (_doc == null) return;
+            try
+            {
+                var it = _doc.ParameterBindings.ForwardIterator();
+                while (it.MoveNext())
+                {
+                    var nom = (it.Key as Autodesk.Revit.DB.Definition)?.Name;
+                    if (!string.IsNullOrEmpty(nom) && !ParamsDisponibles.Contains(nom))
+                        ParamsDisponibles.Add(nom);
+                }
+            }
+            catch { /* si falla, continua amb els fixos */ }
+        }
+
+        private void ActualitzarSuggeriments()
+        {
+            ValorsSuggerits.Clear();
+            if (_doc == null) return;
+
+            try
+            {
+                if (_param == "Workset")
+                {
+                    // Llegeix els worksets del projecte
+                    var table = _doc.GetWorksetTable();
+                    var worksets = new Autodesk.Revit.DB.FilteredWorksetCollector(_doc)
+                        .OfKind(Autodesk.Revit.DB.WorksetKind.UserWorkset)
+                        .ToList();
+                    foreach (var ws in worksets)
+                        ValorsSuggerits.Add(ws.Name);
+                }
+                else if (_param == "Reference Level" || _param == "Name" &&
+                         _param.Contains("Level"))
+                {
+                    // Llegeix els nivells del projecte
+                    var nivells = new Autodesk.Revit.DB.FilteredElementCollector(_doc)
+                        .OfClass(typeof(Autodesk.Revit.DB.Level))
+                        .Cast<Autodesk.Revit.DB.Level>()
+                        .OrderBy(l => l.Elevation)
+                        .Select(l => l.Name);
+                    foreach (var n in nivells)
+                        ValorsSuggerits.Add(n);
+                }
+                else if (_param == Protocol.ParamVirtual.Vertical ||
+                         _param == Protocol.ParamVirtual.Horitzontal)
+                {
+                    ValorsSuggerits.Add("true");
+                    ValorsSuggerits.Add("false");
+                }
+            }
+            catch { /* si falla, deixa buit */ }
+
+            Notify(nameof(ValorsSuggerits));
         }
     }
-
     public record OperadorItem(FilterOperator Op)
     {
         public string Display => Op.Etiqueta();
