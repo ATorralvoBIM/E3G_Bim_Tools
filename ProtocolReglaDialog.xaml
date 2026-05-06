@@ -45,10 +45,10 @@
 		<Border Grid.Row="2" Background="#F8FAFC" CornerRadius="8"
                 BorderBrush="#E8ECF0" BorderThickness="1" Padding="12">
 			<StackPanel>
-				<TextBlock Text="Condicions:" FontWeight="SemiBold" FontSize="12"
-                           Foreground="#1E293B" Margin="0,0,0,8"/>
+                <TextBlock Text="Paràmetres:" FontWeight="SemiBold" FontSize="12"
+				           Foreground="#1E293B" Margin="0,0,0,8"/>
 
-				<ScrollViewer VerticalScrollBarVisibility="Auto" MaxHeight="280">
+                <ScrollViewer VerticalScrollBarVisibility="Auto" MaxHeight="280">
 					<ItemsControl x:Name="LstCondicions">
 						<ItemsControl.ItemTemplate>
 							<DataTemplate>

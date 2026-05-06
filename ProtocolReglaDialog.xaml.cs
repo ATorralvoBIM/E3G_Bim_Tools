@@ -12,80 +12,115 @@ namespace E3G.Saneamiento
     public partial class ProtocolReglaDialog : Window
     {
         public ProtocolRegla? ReglaEditada { get; private set; }
+        public bool Desat { get; private set; } = false;
+
         private readonly ObservableCollection<CondicioViewModel> _condicions = new();
         private readonly Document? _doc;
 
         public ProtocolReglaDialog(ProtocolRegla? regla, Document? doc = null)
         {
             InitializeComponent();
-            // Categories disponibles
-            var categories = new List<CategoriaRevitItem>
-            {
-                new() { Nom = "Canonada (OST_PipeCurves)",        Valor = (int)ElementTipus.Canonada },
-                new() { Nom = "Grup tipus (GroupType)",            Valor = (int)ElementTipus.GrupTipus },
-                new() { Nom = "Nivell (Level)",                    Valor = (int)ElementTipus.Nivell },
-                new() { Nom = "Workset",                           Valor = (int)ElementTipus.Workset },
-            };
+            _doc = doc;
+            LstCondicions.ItemsSource = _condicions;
 
-            // Si tenim document, afegim categories MEP del projecte
+            // ── Inicialitzar CmbAplicaA amb categories del model ─────────────
+            var categories = new List<CategoriaRevitItem>();
             if (doc != null)
             {
                 try
                 {
-                    var catsMEP = new Autodesk.Revit.DB.FilteredElementCollector(doc)
-                        .OfClass(typeof(Autodesk.Revit.DB.MEPCurve))
-                        .Cast<Element>()
-                        .Select(e => e.Category?.Name)
-                        .Where(n => !string.IsNullOrEmpty(n))
-                        .Distinct()
-                        .OrderBy(n => n);
-                    foreach (var cat in catsMEP)
-                        if (!categories.Any(c => c.Nom.Contains(cat!)))
-                            categories.Add(new() { Nom = cat!, Valor = (int)ElementTipus.Canonada });
+                    var catsMEP = new (string Nom, int Valor)[]
+                    {
+                        ("Canonades (OST_PipeCurves)",            (int)BuiltInCategory.OST_PipeCurves),
+                        ("Accessoris canonada (OST_PipeFitting)", (int)BuiltInCategory.OST_PipeFitting),
+                        ("Equips mecànics",                       (int)BuiltInCategory.OST_MechanicalEquipment),
+                        ("Aparells sanitaris",                    (int)BuiltInCategory.OST_PlumbingFixtures),
+                        ("Conductes (OST_DuctCurves)",            (int)BuiltInCategory.OST_DuctCurves),
+                    };
+                    foreach (var c in catsMEP)
+                        categories.Add(new CategoriaRevitItem { Nom = c.Nom, Valor = c.Valor });
+
+                    categories.Add(new CategoriaRevitItem { Nom = "─── Altres categories ───", Valor = -99 });
+
+                    var cats = doc.Settings.Categories;
+                    foreach (Category cat in cats)
+                    {
+                        if (cat == null || cat.CategoryType != CategoryType.Model) continue;
+                        if (categories.Any(c => c.Valor == (int)cat.Id.IntegerValue)) continue;
+                        categories.Add(new CategoriaRevitItem
+                        {
+                            Nom = cat.Name,
+                            Valor = (int)cat.Id.IntegerValue
+                        });
+                    }
                 }
                 catch { }
             }
 
-            CmbAplicaA.ItemsSource = categories;
-            CmbAplicaA.SelectedIndex = 0;
-
-            // Seleccionar la categoria de la regla existent si n'hi ha
-            if (regla != null)
+            if (categories.Count == 0)
             {
-                var item = categories.FirstOrDefault(c => c.Valor == (int)regla.Aplica);
-                if (item != null) CmbAplicaA.SelectedItem = item;
+                categories.Add(new CategoriaRevitItem { Nom = "Canonades (OST_PipeCurves)", Valor = (int)BuiltInCategory.OST_PipeCurves });
+                categories.Add(new CategoriaRevitItem { Nom = "Grup tipus (GroupType)", Valor = -1 });
+                categories.Add(new CategoriaRevitItem { Nom = "Nivell (Level)", Valor = -2 });
+                categories.Add(new CategoriaRevitItem { Nom = "Workset", Valor = -3 });
             }
 
-            _doc = doc;
-            LstCondicions.ItemsSource = _condicions;
+            CmbAplicaA.ItemsSource = categories;
+            CmbAplicaA.DisplayMemberPath = "Nom";
+            CmbAplicaA.SelectedValuePath = "Valor";
+            CmbAplicaA.SelectedIndex = 0;
 
+            // ── Inicialitzar CmbLogica ───────────────────────────────────────
+            CmbLogica.Items.Add(new ComboBoxItem { Content = "TOTES (AND)", Tag = 0 });
+            CmbLogica.Items.Add(new ComboBoxItem { Content = "QUALSEVOL (OR)", Tag = 1 });
+            CmbLogica.SelectedIndex = 0;
+
+            // ── Carregar dades de la regla existent ──────────────────────────
             if (regla != null)
             {
                 TxtNom.Text = regla.Nom;
-                foreach (ComboBoxItem item in CmbAplicaA.Items)
-                    if ((int)(item.Tag ?? 0) == (int)regla.Aplica)
-                    { item.IsSelected = true; break; }
-                foreach (ComboBoxItem item in CmbLogica.Items)
-                    if ((int)(item.Tag ?? 0) == (int)regla.Logica)
-                    { item.IsSelected = true; break; }
+
+                var item = categories.FirstOrDefault(c => c.Valor == (int)regla.Aplica);
+                if (item != null) CmbAplicaA.SelectedItem = item;
+
+                foreach (ComboBoxItem ci in CmbLogica.Items)
+                    if ((int)(ci.Tag ?? 0) == (int)regla.Logica)
+                    { ci.IsSelected = true; break; }
+
                 foreach (var c in regla.Condicions)
                     _condicions.Add(new CondicioViewModel(c, doc));
             }
 
             if (_condicions.Count == 0)
                 _condicions.Add(new CondicioViewModel(null, doc));
+
+            // ── Quan canvia la categoria, actualitzem els paràmetres ─────────
+            CmbAplicaA.SelectionChanged += (s, _) => ActualitzarParamsPerCategoria();
+            ActualitzarParamsPerCategoria();
+        }
+
+        // ── Actualitza els paràmetres de totes les condicions ────────────────
+        private void ActualitzarParamsPerCategoria()
+        {
+            if (CmbAplicaA.SelectedItem is not CategoriaRevitItem cat) return;
+            if (cat.Valor == -99) return; // separador
+            foreach (var vm in _condicions)
+                vm.ActualitzarParamsPerCategoria(_doc, cat.Valor);
         }
 
         private void BtnAfegirCondicio_Click(object sender, RoutedEventArgs e)
-            => _condicions.Add(new CondicioViewModel(null, _doc));
+        {
+            var nova = new CondicioViewModel(null, _doc);
+            if (CmbAplicaA.SelectedItem is CategoriaRevitItem cat && cat.Valor != -99)
+                nova.ActualitzarParamsPerCategoria(_doc, cat.Valor);
+            _condicions.Add(nova);
+        }
 
         private void BtnEliminarCondicio_Click(object sender, RoutedEventArgs e)
         {
             if ((sender as Button)?.Tag is CondicioViewModel vm)
                 _condicions.Remove(vm);
         }
-
-        public bool Desat { get; private set; } = false;
 
         private void BtnDesar_Click(object sender, RoutedEventArgs e)
         {
@@ -96,8 +131,21 @@ namespace E3G.Saneamiento
                 return;
             }
 
-            var aplica = (ElementTipus)((CmbAplicaA.SelectedItem as CategoriaRevitItem)?.Valor ?? 0);
-            var logica = (LogicaCondicions)(int)((CmbLogica.SelectedItem as ComboBoxItem)?.Tag ?? 0);
+            // Determinar ElementTipus a partir del BuiltInCategory seleccionat
+            var catSeleccionada = CmbAplicaA.SelectedItem as CategoriaRevitItem;
+            var aplica = catSeleccionada?.Valor switch
+            {
+                (int)BuiltInCategory.OST_PipeCurves => ElementTipus.Canonada,
+                (int)BuiltInCategory.OST_PipeFitting => ElementTipus.Canonada,
+                -1 => ElementTipus.GrupTipus,
+                -2 => ElementTipus.Nivell,
+                -3 => ElementTipus.Workset,
+                _ => ElementTipus.Canonada
+            };
+
+            var logica = (CmbLogica.SelectedItem as ComboBoxItem)?.Tag is int t
+                ? (LogicaCondicions)t
+                : LogicaCondicions.Totes;
 
             ReglaEditada = new ProtocolRegla
             {
@@ -126,14 +174,7 @@ namespace E3G.Saneamiento
         }
     }
 
-    // Afegeix aquesta classe al fitxer (fora de ProtocolReglaDialog)
-    public class CategoriaRevitItem
-    {
-        public string Nom { get; set; } = "";
-        public int Valor { get; set; }
-    }
-
-
+    // ── ViewModel per a cada condició ────────────────────────────────────────
     public class CondicioViewModel : System.ComponentModel.INotifyPropertyChanged
     {
         public event System.ComponentModel.PropertyChangedEventHandler? PropertyChanged;
@@ -142,6 +183,7 @@ namespace E3G.Saneamiento
         private string _param = "Type Name";
         private FilterOperator _operador = FilterOperator.Conte;
         private string _valor = "";
+        private readonly Document? _doc;
 
         public string Param
         {
@@ -165,91 +207,105 @@ namespace E3G.Saneamiento
                 .Select(op => new OperadorItem(op))
                 .ToList();
 
-        // Paràmetres disponibles al projecte
         public ObservableCollection<string> ParamsDisponibles { get; } = new();
-
-        // Suggeriments de valor (worksets, nivells, etc.)
         public ObservableCollection<string> ValorsSuggerits { get; } = new();
-
-        private readonly Document? _doc;
 
         public CondicioViewModel(FilterCondicio? c, Document? doc)
         {
             _doc = doc;
             if (c != null) { _param = c.ParamNom; _operador = c.Operador; _valor = c.Valor; }
-            CarregarParams();
-            ActualitzarSuggeriments();
         }
 
-        private void CarregarParams()
+        /// <summary>
+        /// Recarrega els paràmetres filtrats per la categoria BuiltIn seleccionada.
+        /// </summary>
+        public void ActualitzarParamsPerCategoria(Document? doc, int categoriaBuiltIn)
         {
-            // Paràmetres fixos sempre disponibles
-            var fixos = new[]
-            {
-            "Type Name", "Name", "Comments", "Mark", "Workset", "Reference Level",
-            "Nombre de sistema", "Tamaño",
-            Protocol.ParamVirtual.Vertical, Protocol.ParamVirtual.Horitzontal,
-            Protocol.ParamVirtual.LongitudM, Protocol.ParamVirtual.ElevacioNivell_M
-        };
-            foreach (var p in fixos)
-                ParamsDisponibles.Add(p);
+            ParamsDisponibles.Clear();
 
-            // Paràmetres compartits del projecte obert
-            if (_doc == null) return;
+            // Paràmetres virtuals geomètrics per canonades
+            if (categoriaBuiltIn == (int)BuiltInCategory.OST_PipeCurves ||
+                categoriaBuiltIn == (int)BuiltInCategory.OST_PipeFitting)
+            {
+                ParamsDisponibles.Add(ParamVirtual.Vertical);
+                ParamsDisponibles.Add(ParamVirtual.Horitzontal);
+                ParamsDisponibles.Add(ParamVirtual.LongitudM);
+                ParamsDisponibles.Add(ParamVirtual.ElevacioNivell_M);
+            }
+
+            if (doc == null)
+            {
+                Notify(nameof(ParamsDisponibles));
+                return;
+            }
+
             try
             {
-                var it = _doc.ParameterBindings.ForwardIterator();
-                while (it.MoveNext())
+                var element = new FilteredElementCollector(doc)
+                    .OfCategory((BuiltInCategory)categoriaBuiltIn)
+                    .WhereElementIsNotElementType()
+                    .FirstElement();
+
+                if (element != null)
                 {
-                    var nom = (it.Key as Autodesk.Revit.DB.Definition)?.Name;
-                    if (!string.IsNullOrEmpty(nom) && !ParamsDisponibles.Contains(nom))
-                        ParamsDisponibles.Add(nom);
+                    foreach (Parameter p in element.Parameters)
+                    {
+                        var nom = p.Definition?.Name;
+                        if (!string.IsNullOrEmpty(nom) && !ParamsDisponibles.Contains(nom))
+                            ParamsDisponibles.Add(nom);
+                    }
+                }
+                else
+                {
+                    // Cap element d'aquesta categoria al model — params genèrics
+                    foreach (var p in new[] { "Type Name", "Name", "Comments", "Mark", "Workset" })
+                        if (!ParamsDisponibles.Contains(p)) ParamsDisponibles.Add(p);
                 }
             }
-            catch { /* si falla, continua amb els fixos */ }
+            catch { }
+
+            Notify(nameof(ParamsDisponibles));
         }
 
         private void ActualitzarSuggeriments()
         {
             ValorsSuggerits.Clear();
             if (_doc == null) return;
-
             try
             {
                 if (_param == "Workset")
                 {
-                    // Llegeix els worksets del projecte
-                    var table = _doc.GetWorksetTable();
-                    var worksets = new Autodesk.Revit.DB.FilteredWorksetCollector(_doc)
-                        .OfKind(Autodesk.Revit.DB.WorksetKind.UserWorkset)
-                        .ToList();
+                    var worksets = new FilteredWorksetCollector(_doc)
+                        .OfKind(WorksetKind.UserWorkset).ToList();
                     foreach (var ws in worksets)
                         ValorsSuggerits.Add(ws.Name);
                 }
-                else if (_param == "Reference Level" || _param == "Name" &&
-                         _param.Contains("Level"))
+                else if (_param == "Reference Level")
                 {
-                    // Llegeix els nivells del projecte
-                    var nivells = new Autodesk.Revit.DB.FilteredElementCollector(_doc)
-                        .OfClass(typeof(Autodesk.Revit.DB.Level))
-                        .Cast<Autodesk.Revit.DB.Level>()
-                        .OrderBy(l => l.Elevation)
-                        .Select(l => l.Name);
+                    var nivells = new FilteredElementCollector(_doc)
+                        .OfClass(typeof(Level)).Cast<Level>()
+                        .OrderBy(l => l.Elevation).Select(l => l.Name);
                     foreach (var n in nivells)
                         ValorsSuggerits.Add(n);
                 }
-                else if (_param == Protocol.ParamVirtual.Vertical ||
-                         _param == Protocol.ParamVirtual.Horitzontal)
+                else if (_param == ParamVirtual.Vertical ||
+                         _param == ParamVirtual.Horitzontal)
                 {
                     ValorsSuggerits.Add("true");
                     ValorsSuggerits.Add("false");
                 }
             }
-            catch { /* si falla, deixa buit */ }
-
+            catch { }
             Notify(nameof(ValorsSuggerits));
         }
     }
+
+    public class CategoriaRevitItem
+    {
+        public string Nom { get; set; } = "";
+        public int Valor { get; set; }
+    }
+
     public record OperadorItem(FilterOperator Op)
     {
         public string Display => Op.Etiqueta();
