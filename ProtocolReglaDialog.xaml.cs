@@ -42,11 +42,13 @@ namespace E3G.Saneamiento
 
                     categories.Add(new CategoriaRevitItem { Nom = "─── Altres categories ───", Valor = -99 });
 
-                    var cats = doc.Settings.Categories;
-                    foreach (Category cat in cats)
+                    var cats = doc.Settings.Categories
+                        .Cast<Category>()
+                        .Where(cat => cat != null && cat.CategoryType == CategoryType.Model)
+                        .Where(cat => !categories.Any(c => c.Valor == (int)cat.Id.IntegerValue))
+                        .OrderBy(cat => cat.Name);
+                    foreach (var cat in cats)
                     {
-                        if (cat == null || cat.CategoryType != CategoryType.Model) continue;
-                        if (categories.Any(c => c.Valor == (int)cat.Id.IntegerValue)) continue;
                         categories.Add(new CategoriaRevitItem
                         {
                             Nom = cat.Name,
