@@ -66,6 +66,11 @@ namespace E3G.Saneamiento
         public List<int> IdsBajantes { get; set; } = new List<int>();
         public List<int> IdsColectores { get; set; } = new List<int>();
         public List<int> IdsAparcamiento { get; set; } = new List<int>();
+
+        public Dictionary<string, double> MetresPorCategoria { get; set; }
+            = new Dictionary<string, double>();
+        public Dictionary<string, List<int>> IdsPorCategoria { get; set; }
+            = new Dictionary<string, List<int>>();
     }
     public class FilaBajantPluvial
     {
@@ -468,38 +473,44 @@ namespace E3G.Saneamiento
 
                 // Classificació via Protocol (si hi ha protocol actiu) o fallback hardcoded
                 string categoria;
-                string grupProtocol = Protocol.AgrupadorMedicions.ObtenerGrupo(e, doc);
+                string? grupProtocol = Protocol.AgrupadorMedicions.ObtenerGrupo(e, doc);
 
                 if (!string.IsNullOrEmpty(grupProtocol))
                 {
-                    // El Protocol ha identificat el grup — el mapegem a les categories internes
-                    categoria = grupProtocol switch
-                    {
-                        "Bajants" => "Bajantes",
-                        "Col·lectors P00-P01" => "Colectores (P00-P01)",
-                        "Aparcament" => "Aparcamiento",
-                        "Interior vivendes" => "Interior vivendes",
-                        _ => grupProtocol   // edifici o custom
-                    };
+                    categoria = grupProtocol;
 
-                    switch (categoria)
+                    // Acumular al diccionari dinàmic
+                    if (!resultado.MetresPorCategoria.ContainsKey(categoria))
+                        resultado.MetresPorCategoria[categoria] = 0;
+                    resultado.MetresPorCategoria[categoria] += len;
+
+                    if (!resultado.IdsPorCategoria.ContainsKey(categoria))
+                        resultado.IdsPorCategoria[categoria] = new List<int>();
+                    resultado.IdsPorCategoria[categoria].Add(e.Id.IntegerValue);
+
+                    // Mantenir retrocompatibilitat amb camps fixos
+                    // (coincidència per nom, case-insensitive)
+                    var catLower = categoria.ToLowerInvariant();
+                    if (catLower.Contains("bajant") || catLower.Contains("bajante"))
                     {
-                        case "Bajantes":
-                            resultado.BajantesM += len;
-                            resultado.IdsBajantes.Add(e.Id.IntegerValue);
-                            break;
-                        case "Colectores (P00-P01)":
-                            resultado.ColectoresM += len;
-                            resultado.IdsColectores.Add(e.Id.IntegerValue);
-                            break;
-                        case "Aparcamiento":
-                            resultado.AparcamientoM += len;
-                            resultado.IdsAparcamiento.Add(e.Id.IntegerValue);
-                            break;
-                        default:
-                            resultado.ColectoresM += len;
-                            resultado.IdsColectores.Add(e.Id.IntegerValue);
-                            break;
+                        resultado.BajantesM += len;
+                        resultado.IdsBajantes.Add(e.Id.IntegerValue);
+                    }
+                    else if (catLower.Contains("col·lector") || catLower.Contains("colector"))
+                    {
+                        resultado.ColectoresM += len;
+                        resultado.IdsColectores.Add(e.Id.IntegerValue);
+                    }
+                    else if (catLower.Contains("aparcament") || catLower.Contains("aparcamiento"))
+                    {
+                        resultado.AparcamientoM += len;
+                        resultado.IdsAparcamiento.Add(e.Id.IntegerValue);
+                    }
+                    else
+                    {
+                        // Categoria custom — va a colectores com a fallback comptable
+                        resultado.ColectoresM += len;
+                        resultado.IdsColectores.Add(e.Id.IntegerValue);
                     }
                 }
                 else
@@ -507,28 +518,36 @@ namespace E3G.Saneamiento
                     // Fallback hardcoded (sense Protocol configurat)
                     if (EsAparcamiento(nivel))
                     {
-                        categoria = "Aparcamiento";
+                        categoria = "Aparcament";
                         resultado.AparcamientoM += len;
                         resultado.IdsAparcamiento.Add(e.Id.IntegerValue);
                     }
                     else if (orient == "V" && len > 1.0 && elevNivel >= Z_P00A - TOL)
                     {
-                        categoria = "Bajantes";
+                        categoria = "Bajants";
                         resultado.BajantesM += len;
                         resultado.IdsBajantes.Add(e.Id.IntegerValue);
                     }
                     else if (orient == "H" && elevNivel >= Z_P00A - TOL && elevNivel <= Z_P01A + TOL)
                     {
-                        categoria = "Colectores (P00-P01)";
+                        categoria = "Col·lectors P00-P01";
                         resultado.ColectoresM += len;
                         resultado.IdsColectores.Add(e.Id.IntegerValue);
                     }
                     else
                     {
-                        categoria = "Servicios comunes";
+                        categoria = "Serveis comuns";
                         resultado.ColectoresM += len;
                         resultado.IdsColectores.Add(e.Id.IntegerValue);
                     }
+
+                    // Fallback també al diccionari dinàmic
+                    if (!resultado.MetresPorCategoria.ContainsKey(categoria))
+                        resultado.MetresPorCategoria[categoria] = 0;
+                    resultado.MetresPorCategoria[categoria] += len;
+                    if (!resultado.IdsPorCategoria.ContainsKey(categoria))
+                        resultado.IdsPorCategoria[categoria] = new List<int>();
+                    resultado.IdsPorCategoria[categoria].Add(e.Id.IntegerValue);
                 }
 
                 resultado.TotalM += len;
@@ -542,8 +561,14 @@ namespace E3G.Saneamiento
                 scData[categoria][nivel][dn] += len;
             }
 
-            var ordenCat = new[] { "Bajantes", "Colectores (P00-P01)", "Aparcamiento", "Servicios comunes" };
-            foreach (var cat in ordenCat)
+            // Construir ServiciosComunes des del diccionari dinàmic
+            // L'ordre de les seccions del Protocol mana
+            var seccionsProtocol = Protocol.ProtocolSession.ProtocolActual?.Seccions
+                .Select(s => s.Etiqueta).ToList()
+                ?? new List<string> { "Bajants", "Col·lectors P00-P01", "Aparcament", "Serveis comuns" };
+
+            // Primer les categories que estan al Protocol (en ordre)
+            foreach (var cat in seccionsProtocol)
             {
                 if (!scData.ContainsKey(cat)) continue;
                 foreach (var nivelKv in scData[cat].OrderBy(x => x.Key))
@@ -558,6 +583,20 @@ namespace E3G.Saneamiento
                         });
             }
 
+            // Després categories que no estan al Protocol (fallback)
+            foreach (var cat in scData.Keys.Except(seccionsProtocol).OrderBy(x => x))
+            {
+                foreach (var nivelKv in scData[cat].OrderBy(x => x.Key))
+                    foreach (var dnKv in nivelKv.Value.OrderBy(x => x.Key))
+                        resultado.ServiciosComunes.Add(new FilaServicioComun
+                        {
+                            Categoria = cat,
+                            Nivel = nivelKv.Key,
+                            DN = dnKv.Key,
+                            ColorHex = CteMotor.GetColorHexByDN(dnKv.Key),
+                            LongitudM = Math.Round(dnKv.Value, 2),
+                        });
+            }
             resultado.TotalM = Math.Round(resultado.TotalM, 2);
             resultado.InteriorM = Math.Round(resultado.InteriorM, 2);
             resultado.BajantesM = Math.Round(resultado.BajantesM, 2);

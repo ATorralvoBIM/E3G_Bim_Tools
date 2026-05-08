@@ -201,7 +201,7 @@ namespace E3G.Saneamiento
         {
             PanelFecalesContenido.Children.Clear();
 
-            // Interior viviendas — click en header selecciona todos los grupos
+            // ── Interior viviendas (sempre fix — ve dels Grups) ──────────────────
             var secInterior = CrearSeccion("Interior viviendas", ColFecales,
                 () => SeleccionarEnRevit(res.IdsInterior));
             var bodyInterior = ObtenerBody(secInterior);
@@ -224,42 +224,57 @@ namespace E3G.Saneamiento
             }
             PanelFecalesContenido.Children.Add(secInterior);
 
-            // Bajantes — click selecciona tuberías bajantes
-            var bajantes = res.ServiciosComunes
-                .Where(s => s.Categoria == "Bajantes")
-                .GroupBy(f => f.DN)
-                .Select(g => new { DN = g.Key, LongitudM = Math.Round(g.Sum(f => f.LongitudM), 2) })
-                .OrderBy(f => f.DN)
-                .ToList();
-            if (bajantes.Any())
-            {
-                var sec = CrearSeccion("Bajantes", ColFecales,
-                    () => SeleccionarEnRevit(res.IdsBajantes));
-                var body = ObtenerBody(sec);
-                foreach (var f in bajantes)
-                    body.Children.Add(CrearFilaDN(f.DN, f.LongitudM));
-                PanelFecalesContenido.Children.Add(sec);
-            }
+            // ── Categories dinàmiques del Protocol ──────────────────────────────
+            // Ordre: primer les seccions del Protocol, després les que no hi són
+            var seccionsProtocol = Protocol.ProtocolSession.ProtocolActual?.Seccions
+                .Select(s => s.Etiqueta).ToList()
+                ?? new List<string>();
 
-            // Colectores — click selecciona tuberías colectores
-            var colectores = res.ServiciosComunes.Where(s => s.Categoria == "Colectores (P00-P01)").ToList();
-            if (colectores.Any())
-            {
-                var sec = CrearSeccion("Colectores (P00–P01)", ColFecales,
-                    () => SeleccionarEnRevit(res.IdsColectores));
-                var body = ObtenerBody(sec);
-                body.Children.Add(CrearTablaGrid(colectores));
-                PanelFecalesContenido.Children.Add(sec);
-            }
+            // Construïm l'ordre de renderització
+            var categoriesOrdenades = new List<string>();
 
-            // Aparcamiento — click selecciona tuberías aparcamiento
-            var aparcamiento = res.ServiciosComunes.Where(s => s.Categoria == "Aparcamiento").ToList();
-            if (aparcamiento.Any())
+            // 1. Primer les que estan al Protocol (en ordre)
+            foreach (var etiqueta in seccionsProtocol)
+                if (res.MetresPorCategoria.ContainsKey(etiqueta))
+                    categoriesOrdenades.Add(etiqueta);
+
+            // 2. Després les que no estan al Protocol (fallback / hardcoded)
+            foreach (var cat in res.MetresPorCategoria.Keys
+                .Where(k => !categoriesOrdenades.Contains(k))
+                .OrderBy(k => k))
+                categoriesOrdenades.Add(cat);
+
+            foreach (var categoria in categoriesOrdenades)
             {
-                var sec = CrearSeccion("Aparcamiento", ColFecales,
-                    () => SeleccionarEnRevit(res.IdsAparcamiento));
+                // Obtenir les IDs per selecció
+                res.IdsPorCategoria.TryGetValue(categoria, out var ids);
+                var idsSel = ids ?? new List<int>();
+
+                // Obtenir les files de ServiciosComunes per aquesta categoria
+                var files = res.ServiciosComunes
+                    .Where(s => s.Categoria == categoria)
+                    .ToList();
+
+                // Títol amb total
+                res.MetresPorCategoria.TryGetValue(categoria, out var totalM);
+                var titol = $"{categoria}  ·  {totalM:F2} m";
+
+                var sec = CrearSeccion(titol, ColFecales,
+                    idsSel.Count > 0 ? () => SeleccionarEnRevit(idsSel) : (Action)null);
                 var body = ObtenerBody(sec);
-                body.Children.Add(CrearTablaGrid(aparcamiento));
+
+                if (files.Any())
+                    body.Children.Add(CrearTablaGrid(files));
+                else
+                    body.Children.Add(new System.Windows.Controls.TextBlock
+                    {
+                        Text = $"{totalM:F2} m (sense detall per nivell/DN)",
+                        FontSize = 11,
+                        Foreground = new SolidColorBrush(
+                            (MediaColor)ColorConverter.ConvertFromString("#475569")),
+                        Margin = new Thickness(14, 8, 14, 8)
+                    });
+
                 PanelFecalesContenido.Children.Add(sec);
             }
         }
