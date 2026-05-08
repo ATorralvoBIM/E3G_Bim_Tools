@@ -45,29 +45,33 @@ namespace E3G.Saneamiento
 
         private void BtnAfegir_Click(object sender, RoutedEventArgs e)
         {
-            var doc = SaneamientoSession.UiApp?.ActiveUIDocument?.Document;
-            var dlg = new ProtocolReglaDialog(null, doc);
+            var dlg = new ProtocolReglaDialog(null);
             dlg.Owner = Window.GetWindow(this);
+            // REEMPLAÇA PER:
             dlg.ShowDialog();
-            if (dlg.Desat && dlg.ReglaEditada != null)
+            if (dlg.Desat)
             {
-                _regles.Add(new ReglaViewModel(dlg.ReglaEditada));
+                _regles.Add(new ReglaViewModel(dlg.ReglaEditada!));
                 ActualitzarBuit();
                 OnReglesCanviades?.Invoke(ObtenirRegles());
             }
         }
 
+
+        // REEMPLAÇA PER:
         private void BtnEditar_Click(object sender, RoutedEventArgs e)
         {
-            if ((sender as Button)?.Tag is not ReglaViewModel vm) return;
-            var doc = SaneamientoSession.UiApp?.ActiveUIDocument?.Document;
-            var dlg = new ProtocolReglaDialog(vm.Regla, doc);
+            if ((sender as Button)?.Tag is not Guid id) return;
+            var vm = _regles.FirstOrDefault(r => r.Regla.Id == id);
+            if (vm == null) return;
+            var dlg = new ProtocolReglaDialog(vm.Regla);
             dlg.Owner = Window.GetWindow(this);
             dlg.ShowDialog();
-            if (dlg.Desat && dlg.ReglaEditada != null)
+            if (dlg.Desat)
             {
                 var idx = _regles.IndexOf(vm);
-                if (idx >= 0) _regles[idx] = new ReglaViewModel(dlg.ReglaEditada);
+                _regles[idx] = new ReglaViewModel(dlg.ReglaEditada!);
+                ActualitzarBuit();
                 OnReglesCanviades?.Invoke(ObtenirRegles());
             }
         }
