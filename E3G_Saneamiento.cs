@@ -1,6 +1,7 @@
 ﻿using Autodesk.Revit.Attributes;
 using Autodesk.Revit.DB;
 using Autodesk.Revit.UI;
+using E3G.Saneamiento.Schematic;  // FASE 3: SchematicGeneratorService
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -1707,7 +1708,17 @@ namespace E3G.Saneamiento
             var xarxa = Pagina?.tabEsquema?.XarxaActual;
             if (xarxa == null) return;
 
-            int vid = ExportadorDraftingView.CrearDraftingView(doc, xarxa);
+            // ---- FASE 3: SchematicGeneratorService ----
+            var prm = SchematicParameters.Default();
+            // Adaptar la normativa si el sistema és de fontaneria
+            if (xarxa.Sistema?.ToLower().Contains("fon") == true ||
+                xarxa.Sistema?.ToLower().Contains("af") == true)
+                prm = SchematicParameters.ForFontaneria();
+
+            var result = SchematicGeneratorService.Generate(doc, xarxa, prm,
+                exportDwg: false);
+
+            int vid = result.ViewId;
 
             // Obrir la vista
             if (vid > 0)
