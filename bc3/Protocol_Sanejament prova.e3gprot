@@ -1,0 +1,98 @@
+{
+  "Instalacio": "Sanejament",
+  "Seccions": [
+    {
+      "Etiqueta": "Interior vivendes",
+      "Regles": [
+        {
+          "Id": "968d8ef6-27cd-4ca0-9923-66ff2d11d78b",
+          "Nom": "Regla autom\u00E0tica (VIV)",
+          "Aplica": 1,
+          "Logica": 0,
+          "Condicions": [
+            {
+              "ParamNom": "Type Name",
+              "Operador": 2,
+              "Valor": "VIV"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "Etiqueta": "Aparcament",
+      "Regles": [
+        {
+          "Id": "46d6fdc1-d9f6-40eb-88b8-59f0dc17c3e8",
+          "Nom": "Nivells subterranis (S*.A)",
+          "Aplica": 2,
+          "Logica": 0,
+          "Condicions": [
+            {
+              "ParamNom": "Name",
+              "Operador": 4,
+              "Valor": "S"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "Etiqueta": "Bajants",
+      "Regles": [
+        {
+          "Id": "8069b185-e948-4c28-b4e4-28cee0d9ef37",
+          "Nom": "Bajants (verticals \u2265 1m)",
+          "Aplica": 0,
+          "Logica": 0,
+          "Condicions": [
+            {
+              "ParamNom": "__GEOM_VERTICAL__",
+              "Operador": 0,
+              "Valor": "true"
+            },
+            {
+              "ParamNom": "__GEOM_LONGITUD_M__",
+              "Operador": 12,
+              "Valor": "1"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "Etiqueta": "Col\u00B7lectors P00-P01",
+      "Regles": [
+        {
+          "Id": "62014d2a-bc81-4197-9366-e31eb90ae69e",
+          "Nom": "Col\u00B7lectors P00-P01",
+          "Aplica": 0,
+          "Logica": 0,
+          "Condicions": [
+            {
+              "ParamNom": "__GEOM_HORITZONTAL__",
+              "Operador": 0,
+              "Valor": "true"
+            },
+            {
+              "ParamNom": "__GEOM_ELEVACIO_NIVELL_M__",
+              "Operador": 12,
+              "Valor": "0"
+            },
+            {
+              "ParamNom": "__GEOM_ELEVACIO_NIVELL_M__",
+              "Operador": 13,
+              "Valor": "3,5"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "Etiqueta": "Edificis",
+      "Regles": []
+    }
+  ],
+  "BajantLongitudMinM": 1,
+  "ToleranciaElevacioM": 0.5
+}

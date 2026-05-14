@@ -1264,6 +1264,42 @@ namespace E3G.Saneamiento
                 if (icoMain32 != null) { btnMain.LargeImage = icoMain32; btnMain.Image = icoMain16; }
                 rpMain.AddItem(btnMain);
 
+                // -- MEP Calc Self-Test (Sprint 1 - Core.Common) --
+                var icoCalc32 = RibbonHelper.CargarIcono(System.IO.Path.Combine(dllDir, "Resources", "icono_panel_32.png"));
+                var icoCalc16 = RibbonHelper.CargarIcono(System.IO.Path.Combine(dllDir, "Resources", "icono_small_16.png"));
+                var btnCalcTest = new PushButtonData("BtnMepCalcSelfTest", "MEP Calc" + System.Environment.NewLine + "Self-Test", dll,
+                    "E3G.Saneamiento.CmdMepCalcSelfTest")
+                { ToolTip = "Executa els smoke-tests del motor de calcul MEP (Sprint 1 - Core.Common)." };
+                if (icoCalc32 != null) { btnCalcTest.LargeImage = icoCalc32; btnCalcTest.Image = icoCalc16; }
+                rpMain.AddItem(btnCalcTest);
+
+                // -- MEP Calc Tuberias (Sprint 4) --
+                var icoFon32 = RibbonHelper.CargarIcono(System.IO.Path.Combine(dllDir, "Resources", "icono_fon_32.png"));
+                var icoFon16 = RibbonHelper.CargarIcono(System.IO.Path.Combine(dllDir, "Resources", "icono_fon_16.png"));
+                var btnCalcPiping = new PushButtonData("BtnMepCalcPiping", "MEP Calc" + System.Environment.NewLine + "Tuberias", dll,
+                    "E3G.Saneamiento.CmdCalcPipingNetwork")
+                { ToolTip = "Calcula un PipingSystem del modelo (Darcy-Weisbach + Colebrook-White) y escribe MEP_CALC_* en cada tramo." };
+                if (icoFon32 != null) { btnCalcPiping.LargeImage = icoFon32; btnCalcPiping.Image = icoFon16; }
+                rpMain.AddItem(btnCalcPiping);
+
+                // -- MEP Calc Conductos (Sprint 4) --
+                var icoVen32 = RibbonHelper.CargarIcono(System.IO.Path.Combine(dllDir, "Resources", "icono_ven_32.png"));
+                var icoVen16 = RibbonHelper.CargarIcono(System.IO.Path.Combine(dllDir, "Resources", "icono_ven_16.png"));
+                var btnCalcDucts = new PushButtonData("BtnMepCalcDucts", "MEP Calc" + System.Environment.NewLine + "Conductos", dll,
+                    "E3G.Saneamiento.CmdCalcDuctNetwork")
+                { ToolTip = "Calcula un MechanicalSystem del modelo (igual friccion / velocidad maxima)." };
+                if (icoVen32 != null) { btnCalcDucts.LargeImage = icoVen32; btnCalcDucts.Image = icoVen16; }
+                rpMain.AddItem(btnCalcDucts);
+
+                // -- MEP Calc Ventana (Sprint 5 — UI WPF principal) --
+                var icoCli32 = RibbonHelper.CargarIcono(System.IO.Path.Combine(dllDir, "Resources", "icono_cli_32.png"));
+                var icoCli16 = RibbonHelper.CargarIcono(System.IO.Path.Combine(dllDir, "Resources", "icono_cli_16.png"));
+                var btnCalcWindow = new PushButtonData("BtnMepCalcWindow", "MEP Calc" + System.Environment.NewLine + "Ventana", dll,
+                    "E3G.Saneamiento.CmdShowCalcWindow")
+                { ToolTip = "Abre la ventana principal de calculo MEP con DataGrid de resultados, criterios configurables y aplicacion al modelo." };
+                if (icoCli32 != null) { btnCalcWindow.LargeImage = icoCli32; btnCalcWindow.Image = icoCli16; }
+                rpMain.AddItem(btnCalcWindow);
+
                 var handlerPluvials = new EventoMedicionPluvials();
                 SaneamientoSession.HandlerPluvials = handlerPluvials;
                 SaneamientoSession.EventoPluvials = ExternalEvent.Create(handlerPluvials);

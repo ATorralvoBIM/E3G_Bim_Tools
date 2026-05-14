@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8"/>
+<title>Esquema MEP — v7.1 (single color · circles · dashed branch entry)</title>
+<style>
+  body { font-family: 'Segoe UI', Arial, sans-serif; margin: 16px; background: #f5f5f5; color: #222; }
+  .panel { width: 920px; background: white; border: 1px solid #ccc; }
+  .hdr { background: #f5f5f5; padding: 6px 10px; font-weight: 600; font-size: 11px; color: #333; border-bottom: 1px solid #ddd; }
+  .legend { background: #fafafa; padding: 4px 10px; font-size: 10px; border-bottom: 1px solid #ddd; display: flex; gap: 14px; flex-wrap: wrap; }
+  .legend .sw  { display: inline-block; width: 14px; height: 3px; vertical-align: middle; margin-right: 4px; border-radius: 2px; }
+  .legend .dsh { display: inline-block; width: 14px; height: 0; vertical-align: middle; margin-right: 4px;
+                 border-top: 1.4px dashed; }
+  .legend .dot { display: inline-block; width: 8px; height: 8px; vertical-align: middle; margin-right: 4px;
+                 border: 1.2px solid white; border-radius: 50%; box-shadow: 0 0 0 0.5px #999; }
+  #schema { overflow: auto; max-height: 86vh; }
+  svg { display: block; }
+  .note { margin-top: 12px; font-size: 11px; color: #555; max-width: 920px; }
+</style>
+</head>
+<body>
+
+<div class="panel">
+  <div class="hdr">Esquema v7.1 · 00_Fontaneria_Test · 328 tramos · color único = sistema</div>
+  <div class="legend">
+    <span><span class="sw" style="background:#1A6FA8"></span>Sistema (LineColor)</span>
+    <span><span class="dot" style="background:#1A6FA8"></span>Bifurcación (circulo en la esquina del tronco padre)</span>
+    <span><span class="dsh" style="border-color:#1A6FA8"></span>Conexión a ramal (horizontal discontinua a la Y de la fila)</span>
+    <span>└ codo · ┬ tee · ■ terminal · + cross · ◇ reductor</span>
+  </div>
+  <div id="schema"></div>
+</div>
+
+<div class="note">
+  <b>Cambios v7.1</b> (frente a v6 anterior):
+  <br>· Paleta por columna eliminada → todo se pinta del <b>color del sistema MEP</b> (LineColor del PipingSystemType / MechanicalSystemType).
+  <br>· Marcador de bifurcación: cuadrado → <b>círculo relleno</b>.
+  <br>· Se elimina el "primer segmento" del ramal (la T horizontal sólida + la prolongación vertical del tronco padre hasta la fila actual).
+  <br>· En su lugar, una <b>línea horizontal discontinua</b> conecta el tronco padre con la columna hija al nivel de la fila del ramal.
+  <br>· La continuidad vertical del tronco la mantiene la siguiente fila de col 0 (cuando vuelve al tronco), no las filas de ramal. Por eso al ver el dibujo no debería haber "huecos" en el tronco.
+</div>
+
+<script>
+// === DATOS — 328 tramos (from, to, dn, q×100, fit) ===
+const D = [
+[1,2,50,212,'T'],[2,3,32,75,'T'],[2,4,50,199,'T'],[3,5,25,57,'T'],[3,6,25,53,'L'],
+[4,7,32,78,'T'],[4,8,50,184,'T'],[5,9,25,42,'L'],[5,10,25,46,'T'],[6,11,25,53,'T'],
+[7,12,25,57,'T'],[7,13,25,57,'L'],[8,14,32,78,'T'],[8,15,40,169,'T'],[9,16,25,42,'T'],
+[10,17,25,40,'L'],[10,18,25,40,'L'],[11,19,25,42,'L'],[11,20,25,40,'L'],[12,21,25,42,'L'],
+[12,22,25,46,'T'],[13,23,25,57,'T'],[14,24,25,57,'T'],[14,25,25,57,'L'],[15,26,32,78,'T'],
+[15,27,40,151,'T'],[16,28,25,40,'T'],[16,29,20,20,'E'],[17,30,25,40,'T'],[18,31,25,40,'L'],
+[19,32,25,42,'L'],[20,33,25,40,'T'],[21,34,25,42,'T'],[22,35,25,40,'L'],[22,36,25,40,'L'],
+[23,37,25,42,'L'],[23,38,25,46,'L'],[24,39,25,42,'L'],[24,40,25,46,'T'],[25,41,25,57,'T'],
+[26,42,25,57,'T'],[26,43,25,57,'L'],[27,44,32,78,'T'],[27,45,40,131,'T'],[28,46,20,20,'L'],
+[28,47,20,20,'E'],[30,48,20,20,'E'],[30,49,20,20,'L'],[31,50,25,40,'T'],[32,51,25,42,'T'],
+[33,52,25,35,'T'],[33,53,20,20,'E'],[34,54,25,40,'T'],[34,55,20,20,'E'],[35,56,25,40,'T'],
+[36,57,25,40,'L'],[37,58,25,42,'L'],[38,59,25,46,'T'],[39,60,25,42,'T'],[40,61,25,40,'L'],
+[40,62,25,40,'L'],[41,63,25,42,'L'],[41,64,25,46,'L'],[42,65,25,42,'L'],[42,66,25,46,'T'],
+[43,67,25,57,'T'],[44,68,25,57,'T'],[44,69,25,57,'L'],[45,70,32,78,'T'],[45,71,40,108,'T'],
+[46,72,20,20,'E'],[49,73,20,20,'E'],[50,74,20,20,'E'],[50,75,20,20,'L'],[51,76,25,40,'T'],
+[51,77,20,20,'E'],[52,78,25,30,'T'],[52,79,20,20,'E'],[54,80,20,20,'L'],[54,81,20,20,'E'],
+[56,82,20,20,'E'],[56,83,20,20,'L'],[57,84,25,40,'T'],[58,85,25,42,'T'],[59,86,25,42,'T'],
+[59,87,20,20,'E'],[60,88,25,40,'T'],[60,89,20,20,'E'],[61,90,25,40,'T'],[62,91,25,40,'L'],
+[63,92,25,42,'L'],[64,93,25,46,'T'],[65,94,25,42,'T'],[66,95,25,40,'L'],[66,96,25,40,'L'],
+[67,97,25,42,'L'],[67,98,25,46,'L'],[68,99,25,42,'L'],[68,100,25,46,'T'],[69,101,25,57,'T'],
+[70,102,25,57,'T'],[70,103,25,57,'L'],[71,104,32,78,'T'],[71,105,32,78,'L'],[75,106,20,20,'E'],
+[76,107,20,20,'L'],[76,108,20,20,'E'],[78,109,20,20,'L'],[78,110,20,10,'E'],[80,111,20,20,'E'],
+[83,112,20,20,'E'],[84,113,20,20,'E'],[84,114,20,20,'L'],[85,115,25,40,'T'],[85,116,20,20,'E'],
+[86,117,25,40,'T'],[86,118,20,20,'E'],[88,119,20,20,'L'],[88,120,20,20,'E'],[90,121,20,20,'E'],
+[90,122,20,20,'L'],[91,123,25,40,'T'],[92,124,25,42,'T'],[93,125,25,42,'T'],[93,126,20,20,'E'],
+[94,127,25,40,'T'],[94,128,20,20,'E'],[95,129,25,40,'T'],[96,130,25,40,'L'],[97,131,25,42,'L'],
+[98,132,25,46,'T'],[99,133,25,42,'T'],[100,134,25,40,'L'],[100,135,25,40,'L'],[101,136,25,42,'L'],
+[101,137,25,46,'L'],[102,138,25,42,'L'],[102,139,25,46,'T'],[103,140,25,57,'T'],[104,141,25,57,'T'],
+[104,142,25,57,'L'],[105,143,32,78,'T'],[107,144,20,20,'E'],[109,145,20,20,'E'],[114,146,20,20,'E'],
+[115,147,20,20,'L'],[115,148,20,20,'E'],[117,149,20,20,'L'],[117,150,20,20,'E'],[119,151,20,20,'E'],
+[122,152,20,20,'E'],[123,153,20,20,'E'],[123,154,20,20,'L'],[124,155,25,40,'T'],[124,156,20,20,'E'],
+[125,157,25,40,'T'],[125,158,20,20,'E'],[127,159,20,20,'L'],[127,160,20,20,'E'],[129,161,20,20,'E'],
+[129,162,20,20,'L'],[130,163,25,40,'T'],[131,164,25,42,'T'],[132,165,25,42,'T'],[132,166,20,20,'E'],
+[133,167,25,40,'T'],[133,168,20,20,'E'],[134,169,25,40,'T'],[135,170,25,40,'L'],[136,171,25,42,'L'],
+[137,172,25,46,'T'],[138,173,25,42,'T'],[139,174,25,40,'L'],[139,175,25,40,'L'],[140,176,25,42,'L'],
+[140,177,25,46,'L'],[141,178,25,42,'L'],[141,179,25,46,'T'],[142,180,25,57,'T'],[143,181,25,57,'T'],
+[143,182,25,57,'L'],[147,183,20,20,'E'],[149,184,20,20,'E'],[154,185,20,20,'E'],[155,186,20,20,'L'],
+[155,187,20,20,'E'],[157,188,20,20,'L'],[157,189,20,20,'E'],[159,190,20,20,'E'],[162,191,20,20,'E'],
+[163,192,20,20,'E'],[163,193,20,20,'L'],[164,194,25,40,'T'],[164,195,20,20,'E'],[165,196,25,40,'T'],
+[165,197,20,20,'E'],[167,198,20,20,'L'],[167,199,20,20,'E'],[169,200,20,20,'E'],[169,201,20,20,'L'],
+[170,202,25,40,'T'],[171,203,25,42,'T'],[172,204,25,42,'T'],[172,205,20,20,'E'],[173,206,25,40,'T'],
+[173,207,20,20,'E'],[174,208,25,40,'T'],[175,209,25,40,'L'],[176,210,25,42,'L'],[177,211,25,46,'T'],
+[178,212,25,42,'T'],[179,213,25,40,'L'],[179,214,25,40,'L'],[180,215,25,42,'L'],[180,216,25,46,'L'],
+[181,217,25,42,'L'],[181,218,25,46,'T'],[182,219,25,57,'T'],[186,220,20,20,'E'],[188,221,20,20,'E'],
+[193,222,20,20,'E'],[194,223,20,20,'L'],[194,224,20,20,'E'],[196,225,20,20,'L'],[196,226,20,20,'E'],
+[198,227,20,20,'E'],[201,228,20,20,'E'],[202,229,20,20,'E'],[202,230,20,20,'L'],[203,231,25,40,'T'],
+[203,232,20,20,'E'],[204,233,25,40,'T'],[204,234,20,20,'E'],[206,235,20,20,'L'],[206,236,20,20,'E'],
+[208,237,20,20,'E'],[208,238,20,20,'L'],[209,239,25,40,'T'],[210,240,25,42,'T'],[211,241,25,42,'T'],
+[211,242,20,20,'E'],[212,243,25,40,'T'],[212,244,20,20,'E'],[213,245,25,40,'T'],[214,246,25,40,'L'],
+[215,247,25,42,'L'],[216,248,25,46,'T'],[217,249,25,42,'T'],[218,250,25,40,'L'],[218,251,25,40,'L'],
+[219,252,25,42,'L'],[219,253,25,46,'L'],[223,254,20,20,'E'],[225,255,20,20,'E'],[230,256,20,20,'E'],
+[231,257,20,20,'L'],[231,258,20,20,'E'],[233,259,20,20,'L'],[233,260,20,20,'E'],[235,261,20,20,'E'],
+[238,262,20,20,'E'],[239,263,20,20,'E'],[239,264,20,20,'L'],[240,265,25,40,'T'],[240,266,20,20,'E'],
+[241,267,25,40,'T'],[241,268,20,20,'E'],[243,269,20,20,'L'],[243,270,20,20,'E'],[245,271,20,20,'E'],
+[245,272,20,20,'L'],[246,273,25,40,'T'],[247,274,25,42,'T'],[248,275,25,42,'T'],[248,276,20,20,'E'],
+[249,277,25,40,'T'],[249,278,20,20,'E'],[250,279,25,40,'T'],[251,280,25,40,'L'],[252,281,25,42,'L'],
+[253,282,25,46,'T'],[257,283,20,20,'E'],[259,284,20,20,'E'],[264,285,20,20,'E'],[265,286,20,20,'L'],
+[265,287,20,20,'E'],[267,288,20,20,'L'],[267,289,20,20,'E'],[269,290,20,20,'E'],[272,291,20,20,'E'],
+[273,292,20,20,'E'],[273,293,20,20,'L'],[274,294,25,40,'T'],[274,295,20,20,'E'],[275,296,25,40,'T'],
+[275,297,20,20,'E'],[277,298,20,20,'L'],[277,299,20,20,'E'],[279,300,20,20,'E'],[279,301,20,20,'L'],
+[280,302,25,40,'T'],[281,303,25,42,'T'],[282,304,25,42,'T'],[282,305,20,20,'E'],[286,306,20,20,'E'],
+[288,307,20,20,'E'],[293,308,20,20,'E'],[294,309,20,20,'L'],[294,310,20,20,'E'],[296,311,20,20,'L'],
+[296,312,20,20,'E'],[298,313,20,20,'E'],[301,314,20,20,'E'],[302,315,20,20,'E'],[302,316,20,20,'L'],
+[303,317,25,40,'T'],[303,318,20,20,'E'],[304,319,25,40,'T'],[304,320,20,20,'E'],[309,321,20,20,'E'],
+[311,322,20,20,'E'],[316,323,20,20,'E'],[317,324,20,20,'L'],[317,325,20,20,'E'],[319,326,20,20,'L'],
+[319,327,20,20,'E'],[324,328,20,20,'E'],[326,329,20,20,'E']
+];
+
+// === Grafo ===
+const pipes = D.map((d, i) => ({ bfs: i+1, from: d[0], to: d[1], dn: d[2], q: d[3]/100, fit: d[4] }));
+const rowByOutgoing = {};
+const childrenOfNode = {};
+for (const p of pipes) {
+  rowByOutgoing[p.to] = p;
+  if (!childrenOfNode[p.from]) childrenOfNode[p.from] = [];
+  childrenOfNode[p.from].push(p);
+}
+
+// columnOf: mayor Q continúa el tronco
+const columnOf = {};
+function computeColumn(p) {
+  if (columnOf[p.bfs] !== undefined) return columnOf[p.bfs];
+  const parent = rowByOutgoing[p.from];
+  let parentCol = 0;
+  if (parent) parentCol = computeColumn(parent);
+  const siblings = childrenOfNode[p.from] || [];
+  if (siblings.length <= 1) {
+    columnOf[p.bfs] = parentCol;
+  } else {
+    const sorted = [...siblings].sort((a, b) => b.q - a.q || a.bfs - b.bfs);
+    const rank = sorted.indexOf(p);
+    columnOf[p.bfs] = (rank === 0) ? parentCol : parentCol + 1;
+  }
+  return columnOf[p.bfs];
+}
+for (const p of pipes) computeColumn(p);
+
+// DFS preorder, branch-first (menor Q visita antes)
+const childrenOfPipe = {};
+for (const p of pipes) {
+  const parent = rowByOutgoing[p.from];
+  if (parent) {
+    if (!childrenOfPipe[parent.bfs]) childrenOfPipe[parent.bfs] = [];
+    childrenOfPipe[parent.bfs].push(p);
+  }
+}
+for (const k of Object.keys(childrenOfPipe))
+  childrenOfPipe[k].sort((a, b) => a.q - b.q || b.bfs - a.bfs);
+
+const rootPipes = pipes.filter(p => !rowByOutgoing[p.from]).sort((a, b) => a.bfs - b.bfs);
+const ordered = [];   // {type, pipe}
+function dfsVisit(p) {
+  ordered.push({type: 'pipe', pipe: p});
+  ordered.push({type: 'fit',  pipe: p});
+  const kids = childrenOfPipe[p.bfs] || [];
+  for (const c of kids) dfsVisit(c);
+}
+for (const r of rootPipes) dfsVisit(r);
+
+// === Render v7.1 ===
+const ROW_H   = 22, TOP_PAD = 30, TRUNK_X = 30, INDENT = 95;
+const SYS     = '#1A6FA8';   // color único = sistema (LineColor)
+const TXT     = '#222', MUTED = '#666';
+
+let maxCol = 0;
+for (const p of pipes) if (columnOf[p.bfs] > maxCol) maxCol = columnOf[p.bfs];
+const svgW = TRUNK_X + maxCol * INDENT + 380;
+const svgH = TOP_PAD + ordered.length * ROW_H + 30;
+
+const yOf = i => TOP_PAD + (i+1) * ROW_H - 8;
+const meta = ordered.map((r, i) => ({
+  i, y: yOf(i), col: columnOf[r.pipe.bfs], type: r.type, pipe: r.pipe,
+}));
+
+// Para cada item, su "posición padre física" = última posición registrada
+// por el row cuyo outgoing == este row.incoming (mismo criterio que el C#).
+// Para pipes: incoming = pipe.from. Para fittings: incoming = pipe.to (porque
+// el fitting está EN el nodo final del pipe).
+//
+// Sin embargo el C# hace algo más simple: registra nodePositions[outgoing]=
+// (x,y) tras procesar cada row, y al procesar uno lee nodePositions[incoming].
+// Reproducimos ese comportamiento secuencial.
+const nodePos = {};   // node id -> {x, y}
+const items = [];     // {meta, pX, pY, isCont, isFirst}
+for (const m of meta) {
+  const x = TRUNK_X + m.col * INDENT;
+  const inNode = (m.type === 'pipe') ? m.pipe.from : m.pipe.to;
+  const outNode = (m.type === 'pipe') ? m.pipe.to   : m.pipe.to;
+  let pX, pY;
+  if (nodePos[inNode]) { pX = nodePos[inNode].x; pY = nodePos[inNode].y; }
+  else { pX = TRUNK_X; pY = 18; }
+  const isCont = Math.abs(pX - x) < 0.1;
+  items.push({m, x, pX, pY, isCont});
+  nodePos[outNode] = {x, y: m.y};
+}
+
+// Render
+const out = [];
+out.push(`<svg width="${svgW}" height="${svgH}" viewBox="0 0 ${svgW} ${svgH}" xmlns="http://www.w3.org/2000/svg">`);
+
+// Fuente
+out.push(`<polygon points="${TRUNK_X-8},6 ${TRUNK_X+8},6 ${TRUNK_X},18" fill="${SYS}" stroke="black" stroke-width="0.6"/>`);
+out.push(`<text x="${TRUNK_X+20}" y="14" font-size="10" fill="${SYS}" font-weight="600">Fuente · Acometida</text>`);
+
+// Lineas
+const teeJunctions = [];
+for (const it of items) {
+  const {m, x, pX, pY, isCont} = it;
+  if (isCont) {
+    // Continuación en la misma columna — vertical solido (color del sistema)
+    // Trunk pipes serían un poco más gruesos en col 0
+    const thick = m.col === 0 ? 3.0 : (m.col === 1 ? 2.4 : 2.0);
+    const w = m.type === 'fit' ? thick * 0.5 : thick;
+    out.push(`<line x1="${x}" y1="${pY}" x2="${x}" y2="${m.y}" stroke="${SYS}" stroke-width="${w}" stroke-linecap="round"/>`);
+  } else {
+    // Bifurcación: horizontal discontinua al nivel de la fila (pX,y -> x,y)
+    out.push(`<line x1="${pX}" y1="${m.y}" x2="${x}" y2="${m.y}" stroke="${SYS}" stroke-width="1.4" stroke-dasharray="3 3" stroke-linecap="round"/>`);
+    teeJunctions.push({x: pX, y: m.y});
+  }
+}
+
+// Glifos y texto
+for (const it of items) {
+  const {m, x} = it;
+  const textX = x + 18;
+  if (m.type === 'pipe') {
+    // Flecha (triángulo) en (x, y)
+    out.push(`<polygon points="${x-3},${m.y-3} ${x+3},${m.y-3} ${x},${m.y+3}" fill="${SYS}" stroke="black" stroke-width="0.4"/>`);
+    const label = `#${m.pipe.bfs} · N${m.pipe.from}→N${m.pipe.to} · DN${m.pipe.dn} · ${m.pipe.q.toFixed(2)} L/s`;
+    const weight = m.col === 0 ? 600 : 400;
+    out.push(`<text x="${textX}" y="${m.y+4}" font-size="9" fill="${TXT}" font-weight="${weight}">${label}</text>`);
+  } else {
+    // Accesorio: glifo en la propia línea, en (x, y) — sin offset extra,
+    // para que coincida visualmente con la columna del ramal/tronco.
+    const f = m.pipe.fit;
+    const fitName = ({T:'TEE',L:'ELBOW',E:'TERMINAL',X:'CROSS',R:'REDUCER',F:'FIN'})[f] || f;
+    if      (f === 'T') out.push(`<path d="M${x-5} ${m.y} L${x+5} ${m.y} M${x} ${m.y} L${x} ${m.y+5}" stroke="${SYS}" stroke-width="1.8" fill="none" stroke-linecap="round"/>`);
+    else if (f === 'L') out.push(`<path d="M${x} ${m.y-5} L${x} ${m.y} L${x+5} ${m.y}" stroke="${SYS}" stroke-width="1.8" fill="none" stroke-linecap="round"/>`);
+    else if (f === 'E') out.push(`<rect x="${x-4}" y="${m.y-4}" width="8" height="8" fill="${SYS}" stroke="black" stroke-width="0.5"/>`);
+    else if (f === 'X') out.push(`<path d="M${x-5} ${m.y} L${x+5} ${m.y} M${x} ${m.y-5} L${x} ${m.y+5}" stroke="${SYS}" stroke-width="1.8" fill="none"/>`);
+    else if (f === 'R') out.push(`<polygon points="${x-5},${m.y-3} ${x+5},${m.y-1} ${x+5},${m.y+1} ${x-5},${m.y+3}" fill="white" stroke="${SYS}" stroke-width="1.4"/>`);
+    else                out.push(`<circle cx="${x}" cy="${m.y}" r="3" fill="${SYS}" stroke="black" stroke-width="0.4"/>`);
+    out.push(`<text x="${textX}" y="${m.y+4}" font-size="9" fill="${MUTED}" font-style="italic">${fitName} @N${m.pipe.to}</text>`);
+  }
+}
+
+// Bifurcation circles — dibujados al final encima
+for (const t of teeJunctions) {
+  out.push(`<circle cx="${t.x}" cy="${t.y}" r="4" fill="${SYS}" stroke="white" stroke-width="1.2"/>`);
+}
+
+out.push(`</svg>`);
+document.getElementById('schema').innerHTML = out.join('\n');
+</script>
+
+</body>
+</html>

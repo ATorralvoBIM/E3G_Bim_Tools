@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8"/>
+<title>Maqueta esquema MEP — propuesta v6 (DFS preorder)</title>
+<style>
+  * { box-sizing: border-box; }
+  body { font-family: 'Segoe UI', Arial, sans-serif; margin: 16px;
+         background: #f5f5f5; color: #222; }
+  h1 { font-size: 16px; margin: 0 0 4px; }
+  .note { font-size: 12px; color: #555; margin-bottom: 12px;
+          background: #fff8e0; padding: 8px 10px; border-left: 3px solid #c98020;
+          max-width: 1100px; }
+  .wrap { display: flex; gap: 8px; background: white;
+          border: 1px solid #ccc; max-width: 1180px; }
+  .table-side { flex: 1; min-width: 0; }
+  .schema-side { width: 520px; border-left: 6px solid #bdbdbd; background: white; }
+  .schema-side .hdr {
+    background: #f5f5f5; padding: 6px 10px; font-weight: 600;
+    font-size: 11px; color: #333; border-bottom: 1px solid #ddd;
+  }
+  .schema-side .legend {
+    background: #fafafa; padding: 4px 10px; font-size: 10px;
+    border-bottom: 1px solid #ddd;
+    display: flex; gap: 14px; flex-wrap: wrap;
+  }
+  .schema-side .legend .sw {
+    display: inline-block; width: 14px; height: 3px; vertical-align: middle;
+    margin-right: 3px; border-radius: 2px;
+  }
+  table { border-collapse: collapse; width: 100%; font-size: 11px; }
+  thead th { background: #1a3a5e; color: white; padding: 4px 8px;
+             text-align: left; border: 1px solid #1a3a5e;
+             position: sticky; top: 0; }
+  tbody td { padding: 2px 8px; border-bottom: 1px solid #eee;
+             white-space: nowrap; height: 22px; }
+  tbody tr.fit td { color: #555; font-style: italic; background: #fafafa; }
+  tbody tr.ok    { background: #f0f7f0; }
+  tbody tr.warn  { background: #fff7e0; }
+  .right { text-align: right; }
+  .center { text-align: center; }
+  svg { display: block; }
+</style>
+</head>
+<body>
+
+<h1>Maqueta — propuesta v6 del esquema (DFS preorder + colores por nivel)</h1>
+<div class="note">
+  <b>Diferencia clave vs lo actual:</b> el orden de filas pasa a <b>DFS preorder</b>
+  (cada sub-árbol completo antes del siguiente). Así cada ramal tiene <b>cuerpo vertical</b>
+  — varios elementos en su columna seguidos — en vez de aparecer como una línea suelta.
+  La columna del tronco principal queda intacta entre ramales, igual que en MagiCAD.<br/>
+  El tronco (col 0) en <span style="color:#1A3A5E"><b>azul oscuro</b></span>,
+  ramales nivel 1 en <span style="color:#2A7DB5"><b>azul medio</b></span>,
+  nivel 2 en <span style="color:#3FA06B"><b>verde</b></span>,
+  nivel 3 en <span style="color:#C9801F"><b>naranja</b></span>.
+</div>
+
+<div class="wrap">
+
+  <!-- ============ TABLA (izquierda) ============ -->
+  <div class="table-side">
+    <table>
+      <thead>
+        <tr>
+          <th>#</th><th>Elemento</th><th>Nodos</th><th>Talla</th>
+          <th class="right">N</th><th class="right">K</th>
+          <th class="right">Q dis [L/s]</th><th class="right">v [m/s]</th>
+          <th class="right">ΔP/m [Pa/m]</th><th class="right">ΔP tot [Pa]</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- DFS preorder: branch-first (menor caudal primero), trunk-last -->
+        <tr class="ok"><td>1</td><td>Tubería</td><td>N1 → N2</td><td>DN 50</td>
+            <td class="right">112</td><td class="right">0,09</td>
+            <td class="right"><b>22,30</b></td><td class="right">2,12</td>
+            <td class="right">240</td><td class="right">496</td></tr>
+        <tr class="fit"><td></td><td>TEE</td><td>@N2</td><td colspan="7"></td></tr>
+
+        <tr class="ok"><td>2</td><td>Tubería</td><td>N2 → N3</td><td>DN 32</td>
+            <td class="right">14</td><td class="right">0,28</td>
+            <td class="right">2,70</td><td class="right">0,75</td>
+            <td class="right">320</td><td class="right">460</td></tr>
+        <tr class="fit"><td></td><td>TEE</td><td>@N3</td><td colspan="7"></td></tr>
+
+        <tr class="warn"><td>3</td><td>Tubería</td><td>N3 → N6</td><td>DN 25</td>
+            <td class="right">7</td><td class="right">0,41</td>
+            <td class="right">1,30</td><td class="right">0,53</td>
+            <td class="right">566</td><td class="right">251</td></tr>
+        <tr class="fit"><td></td><td>ELBOW</td><td>@N6</td><td colspan="7"></td></tr>
+        <tr class="warn"><td>4</td><td>Tubería</td><td>N6 → N11</td><td>DN 25</td>
+            <td class="right">7</td><td class="right">0,41</td>
+            <td class="right">1,30</td><td class="right">0,53</td>
+            <td class="right">566</td><td class="right">123</td></tr>
+        <tr class="fit"><td></td><td>TERMINAL</td><td>@N11</td><td colspan="7"></td></tr>
+
+        <tr class="warn"><td>5</td><td>Tubería</td><td>N3 → N5</td><td>DN 25</td>
+            <td class="right">7</td><td class="right">0,41</td>
+            <td class="right">1,40</td><td class="right">0,57</td>
+            <td class="right">645</td><td class="right">1116</td></tr>
+        <tr class="fit"><td></td><td>TEE</td><td>@N5</td><td colspan="7"></td></tr>
+
+        <tr class="ok"><td>6</td><td>Tubería</td><td>N5 → N9</td><td>DN 25</td>
+            <td class="right">3</td><td class="right">0,71</td>
+            <td class="right">0,60</td><td class="right">0,42</td>
+            <td class="right">381</td><td class="right">90</td></tr>
+        <tr class="fit"><td></td><td>ELBOW</td><td>@N9</td><td colspan="7"></td></tr>
+        <tr class="ok"><td>7</td><td>Tubería</td><td>N9 → N16</td><td>DN 25</td>
+            <td class="right">3</td><td class="right">0,71</td>
+            <td class="right">0,60</td><td class="right">0,42</td>
+            <td class="right">381</td><td class="right">126</td></tr>
+        <tr class="fit"><td></td><td>TERMINAL</td><td>@N16</td><td colspan="7"></td></tr>
+
+        <tr class="warn"><td>8</td><td>Tubería</td><td>N5 → N10</td><td>DN 25</td>
+            <td class="right">4</td><td class="right">0,58</td>
+            <td class="right">0,80</td><td class="right">0,46</td>
+            <td class="right">443</td><td class="right">328</td></tr>
+        <tr class="fit"><td></td><td>ELBOW</td><td>@N10</td><td colspan="7"></td></tr>
+        <tr class="ok"><td>9</td><td>Tubería</td><td>N10 → N17</td><td>DN 25</td>
+            <td class="right">2</td><td class="right">1,00</td>
+            <td class="right">0,40</td><td class="right">0,40</td>
+            <td class="right">344</td><td class="right">81</td></tr>
+        <tr class="fit"><td></td><td>TERMINAL</td><td>@N17</td><td colspan="7"></td></tr>
+
+        <tr class="ok"><td>10</td><td>Tubería</td><td>N2 → N4</td><td>DN 50</td>
+            <td class="right">98</td><td class="right">0,10</td>
+            <td class="right"><b>19,60</b></td><td class="right">1,99</td>
+            <td class="right">215</td><td class="right">201</td></tr>
+        <tr class="fit"><td></td><td>TEE</td><td>@N4</td><td colspan="7"></td></tr>
+
+        <tr class="ok"><td>11</td><td>Tubería</td><td>N4 → N7</td><td>DN 32</td>
+            <td class="right">14</td><td class="right">0,28</td>
+            <td class="right">2,80</td><td class="right">0,78</td>
+            <td class="right">341</td><td class="right">491</td></tr>
+        <tr class="fit"><td></td><td>TEE</td><td>@N7</td><td colspan="7"></td></tr>
+        <tr class="warn"><td>12</td><td>Tubería</td><td>N7 → N12</td><td>DN 25</td>
+            <td class="right">7</td><td class="right">0,41</td>
+            <td class="right">1,40</td><td class="right">0,57</td>
+            <td class="right">645</td><td class="right">1116</td></tr>
+        <tr class="fit"><td></td><td>TERMINAL</td><td>@N12</td><td colspan="7"></td></tr>
+        <tr class="warn"><td>13</td><td>Tubería</td><td>N7 → N13</td><td>DN 25</td>
+            <td class="right">7</td><td class="right">0,41</td>
+            <td class="right">1,40</td><td class="right">0,57</td>
+            <td class="right">645</td><td class="right">286</td></tr>
+        <tr class="fit"><td></td><td>TERMINAL</td><td>@N13</td><td colspan="7"></td></tr>
+
+        <tr class="ok"><td>14</td><td>Tubería</td><td>N4 → N8</td><td>DN 50</td>
+            <td class="right">84</td><td class="right">0,11</td>
+            <td class="right"><b>16,80</b></td><td class="right">1,84</td>
+            <td class="right">188</td><td class="right">176</td></tr>
+        <tr class="fit"><td></td><td>TEE</td><td>@N8</td><td colspan="7"></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ============ ESQUEMA (derecha) ============ -->
+  <div class="schema-side">
+    <div class="hdr">Esquema (sentido del flujo) — DFS preorder · 1 fila = 1 tramo</div>
+    <div class="legend">
+      <span><span class="sw" style="background:#1A3A5E"></span> tronco col 0</span>
+      <span><span class="sw" style="background:#2A7DB5"></span> ramal col 1</span>
+      <span><span class="sw" style="background:#3FA06B"></span> ramal col 2</span>
+      <span>▲ fuente · ■ terminal · ┬ tee · └ codo</span>
+    </div>
+
+    <!-- SVG con DFS-preorder. ROW_H=22 px (igual que en el WPF). Cada fila Y = topPad + i*22 -->
+    <svg width="500" height="900" viewBox="0 0 500 900" xmlns="http://www.w3.org/2000/svg">
+
+      <!-- Coordenadas X por nivel -->
+      <!-- col 0 = 24, col 1 = 110, col 2 = 196, col 3 = 282 (sangrado 86 px) -->
+
+      <!-- ===== Fuente ===== -->
+      <polygon points="24,6 18,16 30,16" fill="#1A3A5E" stroke="black" stroke-width="0.6"/>
+      <text x="36" y="13" font-size="10" fill="#1A3A5E" font-weight="600">Fuente / Acometida</text>
+
+      <!-- ===== TRONCO COL 0 (azul oscuro) ===== -->
+      <!-- baja desde fuente (y=16) hasta el último elemento del tronco visible.
+           El tronco recorre las filas: 1(Tub N1->N2)=y34, 2(TEE@N2)=y56,
+           10(Tub N2->N4)=y210, 11(TEE@N4)=y232, 14(Tub N4->N8)=y386, 15(TEE@N8)=y408 -->
+      <line x1="24" y1="16"  x2="24" y2="56"  stroke="#1A3A5E" stroke-width="3" stroke-linecap="round"/>
+      <!-- gap mientras dibujamos sub-árbol de N3 -->
+      <line x1="24" y1="56"  x2="24" y2="210" stroke="#1A3A5E" stroke-width="3" stroke-linecap="round" opacity="0.65"/>
+      <line x1="24" y1="210" x2="24" y2="232" stroke="#1A3A5E" stroke-width="3" stroke-linecap="round"/>
+      <line x1="24" y1="232" x2="24" y2="386" stroke="#1A3A5E" stroke-width="3" stroke-linecap="round" opacity="0.65"/>
+      <line x1="24" y1="386" x2="24" y2="430" stroke="#1A3A5E" stroke-width="3" stroke-linecap="round"/>
+
+      <!-- Glifo fila 1: Tubería N1→N2 -->
+      <polygon points="20,38 28,38 24,46" fill="#1A3A5E"/>
+      <text x="36" y="38" font-size="10" fill="#222">#1 · N1→N2 · DN50</text>
+      <!-- Glifo fila 2: TEE @N2 -->
+      <path d="M17 56 L31 56 M24 56 L24 63" stroke="#1A3A5E" stroke-width="2.4" fill="none"/>
+      <text x="36" y="60" font-size="10" fill="#555" font-style="italic">TEE @N2</text>
+
+      <!-- ============== SUB-ÁRBOL DE N3 (col 1, azul medio) ============== -->
+      <!-- Rama de N2→N3 sale a la derecha en y=78 (fila 3) -->
+      <!-- horizontal Tee col0→col1 -->
+      <line x1="24" y1="78" x2="110" y2="78" stroke="#2A7DB5" stroke-width="2.4" stroke-linecap="round"/>
+      <!-- marcador T-junction en tronco padre -->
+      <rect x="20" y="74" width="8" height="8" fill="#1A3A5E" stroke="white" stroke-width="1.2" rx="1"/>
+      <!-- tronco col 1 (azul medio) recorre y=78 a la última fila del subarbol N3 -->
+      <line x1="110" y1="78" x2="110" y2="298" stroke="#2A7DB5" stroke-width="2.4" stroke-linecap="round"/>
+
+      <!-- fila 3 glifo (tubería) -->
+      <polygon points="106,78 114,78 110,86" fill="#2A7DB5"/>
+      <text x="122" y="78" font-size="10" fill="#222">#2 · N2→N3 · DN32</text>
+      <!-- fila 4 TEE @N3 -->
+      <path d="M103 100 L117 100 M110 100 L110 107" stroke="#2A7DB5" stroke-width="2.2" fill="none"/>
+      <text x="122" y="104" font-size="10" fill="#555" font-style="italic">TEE @N3</text>
+
+      <!-- ===== Sub-rama N6 (col 2, verde) — fila 5 N3→N6 y=122 ===== -->
+      <line x1="110" y1="122" x2="196" y2="122" stroke="#3FA06B" stroke-width="2.4" stroke-linecap="round"/>
+      <rect x="106" y="118" width="8" height="8" fill="#2A7DB5" stroke="white" stroke-width="1.2" rx="1"/>
+      <line x1="196" y1="122" x2="196" y2="188" stroke="#3FA06B" stroke-width="2" stroke-linecap="round"/>
+      <polygon points="192,122 200,122 196,130" fill="#3FA06B"/>
+      <text x="208" y="122" font-size="10" fill="#222">#3 · N3→N6 · DN25</text>
+      <path d="M192 144 L196 140 L200 144" stroke="#3FA06B" stroke-width="2" fill="none"/>
+      <text x="208" y="148" font-size="10" fill="#555" font-style="italic">ELBOW @N6</text>
+      <polygon points="192,166 200,166 196,174" fill="#3FA06B"/>
+      <text x="208" y="166" font-size="10" fill="#222">#4 · N6→N11 · DN25</text>
+      <rect x="190" y="184" width="12" height="8" fill="#3FA06B" stroke="black" stroke-width="0.4"/>
+      <text x="208" y="192" font-size="10" fill="#555" font-style="italic">TERMINAL @N11</text>
+
+      <!-- ===== Sub-trunk N5 (col 1 continuación) — fila 6 y=210 ===== -->
+      <polygon points="106,210 114,210 110,218" fill="#2A7DB5"/>
+      <text x="122" y="210" font-size="10" fill="#222">#5 · N3→N5 · DN25</text>
+      <path d="M103 232 L117 232 M110 232 L110 239" stroke="#2A7DB5" stroke-width="2.2" fill="none"/>
+      <text x="122" y="236" font-size="10" fill="#555" font-style="italic">TEE @N5</text>
+
+      <!-- Sub-rama N9 (col 2, verde) y=254 -->
+      <line x1="110" y1="254" x2="196" y2="254" stroke="#3FA06B" stroke-width="2.4" stroke-linecap="round"/>
+      <rect x="106" y="250" width="8" height="8" fill="#2A7DB5" stroke="white" stroke-width="1.2" rx="1"/>
+      <line x1="196" y1="254" x2="196" y2="298" stroke="#3FA06B" stroke-width="2" stroke-linecap="round"/>
+      <polygon points="192,254 200,254 196,262" fill="#3FA06B"/>
+      <text x="208" y="254" font-size="10" fill="#222">#6 · N5→N9 · DN25</text>
+      <path d="M192 276 L196 272 L200 276" stroke="#3FA06B" stroke-width="2" fill="none"/>
+      <text x="208" y="280" font-size="10" fill="#555" font-style="italic">ELBOW @N9</text>
+      <polygon points="192,298 200,298 196,306" fill="#3FA06B"/>
+      <text x="208" y="298" font-size="10" fill="#222">#7 · N9→N16 · DN25</text>
+      <rect x="190" y="316" width="12" height="8" fill="#3FA06B" stroke="black" stroke-width="0.4"/>
+      <text x="208" y="324" font-size="10" fill="#555" font-style="italic">TERMINAL @N16</text>
+
+      <!-- Sub-trunk N10 (col 1) y=342 -->
+      <polygon points="106,342 114,342 110,350" fill="#2A7DB5"/>
+      <text x="122" y="342" font-size="10" fill="#222">#8 · N5→N10 · DN25</text>
+      <path d="M103 364 L117 364 L110 371 Z" stroke="#2A7DB5" stroke-width="2.2" fill="none"/>
+      <text x="122" y="368" font-size="10" fill="#555" font-style="italic">ELBOW @N10</text>
+      <polygon points="106,386 114,386 110,394" fill="#2A7DB5"/>
+      <text x="122" y="386" font-size="10" fill="#222">#9 · N10→N17 · DN25</text>
+      <rect x="104" y="404" width="12" height="8" fill="#2A7DB5" stroke="black" stroke-width="0.4"/>
+      <text x="122" y="412" font-size="10" fill="#555" font-style="italic">TERMINAL @N17</text>
+
+      <!-- ============== VUELTA AL TRONCO PRINCIPAL — fila 10 N2→N4 y=430 ============== -->
+      <!-- Glifo fila 10 -->
+      <polygon points="20,430 28,430 24,438" fill="#1A3A5E"/>
+      <text x="36" y="430" font-size="10" fill="#222"><tspan font-weight="600">#10 · N2→N4 · DN50 (tronco)</tspan></text>
+      <!-- fila 11 TEE @N4 y=452 -->
+      <path d="M17 452 L31 452 M24 452 L24 459" stroke="#1A3A5E" stroke-width="2.4" fill="none"/>
+      <text x="36" y="456" font-size="10" fill="#555" font-style="italic">TEE @N4</text>
+
+      <!-- ===== Sub-árbol N7 (col 1) y=474 ===== -->
+      <line x1="24" y1="474" x2="110" y2="474" stroke="#2A7DB5" stroke-width="2.4" stroke-linecap="round"/>
+      <rect x="20" y="470" width="8" height="8" fill="#1A3A5E" stroke="white" stroke-width="1.2" rx="1"/>
+      <line x1="110" y1="474" x2="110" y2="606" stroke="#2A7DB5" stroke-width="2.4" stroke-linecap="round"/>
+      <polygon points="106,474 114,474 110,482" fill="#2A7DB5"/>
+      <text x="122" y="474" font-size="10" fill="#222">#11 · N4→N7 · DN32</text>
+      <path d="M103 496 L117 496 M110 496 L110 503" stroke="#2A7DB5" stroke-width="2.2" fill="none"/>
+      <text x="122" y="500" font-size="10" fill="#555" font-style="italic">TEE @N7</text>
+
+      <!-- Rama N12 (col 2) y=518 -->
+      <line x1="110" y1="518" x2="196" y2="518" stroke="#3FA06B" stroke-width="2.4" stroke-linecap="round"/>
+      <rect x="106" y="514" width="8" height="8" fill="#2A7DB5" stroke="white" stroke-width="1.2" rx="1"/>
+      <polygon points="192,518 200,518 196,526" fill="#3FA06B"/>
+      <text x="208" y="518" font-size="10" fill="#222">#12 · N7→N12 · DN25</text>
+      <rect x="190" y="536" width="12" height="8" fill="#3FA06B" stroke="black" stroke-width="0.4"/>
+      <text x="208" y="544" font-size="10" fill="#555" font-style="italic">TERMINAL @N12</text>
+
+      <!-- Sub-trunk N13 (col 1) y=562 -->
+      <polygon points="106,562 114,562 110,570" fill="#2A7DB5"/>
+      <text x="122" y="562" font-size="10" fill="#222">#13 · N7→N13 · DN25</text>
+      <rect x="104" y="580" width="12" height="8" fill="#2A7DB5" stroke="black" stroke-width="0.4"/>
+      <text x="122" y="588" font-size="10" fill="#555" font-style="italic">TERMINAL @N13</text>
+
+      <!-- ============== Vuelta al tronco — fila 14 N4→N8 y=606 ============== -->
+      <polygon points="20,606 28,606 24,614" fill="#1A3A5E"/>
+      <text x="36" y="606" font-size="10" fill="#222"><tspan font-weight="600">#14 · N4→N8 · DN50 (tronco)</tspan></text>
+      <path d="M17 628 L31 628 M24 628 L24 635" stroke="#1A3A5E" stroke-width="2.4" fill="none"/>
+      <text x="36" y="632" font-size="10" fill="#555" font-style="italic">TEE @N8</text>
+
+      <!-- el tronco continuaría más abajo... -->
+      <text x="36" y="670" font-size="10" fill="#aaa" font-style="italic">⋮ resto del tronco principal y sub-árboles ⋮</text>
+
+    </svg>
+  </div>
+</div>
+
+<div style="margin-top:12px; font-size:11px; color:#555; max-width:1180px;">
+  <b>Topología asumida</b> (deducida de tu captura):<br/>
+  · N1 → N2 → <i>(TEE @N2 con 2 hijos)</i> → N3 (rama 2.7 L/s) <b>+</b> N4 (tronco 19.6 L/s)<br/>
+  · N3 → <i>(TEE @N3)</i> → N6 (rama 1.3 L/s, sub-árbol corto: N11) <b>+</b> N5 (sub-tronco 1.4 L/s)<br/>
+  · N5 → <i>(TEE @N5)</i> → N9 (rama 0.6 L/s: N16) <b>+</b> N10 (sub-tronco 0.8 L/s: N17)<br/>
+  · N4 → <i>(TEE @N4)</i> → N7 (rama 2.8 L/s) <b>+</b> N8 (tronco 16.8 L/s)<br/>
+  · N7 → <i>(TEE @N7)</i> → N12 (rama 1.4 L/s: leaf) <b>+</b> N13 (1.4 L/s: leaf)<br/>
+  <br/>
+  <b>Si apruebas este aspecto</b>, en el código:<br/>
+  1. Cambio el orden de filas de BFS → DFS preorder con regla "menor caudal primero, tronco al final".<br/>
+  2. La tabla refleja el mismo orden — la columna <code>BfsIndex</code> (#) se conserva como identificador estable pero no como criterio de orden.<br/>
+  3. El esquema ya tiene los colores, T-junctions cuadrados y verticales gruesas en col 0 — sólo cambia el ORDEN.<br/>
+</div>
+
+</body>
+</html>

@@ -7,6 +7,15 @@
     <UseWPF>true</UseWPF>
     <PlatformTarget>x64</PlatformTarget>
     <GenerateDependencyFile>false</GenerateDependencyFile>
+
+    <!-- Suprime warnings conocidos de la combinacion .NET 8 + Revit 2025:
+         MSB3277: conflicto System.Drawing / Microsoft.VisualBasic entre
+                  RevitAPI.dll (versiones antiguas) y .NET 8 (mas recientes).
+                  MSBuild lo resuelve eligiendo la principal y la app corre OK.
+         CS0618 : ElementId.IntegerValue obsoleto en Revit 2024+ (usar Value).
+                  Pendiente de migracion en codigo previo a Sprint 1.  No
+                  bloquea compilacion ni runtime. -->
+    <NoWarn>$(NoWarn);MSB3277;CS0618;CS8632</NoWarn>
   </PropertyGroup>
   <ItemGroup>
     <None Remove="Resources\E3G-LOGO-.png" />

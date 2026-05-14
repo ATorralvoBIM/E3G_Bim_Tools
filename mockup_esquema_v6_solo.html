@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8"/>
+<title>Esquema MEP — propuesta v6.1 (símbolos fuera de la línea)</title>
+<style>
+  body { font-family: 'Segoe UI', Arial, sans-serif; margin: 16px; background: #f5f5f5; }
+  .panel { width: 560px; background: white; border: 1px solid #ccc; }
+  .hdr { background: #f5f5f5; padding: 6px 10px; font-weight: 600; font-size: 11px;
+         color: #333; border-bottom: 1px solid #ddd; }
+  .legend { background: #fafafa; padding: 4px 10px; font-size: 10px;
+            border-bottom: 1px solid #ddd; display: flex; gap: 14px; flex-wrap: wrap; }
+  .legend .sw { display: inline-block; width: 14px; height: 3px; vertical-align: middle;
+                margin-right: 4px; border-radius: 2px; }
+  svg { display: block; }
+  .note { margin-top: 12px; font-size: 11px; color: #555; max-width: 560px; }
+</style>
+</head>
+<body>
+
+<div class="panel">
+  <div class="hdr">Esquema (sentido del flujo) · Mecánica Suministro de aire 1</div>
+  <div class="legend">
+    <span><span class="sw" style="background:#1A3A5E"></span>tronco</span>
+    <span><span class="sw" style="background:#2A7DB5"></span>rama</span>
+    <span>└ codo · ┬ tee · ■ terminal · ⬥ reductor · + cross</span>
+  </div>
+
+  <!-- SVG: 12 filas × 22px + 30 cabecera ≈ 320 alto. Ancho 560. -->
+  <svg width="560" height="330" viewBox="0 0 560 330" xmlns="http://www.w3.org/2000/svg">
+
+    <!-- ===== Fuente / acometida — triángulo apuntando ABAJO en el sentido del flujo ===== -->
+    <polygon points="22,6 38,6 30,18" fill="#1A3A5E" stroke="black" stroke-width="0.6"/>
+    <text x="64" y="14" font-size="10" fill="#1A3A5E" font-weight="600">Fuente · UTA</text>
+
+    <!-- ============ TRONCO COL 0 (azul oscuro, x=30) ============ -->
+    <!-- Tronco continuo de y=18 (debajo de la fuente) hasta y=290 (justo antes
+         del cuadrado terminal en y=278+4=282).  El segmento entre y=124 (T-junction)
+         y y=212 (vuelta del subarbol) se pinta atenuado para indicar "el tronco
+         pasa por aqui pero los elementos visibles ahora son del ramal". -->
+    <line x1="30" y1="18"  x2="30" y2="124" stroke="#1A3A5E" stroke-width="3"
+          stroke-linecap="round"/>
+    <line x1="30" y1="124" x2="30" y2="212" stroke="#1A3A5E" stroke-width="3"
+          stroke-linecap="round" opacity="0.45"/>
+    <line x1="30" y1="212" x2="30" y2="278" stroke="#1A3A5E" stroke-width="3"
+          stroke-linecap="round"/>
+
+    <!-- ============ FILAS ============ -->
+    <!-- Convencion:
+           · TUBERIA: sin glifo. La linea coloreada ES la tuberia. El texto
+             empieza a la derecha de la linea con un sangrado fijo.
+           · ACCESORIO: glifo pequeño a la izquierda del texto (no encima de
+             la linea, para no parecer una flecha).  La linea pasa por detras
+             continua.
+           · CORNER (primera fila de un ramal nuevo): solo la "T" horizontal
+             + texto. NO glifo en el cruce — antes hacia parecer flecha. -->
+
+    <!-- Row 1 · #1 · N1→N2 · 470 L/s (col 0, y=36) — tuberia -->
+    <text x="64" y="40" font-size="10" fill="#222" font-weight="600">#1 · N1→N2 · 300x300 · 470 L/s</text>
+
+    <!-- Row 2 · ELBOW @N2 (col 0, y=58) — glifo └ a x=48, texto a x=64 -->
+    <path d="M44 54 L44 58 L48 58" stroke="#1A3A5E" stroke-width="1.8"
+          fill="none" stroke-linecap="round"/>
+    <text x="64" y="62" font-size="10" fill="#555" font-style="italic">ELBOW @N2</text>
+
+    <!-- Row 3 · #2 · N2→N3 · 470 L/s (col 0, y=80) — tuberia -->
+    <text x="64" y="84" font-size="10" fill="#222" font-weight="600">#2 · N2→N3 · 300x300 · 470 L/s</text>
+
+    <!-- Row 4 · TEE @N3 (col 0, y=102) — bifurcacion. Glifo ┬ a x=44 -->
+    <path d="M40 102 L48 102 M44 102 L44 107" stroke="#1A3A5E"
+          stroke-width="1.8" fill="none" stroke-linecap="round"/>
+    <text x="64" y="106" font-size="10" fill="#555" font-style="italic">TEE @N3 — bifurcación</text>
+
+    <!-- ============ RAMA COL 1 (azul medio, x=160) ============ -->
+    <!-- Horizontal "T" desde el tronco (x=30) al sub-tronco (x=160) en y=124 -->
+    <line x1="30" y1="124" x2="160" y2="124" stroke="#2A7DB5" stroke-width="2.4"
+          stroke-linecap="round"/>
+    <!-- Cuadrado T-junction sobre el tronco padre -->
+    <rect x="26" y="120" width="8" height="8" fill="#1A3A5E" stroke="white"
+          stroke-width="1.2" rx="1"/>
+    <!-- Sub-tronco vertical (col 1) recorre desde y=124 hasta y=190 -->
+    <line x1="160" y1="124" x2="160" y2="190" stroke="#2A7DB5"
+          stroke-width="2.4" stroke-linecap="round"/>
+
+    <!-- Row 5 · #4 · N3→N5 (col 1, y=124) — CORNER, sin glifo, solo texto -->
+    <text x="180" y="128" font-size="10" fill="#222">#4 · N3→N5 · 300x300 · 235 L/s</text>
+
+    <!-- Row 6 · ELBOW @N5 (col 1, y=146) — glifo └ a x=174 -->
+    <path d="M170 142 L170 146 L174 146" stroke="#2A7DB5"
+          stroke-width="1.8" fill="none" stroke-linecap="round"/>
+    <text x="180" y="150" font-size="10" fill="#555" font-style="italic">ELBOW @N5</text>
+
+    <!-- Row 7 · #6 · N5→N7 (col 1, y=168) — tuberia -->
+    <text x="180" y="172" font-size="10" fill="#222">#6 · N5→N7 · 300x300 · 235 L/s</text>
+
+    <!-- Row 8 · TERMINAL @N7 (col 1, y=190) — glifo ■ a x=170 -->
+    <rect x="168" y="186" width="8" height="8" fill="#2A7DB5" stroke="black" stroke-width="0.4"/>
+    <text x="180" y="194" font-size="10" fill="#555" font-style="italic">TERMINAL @N7</text>
+
+    <!-- ============ Vuelta al tronco principal (col 0) ============ -->
+    <!-- Row 9 · #3 · N3→N4 (col 0, y=212) — tuberia tronco. Sin glifo. -->
+    <text x="64" y="216" font-size="10" fill="#222" font-weight="600">#3 · N3→N4 · 300x300 · 235 L/s (tronco)</text>
+
+    <!-- Row 10 · ELBOW @N4 (col 0, y=234) — glifo └ a x=48 -->
+    <path d="M44 230 L44 234 L48 234" stroke="#1A3A5E"
+          stroke-width="1.8" fill="none" stroke-linecap="round"/>
+    <text x="64" y="238" font-size="10" fill="#555" font-style="italic">ELBOW @N4</text>
+
+    <!-- Row 11 · #5 · N4→N6 (col 0, y=256) — tuberia -->
+    <text x="64" y="260" font-size="10" fill="#222" font-weight="600">#5 · N4→N6 · 300x300 · 235 L/s</text>
+
+    <!-- Row 12 · TERMINAL @N6 (col 0, y=278) — glifo ■ a x=42 -->
+    <rect x="40" y="274" width="8" height="8" fill="#1A3A5E" stroke="black" stroke-width="0.4"/>
+    <text x="64" y="282" font-size="10" fill="#222">TERMINAL @N6</text>
+
+  </svg>
+</div>
+
+<div class="note">
+  <b>Cambios respecto a la versión anterior:</b>
+  <ul style="margin: 4px 0 0 16px; padding: 0;">
+    <li><b>Tuberías sin glifo</b> sobre la línea — la línea coloreada YA representa la tubería. Antes el ▼ encima de la línea parecía una flecha de flujo.</li>
+    <li><b>Accesorios con glifo pequeño JUNTO al texto</b>, no sobre la línea. El └ del codo ya no se confunde con flecha.</li>
+    <li><b>Esquina de bifurcación sin glifo</b> — #4 sólo lleva texto. El cruce horizontal + vertical es señal visual suficiente del cambio de dirección.</li>
+    <li>El tronco principal se atenúa (opacidad 45 %) entre el T-junction y la vuelta del sub-árbol, para reforzar el "estoy entrando en el ramal".</li>
+  </ul>
+</div>
+
+</body>
+</html>
