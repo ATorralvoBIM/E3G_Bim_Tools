@@ -838,6 +838,8 @@ namespace E3G.Saneamiento
         {
             SchematicCanvas.Children.Clear();
             _schemaGlyphs.Clear();
+            _schemaLines.Clear();
+            _lineOriginalStrokes.Clear();
             _highlightedGlyph = null;
             _lastSchemaRows = rows;
             if (rows == null || rows.Count == 0) return;
@@ -969,14 +971,22 @@ namespace E3G.Saneamiento
                     // Continuación en la misma columna — vertical sólido del
                     // color del sistema. Más fino para fittings (línea sin
                     // longitud de tramo) y más grueso para tuberías.
-                    SchematicCanvas.Children.Add(new WpfLine
+                    var pipeLine = new WpfLine
                     {
                         X1 = x, Y1 = pY, X2 = x, Y2 = y,
                         Stroke = _lastSystemBrush,
                         StrokeThickness = row.IsFitting ? trunkThickness * 0.5 : trunkThickness,
                         StrokeStartLineCap = PenLineCap.Round,
                         StrokeEndLineCap   = PenLineCap.Round,
-                    });
+                    };
+                    SchematicCanvas.Children.Add(pipeLine);
+                    // [Fase 2] Registrar la línea del tramo para overlay de
+                    // camino crítico / heatmap (solo pipes, no fittings).
+                    if (!row.IsFitting)
+                    {
+                        _schemaLines[row] = pipeLine;
+                        _lineOriginalStrokes[pipeLine] = (pipeLine.Stroke, pipeLine.StrokeThickness);
+                    }
                 }
                 else
                 {
@@ -991,7 +1001,7 @@ namespace E3G.Saneamiento
                     //      salida del ramal sin saturar el dibujo.
                     //   2) Un círculo (acumulado en teeJunctions) en la esquina
                     //      exacta de la bifurcación (pX, y) sobre el tronco.
-                    SchematicCanvas.Children.Add(new WpfLine
+                    var branchLine = new WpfLine
                     {
                         X1 = pX, Y1 = y, X2 = x, Y2 = y,
                         Stroke = colBrush,
@@ -999,7 +1009,18 @@ namespace E3G.Saneamiento
                         StrokeDashArray = new DoubleCollection { 3, 3 },
                         StrokeStartLineCap = PenLineCap.Round,
                         StrokeEndLineCap   = PenLineCap.Round,
-                    });
+                    };
+                    SchematicCanvas.Children.Add(branchLine);
+                    // [Fase 2] El ramal usa la línea horizontal como su línea
+                    // representativa (el tramo vertical vendrá en la fila
+                    // siguiente, que ya será continuación). Aun así la
+                    // registramos aquí para que el overlay pueda colorear la
+                    // conexión de rama cuando se activa el heatmap o camino crítico.
+                    if (!row.IsFitting)
+                    {
+                        _schemaLines[row] = branchLine;
+                        _lineOriginalStrokes[branchLine] = (branchLine.Stroke, branchLine.StrokeThickness);
+                    }
                     // El fitting del nodo padre (si es TEE/CROSS) se usará
                     // para dibujar SU glifo en (pX, y) en lugar del círculo
                     // genérico — el accesorio queda justo en el sitio donde
@@ -2092,6 +2113,371 @@ namespace E3G.Saneamiento
             public BuildingTypeItem(SimultaneityProfile profile, string label)
             { Profile = profile; Label = label; }
             public override string ToString() => Label;
+        }
+
+        // ===================================================================
+        //  FASE 2 — Camino crítico + Heatmap
+        // ===================================================================
+
+        // -------------------------------------------------------------------
+        //  Algoritmo del camino crítico — diagrama de flujo (comentario)
+        //
+        //  ┌─────────────────────────────────────────────────────────────────┐
+        //  │  ENTRADA: IList<ResultRow> rows  (orden DFS preorder)           │
+        //  ├─────────────────────────────────────────────────────────────────┤
+        //  │  1. Indexar pipes por nodo de salida → rowByOutgoing            │
+        //  │  2. Para cada pipe (en orden):                                  │
+        //  │       cumDp[pipe] = cumDp[parent] + max(pipe.TotalLoss, 0)      │
+        //  │  3. Terminales = pipes sin hijos en el grafo                    │
+        //  │  4. worst = argmax(cumDp) entre terminales                      │
+        //  │  5. Trace-back: worst → fuente, reconstruir lista de tramos     │
+        //  └─────────────────────────────────────────────────────────────────┘
+        //
+        //  Complejidad: O(N) tiempo y espacio.
+        //  Robustez: acepta grafos desconectados y TotalLoss negativos.
+        // -------------------------------------------------------------------
+
+        // -------------------------------------------------------------------
+        //  Handlers de UI
+        // -------------------------------------------------------------------
+
+        /// <summary>
+        /// [Fase 2] Toggle del botón "Camino crítico".
+        /// Al activarse: analiza la red actual y superpone el overlay naranja.
+        /// Al desactivarse: limpia el overlay y devuelve al color del sistema.
+        /// </summary>
+        private void OnCriticalPathToggled(object sender, RoutedEventArgs e)
+        {
+            bool active = BtnCriticalPath?.IsChecked == true;
+            if (!active)
+            {
+                _activeCriticalPath = null;
+                ClearAnalyticsOverlay();
+                // Si el heatmap sigue activo, reaplicarlo.
+                if (_activeHeatmap != null && !_activeHeatmap.IsEmpty)
+                    ApplyHeatmap(_activeHeatmap);
+                return;
+            }
+
+            if (_lastSchemaRows == null || _lastSchemaRows.Count == 0)
+            {
+                LblStatus.Text = "Sin datos. Ejecuta Calcular primero.";
+                BtnCriticalPath.IsChecked = false;
+                return;
+            }
+
+            _activeCriticalPath = _criticalPathSvc.Analyze(_lastSchemaRows);
+            if (_activeCriticalPath.IsEmpty)
+            {
+                LblStatus.Text = "No se pudo calcular el camino crítico — red sin terminales.";
+                BtnCriticalPath.IsChecked = false;
+                return;
+            }
+
+            // Si hay heatmap activo, aplicar primero el heatmap y después
+            // superponer el overlay del camino crítico encima.
+            if (_activeHeatmap != null && !_activeHeatmap.IsEmpty)
+                ApplyHeatmap(_activeHeatmap);
+
+            ApplyCriticalPathOverlay(_activeCriticalPath);
+            LblStatus.Text = $"Camino crítico: {_activeCriticalPath.Path.Count} tramos · "
+                           + $"ΔP total = {_activeCriticalPath.TotalDeltaP:F0} Pa";
+        }
+
+        /// <summary>
+        /// [Fase 2] Cambio en el ComboBox de heatmap.
+        /// </summary>
+        private void OnHeatmapChanged(object sender, SelectionChangedEventArgs e)
+        {
+            int idx = CboHeatmap?.SelectedIndex ?? 0;
+            HeatmapMetric metric = idx switch
+            {
+                1 => HeatmapMetric.FlowLps,
+                2 => HeatmapMetric.Velocity,
+                3 => HeatmapMetric.FrictionPaPm,
+                4 => HeatmapMetric.HoldingMargin,
+                _ => HeatmapMetric.None,
+            };
+
+            if (metric == HeatmapMetric.None)
+            {
+                _activeHeatmap = null;
+                ClearAnalyticsOverlay();
+                if (LblHeatmapRange != null) LblHeatmapRange.Text = "";
+                // Reaplicar camino crítico si está activo.
+                if (BtnCriticalPath?.IsChecked == true && _activeCriticalPath != null)
+                    ApplyCriticalPathOverlay(_activeCriticalPath);
+                return;
+            }
+
+            if (_lastSchemaRows == null || _lastSchemaRows.Count == 0) return;
+
+            _activeHeatmap = _heatmapSvc.Compute(_lastSchemaRows, metric);
+            if (_activeHeatmap.IsEmpty) return;
+
+            ApplyHeatmap(_activeHeatmap);
+
+            // Actualizar etiqueta de rango.
+            string unit = metric switch
+            {
+                HeatmapMetric.FlowLps      => "L/s",
+                HeatmapMetric.Velocity     => "m/s",
+                HeatmapMetric.FrictionPaPm => "Pa/m",
+                HeatmapMetric.HoldingMargin=> "%",
+                _                          => "",
+            };
+            double displayMin = metric == HeatmapMetric.HoldingMargin
+                ? _activeHeatmap.Min * 100 : _activeHeatmap.Min;
+            double displayMax = metric == HeatmapMetric.HoldingMargin
+                ? _activeHeatmap.Max * 100 : _activeHeatmap.Max;
+            if (LblHeatmapRange != null)
+                LblHeatmapRange.Text =
+                    $"■ {displayMin:F1}  →  ■ {displayMax:F1} {unit}";
+
+            // Superponer camino crítico encima si está activo.
+            if (BtnCriticalPath?.IsChecked == true && _activeCriticalPath != null)
+                ApplyCriticalPathOverlay(_activeCriticalPath);
+        }
+
+        // -------------------------------------------------------------------
+        //  Rendering — overlay de análisis
+        // -------------------------------------------------------------------
+
+        /// <summary>
+        /// Colorea cada línea de pipe según el brush del heatmap.
+        /// Las líneas de fitting quedan sin cambio (no tienen datos hidráulicos).
+        /// </summary>
+        private void ApplyHeatmap(HeatmapResult heatmap)
+        {
+            if (heatmap == null || heatmap.IsEmpty) return;
+            foreach (var kv in _schemaLines)
+            {
+                ResultRow row = kv.Key;
+                WpfLine line   = kv.Value;
+                if (heatmap.Brushes.TryGetValue(row, out Brush brush))
+                {
+                    line.Stroke          = brush;
+                    line.StrokeThickness = _lineOriginalStrokes.TryGetValue(line, out var orig)
+                                          ? orig.thickness + 0.5 : 3.0;
+                    line.StrokeDashArray = null;   // quitar dashes del ramal
+                }
+            }
+        }
+
+        /// <summary>
+        /// Superpone el overlay del camino crítico sobre el esquema ya pintado
+        /// (puede estar en color de sistema o con heatmap).
+        /// Reglas visuales:
+        ///   • Tramos del camino crítico → naranja vivo (#FF6D00), grosor ×1.8,
+        ///     sin dash, añade glow effect.
+        ///   • Tramos fuera del camino  → se atenúan al 30 % de opacidad.
+        /// </summary>
+        private void ApplyCriticalPathOverlay(CriticalPathResult cpr)
+        {
+            if (cpr == null || cpr.IsEmpty) return;
+
+            var criticalSet = new HashSet<ResultRow>(cpr.Path);
+            var criticalBrush = new SolidColorBrush(WpfColor.FromRgb(0xFF, 0x6D, 0x00));
+            criticalBrush.Freeze();
+            var dimBrush = new SolidColorBrush(WpfColor.FromArgb(0x44, 0x99, 0x99, 0x99));
+            dimBrush.Freeze();
+
+            foreach (var kv in _schemaLines)
+            {
+                ResultRow row = kv.Key;
+                WpfLine line   = kv.Value;
+                bool isCritical = criticalSet.Contains(row);
+
+                if (isCritical)
+                {
+                    line.Stroke          = criticalBrush;
+                    line.StrokeThickness = (_lineOriginalStrokes.TryGetValue(line, out var orig)
+                                           ? orig.thickness : 3.0) * 1.8;
+                    line.StrokeDashArray = null;
+                    line.Effect = new System.Windows.Media.Effects.DropShadowEffect
+                    {
+                        Color        = WpfColor.FromRgb(0xFF, 0x6D, 0x00),
+                        BlurRadius   = 10,
+                        ShadowDepth  = 0,
+                        Opacity      = 0.65,
+                    };
+                }
+                else
+                {
+                    // Atenuar sin destruir la información de heatmap si estaba activo.
+                    line.Opacity = 0.28;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Restaura todas las líneas del esquema a su color y grosor originales.
+        /// Elimina también cualquier efecto de glow y opacidad reducida.
+        /// </summary>
+        private void ClearAnalyticsOverlay()
+        {
+            foreach (var kv in _schemaLines)
+            {
+                WpfLine line = kv.Value;
+                if (_lineOriginalStrokes.TryGetValue(line, out var orig))
+                {
+                    line.Stroke          = orig.stroke;
+                    line.StrokeThickness = orig.thickness;
+                }
+                line.Effect  = null;
+                line.Opacity = 1.0;
+                // Restaurar dash si era ramal (X1 != X2 → horizontal).
+                if (Math.Abs(line.X1 - line.X2) > 0.1)
+                    line.StrokeDashArray = new DoubleCollection { 3, 3 };
+                else
+                    line.StrokeDashArray = null;
+            }
+            if (LblHeatmapRange != null) LblHeatmapRange.Text = "";
+        }
+
+        // -------------------------------------------------------------------
+        //  Tooltips justificativos enriquecidos (Fase 2)
+        // -------------------------------------------------------------------
+
+        /// <summary>
+        /// Construye un tooltip completo para un pipe con toda la información
+        /// hidráulica relevante: datos del tramo + posición en el camino crítico
+        /// + ΔP acumulado.
+        /// </summary>
+        private string BuildPipeTooltip(ResultRow row, CriticalPathResult cpr)
+        {
+            var sb = new System.Text.StringBuilder();
+
+            // Cabecera: número de tramo y ruta
+            sb.Append("Tramo #").Append(row.BfsIndex)
+              .Append("  ").Append(row.NodePath ?? "");
+
+            // Indicador de camino crítico
+            if (cpr != null && !cpr.IsEmpty)
+            {
+                bool isCrit = false;
+                foreach (var p in cpr.Path)
+                    if (ReferenceEquals(p, row)) { isCrit = true; break; }
+                sb.Append(isCrit ? "\n⚠ CAMINO CRÍTICO" : "");
+            }
+
+            // Geometría
+            if (!string.IsNullOrEmpty(row.Size))
+                sb.Append("\n").Append(row.Size);
+            if (!string.IsNullOrEmpty(row.RecommendedSize)
+                && row.RecommendedSize != "—" && row.RecommendedSize != row.Size)
+                sb.Append("  (rec ").Append(row.RecommendedSize).Append(")");
+
+            // Hidráulica
+            if (row.FlowLps > 0)
+                sb.Append("\nQ = ").Append(row.FlowLps.ToString("F2")).Append(" L/s");
+            if (row.Velocity > 0)
+                sb.Append("  v = ").Append(row.Velocity.ToString("F2")).Append(" m/s");
+            if (row.FrictionPaPm > 0)
+                sb.Append("\nΔP/m = ").Append(row.FrictionPaPm.ToString("F0")).Append(" Pa/m");
+            if (row.TotalLoss > 0)
+                sb.Append("  ΔP tramo = ").Append(row.TotalLoss.ToString("F0")).Append(" Pa");
+
+            // ΔP acumulado (desde la fuente)
+            if (cpr != null && !cpr.IsEmpty
+                && cpr.AccumulatedAt.TryGetValue(row, out double accDp))
+                sb.Append("\nΔP acumulado = ").Append(accDp.ToString("F0")).Append(" Pa");
+
+            // N aparatos + K
+            if (row.FixtureCount > 0)
+                sb.Append("\nN = ").Append(row.FixtureCount).Append(" aparatos")
+                  .Append("  K = ").Append(row.KFactor.ToString("F2"));
+
+            // Nivel y estado
+            if (!string.IsNullOrEmpty(row.LevelName))
+                sb.Append("\nNivel: ").Append(row.LevelName);
+            if (!string.IsNullOrEmpty(row.Status))
+                sb.Append("\n").Append(row.Status);
+
+            return sb.ToString();
+        }
+
+        /// <summary>
+        /// Construye un tooltip justificativo para un fitting (accesorio).
+        /// Incluye el tipo, descripción funcional y datos de contexto del nudo.
+        /// </summary>
+        private static string BuildFittingTooltip(ResultRow row)
+        {
+            var sb = new System.Text.StringBuilder();
+            string kind = row.EndNodeKind ?? row.ElementKind ?? "?";
+            string node = row.NodePath ?? "";
+
+            // Tipo y descripción funcional
+            switch (kind)
+            {
+                case "TEE":
+                    sb.Append("TEE — Derivación en T");
+                    sb.Append("\nEl flujo principal continúa por el tronco;");
+                    sb.Append("\nun ramal sale lateralmente.");
+                    break;
+                case "CROSS":
+                    sb.Append("CROSS — Cruce de cuatro vías");
+                    sb.Append("\nEl flujo principal y dos ramales se bifurcan.");
+                    break;
+                case "ELBOW":
+                    sb.Append("CODO — Cambio de dirección");
+                    sb.Append("\nPérdida singular ≈ K × v² / 2g");
+                    sb.Append("\n  K estimado: 0.5 – 1.5 (radio del codo)");
+                    break;
+                case "REDUCER":
+                    sb.Append("REDUCTOR — Cambio de diámetro");
+                    sb.Append("\nPérdida singular ≈ K × Δv² / 2g");
+                    sb.Append("\n  K estimado: 0.1 – 0.5 (reducción cónica)");
+                    break;
+                case "TERMINAL":
+                    sb.Append("TERMINAL — Aparato de consumo");
+                    sb.Append("\nPunto final de la red.");
+                    sb.Append("\nPresión mínima garantizada aquí.");
+                    break;
+                case "FIN":
+                    sb.Append("FIN — Extremo abierto");
+                    sb.Append("\nTramo sin continuación en el modelo.");
+                    break;
+                default:
+                    sb.Append(kind).Append(" ").Append(node);
+                    break;
+            }
+
+            if (!string.IsNullOrEmpty(node))
+                sb.Append("\nNudo: ").Append(node);
+            if (row.BranchCount > 0)
+                sb.Append("\nRamales aguas-abajo: ").Append(row.BranchCount);
+            if (!string.IsNullOrEmpty(row.LevelName))
+                sb.Append("\nNivel: ").Append(row.LevelName);
+
+            return sb.ToString();
+        }
+
+        // -------------------------------------------------------------------
+        //  Helper: actualizar tooltips del esquema con datos analíticos.
+        //  Llamado tras ApplyCriticalPathOverlay / ApplyHeatmap para que
+        //  los ToolTip reflejen el ΔP acumulado y la posición en el camino.
+        // -------------------------------------------------------------------
+
+        /// <summary>
+        /// Actualiza los ToolTip de todos los glyphs registrados usando la
+        /// información del camino crítico activo (si lo hay).  Así al hacer
+        /// hover sobre un tramo se ve el ΔP acumulado y si es crítico.
+        /// </summary>
+        private void RefreshSchematicTooltips()
+        {
+            foreach (var kv in _schemaGlyphs)
+            {
+                ResultRow row = kv.Key;
+                FrameworkElement el = kv.Value;
+                if (el == null) continue;
+
+                string tip = row.IsFitting
+                    ? BuildFittingTooltip(row)
+                    : BuildPipeTooltip(row, _activeCriticalPath);
+
+                el.ToolTip = tip;
+            }
         }
     }
 }
