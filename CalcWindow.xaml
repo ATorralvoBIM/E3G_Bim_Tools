@@ -596,6 +596,8 @@
             <Button x:Name="BtnDiag"   Content="ⓘ Diagnóstico"     Click="OnShowDiag" IsEnabled="False" MinWidth="120"/>
             <Button x:Name="BtnCalc"   Content="▶ Calcular"          Click="OnCalculate"/>
             <Button x:Name="BtnExport" Content="📥 Exportar informe" Click="OnExport"   IsEnabled="False" MinWidth="160"/>
+            <Button x:Name="BtnSchema" Content="🗺 Generar esquema" Click="OnGenerateSchema" IsEnabled="False" MinWidth="160"
+                    ToolTip="Abre la ventana de previsualización del esquema de principio"/>
             <Button x:Name="BtnApply"  Content="✔ Aplicar al modelo" Click="OnApply"    IsEnabled="False" MinWidth="140"/>
             <Button x:Name="BtnClose"  Content="Cerrar"               Click="OnClose"/>
         </StackPanel>

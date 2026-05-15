@@ -112,6 +112,21 @@ namespace E3G.Saneamiento
             // redraws excesivos durante el drag.
             SchematicScroll.SizeChanged += OnSchematicScrollSizeChanged;
 
+            // [Fase 3] Guardamos UIApplication para que el preview del esquema
+            // pueda invocar a SchematicGeneratorService dentro del contexto
+            // de Revit.  Es independiente de la sync — incluso sin sync
+            // activa, mientras tengamos uiApp, podremos generar la vista.
+            _uiAppOpt = uiApp;
+            // El ExternalEventBus debe crearse en un contexto válido de la
+            // API de Revit (es decir, durante Execute del comando).  Si lo
+            // intentamos crear más tarde desde un click handler, falla.
+            // Por eso lo creamos AQUÍ y lo pasamos al preview cuando se abra.
+            if (uiApp != null)
+            {
+                try { _schematicBus = new RevitBridge.Sync.ExternalEventBus(); }
+                catch { /* si falla, el preview lo dirá al pulsar Generar */ }
+            }
+
             // [Fase 1] Sincronización bidireccional Revit ↔ UI.
             if (uiApp != null)
             {
@@ -128,7 +143,14 @@ namespace E3G.Saneamiento
                     _schemaSyncCtl?.Dispose();
                     _sync.Stop();
                     _sync.Dispose();
+                    _schematicBus?.Dispose();
                 };
+            }
+            else
+            {
+                // Si la sync no está activa pero quisiéramos limpiar el bus
+                // del esquema de todos modos, lo registramos también.
+                Closed += (s, e) => _schematicBus?.Dispose();
             }
         }
 
@@ -405,6 +427,7 @@ namespace E3G.Saneamiento
             BtnApply.IsEnabled = true;
             BtnDiag.IsEnabled = true;
             BtnExport.IsEnabled = true;
+            BtnSchema.IsEnabled = true;
             LblStatus.Text = $"OK · {network.Segments.Count} tramos · "
                 + $"ΔP peor caso = {report.WorstCasePressureDropPa:F0} Pa · "
                 + $"avisos {report.CountWarnings} · errores {report.CountErrors}";
@@ -495,6 +518,7 @@ namespace E3G.Saneamiento
             BtnApply.IsEnabled = true;
             BtnDiag.IsEnabled = true;
             BtnExport.IsEnabled = true;
+            BtnSchema.IsEnabled = true;
             LblStatus.Text = $"OK · {network.Segments.Count} tramos · "
                 + $"ΔP peor caso = {report.WorstCasePressureDropPa:F0} Pa · "
                 + $"avisos {report.CountWarnings} · errores {report.CountErrors}";
@@ -554,6 +578,63 @@ namespace E3G.Saneamiento
                 sb.AppendLine("[" + m.Severity + "] " + m.Code + ": " + m.Message);
             return sb.ToString();
         }
+
+        // -------------------------------------------------------------------
+        //  [Fase 3] Generar esquema de principio (preview WPF + Revit view)
+        // -------------------------------------------------------------------
+
+        private void OnGenerateSchema(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                if (_lastSchemaRows == null || _lastSchemaRows.Count == 0)
+                {
+                    LblStatus.Text = "Calcula primero un sistema.";
+                    return;
+                }
+
+                // Reconstruir columnOf y CriticalPath con el estado actual.
+                var columnOf = ComputeColumnsByTrunk(_lastSchemaRows);
+                var critRes = _activeCriticalPath;   // null si no está activo
+
+                // Leyenda con los metadatos del último cálculo.
+                var legend = new E3G.Saneamiento.Core.Schematic.SchematicLegend
+                {
+                    SystemName = _lastSystemName ?? "(sin nombre)",
+                    CriteriaName = _lastIsPiping
+                        ? (CboPipeCriteria.SelectedItem?.ToString() ?? "")
+                        : (CboDuctCriteria.SelectedItem?.ToString() ?? ""),
+                    PipeCount = _lastSchemaRows.Count(r => r != null && !r.IsFitting),
+                    WorstCaseDpPa = _lastReport?.WorstCasePressureDropPa ?? 0,
+                    WarningCount = _lastReport?.CountWarnings ?? 0,
+                    ErrorCount = _lastReport?.CountErrors ?? 0,
+                    GeneratedAt = DateTime.Now,
+                };
+
+                var preview = new E3G.Saneamiento.UI.Schematic.SchematicPreviewWindow(
+                    _uiAppOpt, _sync, _lastSchemaRows, columnOf, critRes, legend,
+                    _schematicBus)
+                {
+                    Owner = this,
+                };
+                preview.Show();
+                LblStatus.Text = "Previsualización abierta.";
+            }
+            catch (Exception ex)
+            {
+                LblStatus.Text = "Error al abrir preview: " + ex.Message;
+                MessageBox.Show(this,
+                    "Excepción al abrir el preview del esquema:\n\n" + ex,
+                    "Generar esquema", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
+        // Campo de respaldo para la UIApplication recibida por el constructor —
+        // el preview lo necesita pero la sobrecarga clásica no lo tiene.
+        private UIApplication _uiAppOpt;
+        // ExternalEventBus creado en constructor (contexto API válido) y
+        // reutilizado por el preview para generar la vista en Revit.
+        private RevitBridge.Sync.ExternalEventBus _schematicBus;
 
         // -------------------------------------------------------------------
         //  Aplicar al modelo
