@@ -1301,6 +1301,20 @@ namespace E3G.Saneamiento
                 if (icoCli32 != null) { btnCalcWindow.LargeImage = icoCli32; btnCalcWindow.Image = icoCli16; }
                 rpMain.AddItem(btnCalcWindow);
 
+                // ── Ajustos ──────────────────────────────────────────────────
+                var icoAjustes32 = RibbonHelper.CargarIcono(System.IO.Path.Combine(dllDir, "Resources", "icono_panel_32.png"));
+                var icoAjustes16 = RibbonHelper.CargarIcono(System.IO.Path.Combine(dllDir, "Resources", "icono_small_16.png"));
+                var btnAjustes = new PushButtonData(
+                    "BtnAjustes",
+                    "E3G" + System.Environment.NewLine + "Ajustos",
+                    dll,
+                    "E3G.Saneamiento.CmdAbrirAjustes")
+                {
+                    ToolTip = "Obre la finestra d'ajustos: idioma, unitats, protocol de classificació…"
+                };
+                if (icoAjustes32 != null) { btnAjustes.LargeImage = icoAjustes32; btnAjustes.Image = icoAjustes16; }
+                rpMain.AddItem(btnAjustes);
+
                 var handlerPluvials = new EventoMedicionPluvials();
                 SaneamientoSession.HandlerPluvials = handlerPluvials;
                 SaneamientoSession.EventoPluvials = ExternalEvent.Create(handlerPluvials);

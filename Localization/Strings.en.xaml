@@ -1,0 +1,43 @@
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:sys="clr-namespace:System;assembly=mscorlib">
+
+    <!-- ══ CalcWindow — Toolbar buttons ══ -->
+    <sys:String x:Key="Str.Btn.Calcular">▶ Calculate</sys:String>
+    <sys:String x:Key="Str.Btn.Aplicar">✔ Apply to model</sys:String>
+    <sys:String x:Key="Str.Btn.Exportar">📥 Export report</sys:String>
+    <sys:String x:Key="Str.Btn.Esquema">🗺 Generate schema</sys:String>
+    <sys:String x:Key="Str.Btn.Tancar">Close</sys:String>
+    <sys:String x:Key="Str.Btn.Diagnostic">ⓘ Diagnostics</sys:String>
+    <sys:String x:Key="Str.Btn.Ajustes">⚙ Settings</sys:String>
+
+    <!-- ══ CalcWindow — Tabs ══ -->
+    <sys:String x:Key="Str.Tab.Fontaneria">Plumbing</sys:String>
+    <sys:String x:Key="Str.Tab.Aeraulic">Aeraulic</sys:String>
+
+    <!-- ══ CalcWindow — Labels ══ -->
+    <sys:String x:Key="Str.Lbl.SistemaMEP">MEP System:</sys:String>
+    <sys:String x:Key="Str.Lbl.Criteri">Sizing criterion:</sys:String>
+    <sys:String x:Key="Str.Lbl.TipusEdifici">Building type (simult.):</sys:String>
+    <sys:String x:Key="Str.Lbl.TempAigua">Water temperature [°C]:</sys:String>
+    <sys:String x:Key="Str.Lbl.PressioFont">Source pressure [kPa]:</sys:String>
+    <sys:String x:Key="Str.Lbl.TempAire">Air temperature [°C]:</sys:String>
+    <sys:String x:Key="Str.Lbl.Altitud">Altitude [m]:</sys:String>
+    <sys:String x:Key="Str.Lbl.PressioVent">Fan pressure [Pa]:</sys:String>
+    <sys:String x:Key="Str.Status.Ready">Ready. Select a system and press Calculate.</sys:String>
+
+    <!-- ══ FilterBar ══ -->
+    <sys:String x:Key="Str.Filter.Placeholder">Search…  bfs:N  dn:50  level:P2</sys:String>
+    <sys:String x:Key="Str.Filter.Problemes">⚠ Issues</sys:String>
+    <sys:String x:Key="Str.Filter.Critic">🔴 Critical</sys:String>
+    <sys:String x:Key="Str.Filter.Accessoris">≠ Fittings</sys:String>
+
+    <!-- ══ CalcWindow — Schema ══ -->
+    <sys:String x:Key="Str.Schema.Title">  Schema (flow direction)  ·  1 row = 1 pipe segment</sys:String>
+    <sys:String x:Key="Str.Btn.CaminoCritico">Critical path</sys:String>
+
+    <!-- ══ Dialogs ══ -->
+    <sys:String x:Key="Str.Dlg.AjustesTitle">Settings — E3G BIM Tools</sys:String>
+    <sys:String x:Key="Str.Dlg.Tancar">Close</sys:String>
+
+</ResourceDictionary>

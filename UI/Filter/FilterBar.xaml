@@ -143,7 +143,7 @@
                          Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}"
                          ToolTip="Busca por nodo, DN, nivel, ElementId...&#10;Sintaxis: bfs:3-8  dn:50  level:P2  id:12345  status:error"/>
                 <!-- Watermark / placeholder -->
-                <TextBlock Text="Buscar…  bfs:N  dn:50  level:P2"
+                <TextBlock Text="{DynamicResource Str.Filter.Placeholder}"
                            IsHitTestVisible="False"
                            VerticalAlignment="Center"
                            HorizontalAlignment="Left"
@@ -182,21 +182,18 @@
 
                 <ToggleButton Style="{StaticResource ChipIssues}"
                               IsChecked="{Binding OnlyIssues}"
-                              ToolTip="Muestra solo tramos con Warning o Error">
-                    ⚠ Problemas
-                </ToggleButton>
+                              Content="{DynamicResource Str.Filter.Problemes}"
+                              ToolTip="Mostra només trams amb Warning o Error"/>
 
                 <ToggleButton Style="{StaticResource ChipToggle}"
                               IsChecked="{Binding OnlyCriticalPath}"
-                              ToolTip="Muestra solo los tramos del camino crítico (ΔP máximo)">
-                    🔴 Crítico
-                </ToggleButton>
+                              Content="{DynamicResource Str.Filter.Critic}"
+                              ToolTip="Mostra només els trams del camí crític (ΔP màxim)"/>
 
                 <ToggleButton Style="{StaticResource ChipToggle}"
                               IsChecked="{Binding HideFittings}"
-                              ToolTip="Oculta las filas de accesorios (TEE, ELBOW, REDUCER…)">
-                    ≠ Accesorios
-                </ToggleButton>
+                              Content="{DynamicResource Str.Filter.Accessoris}"
+                              ToolTip="Amaga les files d'accessori (TEE, ELBOW, REDUCER…)"/>
 
             </StackPanel>
 

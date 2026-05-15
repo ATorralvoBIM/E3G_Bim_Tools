@@ -58,6 +58,7 @@ using WpfColor     = System.Windows.Media.Color;
 using WpfColors    = System.Windows.Media.Colors;
 // [Fase 4] Filtros y búsqueda
 using System.Windows.Data;
+using E3G.Saneamiento.Localization;
 using E3G.Saneamiento.Core.Filtering;
 using E3G.Saneamiento.UI.Filter;
 
@@ -109,6 +110,10 @@ namespace E3G.Saneamiento
             _doc = doc ?? throw new ArgumentNullException(nameof(doc));
             InitializeComponent();
             DgResults.ItemsSource = Rows;
+
+            // [Idioma] Carregar l'idioma persistit i aplicar els strings DynamicResource.
+            // LanguageService.Init() ja és idempotent si AjustesWindow l'ha cridat abans.
+            LanguageService.Init();
 
             // [Fase 4] Inicializar FilterBar + ViewModel
             _filterVm = new FilterBarViewModel();
@@ -268,6 +273,53 @@ namespace E3G.Saneamiento
         private void OnDuctTempChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
             if (LblDuctTemp != null) LblDuctTemp.Text = ((int)e.NewValue).ToString();
+        }
+
+        // ── [Ajustes] Obrir finestra d'ajustos ──────────────────────────────
+
+        private void OnOpenAjustes(object sender, RoutedEventArgs e)
+        {
+            // AjustesWindow és un Page, la mostrem dins d'un Window lleuger.
+            var dlg = new Window
+            {
+                Title        = TryGetString("Str.Dlg.AjustesTitle") ?? "Ajustes — E3G BIM Tools",
+                Width        = 820,
+                Height       = 680,
+                MinWidth     = 680,
+                MinHeight    = 500,
+                WindowStartupLocation = WindowStartupLocation.CenterOwner,
+                Owner        = this,
+                ShowInTaskbar = false,
+                ResizeMode   = ResizeMode.CanResizeWithGrip,
+                Background   = System.Windows.Media.Brushes.White,
+            };
+
+            var ajustesPage = new AjustesWindow(_uiAppOpt);
+
+            // Quan l'idioma canviï des d'AjustesWindow, actualitzem el títol del diàleg.
+            LanguageService.LanguageChanged += () =>
+            {
+                dlg.Title = TryGetString("Str.Dlg.AjustesTitle") ?? "Ajustes — E3G BIM Tools";
+            };
+
+            var frame = new System.Windows.Controls.Frame
+            {
+                NavigationUIVisibility = System.Windows.Navigation.NavigationUIVisibility.Hidden,
+                Content = ajustesPage,
+            };
+            dlg.Content = frame;
+            dlg.ShowDialog();
+        }
+
+        /// <summary>Intenta obtenir un string del ResourceDictionary actiu.
+        /// Retorna null si la clau no existeix (fallback segur).</summary>
+        private static string TryGetString(string key)
+        {
+            try
+            {
+                return Application.Current?.Resources[key] as string;
+            }
+            catch { return null; }
         }
 
         private void OnClose(object sender, RoutedEventArgs e) => Close();

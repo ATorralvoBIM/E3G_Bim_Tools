@@ -1,0 +1,43 @@
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:sys="clr-namespace:System;assembly=mscorlib">
+
+    <!-- ══ CalcWindow — Botons toolbar ══ -->
+    <sys:String x:Key="Str.Btn.Calcular">▶ Calcular</sys:String>
+    <sys:String x:Key="Str.Btn.Aplicar">✔ Aplicar al model</sys:String>
+    <sys:String x:Key="Str.Btn.Exportar">📥 Exportar informe</sys:String>
+    <sys:String x:Key="Str.Btn.Esquema">🗺 Generar esquema</sys:String>
+    <sys:String x:Key="Str.Btn.Tancar">Tancar</sys:String>
+    <sys:String x:Key="Str.Btn.Diagnostic">ⓘ Diagnòstic</sys:String>
+    <sys:String x:Key="Str.Btn.Ajustes">⚙ Ajustos</sys:String>
+
+    <!-- ══ CalcWindow — Tabs ══ -->
+    <sys:String x:Key="Str.Tab.Fontaneria">Fontaneria</sys:String>
+    <sys:String x:Key="Str.Tab.Aeraulic">Aeràulic</sys:String>
+
+    <!-- ══ CalcWindow — Labels ══ -->
+    <sys:String x:Key="Str.Lbl.SistemaMEP">Sistema MEP:</sys:String>
+    <sys:String x:Key="Str.Lbl.Criteri">Criteri dimensionat:</sys:String>
+    <sys:String x:Key="Str.Lbl.TipusEdifici">Tipus edifici (simult.):</sys:String>
+    <sys:String x:Key="Str.Lbl.TempAigua">Temperatura aigua [°C]:</sys:String>
+    <sys:String x:Key="Str.Lbl.PressioFont">Pressió font [kPa]:</sys:String>
+    <sys:String x:Key="Str.Lbl.TempAire">Temperatura aire [°C]:</sys:String>
+    <sys:String x:Key="Str.Lbl.Altitud">Altitud [m]:</sys:String>
+    <sys:String x:Key="Str.Lbl.PressioVent">Pressió ventilador [Pa]:</sys:String>
+    <sys:String x:Key="Str.Status.Ready">A punt. Selecciona un sistema i prem Calcular.</sys:String>
+
+    <!-- ══ FilterBar ══ -->
+    <sys:String x:Key="Str.Filter.Placeholder">Cercar…  bfs:N  dn:50  level:P2</sys:String>
+    <sys:String x:Key="Str.Filter.Problemes">⚠ Problemes</sys:String>
+    <sys:String x:Key="Str.Filter.Critic">🔴 Crític</sys:String>
+    <sys:String x:Key="Str.Filter.Accessoris">≠ Accessoris</sys:String>
+
+    <!-- ══ CalcWindow — Esquema ══ -->
+    <sys:String x:Key="Str.Schema.Title">  Esquema (sentit del flux)  ·  1 fila = 1 tram de canonada</sys:String>
+    <sys:String x:Key="Str.Btn.CaminoCritico">Camí crític</sys:String>
+
+    <!-- ══ Diàlegs ══ -->
+    <sys:String x:Key="Str.Dlg.AjustesTitle">Ajustos — E3G BIM Tools</sys:String>
+    <sys:String x:Key="Str.Dlg.Tancar">Tancar</sys:String>
+
+</ResourceDictionary>

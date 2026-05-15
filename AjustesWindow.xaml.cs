@@ -1,5 +1,6 @@
 ﻿using Autodesk.Revit.DB;
 using Autodesk.Revit.UI;
+using E3G.Saneamiento.Localization;
 using E3G.Saneamiento;
 using System;
 using System.Collections.Generic;
@@ -31,7 +32,54 @@ namespace E3G.Saneamiento
         {
             InitializeComponent();
             _uiApp = uiApp;
-            Loaded += (s, e) => NavegarA(SecIdioma, BtnNavIdioma);
+
+            // [Idioma] Inicialitzar LanguageService i restaurar la selecció
+            // guardada al ComboBox abans de mostrar la pàgina.
+            LanguageService.Init();
+            Loaded += (s, e) =>
+            {
+                NavegarA(SecIdioma, BtnNavIdioma);
+                RestaurarIdiomaComboBox();
+                // Ara sí: subscriure SelectionChanged perquè no dispari durant Init.
+                CbxIdiomaPlugin.SelectionChanged += OnIdiomaPluginChanged;
+            };
+        }
+
+        // ── Handlers de canvi d'idioma ────────────────────────────────────
+
+        private void OnIdiomaPluginChanged(object sender, SelectionChangedEventArgs e)
+        {
+            var item = CbxIdiomaPlugin.SelectedItem as ComboBoxItem;
+            if (item == null) return;
+            // Mappejar el text visible → codi normalitzat per LanguageService.
+            var text = item.Content?.ToString() ?? "";
+            LanguageService.Set(text);   // LanguageService.Normalize() s'encarrega del mapping
+        }
+
+        /// <summary>Selecciona al ComboBox l'idioma que LanguageService té actiu.</summary>
+        private void RestaurarIdiomaComboBox()
+        {
+            string codi = LanguageService.Current;
+            // Triar el ComboBoxItem que correspon al codi actiu.
+            foreach (ComboBoxItem item in CbxIdiomaPlugin.Items)
+            {
+                var text = item.Content?.ToString()?.ToLowerInvariant() ?? "";
+                bool match = codi switch
+                {
+                    "ca" => text.Contains("catal"),
+                    "es" => text.Contains("espa"),
+                    "en" => text.Contains("engl"),
+                    _    => false,
+                };
+                if (match)
+                {
+                    // Suspendre SelectionChanged mentre assignem la selecció inicial.
+                    CbxIdiomaPlugin.SelectionChanged -= OnIdiomaPluginChanged;
+                    CbxIdiomaPlugin.SelectedItem = item;
+                    CbxIdiomaPlugin.SelectionChanged += OnIdiomaPluginChanged;
+                    break;
+                }
+            }
         }
 
         // ════════════════════════════════════════════════

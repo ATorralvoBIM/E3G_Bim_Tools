@@ -1,0 +1,43 @@
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:sys="clr-namespace:System;assembly=mscorlib">
+
+    <!-- ══ CalcWindow — Botons toolbar ══ -->
+    <sys:String x:Key="Str.Btn.Calcular">▶ Calcular</sys:String>
+    <sys:String x:Key="Str.Btn.Aplicar">✔ Aplicar al modelo</sys:String>
+    <sys:String x:Key="Str.Btn.Exportar">📥 Exportar informe</sys:String>
+    <sys:String x:Key="Str.Btn.Esquema">🗺 Generar esquema</sys:String>
+    <sys:String x:Key="Str.Btn.Tancar">Cerrar</sys:String>
+    <sys:String x:Key="Str.Btn.Diagnostic">ⓘ Diagnóstico</sys:String>
+    <sys:String x:Key="Str.Btn.Ajustes">⚙ Ajustes</sys:String>
+
+    <!-- ══ CalcWindow — Tabs ══ -->
+    <sys:String x:Key="Str.Tab.Fontaneria">Fontanería</sys:String>
+    <sys:String x:Key="Str.Tab.Aeraulic">Aeráulico</sys:String>
+
+    <!-- ══ CalcWindow — Labels ══ -->
+    <sys:String x:Key="Str.Lbl.SistemaMEP">Sistema MEP:</sys:String>
+    <sys:String x:Key="Str.Lbl.Criteri">Criterio dimensionado:</sys:String>
+    <sys:String x:Key="Str.Lbl.TipusEdifici">Tipo edificio (simult.):</sys:String>
+    <sys:String x:Key="Str.Lbl.TempAigua">Temperatura agua [°C]:</sys:String>
+    <sys:String x:Key="Str.Lbl.PressioFont">Presión fuente [kPa]:</sys:String>
+    <sys:String x:Key="Str.Lbl.TempAire">Temperatura aire [°C]:</sys:String>
+    <sys:String x:Key="Str.Lbl.Altitud">Altitud [m]:</sys:String>
+    <sys:String x:Key="Str.Lbl.PressioVent">Presión ventilador [Pa]:</sys:String>
+    <sys:String x:Key="Str.Status.Ready">Listo. Selecciona un sistema y pulsa Calcular.</sys:String>
+
+    <!-- ══ FilterBar ══ -->
+    <sys:String x:Key="Str.Filter.Placeholder">Buscar…  bfs:N  dn:50  level:P2</sys:String>
+    <sys:String x:Key="Str.Filter.Problemes">⚠ Problemas</sys:String>
+    <sys:String x:Key="Str.Filter.Critic">🔴 Crítico</sys:String>
+    <sys:String x:Key="Str.Filter.Accessoris">≠ Accesorios</sys:String>
+
+    <!-- ══ CalcWindow — Esquema ══ -->
+    <sys:String x:Key="Str.Schema.Title">  Esquema (sentido del flujo)  ·  1 fila = 1 tramo de tubería</sys:String>
+    <sys:String x:Key="Str.Btn.CaminoCritico">Camino crítico</sys:String>
+
+    <!-- ══ Diàlegs ══ -->
+    <sys:String x:Key="Str.Dlg.AjustesTitle">Ajustes — E3G BIM Tools</sys:String>
+    <sys:String x:Key="Str.Dlg.Tancar">Cerrar</sys:String>
+
+</ResourceDictionary>

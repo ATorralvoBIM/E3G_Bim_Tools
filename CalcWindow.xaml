@@ -535,7 +535,7 @@
                         <RowDefinition Height="*"/>
                     </Grid.RowDefinitions>
                     <TextBlock Grid.Row="0"
-                               Text="  Esquema (sentido del flujo)  ·  1 fila = 1 tramo de tubería; el glifo indica el accesorio aguas-abajo"
+                               Text="{DynamicResource Str.Schema.Title}"
                                TextWrapping="Wrap"
                                FontWeight="SemiBold" Padding="6,4"
                                Background="{DynamicResource ThemeHeaderBg}"
@@ -559,7 +559,7 @@
                             Padding="6,4">
                         <StackPanel Orientation="Horizontal">
                             <ToggleButton x:Name="BtnCriticalPath"
-                                          Content="Camino crítico"
+                                          Content="{DynamicResource Str.Btn.CaminoCritico}"
                                           Padding="10,2" MinWidth="120"
                                           ToolTip="Resalta el recorrido fuente → terminal con peor ΔP acumulado"
                                           Checked="OnCriticalPathToggled"
@@ -592,20 +592,23 @@
             </Border>
         </Grid>
 
-        <TextBlock Grid.Row="3" x:Name="LblStatus" Text="Listo. Selecciona un sistema y pulsa Calcular."
+        <TextBlock Grid.Row="3" x:Name="LblStatus" Text="{DynamicResource Str.Status.Ready}"
                    Margin="2,4" Foreground="{DynamicResource ThemeMutedFg}"/>
 
         <StackPanel Grid.Row="4" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,8,0,0">
             <ToggleButton x:Name="BtnTheme" Style="{StaticResource ThemeSwitchStyle}"
                           ToolTip="Alternar tema claro / oscuro"
                           Checked="OnToggleTheme" Unchecked="OnToggleTheme"/>
-            <Button x:Name="BtnDiag"   Content="ⓘ Diagnóstico"     Click="OnShowDiag" IsEnabled="False" MinWidth="120"/>
-            <Button x:Name="BtnCalc"   Content="▶ Calcular"          Click="OnCalculate"/>
-            <Button x:Name="BtnExport" Content="📥 Exportar informe" Click="OnExport"   IsEnabled="False" MinWidth="160"/>
-            <Button x:Name="BtnSchema" Content="🗺 Generar esquema" Click="OnGenerateSchema" IsEnabled="False" MinWidth="160"
+            <Button x:Name="BtnDiag"   Content="{DynamicResource Str.Btn.Diagnostic}" Click="OnShowDiag" IsEnabled="False" MinWidth="120"/>
+            <Button x:Name="BtnCalc"   Content="{DynamicResource Str.Btn.Calcular}"   Click="OnCalculate"/>
+            <Button x:Name="BtnExport" Content="{DynamicResource Str.Btn.Exportar}"   Click="OnExport"   IsEnabled="False" MinWidth="160"/>
+            <Button x:Name="BtnSchema" Content="{DynamicResource Str.Btn.Esquema}"    Click="OnGenerateSchema" IsEnabled="False" MinWidth="160"
                     ToolTip="Abre la ventana de previsualización del esquema de principio"/>
-            <Button x:Name="BtnApply"  Content="✔ Aplicar al modelo" Click="OnApply"    IsEnabled="False" MinWidth="140"/>
-            <Button x:Name="BtnClose"  Content="Cerrar"               Click="OnClose"/>
+            <Button x:Name="BtnApply"  Content="{DynamicResource Str.Btn.Aplicar}"    Click="OnApply"    IsEnabled="False" MinWidth="140"/>
+            <Separator Width="1" Background="{DynamicResource ThemeBorder}" Margin="6,2"/>
+            <Button x:Name="BtnAjustes" Content="{DynamicResource Str.Btn.Ajustes}"  Click="OnOpenAjustes" MinWidth="100"
+                    ToolTip="Obrir la finestra d'ajustos"/>
+            <Button x:Name="BtnClose"  Content="{DynamicResource Str.Btn.Tancar}"    Click="OnClose"/>
         </StackPanel>
     </Grid>
 </Window>
