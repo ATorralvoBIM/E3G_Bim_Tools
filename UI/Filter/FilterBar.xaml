@@ -1,0 +1,240 @@
+<!--
+  FilterBar.xaml  —  FASE 4: Barra de búsqueda + filtros rápidos
+  ───────────────────────────────────────────────────────────────
+  Layout:
+    [ 🔍 SearchBox _________________________ ] [×]  |  [⚠ Problemas] [🔴 Crítico] [≠ Accesorios]  |  12 / 48
+  
+  Convenciones:
+    · Los ToggleButton activos se colorean con ThemeWarnBg / ThemeErrorBg
+      para dar retroalimentación visual sin icono adicional.
+    · El SearchBox tiene un TextBlock de watermark superpuesto (Visibility
+      inversa al texto) — compatible con .NET 8 WPF sin dependencias externas.
+    · Se usa DynamicResource para respetar el sistema de tema claro/oscuro.
+-->
+<UserControl x:Class="E3G.Saneamiento.UI.Filter.FilterBar"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             mc:Ignorable="d"
+             d:DesignHeight="36" d:DesignWidth="900"
+             FontFamily="Segoe UI" FontSize="12">
+
+    <UserControl.Resources>
+
+        <!-- ── Conversor booleano → Visibility ───────────────────────── -->
+        <BooleanToVisibilityConverter x:Key="BoolToVis"/>
+
+        <!-- ── Chip de filtro rápido: ToggleButton con apariencia de "pill" -->
+        <Style x:Key="ChipToggle" TargetType="ToggleButton">
+            <Setter Property="Padding"          Value="10,2"/>
+            <Setter Property="Margin"           Value="3,0,0,0"/>
+            <Setter Property="Height"           Value="24"/>
+            <Setter Property="Cursor"           Value="Hand"/>
+            <Setter Property="FontSize"         Value="11"/>
+            <Setter Property="Foreground"       Value="{DynamicResource ThemeWindowFg}"/>
+            <Setter Property="Background"       Value="{DynamicResource ThemeHeaderBg}"/>
+            <Setter Property="BorderBrush"      Value="{DynamicResource ThemeBorder}"/>
+            <Setter Property="BorderThickness"  Value="1"/>
+            <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ToggleButton">
+                        <Border x:Name="Bd"
+                                Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                CornerRadius="12"
+                                Padding="{TemplateBinding Padding}">
+                            <ContentPresenter HorizontalAlignment="Center"
+                                              VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsChecked" Value="True">
+                                <Setter TargetName="Bd" Property="Background"
+                                        Value="{DynamicResource ThemeWarnBg}"/>
+                                <Setter TargetName="Bd" Property="BorderBrush"
+                                        Value="#E6A800"/>
+                                <Setter Property="FontWeight" Value="SemiBold"/>
+                            </Trigger>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="Bd" Property="BorderBrush"
+                                        Value="{DynamicResource ThemeMutedFg}"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- ── Chip especial para "Solo problemas" (rojo cuando activo) ── -->
+        <Style x:Key="ChipIssues" TargetType="ToggleButton"
+               BasedOn="{StaticResource ChipToggle}">
+            <Style.Triggers>
+                <Trigger Property="IsChecked" Value="True">
+                    <Setter Property="Background" Value="{DynamicResource ThemeErrorBg}"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+        <!-- ── Botón de borrar (×) ───────────────────────────────────── -->
+        <Style x:Key="BtnClear" TargetType="Button">
+            <Setter Property="Width"            Value="20"/>
+            <Setter Property="Height"           Value="20"/>
+            <Setter Property="Margin"           Value="4,0,0,0"/>
+            <Setter Property="Padding"          Value="0"/>
+            <Setter Property="Cursor"           Value="Hand"/>
+            <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+            <Setter Property="ToolTip"          Value="Borrar filtros"/>
+            <Setter Property="Foreground"       Value="{DynamicResource ThemeMutedFg}"/>
+            <Setter Property="Background"       Value="Transparent"/>
+            <Setter Property="BorderThickness"  Value="0"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="Bd" CornerRadius="10"
+                                Background="{TemplateBinding Background}"
+                                Padding="1">
+                            <TextBlock Text="✕" FontSize="11"
+                                       HorizontalAlignment="Center"
+                                       VerticalAlignment="Center"
+                                       Foreground="{TemplateBinding Foreground}"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="Bd" Property="Background"
+                                        Value="{DynamicResource ThemeErrorBg}"/>
+                                <Setter Property="Foreground" Value="#CC2222"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+    </UserControl.Resources>
+
+    <!-- ════════════════════════════════════════════════════════════
+         Contenedor principal: fondo separador superior
+    ════════════════════════════════════════════════════════════ -->
+    <Border Background="{DynamicResource ThemeHeaderBg}"
+            BorderBrush="{DynamicResource ThemeBorder}"
+            BorderThickness="0,1,0,1"
+            Padding="8,4">
+
+        <DockPanel LastChildFill="False">
+
+            <!-- ── Icono lupa ───────────────────────────────────────── -->
+            <TextBlock DockPanel.Dock="Left"
+                       Text="🔍" FontSize="13"
+                       VerticalAlignment="Center"
+                       Margin="0,0,6,0"/>
+
+            <!-- ── SearchBox con watermark superpuesto ──────────────── -->
+            <Grid DockPanel.Dock="Left" Width="240" VerticalAlignment="Center">
+                <TextBox x:Name="TxtSearch"
+                         Height="26"
+                         Padding="4,2"
+                         VerticalContentAlignment="Center"
+                         Background="{DynamicResource ThemePanelBg}"
+                         Foreground="{DynamicResource ThemeWindowFg}"
+                         BorderBrush="{DynamicResource ThemeBorder}"
+                         CaretBrush="{DynamicResource ThemeWindowFg}"
+                         Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}"
+                         ToolTip="Busca por nodo, DN, nivel, ElementId...&#10;Sintaxis: bfs:3-8  dn:50  level:P2  id:12345  status:error"/>
+                <!-- Watermark / placeholder -->
+                <TextBlock Text="Buscar…  bfs:N  dn:50  level:P2"
+                           IsHitTestVisible="False"
+                           VerticalAlignment="Center"
+                           HorizontalAlignment="Left"
+                           Margin="6,0"
+                           FontStyle="Italic"
+                           Foreground="{DynamicResource ThemeMutedFg}">
+                    <TextBlock.Style>
+                        <Style TargetType="TextBlock">
+                            <Setter Property="Visibility" Value="Collapsed"/>
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding SearchText}" Value="">
+                                    <Setter Property="Visibility" Value="Visible"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </TextBlock.Style>
+                </TextBlock>
+            </Grid>
+
+            <!-- ── Botón X: solo visible cuando hay filtro activo ───── -->
+            <Button DockPanel.Dock="Left"
+                    Style="{StaticResource BtnClear}"
+                    Command="{Binding ClearAllCommand}"
+                    Visibility="{Binding HasActiveFilter,
+                                         Converter={StaticResource BoolToVis}}"/>
+
+            <!-- ── Separador vertical ───────────────────────────────── -->
+            <Separator DockPanel.Dock="Left"
+                       Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}"
+                       Margin="10,2"/>
+
+            <!-- ── Chips de filtro rápido ────────────────────────────── -->
+            <StackPanel DockPanel.Dock="Left"
+                        Orientation="Horizontal"
+                        VerticalAlignment="Center">
+
+                <ToggleButton Style="{StaticResource ChipIssues}"
+                              IsChecked="{Binding OnlyIssues}"
+                              ToolTip="Muestra solo tramos con Warning o Error">
+                    ⚠ Problemas
+                </ToggleButton>
+
+                <ToggleButton Style="{StaticResource ChipToggle}"
+                              IsChecked="{Binding OnlyCriticalPath}"
+                              ToolTip="Muestra solo los tramos del camino crítico (ΔP máximo)">
+                    🔴 Crítico
+                </ToggleButton>
+
+                <ToggleButton Style="{StaticResource ChipToggle}"
+                              IsChecked="{Binding HideFittings}"
+                              ToolTip="Oculta las filas de accesorios (TEE, ELBOW, REDUCER…)">
+                    ≠ Accesorios
+                </ToggleButton>
+
+            </StackPanel>
+
+            <!-- ── Contador N / M (derecha) ──────────────────────────── -->
+            <TextBlock DockPanel.Dock="Right"
+                       VerticalAlignment="Center"
+                       Margin="12,0,4,0"
+                       FontSize="11"
+                       Foreground="{DynamicResource ThemeMutedFg}"
+                       Text="{Binding MatchLabel}"
+                       ToolTip="Filas visibles / total">
+                <TextBlock.Style>
+                    <Style TargetType="TextBlock">
+                        <Style.Triggers>
+                            <!-- Rojo si hay filtro activo y el resultado está vacío -->
+                            <MultiDataTrigger>
+                                <MultiDataTrigger.Conditions>
+                                    <Condition Binding="{Binding HasActiveFilter}" Value="True"/>
+                                    <Condition Binding="{Binding MatchCount}"      Value="0"/>
+                                </MultiDataTrigger.Conditions>
+                                <Setter Property="Foreground" Value="#CC2222"/>
+                                <Setter Property="FontWeight" Value="SemiBold"/>
+                            </MultiDataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </TextBlock.Style>
+            </TextBlock>
+
+            <!-- ── Etiqueta "sintaxis" colapsada (ayuda inline) ──────── -->
+            <TextBlock DockPanel.Dock="Right"
+                       VerticalAlignment="Center"
+                       FontSize="10"
+                       Margin="0,0,8,0"
+                       Foreground="{DynamicResource ThemeMutedFg}"
+                       Text="[bfs:3-8] [dn:50] [level:P2] [id:…] [status:error]"
+                       Visibility="{Binding HasActiveFilter,
+                                            Converter={StaticResource BoolToVis}}"/>
+
+        </DockPanel>
+    </Border>
+</UserControl>

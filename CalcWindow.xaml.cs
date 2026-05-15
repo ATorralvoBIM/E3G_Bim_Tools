@@ -56,6 +56,10 @@ using WpfPolygon   = System.Windows.Shapes.Polygon;
 using WpfPath      = System.Windows.Shapes.Path;
 using WpfColor     = System.Windows.Media.Color;
 using WpfColors    = System.Windows.Media.Colors;
+// [Fase 4] Filtros y búsqueda
+using System.Windows.Data;
+using E3G.Saneamiento.Core.Filtering;
+using E3G.Saneamiento.UI.Filter;
 
 namespace E3G.Saneamiento
 {
@@ -84,6 +88,11 @@ namespace E3G.Saneamiento
         // del mismo color, en vez de la paleta por nivel de columna).
         private Brush _lastSystemBrush = new SolidColorBrush(WpfColor.FromRgb(0x1A, 0x3A, 0x5E));
 
+        // ── [Fase 4] Filtros + Búsqueda ──────────────────────────────────
+        private FilterBarViewModel _filterVm;
+        private readonly FilterService  _filterSvc  = new FilterService();
+        private readonly SchemeFilterRenderer _schemeRenderer = new SchemeFilterRenderer();
+
         public ObservableCollection<ResultRow> Rows { get; } = new ObservableCollection<ResultRow>();
 
         /// <summary>
@@ -100,6 +109,11 @@ namespace E3G.Saneamiento
             _doc = doc ?? throw new ArgumentNullException(nameof(doc));
             InitializeComponent();
             DgResults.ItemsSource = Rows;
+
+            // [Fase 4] Inicializar FilterBar + ViewModel
+            _filterVm = new FilterBarViewModel();
+            FilterBarControl.SetViewModel(_filterVm);
+            _filterVm.CriteriaChanged += OnFilterCriteriaChanged;
 
             LoadPipingSystems();
             LoadDuctSystems();
@@ -144,13 +158,14 @@ namespace E3G.Saneamiento
                     _sync.Stop();
                     _sync.Dispose();
                     _schematicBus?.Dispose();
+                    _filterVm?.Dispose();
                 };
             }
             else
             {
                 // Si la sync no está activa pero quisiéramos limpiar el bus
                 // del esquema de todos modos, lo registramos también.
-                Closed += (s, e) => _schematicBus?.Dispose();
+                Closed += (s, e) => { _schematicBus?.Dispose(); _filterVm?.Dispose(); };
             }
         }
 
@@ -818,6 +833,28 @@ namespace E3G.Saneamiento
             // desde la fuente (acometida) y debe mantenerse asi para reflejar
             // el sentido fisico del flujo del fluido en el sistema.
             foreach (var r in rows) Rows.Add(r);
+
+            // [Fase 4] Conectar el CollectionView de DgResults al predicado
+            // de filtrado activo.  CollectionViewSource.GetDefaultView devuelve
+            // la ICollectionView compartida que WPF ya usa internamente para
+            // el DataGrid, por lo que basta con asignarle el Filter.
+            var view = CollectionViewSource.GetDefaultView(DgResults.ItemsSource);
+            if (view != null)
+            {
+                var criteria = _filterVm?.BuildCriteria() ?? FilterCriteria.Empty;
+                view.Filter = _filterSvc.ToCollectionViewPredicate(criteria);
+            }
+
+            // Actualizar contadores del FilterBar: total = todas las rows cargadas;
+            // visible = las que pasan el predicado activo.
+            {
+                int total   = Rows.Count;
+                var criteria2 = _filterVm?.BuildCriteria() ?? FilterCriteria.Empty;
+                int visible2  = criteria2.IsEmpty
+                    ? total
+                    : _filterSvc.Evaluate(new System.Collections.Generic.List<ResultRow>(Rows), criteria2).Count;
+                _filterVm?.UpdateCounters(visible2, total);
+            }
         }
 
         // -------------------------------------------------------------------
@@ -1261,6 +1298,77 @@ namespace E3G.Saneamiento
             SchematicCanvas.Width = Math.Max(targetWidth, naturalWidth);
             SchematicCanvas.Height = SchemaTopPad
                 + (rows.Count + 1) * SchemaRowHeight + 20;
+
+            // [Fase 4] Conectar el renderer de atenuación con los diccionarios
+            // recién poblados y reaplicar el filtro activo sobre el esquema.
+            // WpfLine ≡ System.Windows.Shapes.Line (alias, mismo tipo en tiempo de compilación).
+            _schemeRenderer.Glyphs = _schemaGlyphs;
+            _schemeRenderer.Lines  = _schemaLines;
+            ApplySchemeFilter();
+        }
+
+        // ── [Fase 4] Manejo del filtro ──────────────────────────────────────
+
+        /// <summary>
+        /// Llamado por FilterBarViewModel.CriteriaChanged (con debounce para
+        /// el texto libre; inmediato para los chips).
+        /// Actualiza el CollectionView.Filter del DataGrid y aplica el dimming
+        /// al esquema.
+        /// </summary>
+        private void OnFilterCriteriaChanged(FilterCriteria criteria)
+        {
+            // ── DataGrid ─────────────────────────────────────────────────
+            var view = CollectionViewSource.GetDefaultView(DgResults.ItemsSource);
+            if (view != null)
+            {
+                // Sincronizar CriticalPathRows si el chip "Crítico" está activo.
+                _filterSvc.CriticalPathRows = _activeCriticalPath?.Path != null
+                    ? (ISet<ResultRow>)new HashSet<ResultRow>(_activeCriticalPath.Path)
+                    : null;
+
+                view.Filter = _filterSvc.ToCollectionViewPredicate(criteria);
+            }
+
+            // ── Contadores ───────────────────────────────────────────────
+            int total   = Rows.Count;
+            // ICollectionView no expone PassesFilter directamente;
+            // contamos aplicando el mismo predicado que acaba de asignarse.
+            var pred    = _filterSvc.ToCollectionViewPredicate(criteria);
+            int visible = Rows.Count(r => pred(r));
+            _filterVm?.UpdateCounters(visible, total);
+
+            // ── Esquema ──────────────────────────────────────────────────
+            ApplySchemeFilter();
+        }
+
+        /// <summary>
+        /// Evalúa el filtro actual sobre _lastSchemaRows y aplica el dimming
+        /// al esquema via SchemeFilterRenderer.
+        /// </summary>
+        private void ApplySchemeFilter()
+        {
+            if (_lastSchemaRows == null || _lastSchemaRows.Count == 0)
+            {
+                _schemeRenderer.Reset();
+                return;
+            }
+
+            var criteria = _filterVm?.BuildCriteria() ?? FilterCriteria.Empty;
+
+            if (criteria.IsEmpty)
+            {
+                _schemeRenderer.Apply(null, criteriaIsEmpty: true);
+                return;
+            }
+
+            // Sincronizar camino crítico en el servicio de filtrado.
+            _filterSvc.CriticalPathRows = _activeCriticalPath?.Path != null
+                ? (ISet<ResultRow>)new HashSet<ResultRow>(_activeCriticalPath.Path)
+                : null;
+
+            var allRows = new System.Collections.Generic.List<ResultRow>(_lastSchemaRows);
+            var visible = _filterSvc.Evaluate(allRows, criteria);
+            _schemeRenderer.Apply(visible, criteriaIsEmpty: false);
         }
 
         private static Brush ColorForStatus(string statusKind)
