@@ -1,0 +1,372 @@
+<Window
+    x:Class="E3G.BimTools.RevitBC3.Views.CatalogPickerDialog"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:shell="clr-namespace:System.Windows.Shell;assembly=PresentationFramework"
+    xmlns:e3gc="clr-namespace:E3G.BimTools.DiTools.UI.Controls;assembly=e3gbimtools.DiTools.UI"
+    Title="e3gbimtools — Catálogo BC3"
+    Width="820" Height="560"
+    MinWidth="600" MinHeight="420"
+    WindowStartupLocation="CenterOwner"
+    ResizeMode="CanResize"
+    ShowInTaskbar="False"
+    WindowStyle="None"
+    AllowsTransparency="True"
+    Background="Transparent"
+    FontFamily="Lato, Segoe UI"
+    SnapsToDevicePixels="True"
+    UseLayoutRounding="True">
+
+    <shell:WindowChrome.WindowChrome>
+        <shell:WindowChrome
+            CaptionHeight="44"
+            ResizeBorderThickness="8"
+            CornerRadius="0"
+            GlassFrameThickness="0"
+            UseAeroCaptionButtons="False" />
+    </shell:WindowChrome.WindowChrome>
+
+    <Window.Resources>
+
+        <!-- â”€â”€ Brushes â”€â”€ -->
+        <SolidColorBrush x:Key="Cp.Bg.Header"       Color="{DynamicResource E3g.Color.SurfaceSubtle}" />
+        <SolidColorBrush x:Key="Cp.Bg.Body"         Color="{DynamicResource E3g.Color.Background}" />
+        <SolidColorBrush x:Key="Cp.Bg.PanelAlt"     Color="{DynamicResource E3g.Color.SurfaceSubtle}" />
+        <SolidColorBrush x:Key="Cp.Border"          Color="{DynamicResource E3g.Color.BorderSubtle}" />
+        <SolidColorBrush x:Key="Cp.Border.Strong"   Color="{DynamicResource E3g.Color.BorderSubtle}" />
+        <SolidColorBrush x:Key="Cp.Text"            Color="{DynamicResource E3g.Color.Text}" />
+        <SolidColorBrush x:Key="Cp.Text.Muted"      Color="{DynamicResource E3g.Color.TextMuted}" />
+        <SolidColorBrush x:Key="Cp.Text.Soft"       Color="{DynamicResource E3g.Color.TextSoft}" />
+        <SolidColorBrush x:Key="Cp.Accent.Blue"     Color="{DynamicResource E3g.Color.Accent}" />
+        <SolidColorBrush x:Key="Cp.Accent.BlueBg"   Color="{DynamicResource E3g.Color.Module.FilterBg}" />
+        <SolidColorBrush x:Key="Cp.Accent.Green"    Color="{DynamicResource E3g.Color.Secondary}" />
+        <FontFamily x:Key="Cp.Mono">Consolas</FontFamily>
+
+        <!-- â”€â”€ TextBox â”€â”€ -->
+        <Style x:Key="Cp.TextBox" TargetType="TextBox">
+            <Setter Property="Background"            Value="White" />
+            <Setter Property="BorderBrush"           Value="{StaticResource Cp.Border.Strong}" />
+            <Setter Property="BorderThickness"       Value="1" />
+            <Setter Property="Padding"               Value="8,5" />
+            <Setter Property="FontSize"              Value="12" />
+            <Setter Property="VerticalContentAlignment" Value="Center" />
+        </Style>
+
+        <!-- â”€â”€ Buttons â”€â”€ -->
+        <Style x:Key="Cp.Button" TargetType="Button">
+            <Setter Property="Background"     Value="Transparent" />
+            <Setter Property="Foreground"     Value="{StaticResource Cp.Text}" />
+            <Setter Property="BorderBrush"    Value="{StaticResource Cp.Border.Strong}" />
+            <Setter Property="BorderThickness" Value="1" />
+            <Setter Property="Padding"        Value="14,6" />
+            <Setter Property="FontSize"       Value="12" />
+            <Setter Property="Cursor"         Value="Hand" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="Bd"
+                                Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                CornerRadius="4"
+                                Padding="{TemplateBinding Padding}">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="Bd" Property="Background" Value="{StaticResource Cp.Bg.PanelAlt}" />
+                                <Setter TargetName="Bd" Property="BorderBrush" Value="{StaticResource Cp.Accent.Blue}" />
+                            </Trigger>
+                            <Trigger Property="IsEnabled" Value="False">
+                                <Setter TargetName="Bd" Property="Opacity" Value="0.4" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="Cp.Button.Primary" TargetType="Button" BasedOn="{StaticResource Cp.Button}">
+            <Setter Property="Background"  Value="{StaticResource Cp.Accent.Blue}" />
+            <Setter Property="Foreground"  Value="White" />
+            <Setter Property="BorderBrush" Value="{StaticResource Cp.Accent.Blue}" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="Bd"
+                                Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                CornerRadius="4"
+                                Padding="{TemplateBinding Padding}">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="Bd" Property="Background" Value="{DynamicResource E3g.Brush.Primary}" />
+                            </Trigger>
+                            <Trigger Property="IsEnabled" Value="False">
+                                <Setter TargetName="Bd" Property="Opacity" Value="0.4" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- â”€â”€ DataGrid â”€â”€ -->
+        <Style x:Key="Cp.DataGrid" TargetType="DataGrid">
+            <Setter Property="Background"          Value="{StaticResource Cp.Bg.Body}" />
+            <Setter Property="BorderBrush"         Value="{StaticResource Cp.Border}" />
+            <Setter Property="BorderThickness"     Value="0,1,0,0" />
+            <Setter Property="GridLinesVisibility" Value="Horizontal" />
+            <Setter Property="HorizontalGridLinesBrush" Value="{StaticResource Cp.Border}" />
+            <Setter Property="RowBackground"       Value="White" />
+            <Setter Property="AlternatingRowBackground" Value="{DynamicResource E3g.Brush.SurfaceSubtle}" />
+            <Setter Property="RowHeaderWidth"      Value="0" />
+            <Setter Property="HeadersVisibility"   Value="Column" />
+            <Setter Property="AutoGenerateColumns" Value="False" />
+            <Setter Property="CanUserAddRows"      Value="False" />
+            <Setter Property="CanUserDeleteRows"   Value="False" />
+            <Setter Property="IsReadOnly"          Value="True" />
+            <Setter Property="SelectionMode"       Value="Single" />
+            <Setter Property="FontSize"            Value="12" />
+            <Setter Property="ColumnHeaderStyle">
+                <Setter.Value>
+                    <Style TargetType="DataGridColumnHeader">
+                        <Setter Property="Background"               Value="{StaticResource Cp.Bg.PanelAlt}" />
+                        <Setter Property="Foreground"               Value="{StaticResource Cp.Text.Soft}" />
+                        <Setter Property="FontFamily"               Value="{StaticResource Cp.Mono}" />
+                        <Setter Property="FontSize"                 Value="10" />
+                        <Setter Property="FontWeight"               Value="SemiBold" />
+                        <Setter Property="Padding"                  Value="10,7" />
+                        <Setter Property="BorderBrush"              Value="{StaticResource Cp.Border}" />
+                        <Setter Property="BorderThickness"          Value="0,0,1,1" />
+                        <Setter Property="HorizontalContentAlignment" Value="Left" />
+                    </Style>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="CellStyle">
+                <Setter.Value>
+                    <Style TargetType="DataGridCell">
+                        <Setter Property="BorderThickness" Value="0" />
+                        <Setter Property="Padding"         Value="8,5" />
+                        <Setter Property="Template">
+                            <Setter.Value>
+                                <ControlTemplate TargetType="DataGridCell">
+                                    <Border Background="{TemplateBinding Background}" Padding="{TemplateBinding Padding}">
+                                        <ContentPresenter VerticalAlignment="Center" />
+                                    </Border>
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
+                        <Style.Triggers>
+                            <Trigger Property="IsSelected" Value="True">
+                                <Setter Property="Background" Value="{StaticResource Cp.Accent.BlueBg}" />
+                                <Setter Property="Foreground" Value="{StaticResource Cp.Text}" />
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+    </Window.Resources>
+
+    <Border x:Name="ChromeRoot"
+            CornerRadius="10"
+            Background="{DynamicResource E3g.Brush.Background}"
+            BorderBrush="{DynamicResource E3g.Brush.Border}"
+            BorderThickness="1"
+            Margin="12">
+        <Border.Effect>
+            <DropShadowEffect Color="#000000" BlurRadius="18" ShadowDepth="0" Opacity="0.20" />
+        </Border.Effect>
+        <Border x:Name="ChromeClip" CornerRadius="{Binding CornerRadius, ElementName=ChromeRoot}">
+            <Border.OpacityMask>
+                <VisualBrush>
+                    <VisualBrush.Visual>
+                        <Border Background="White"
+                                CornerRadius="{Binding CornerRadius, ElementName=ChromeClip}"
+                                Width="{Binding ActualWidth, ElementName=ChromeClip}"
+                                Height="{Binding ActualHeight, ElementName=ChromeClip}" />
+                    </VisualBrush.Visual>
+                </VisualBrush>
+            </Border.OpacityMask>
+            <DockPanel LastChildFill="True">
+                <e3gc:E3gTitleBar x:Name="TitleBar"
+                                  DockPanel.Dock="Top"
+                                  Title="e3gbimtools"
+                                  Subtitle="Catálogo BC3"
+                                  ShowStatus="False"
+                                  ShowMinimize="False" />
+
+    <DockPanel>
+
+        <!-- â”€â”€ Cabecera: búsqueda â”€â”€ -->
+        <Border DockPanel.Dock="Top"
+                Background="{StaticResource Cp.Bg.Header}"
+                BorderBrush="{StaticResource Cp.Border}"
+                BorderThickness="0,0,0,1"
+                Padding="14,10">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="10" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+
+                <!-- Caja de búsqueda con placeholder simulado -->
+                <Grid Grid.Column="0">
+                    <TextBox x:Name="SearchBox"
+                             Style="{StaticResource Cp.TextBox}"
+                             TextChanged="OnSearchChanged"
+                             KeyDown="OnSearchKeyDown" />
+                    <TextBlock x:Name="SearchPlaceholder"
+                               Text="ðŸ”  Filtrar por código o descripción..."
+                               IsHitTestVisible="False"
+                               VerticalAlignment="Center"
+                               Margin="10,0"
+                               Foreground="{StaticResource Cp.Text.Soft}"
+                               FontSize="12" />
+                </Grid>
+
+                <!-- Contador de resultados -->
+                <TextBlock Grid.Column="2"
+                           x:Name="ResultCountText"
+                           VerticalAlignment="Center"
+                           FontSize="11"
+                           FontFamily="{StaticResource Cp.Mono}"
+                           Foreground="{StaticResource Cp.Text.Muted}"
+                           Text="0 resultados" />
+            </Grid>
+        </Border>
+
+        <!-- â”€â”€ Pie: botones â”€â”€ -->
+        <Border DockPanel.Dock="Bottom"
+                Background="{StaticResource Cp.Bg.Header}"
+                BorderBrush="{StaticResource Cp.Border}"
+                BorderThickness="0,1,0,0"
+                Padding="14,10">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="8" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+
+                <!-- Preview de la partida seleccionada -->
+                <StackPanel Grid.Column="0" Orientation="Horizontal" VerticalAlignment="Center">
+                    <TextBlock x:Name="SelectionPreviewCode"
+                               FontFamily="{StaticResource Cp.Mono}"
+                               FontSize="12"
+                               FontWeight="SemiBold"
+                               Foreground="{StaticResource Cp.Accent.Blue}"
+                               Text=""
+                               Margin="0,0,8,0" />
+                    <TextBlock x:Name="SelectionPreviewDesc"
+                               FontSize="11"
+                               Foreground="{StaticResource Cp.Text.Muted}"
+                               TextTrimming="CharacterEllipsis"
+                               MaxWidth="320"
+                               Text="" />
+                </StackPanel>
+
+                <Button Grid.Column="1"
+                        Content="Cancelar"
+                        Style="{StaticResource Cp.Button}"
+                        IsCancel="True"
+                        Click="OnCancelClick" />
+
+                <Button Grid.Column="3"
+                        x:Name="SelectButton"
+                        Content="Seleccionar partida"
+                        Style="{StaticResource Cp.Button.Primary}"
+                        IsDefault="True"
+                        IsEnabled="False"
+                        Click="OnSelectClick" />
+            </Grid>
+        </Border>
+
+        <!-- â”€â”€ Tabla de resultados â”€â”€ -->
+        <DataGrid x:Name="ResultsGrid"
+                  Style="{StaticResource Cp.DataGrid}"
+                  ColumnWidth="*"
+                  SelectionChanged="OnResultSelectionChanged"
+                  MouseDoubleClick="OnResultDoubleClick">
+            <DataGrid.Columns>
+
+                <!-- Tipo (icono pequeño) -->
+                <DataGridTextColumn Header="TIPO" Binding="{Binding TypeIcon}" Width="44" MinWidth="44">
+                    <DataGridTextColumn.ElementStyle>
+                        <Style TargetType="TextBlock">
+                            <Setter Property="HorizontalAlignment" Value="Center" />
+                            <Setter Property="FontSize" Value="14" />
+                        </Style>
+                    </DataGridTextColumn.ElementStyle>
+                </DataGridTextColumn>
+
+                <!-- Código -->
+                <DataGridTextColumn Header="CÓDIGO" Binding="{Binding Code}" Width="160" MinWidth="100">
+                    <DataGridTextColumn.ElementStyle>
+                        <Style TargetType="TextBlock">
+                            <Setter Property="FontFamily" Value="Consolas" />
+                            <Setter Property="FontSize"   Value="11" />
+                            <Setter Property="Foreground" Value="{DynamicResource E3g.Brush.Accent}" />
+                        </Style>
+                    </DataGridTextColumn.ElementStyle>
+                </DataGridTextColumn>
+
+                <!-- Descripción -->
+                <DataGridTextColumn Header="DESCRIPCIÓN" Binding="{Binding Description}" Width="3*" MinWidth="200">
+                    <DataGridTextColumn.ElementStyle>
+                        <Style TargetType="TextBlock">
+                            <Setter Property="TextTrimming" Value="CharacterEllipsis" />
+                            <Setter Property="ToolTip"      Value="{Binding Description}" />
+                        </Style>
+                    </DataGridTextColumn.ElementStyle>
+                </DataGridTextColumn>
+
+                <!-- Unidad -->
+                <DataGridTextColumn Header="UD" Binding="{Binding Unit}" Width="60" MinWidth="40">
+                    <DataGridTextColumn.ElementStyle>
+                        <Style TargetType="TextBlock">
+                            <Setter Property="FontFamily" Value="Consolas" />
+                            <Setter Property="FontSize"   Value="11" />
+                            <Setter Property="Foreground" Value="{DynamicResource E3g.Brush.TextMuted}" />
+                        </Style>
+                    </DataGridTextColumn.ElementStyle>
+                </DataGridTextColumn>
+
+                <!-- Precio -->
+                <DataGridTextColumn Header="P.UNIT." Binding="{Binding PriceUnit, StringFormat=N2}" Width="80" MinWidth="60">
+                    <DataGridTextColumn.ElementStyle>
+                        <Style TargetType="TextBlock">
+                            <Setter Property="FontFamily"        Value="Consolas" />
+                            <Setter Property="FontSize"          Value="11" />
+                            <Setter Property="HorizontalAlignment" Value="Right" />
+                            <Setter Property="Foreground"        Value="{DynamicResource E3g.Brush.Secondary}" />
+                        </Style>
+                    </DataGridTextColumn.ElementStyle>
+                </DataGridTextColumn>
+
+                <!-- Capítulo padre (código) -->
+                <DataGridTextColumn Header="CAPÃTULO" Binding="{Binding ParentCode}" Width="120" MinWidth="80">
+                    <DataGridTextColumn.ElementStyle>
+                        <Style TargetType="TextBlock">
+                            <Setter Property="FontFamily" Value="Consolas" />
+                            <Setter Property="FontSize"   Value="10" />
+                            <Setter Property="Foreground" Value="{DynamicResource E3g.Brush.TextSoft}" />
+                        </Style>
+                    </DataGridTextColumn.ElementStyle>
+                </DataGridTextColumn>
+
+            </DataGrid.Columns>
+        </DataGrid>
+
+    </DockPanel>
+            </DockPanel>
+        </Border>
+    </Border>
+</Window>

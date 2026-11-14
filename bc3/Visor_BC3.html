@@ -65,7 +65,7 @@
     margin-bottom: 16px;
   }
   .summary-grid {
-    display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px;
+    display: grid; grid-template-columns: repeat(6, 1fr); gap: 12px;
   }
   .summary-cell .lbl {
     font-size: 9px; font-weight: 700; letter-spacing: .5px; color: var(--text-muted);
@@ -75,7 +75,21 @@
     font-size: 22px; font-weight: 700; color: var(--accent-san);
     margin-top: 2px;
   }
-  .summary-cell .val.green { color: var(--accent-good); }
+  .summary-cell .val.green  { color: var(--accent-good); }
+  .summary-cell .val.amber  { color: var(--accent-amber); }
+  .summary-cell .val.red    { color: #DC2626; }
+
+  /* Barra de cobertura GUID */
+  .guid-bar-wrap {
+    margin-top: 4px; height: 6px; background: var(--border-light);
+    border-radius: 3px; overflow: hidden;
+  }
+  .guid-bar-fill {
+    height: 100%; border-radius: 3px; transition: width .4s;
+  }
+  .guid-bar-fill.green  { background: var(--accent-good); }
+  .guid-bar-fill.amber  { background: var(--accent-amber); }
+  .guid-bar-fill.red    { background: #DC2626; }
 
   .header-meta {
     display: flex; gap: 24px; padding-top: 12px; margin-top: 12px;
@@ -308,23 +322,43 @@ function parseBc3(text) {
         });
       }
     } else if (tipo === 'M') {
-      // ~M|PADRE\HIJO|TOTAL|LINIES|
-      const conceptos = (subs[1] || '').split('\\');
-      const padre = conceptos[0] || '';
-      const hijo = conceptos[1] || '';
-      const total = parseFloat(subs[2] || '0') || 0;
-      const lineasRaw = (subs[3] || '').split('\\');
-      // Cada línia ocupa 5 sub-valores: comentari, uds, longitud, latitud, altura
+      // Formato extendido FIEBDC-3/2016+:
+      //   ~M|CAP\SUBCAP\PARTIDA\|POSICION|TOTAL|ETIQUETA|LINEAS|
+      // El path puede tener N niveles; el último segmento no vacío es la partida,
+      // el penúltimo es su padre inmediato.
+      const segmentos = (subs[1] || '').split('\\').filter(s => s.length > 0);
+      const hijo  = segmentos[segmentos.length - 1] || '';   // último = código partida
+      const padre = segmentos[segmentos.length - 2] || '';   // penúltimo = cap/subcap padre
+
+      // Detectar formato: extendido (subs[2]=Posicion vacío, subs[3]=Total)
+      //                   o simple   (subs[2]=Total directamente)
+      let total, lineasRaw;
+      if (subs[2] === '' && subs.length >= 4) {
+        // Formato extendido: ||Total||Lineas|
+        total     = parseFloat(subs[3] || '0') || 0;
+        lineasRaw = (subs[5] || '').split('\\');
+      } else {
+        // Formato simple: |Total|Lineas|
+        total     = parseFloat(subs[2] || '0') || 0;
+        lineasRaw = (subs[3] || '').split('\\');
+      }
+
+      // Detectar si cada línea empieza con campo "tipo" numérico (1=normal, 2=resta, 3=subtotal)
+      // Formato extendido: tipo\comentari\uds\longitud\latitud\altura  (6 camps)
+      // Formato simple:    comentari\uds\longitud\latitud\altura        (5 camps)
+      const esExtendido = lineasRaw.length > 0 && /^\d$/.test(lineasRaw[0]);
+      const paso   = esExtendido ? 6 : 5;
+      const offset = esExtendido ? 1 : 0;  // saltar el camp "tipo"
       const lineas = [];
-      for (let i = 0; i + 4 < lineasRaw.length; i += 5) {
-        const coment = lineasRaw[i] || '';
-        if (!coment && i+1 >= lineasRaw.length) break;
+      for (let i = 0; i + offset + 4 <= lineasRaw.length; i += paso) {
+        const coment = lineasRaw[i + offset] || '';
+        if (!coment) break;
         lineas.push({
           comentario: coment,
-          uds: parseFloat(lineasRaw[i+1]) || 0,
-          longitud: parseFloat(lineasRaw[i+2]) || 0,
-          latitud: parseFloat(lineasRaw[i+3]) || 0,
-          altura: parseFloat(lineasRaw[i+4]) || 0
+          uds:      parseFloat(lineasRaw[i + offset + 1]) || 0,
+          longitud: parseFloat(lineasRaw[i + offset + 2]) || 0,
+          latitud:  parseFloat(lineasRaw[i + offset + 3]) || 0,
+          altura:   parseFloat(lineasRaw[i + offset + 4]) || 0
         });
       }
       data.mediciones[`${padre}|${hijo}`] = { total, lineas };
@@ -348,26 +382,44 @@ function primerSubvalor(s) {
 function renderResult(data) {
   // Trobar capítol arrel "##"
   const raiz = data.conceptos['##'];
-  // Llistar capítols (no acaben en # excepte ##; capítols són "##" i "<COD>##")
-  const capitulos = Object.values(data.conceptos)
-    .filter(c => c.codigo.endsWith('#') && c.codigo !== '##');
-  // Partides (tot lo demés)
+
+  // Capítols de primer nivell: fills directes de ## segons els ~D.
+  // (ja no filtrem per codi que acabi en '#', que era el bug antic)
+  const hijosRaiz = (data.descomp['##'] || []).map(d => d.hijo);
+  const capitulos = hijosRaiz.map(cod => data.conceptos[cod]).filter(Boolean);
+
+  // Totes les partides: conceptes fulla (sense fills a ~D) que no siguin ##
   const todasPartidas = Object.values(data.conceptos)
-    .filter(c => !c.codigo.endsWith('#'));
+    .filter(c => c.codigo !== '##' && !(data.descomp[c.codigo] && data.descomp[c.codigo].length > 0));
 
   // Totals
   let totalPartidas = 0, totalLineas = 0, totalElementos = 0, totalImporte = 0;
+  let guidValid = 0, guidTotal = 0;
+  // Regex GUID IFC: 22 chars del alfabeto Base64 IFC (0-9 A-Z a-z _ $)
+  const IFC_GUID_RE = /^[0-9A-Za-z_$]{22}$/;
   const elementsSet = new Set();
   for (const m of Object.values(data.mediciones)) {
     totalLineas += m.lineas.length;
     for (const l of m.lineas) {
-      // Mirar si el comentari acaba en "Pipe Id NNNN" → element id únic
+      // Conteo de IfcGUIDs: el GUID va después del '#' en el comentario
+      const hashIdx = (l.comentario || '').indexOf('#');
+      if (hashIdx >= 0) {
+        guidTotal++;
+        const candidate = l.comentario.substring(hashIdx + 1);
+        if (IFC_GUID_RE.test(candidate)) guidValid++;
+      }
+      // Element id únic (per al recompte visual)
       const match = (l.comentario || '').match(/Pipe Id (\d+)/);
       if (match) elementsSet.add(match[1]);
       else if (l.comentario) elementsSet.add(l.comentario);
     }
   }
   totalElementos = elementsSet.size;
+  const guidPct  = guidTotal > 0 ? (guidValid / guidTotal * 100) : null;
+  const guidColor = guidPct === null ? 'green'
+                  : guidPct >= 95   ? 'green'
+                  : guidPct >= 80   ? 'amber'
+                  :                   'red';
   totalPartidas = todasPartidas.length;
   for (const p of todasPartidas) {
     const k = Object.keys(data.mediciones).find(x => x.endsWith('|' + p.codigo));
@@ -383,6 +435,12 @@ function renderResult(data) {
         <div class="summary-cell"><div class="lbl">Elements únics</div><div class="val">${totalElementos.toLocaleString('ca')}</div></div>
         <div class="summary-cell"><div class="lbl">Capítols</div><div class="val">${capitulos.length}</div></div>
         <div class="summary-cell"><div class="lbl">Import total</div><div class="val green">${fmtMoney(totalImporte)}</div></div>
+        <div class="summary-cell">
+          <div class="lbl">Cobertura IfcGUID</div>
+          <div class="val ${guidColor}">${guidPct === null ? '—' : guidPct.toFixed(1) + '%'}</div>
+          ${guidTotal > 0 ? `<div class="guid-bar-wrap"><div class="guid-bar-fill ${guidColor}" style="width:${Math.min(100,guidPct).toFixed(1)}%"></div></div>` : ''}
+          ${guidTotal > 0 ? `<div style="font-size:9px;color:var(--text-muted);margin-top:2px">${guidValid}/${guidTotal} línies</div>` : '<div style="font-size:9px;color:var(--text-muted);margin-top:2px">Sense línies amb #GUID</div>'}
+        </div>
       </div>
       <div class="header-meta">
         ${raiz ? `<span><b>Projecte:</b> ${escapeHtml(raiz.descripcion)}</span>` : ''}
@@ -392,14 +450,28 @@ function renderResult(data) {
     </div>
   `;
 
+  // Recull totes les partides fulla d'un concepte (recursiu per subcapítols)
+  function getPartidesRecursiu(codigo, visitats = new Set()) {
+    if (visitats.has(codigo)) return [];
+    visitats.add(codigo);
+    const fills = (data.descomp[codigo] || []).map(d => d.hijo);
+    if (fills.length === 0) {
+      // Node fulla: és una partida si existeix com a concepte
+      return data.conceptos[codigo] ? [data.conceptos[codigo]] : [];
+    }
+    // Node interior: recórrer fills
+    const result = [];
+    for (const fill of fills) result.push(...getPartidesRecursiu(fill, visitats));
+    return result;
+  }
+
   // Per cada capítol, llistar les seves partides
   if (capitulos.length === 0) {
     html += `<div class="empty">No s'han trobat capítols al fitxer.</div>`;
   } else {
     for (const cap of capitulos) {
-      // Partides del capítol
-      const hijos = (data.descomp[cap.codigo] || []).map(d => d.hijo);
-      const partidas = todasPartidas.filter(p => hijos.includes(p.codigo));
+      // Partides del capítol (recursiu: cap → subcap → partides)
+      const partidas = getPartidesRecursiu(cap.codigo);
 
       let importeCap = 0;
       let lineasCap = 0;

@@ -1,0 +1,49 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <AssemblyName>e3gbimtools.RevitBC3</AssemblyName>
+    <RootNamespace>E3G.BimTools.RevitBC3</RootNamespace>
+    <TargetFramework>net8.0-windows</TargetFramework>
+    <PlatformTarget>x64</PlatformTarget>
+    <UseWPF>true</UseWPF>
+    <!-- Sin esto, los DLL de paquetes NuGet (gong-wpf-dragdrop,
+         System.Text.Encoding.CodePages, etc.) NO se copian al bin/.
+         Revit los necesita en la misma carpeta que el addin para
+         resolver assemblies en tiempo de carga. -->
+    <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\e3gbimtools.DiTools.Core\e3gbimtools.DiTools.Core.csproj" />
+    <ProjectReference Include="..\e3gbimtools.DiTools.UI\e3gbimtools.DiTools.UI.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- Necesario para escribir BC3 en CP1252 (Windows-1252), que es el
+         "ANSI" que TCQ/Presto/Arquimedes esperan.  En .NET Core 5+ las
+         codepages legacy ya no estan en la BCL por defecto y hay que
+         registrar CodePagesEncodingProvider, que vive en este paquete.  Sin
+         el, Encoding.GetEncoding(1252) lanza NotSupportedException y el
+         export aborta. -->
+    <PackageReference Include="System.Text.Encoding.CodePages" Version="8.0.0" />
+
+    <!-- Sprint B - Drag-and-drop entre nodos del arbol de capitulos.
+         gong-wpf-dragdrop es la libreria probada del ecosistema WPF para
+         drag-and-drop declarativo entre TreeView/ListBox/DataGrid.  Licencia
+         BSD-3-Clause (compatible con uso comercial y embebido).
+         Doc: https://github.com/punker76/gong-wpf-dragdrop -->
+    <PackageReference Include="gong-wpf-dragdrop" Version="3.2.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="RevitAPI">
+      <HintPath>$(RevitInstallDir)RevitAPI.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="RevitAPIUI">
+      <HintPath>$(RevitInstallDir)RevitAPIUI.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+  </ItemGroup>
+
+</Project>

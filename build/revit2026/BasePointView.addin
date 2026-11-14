@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RevitAddIns>
+  <!-- BasePointView para Revit 2026: pestaña con Exportar / Publicar / Publicar
+       lámina / Conversor .rvt. Ruta relativa a la carpeta Addins\2026. -->
+  <AddIn Type="Application">
+    <Name>BasePointView</Name>
+    <Assembly>BasePointView\e3gbimtools.BasePointExport.dll</Assembly>
+    <FullClassName>E3G.BimTools.BasePointExport.BasePointViewApp</FullClassName>
+    <ClientId>07289edc-aa1e-4df3-985b-cde725f421d6</ClientId>
+    <VendorId>E3G</VendorId>
+    <VendorDescription>E3G - equipo BIM</VendorDescription>
+  </AddIn>
+</RevitAddIns>

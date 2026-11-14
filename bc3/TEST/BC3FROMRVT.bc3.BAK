@@ -1,0 +1,21 @@
+~V|e3gbimtools.RevitBC3.bc3|FIEBDC-3/2024|e3gbimtools|e3gbimtools.RevitBC3 26052026|ANSI||||
+~K|2\2\2\2\2\2\2\2\2|EUR|
+~C|##||Presupuesto e3gbimtools|0|26052026|0|
+~C|00##||PRESUPUESTO|0|26052026|0|
+~C|00.01#||SANEAMIENTO EDIFICIO A|0|26052026|0|
+~C|00.05#||SANEAMIENTO EDIFICIO B|0|26052026|0|
+~C|01##||PRESUPUESTO|0|26052026|0|
+~C|01.02#||BAJANTES|0|26052026|0|
+~C|ED15N711.001|m|Bajante PP pared tricapa,evacua.insonoriz.,DN=110mm,fija.meca.bridas (PLUVIAL Ø110 A)|0|26052026||
+~C|ED15N711.002|m|Bajante PP pared tricapa,evacua.insonoriz.,DN=110mm,fija.meca.bridas (PLUVIAL Ø110 B)|67.57|26052026||
+~C|ED15N711.003|m|Bajante PP pared tricapa,evacua.insonoriz.,DN=110mm,fija.meca.bridas (BAJANTE PLUVIAL Ø110)|67.57|26052026||
+~T|ED15N711.001|Bajante de tubo de polipropileno de pared tricapa para evacuación insonorizada, de DN 110 mm, incluidas las piezas especiales y fijado mecánicamente con bridas|
+~T|ED15N711.002|Bajante de tubo de polipropileno de pared tricapa para evacuación insonorizada, de DN 110 mm, incluidas las piezas especiales y fijado mecánicamente con bridas|
+~T|ED15N711.003|Bajante de tubo de polipropileno de pared tricapa para evacuación insonorizada, de DN 110 mm, incluidas las piezas especiales y fijado mecánicamente con bridas|
+~D|##|00##\1\1\01##\1\1\|
+~D|00##|00.01#\1\1\00.05#\1\1\|
+~D|01##|01.02#\1\1\|
+~D|00.01#|ED15N711.001\1\5.5\|
+~D|00.05#|ED15N711.002\1\4.463\|
+~D|01.02#|ED15N711.003\1\10.938\|
+~M|00##\00.05#\ED15N711.002|4.463|[10_20 2 · S02]#3evGS0iVf78wLzyovWD4b9\1\4.463\\\|

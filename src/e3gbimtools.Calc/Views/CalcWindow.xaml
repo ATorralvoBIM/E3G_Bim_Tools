@@ -1,0 +1,962 @@
+<Window x:Class="e3gbimtools.Calc.Views.CalcWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:shell="clr-namespace:System.Windows.Shell;assembly=PresentationFramework"
+        xmlns:e3gc="clr-namespace:E3G.BimTools.DiTools.UI.Controls;assembly=e3gbimtools.DiTools.UI"
+        Title="e3gbimtools — Cálculo MEP"
+        Width="1200" Height="740"
+        MinWidth="900" MinHeight="600"
+        WindowStartupLocation="CenterOwner"
+        ShowInTaskbar="False"
+        WindowStyle="None"
+        AllowsTransparency="True"
+        Background="Transparent"
+        FontFamily="pack://application:,,,/e3gbimtools.DiTools.UI;component/Fonts/#Inter, Segoe UI, Arial"
+        FontSize="13"
+        SnapsToDevicePixels="True"
+        UseLayoutRounding="True">
+
+    <shell:WindowChrome.WindowChrome>
+        <shell:WindowChrome
+            CaptionHeight="44"
+            ResizeBorderThickness="8"
+            CornerRadius="0"
+            GlassFrameThickness="0"
+            UseAeroCaptionButtons="False" />
+    </shell:WindowChrome.WindowChrome>
+
+    <Window.Resources>
+        <ResourceDictionary>
+
+            <!-- Colores Fluent Light inlineados (CalcWindow no referencia DiTools.UI) -->
+            <Color x:Key="E3g.Color.Primary">#0F6CBD</Color>
+            <Color x:Key="E3g.Color.Secondary">#107C41</Color>
+            <Color x:Key="E3g.Color.Accent">#2B88D8</Color>
+            <Color x:Key="E3g.Color.Background">#FFFFFF</Color>
+            <Color x:Key="E3g.Color.SurfaceSubtle">#FAF9F8</Color>
+            <Color x:Key="E3g.Color.BorderSubtle">#EDEBE9</Color>
+            <Color x:Key="E3g.Color.TextSoft">#A19F9D</Color>
+            <Color x:Key="E3g.Color.Text">#201F1E</Color>
+            <Color x:Key="E3g.Color.TextMuted">#605E5C</Color>
+            <Color x:Key="E3g.Color.Error">#D13438</Color>
+            <Color x:Key="E3g.Color.SuccessBg">#DFF6E5</Color>
+            <Color x:Key="E3g.Color.WarningBg">#FFF4CE</Color>
+            <Color x:Key="E3g.Color.ErrorBg">#FDE7E9</Color>
+
+            <!-- Brushes derivados (mismas claves que DiTools.UI, evita pack URI cross-assembly) -->
+            <SolidColorBrush x:Key="E3g.Brush.Primary"       Color="{StaticResource E3g.Color.Primary}" />
+            <SolidColorBrush x:Key="E3g.Brush.Secondary"     Color="{StaticResource E3g.Color.Secondary}" />
+            <SolidColorBrush x:Key="E3g.Brush.Accent"        Color="{StaticResource E3g.Color.Accent}" />
+            <SolidColorBrush x:Key="E3g.Brush.Background"    Color="{StaticResource E3g.Color.Background}" />
+            <SolidColorBrush x:Key="E3g.Brush.Surface"       Color="{StaticResource E3g.Color.SurfaceSubtle}" />
+            <SolidColorBrush x:Key="E3g.Brush.SurfaceAlt"    Color="{StaticResource E3g.Color.BorderSubtle}" />
+            <SolidColorBrush x:Key="E3g.Brush.Border"        Color="{StaticResource E3g.Color.TextSoft}" />
+            <SolidColorBrush x:Key="E3g.Brush.Text"          Color="{StaticResource E3g.Color.Text}" />
+            <SolidColorBrush x:Key="E3g.Brush.TextMuted"     Color="{StaticResource E3g.Color.TextMuted}" />
+            <SolidColorBrush x:Key="E3g.Brush.TextOnPrimary" Color="{StaticResource E3g.Color.Background}" />
+            <SolidColorBrush x:Key="E3g.Brush.Error"         Color="{StaticResource E3g.Color.Error}" />
+            <!-- Colores de estado de filas -->
+            <SolidColorBrush x:Key="E3g.Brush.RowOk"         Color="{StaticResource E3g.Color.SuccessBg}" />
+            <SolidColorBrush x:Key="E3g.Brush.RowWarning"    Color="{StaticResource E3g.Color.WarningBg}" />
+            <SolidColorBrush x:Key="E3g.Brush.RowError"      Color="{StaticResource E3g.Color.ErrorBg}" />
+
+            <Style TargetType="TextBlock" x:Key="SectionLabel">
+                <Setter Property="FontWeight" Value="SemiBold" />
+                <Setter Property="Margin" Value="0,4,0,4" />
+                <Setter Property="Foreground" Value="{StaticResource E3g.Brush.Text}" />
+            </Style>
+
+            <Style TargetType="Button" x:Key="ActionButton">
+                <Setter Property="Padding" Value="12,4" />
+                <Setter Property="Margin" Value="0,0,6,0" />
+                <Setter Property="MinWidth" Value="90" />
+                <Setter Property="Height" Value="28" />
+                <Setter Property="Background" Value="{StaticResource E3g.Brush.Surface}" />
+                <Setter Property="Foreground" Value="{StaticResource E3g.Brush.Text}" />
+                <Setter Property="BorderBrush" Value="{StaticResource E3g.Brush.Border}" />
+            </Style>
+
+            <Style TargetType="Button" x:Key="PrimaryButton" BasedOn="{StaticResource ActionButton}">
+                <Setter Property="Background" Value="{StaticResource E3g.Brush.Accent}" />
+                <Setter Property="Foreground" Value="{StaticResource E3g.Brush.TextOnPrimary}" />
+                <Setter Property="BorderBrush" Value="{StaticResource E3g.Brush.Accent}" />
+                <Setter Property="FontWeight" Value="SemiBold" />
+            </Style>
+
+            <Style TargetType="DataGrid">
+                <Setter Property="AutoGenerateColumns" Value="False" />
+                <Setter Property="IsReadOnly" Value="True" />
+                <Setter Property="HeadersVisibility" Value="Column" />
+                <Setter Property="GridLinesVisibility" Value="Horizontal" />
+                <Setter Property="RowHeight" Value="22" />
+                <Setter Property="SelectionMode" Value="Single" />
+                <Setter Property="Background" Value="{StaticResource E3g.Brush.Background}" />
+                <Setter Property="RowBackground" Value="{StaticResource E3g.Brush.Background}" />
+                <Setter Property="AlternatingRowBackground" Value="{StaticResource E3g.Brush.Surface}" />
+                <Setter Property="BorderBrush" Value="{StaticResource E3g.Brush.Border}" />
+            </Style>
+
+            <!-- RowStyle compartido: colorea filas según StatusKind (OK/Warning/Error) -->
+            <Style x:Key="CalcResultRowStyle" TargetType="DataGridRow">
+                <Style.Triggers>
+                    <DataTrigger Binding="{Binding StatusKind}" Value="OK">
+                        <Setter Property="Background" Value="{StaticResource E3g.Brush.RowOk}" />
+                    </DataTrigger>
+                    <DataTrigger Binding="{Binding StatusKind}" Value="Warning">
+                        <Setter Property="Background" Value="{StaticResource E3g.Brush.RowWarning}" />
+                    </DataTrigger>
+                    <DataTrigger Binding="{Binding StatusKind}" Value="Error">
+                        <Setter Property="Background" Value="{StaticResource E3g.Brush.RowError}" />
+                    </DataTrigger>
+                    <!-- Tramo desconectado de la fuente: magenta vivo + negrita para que salte a la vista -->
+                    <DataTrigger Binding="{Binding StatusKind}" Value="Disconnected">
+                        <Setter Property="Background" Value="#FFE040FB" />
+                        <Setter Property="Foreground" Value="White" />
+                        <Setter Property="FontWeight" Value="Bold" />
+                    </DataTrigger>
+                </Style.Triggers>
+            </Style>
+
+            <Style TargetType="ComboBox">
+                <Setter Property="Margin" Value="0,0,6,0" />
+                <Setter Property="Height" Value="26" />
+                <Setter Property="VerticalContentAlignment" Value="Center" />
+                <Setter Property="Background" Value="{StaticResource E3g.Brush.Surface}" />
+            </Style>
+
+            <Style TargetType="TextBox">
+                <Setter Property="Margin" Value="0,0,6,0" />
+                <Setter Property="Padding" Value="4,2" />
+                <Setter Property="VerticalContentAlignment" Value="Center" />
+                <Setter Property="Height" Value="26" />
+                <Setter Property="Background" Value="{StaticResource E3g.Brush.Surface}" />
+                <Setter Property="BorderBrush" Value="{StaticResource E3g.Brush.Border}" />
+            </Style>
+        </ResourceDictionary>
+    </Window.Resources>
+
+    <Border x:Name="ChromeRoot"
+            CornerRadius="10"
+            Background="{DynamicResource E3g.Brush.Background}"
+            BorderBrush="{DynamicResource E3g.Brush.Border}"
+            BorderThickness="1"
+            Margin="12">
+        <Border.Effect>
+            <DropShadowEffect Color="#000000" BlurRadius="18" ShadowDepth="0" Opacity="0.20" />
+        </Border.Effect>
+        <Border x:Name="ChromeClip" CornerRadius="{Binding CornerRadius, ElementName=ChromeRoot}">
+            <Border.OpacityMask>
+                <VisualBrush>
+                    <VisualBrush.Visual>
+                        <Border Background="White"
+                                CornerRadius="{Binding CornerRadius, ElementName=ChromeClip}"
+                                Width="{Binding ActualWidth, ElementName=ChromeClip}"
+                                Height="{Binding ActualHeight, ElementName=ChromeClip}" />
+                    </VisualBrush.Visual>
+                </VisualBrush>
+            </Border.OpacityMask>
+            <DockPanel LastChildFill="True">
+                <e3gc:E3gTitleBar x:Name="TitleBar"
+                                  DockPanel.Dock="Top"
+                                  Title="e3gbimtools"
+                                  Subtitle="Cálculo MEP"
+                                  ShowStatus="False"
+                                  ShowMinimize="False" />
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <!-- ================================================================ -->
+        <!--  Tabs                                                            -->
+        <!-- ================================================================ -->
+        <TabControl Grid.Row="0" Margin="8,8,8,4"
+                    Background="{StaticResource E3g.Brush.Background}"
+                    BorderBrush="{StaticResource E3g.Brush.Border}">
+
+            <!-- ============================================================ -->
+            <!--  Tab 1: Hidráulica                                           -->
+            <!-- ============================================================ -->
+            <TabItem Header="  Hidráulica  ">
+                <Grid Margin="8">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="130" />
+                    </Grid.RowDefinitions>
+
+                    <!-- Barra de acciones -->
+                    <Border Grid.Row="0" Padding="8,6"
+                            BorderBrush="{StaticResource E3g.Brush.Border}"
+                            BorderThickness="1" CornerRadius="4" Margin="0,0,0,6">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="200" />
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Grid.Column="0" Text="Sistema:" VerticalAlignment="Center"
+                                       Margin="0,0,6,0" Foreground="{StaticResource E3g.Brush.TextMuted}" />
+                            <ComboBox  Grid.Column="1" x:Name="HydSystemCombo"
+                                       SelectionChanged="OnHydSystemChanged" />
+                            <Button    Grid.Column="2" Content="Recargar"
+                                       Style="{StaticResource ActionButton}"
+                                       Click="OnHydReloadClick" />
+                            <TextBlock Grid.Column="3" Text="Preset:" VerticalAlignment="Center"
+                                       Margin="12,0,6,0" Foreground="{StaticResource E3g.Brush.TextMuted}" />
+                            <ComboBox  Grid.Column="4" x:Name="HydPresetCombo" Width="160" />
+                            <Button    Grid.Column="5" Content="Calcular"
+                                       Style="{StaticResource PrimaryButton}"
+                                       Click="OnHydCalcClick" />
+                            <Button    Grid.Column="6" Content="Escribir al modelo"
+                                       Style="{StaticResource ActionButton}"
+                                       Click="OnHydWriteClick" />
+                            <Button    Grid.Column="7" Content="Aplicar dimensionado"
+                                       Style="{StaticResource ActionButton}"
+                                       Click="OnHydApplySizingClick"
+                                       ToolTip="Cambia en el modelo el diámetro de los tramos que incumplen velocidad/rozamiento al tama&#241;o sugerido (siguiente disponible del tipo). Pide confirmaci&#243;n y recalcula." />
+                            <StackPanel Grid.Column="8" Orientation="Horizontal" HorizontalAlignment="Right">
+                                <Button Content="Memoria (DOCX)"
+                                        Style="{StaticResource ActionButton}"
+                                        Margin="0,0,6,0"
+                                        Click="OnHydExportReportClick"
+                                        ToolTip="Genera la memoria de cálculo en Word: metodología, normativa, datos de partida, tabla de resultados y justificación paso a paso del camino crítico." />
+                                <Button Content="Exportar CSV"
+                                        Style="{StaticResource ActionButton}"
+                                        Click="OnHydExportCsvClick" />
+                            </StackPanel>
+                        </Grid>
+                    </Border>
+
+                    <!-- Contenido principal: tabla izquierda | splitter | esquema derecha -->
+                    <!-- Ambas columnas usan * para que el GridSplitter redimensione las dos -->
+                    <Grid Grid.Row="1">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="3*" MinWidth="300" />
+                            <ColumnDefinition Width="5" />
+                            <ColumnDefinition Width="*"  MinWidth="180" />
+                        </Grid.ColumnDefinitions>
+
+                        <!-- Izquierda: tabla de resultados + resumen -->
+                        <Grid Grid.Column="0">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="*" />
+                                <RowDefinition Height="5" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="110" />
+                            </Grid.RowDefinitions>
+
+                            <!-- Tabla de resultados con RowStyle, ContextMenu y eventos -->
+                            <DataGrid Grid.Row="0" x:Name="HydResultsGrid"
+                                      RowStyle="{StaticResource CalcResultRowStyle}"
+                                      SelectionChanged="OnHydGridSelectionChanged"
+                                      MouseDoubleClick="OnHydRowDoubleClick">
+                                <DataGrid.ContextMenu>
+                                    <ContextMenu Opened="OnHydColumnVisibilityMenuOpened" />
+                                </DataGrid.ContextMenu>
+                                <DataGrid.Columns>
+                                    <DataGridTextColumn x:Name="HydColBfsIndex"
+                                                        Header="#"
+                                                        Binding="{Binding BfsIndexDisplay}"
+                                                        Width="36" />
+                                    <DataGridTextColumn x:Name="HydColNodos"
+                                                        Header="Nodos"
+                                                        Binding="{Binding NodePath}"
+                                                        Width="90" />
+                                    <DataGridTextColumn x:Name="HydColNivel"
+                                                        Header="Nivel"
+                                                        Binding="{Binding LevelName}"
+                                                        Width="80" />
+                                    <DataGridTextColumn x:Name="HydColRevitId"
+                                                        Header="Id Revit"
+                                                        Binding="{Binding RevitIdDisplay}"
+                                                        Width="75" />
+                                    <DataGridTextColumn x:Name="HydColTalla"
+                                                        Header="Talla"
+                                                        Binding="{Binding SizeDisplay}"
+                                                        Width="60" />
+                                    <DataGridTextColumn x:Name="HydColDnRec"
+                                                        Header="DN rec"
+                                                        Binding="{Binding RecommendedSizeDisplay}"
+                                                        Width="62" />
+                                    <DataGridTextColumn x:Name="HydColN"
+                                                        Header="N"
+                                                        Binding="{Binding FixtureCountDisplay}"
+                                                        Width="36"
+                                                        Visibility="Collapsed" />
+                                    <DataGridTextColumn x:Name="HydColK"
+                                                        Header="K"
+                                                        Binding="{Binding KFactorDisplay}"
+                                                        Width="50"
+                                                        Visibility="Collapsed" />
+                                    <DataGridTextColumn x:Name="HydColQRaw"
+                                                        Header="Q raw [L/s]"
+                                                        Binding="{Binding RawFlowLpsDisplay}"
+                                                        Width="72"
+                                                        Visibility="Collapsed" />
+                                    <DataGridTextColumn x:Name="HydColQDis"
+                                                        Header="Q dis [L/s]"
+                                                        Binding="{Binding FlowLpsDisplay}"
+                                                        Width="72" />
+                                    <DataGridTextColumn x:Name="HydColV"
+                                                        Header="v [m/s]"
+                                                        Binding="{Binding VelocityDisplay}"
+                                                        Width="65" />
+                                    <DataGridTextColumn x:Name="HydColDpM"
+                                                        Header="Î”P/m [Pa/m]"
+                                                        Binding="{Binding FrictionPaPmDisplay}"
+                                                        Width="82" />
+                                    <DataGridTextColumn x:Name="HydColDpTot"
+                                                        Header="Î”P tot [Pa]"
+                                                        Binding="{Binding TotalLossDisplay}"
+                                                        Width="80" />
+                                    <DataGridTextColumn x:Name="HydColEstado"
+                                                        Header="Estado"
+                                                        Binding="{Binding Status}"
+                                                        Width="*" />
+                                </DataGrid.Columns>
+                            </DataGrid>
+
+                            <GridSplitter Grid.Row="1" HorizontalAlignment="Stretch" Height="5"
+                                          Background="{StaticResource E3g.Brush.SurfaceAlt}" />
+
+                            <!-- Editor de di&#225;metro por tramo -->
+                            <Border Grid.Row="2" x:Name="HydSizeEditorPanel" Visibility="Collapsed"
+                                    Margin="0,4,0,4"
+                                    BorderBrush="{StaticResource E3g.Brush.Border}"
+                                    BorderThickness="1" CornerRadius="4" Padding="6">
+                                <StackPanel>
+                                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                        <TextBlock Text="Di&#225;metro tramo:" FontWeight="SemiBold"
+                                                   VerticalAlignment="Center"
+                                                   Foreground="{StaticResource E3g.Brush.Text}" />
+                                        <TextBlock x:Name="HydSizeEditorLabel" Margin="8,0,8,0"
+                                                   VerticalAlignment="Center"
+                                                   Foreground="{StaticResource E3g.Brush.Text}" />
+                                        <ComboBox x:Name="HydSizeEditorCombo" Width="150"
+                                                  VerticalAlignment="Center"
+                                                  SelectionChanged="OnHydSizeEditorComboChanged" />
+                                        <Button Content="Recalcular con cambios" Margin="10,0,0,0"
+                                                Padding="8,2" Click="OnHydRecalcWithChangesClick" />
+                                        <Button Content="Aplicar al modelo" Margin="6,0,0,0"
+                                                Padding="8,2" Click="OnHydApplyManualSizeClick" />
+                                        <Button Content="Restablecer" Margin="6,0,0,0"
+                                                Padding="8,2" Click="OnHydResetManualSizesClick" />
+                                    </StackPanel>
+                                    <TextBlock x:Name="HydSizeEditorHint" Margin="0,4,0,0"
+                                               TextWrapping="Wrap" FontSize="11"
+                                               Foreground="#C0392B" />
+                                </StackPanel>
+                            </Border>
+
+                            <!-- Resumen / mensajes -->
+                            <Border Grid.Row="3" BorderBrush="{StaticResource E3g.Brush.Border}"
+                                    BorderThickness="1" CornerRadius="4" Padding="6">
+                                <ScrollViewer VerticalScrollBarVisibility="Auto">
+                                    <TextBlock x:Name="HydSummaryText" TextWrapping="Wrap"
+                                               FontSize="11" FontFamily="Consolas"
+                                               Foreground="{StaticResource E3g.Brush.Text}" />
+                                </ScrollViewer>
+                            </Border>
+                        </Grid>
+
+                        <!-- Splitter vertical tabla / esquema -->
+                        <GridSplitter Grid.Column="1" Width="5" VerticalAlignment="Stretch"
+                                      Background="{StaticResource E3g.Brush.SurfaceAlt}" />
+
+                        <!-- Derecha: panel de filtros + esquema árbol -->
+                        <Grid Grid.Column="2">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="*" />
+                            </Grid.RowDefinitions>
+
+                            <!-- Panel de filtros inline sobre el esquema -->
+                            <Border Grid.Row="0"
+                                    BorderBrush="{StaticResource E3g.Brush.Border}"
+                                    BorderThickness="1" CornerRadius="4"
+                                    Padding="6,4" Margin="0,0,0,4"
+                                    Background="{StaticResource E3g.Brush.Surface}">
+                                <StackPanel Orientation="Vertical">
+                                    <StackPanel Orientation="Horizontal" Margin="0,0,0,3">
+                                        <!-- Velocidad -->
+                                        <TextBlock Text="v max:" VerticalAlignment="Center"
+                                                   FontSize="11" Margin="0,0,4,0"/>
+                                        <TextBox x:Name="HydFilterVMax"
+                                                 Width="46" FontSize="11"
+                                                 ToolTip="Filtrar tramos con v > valor (m/s). Vacío = sin filtro."
+                                                 TextChanged="OnHydFilterChanged"/>
+                                        <TextBlock Text="m/s" VerticalAlignment="Center"
+                                                   FontSize="11" Margin="2,0,10,0"/>
+                                        <!-- Î”P/m -->
+                                        <TextBlock Text="Î”P/m max:" VerticalAlignment="Center"
+                                                   FontSize="11" Margin="0,0,4,0"/>
+                                        <TextBox x:Name="HydFilterDpMax"
+                                                 Width="52" FontSize="11"
+                                                 ToolTip="Filtrar tramos con Î”P/m > valor (Pa/m). Vacío = sin filtro."
+                                                 TextChanged="OnHydFilterChanged"/>
+                                        <TextBlock Text="Pa/m" VerticalAlignment="Center"
+                                                   FontSize="11" Margin="2,0,10,0"/>
+                                        <!-- Solo avisos -->
+                                        <CheckBox x:Name="HydFilterOnlyIssues"
+                                                  Content="Solo avisos"
+                                                  VerticalAlignment="Center"
+                                                  FontSize="11"
+                                                  Checked="OnHydFilterChanged"
+                                                  Unchecked="OnHydFilterChanged"/>
+                                    </StackPanel>
+                                    <StackPanel Orientation="Horizontal">
+                                        <Button Content="â˜… Camino crítico"
+                                                FontSize="11" Padding="6,2" Margin="0,0,6,0"
+                                                Click="OnHydCritPathClick"
+                                                ToolTip="Calcular y resaltar el camino crítico en el esquema"/>
+                                        <Button Content="âœ• Limpiar filtros"
+                                                FontSize="11" Padding="6,2"
+                                                Click="OnHydFilterClearClick"
+                                                ToolTip="Quitar todos los filtros y restaurar el esquema"/>
+                                        <Button x:Name="HydView3DButton"
+                                                Content="Ver 3D"
+                                                FontSize="11" Padding="6,2" Margin="6,0,0,0"
+                                                Click="OnHydView3DClick"
+                                                ToolTip="Alternar entre el esquema en árbol y un visor 3D del sistema calculado (geometría real con codos, tes y accesorios)."/>
+                                        <Button x:Name="HydLocateDisconnectedButton"
+                                                Content="&#x26A0; Localizar desconectados"
+                                                Visibility="Collapsed"
+                                                FontSize="11" FontWeight="Bold" Padding="6,2" Margin="6,0,0,0"
+                                                Background="#FFE040FB" Foreground="White"
+                                                Click="OnHydLocateDisconnectedClick"
+                                                ToolTip="Selecciona y centra en Revit los tramos que están desconectados de la fuente (corte en un codo/te/unión)."/>
+                                    </StackPanel>
+                                </StackPanel>
+                            </Border>
+
+                            <!-- Esquema árbol / visor 3D -->
+                            <Border Grid.Row="1"
+                                    BorderBrush="{StaticResource E3g.Brush.Border}"
+                                    BorderThickness="1" CornerRadius="4">
+                                <Grid x:Name="HydView3DHost" Background="{StaticResource E3g.Brush.Background}">
+                                    <ScrollViewer x:Name="HydSchematicScroll"
+                                                  VerticalScrollBarVisibility="Auto"
+                                                  HorizontalScrollBarVisibility="Auto">
+                                        <Canvas x:Name="HydSchematicCanvas" Width="600" Height="600"
+                                                Background="{StaticResource E3g.Brush.Background}" />
+                                    </ScrollViewer>
+                                    <!-- Fondo con degradado para dar profundidad al 3D -->
+                                    <Rectangle x:Name="Hyd3DBackdrop" Visibility="Collapsed" IsHitTestVisible="False">
+                                        <Rectangle.Fill>
+                                            <RadialGradientBrush Center="0.5,0.42" GradientOrigin="0.5,0.42"
+                                                                 RadiusX="0.85" RadiusY="0.85">
+                                                <GradientStop Color="#FFF4F7FB" Offset="0" />
+                                                <GradientStop Color="#FFD7DFEA" Offset="0.62" />
+                                                <GradientStop Color="#FFB6C2D2" Offset="1" />
+                                            </RadialGradientBrush>
+                                        </Rectangle.Fill>
+                                    </Rectangle>
+                                    <Viewport3D x:Name="HydViewport3D" Visibility="Collapsed" ClipToBounds="True" />
+                                    <TextBlock x:Name="HydView3DHint"
+                                               Visibility="Collapsed"
+                                               IsHitTestVisible="False"
+                                               VerticalAlignment="Bottom" HorizontalAlignment="Left"
+                                               Margin="8" FontSize="10"
+                                               Foreground="{StaticResource E3g.Brush.TextMuted}"
+                                               Text="Rueda central = paneo · May&#250;s+central = orbitar · Rueda = zoom · Clic = seleccionar tubo" />
+                                    <!-- Panel de datos dinámico (se rellena al seleccionar un tubo) -->
+                                    <Border x:Name="Hyd3DInfo" Visibility="Collapsed" IsHitTestVisible="False"
+                                            VerticalAlignment="Top" HorizontalAlignment="Right" Margin="10"
+                                            Background="#F2FFFFFF"
+                                            BorderBrush="{StaticResource E3g.Brush.Border}" BorderThickness="1"
+                                            CornerRadius="6" Padding="12,9" MaxWidth="250">
+                                        <StackPanel>
+                                            <TextBlock x:Name="Hyd3DInfoTitle" FontWeight="SemiBold" FontSize="12"
+                                                       Foreground="{StaticResource E3g.Brush.Text}" Text="Tubería" />
+                                            <TextBlock x:Name="Hyd3DInfoBody" FontSize="11" Margin="0,5,0,0"
+                                                       Foreground="{StaticResource E3g.Brush.TextMuted}" />
+                                        </StackPanel>
+                                    </Border>
+                                </Grid>
+                            </Border>
+                        </Grid>
+                    </Grid>
+
+                    <!-- Panel lateral de parámetros -->
+                    <Border Grid.Row="2" Margin="0,6,0,0"
+                            BorderBrush="{StaticResource E3g.Brush.Border}"
+                            BorderThickness="1" CornerRadius="4" Padding="8">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <StackPanel Grid.Column="0">
+                                <TextBlock Text="Parámetros calculados" Style="{StaticResource SectionLabel}" />
+                                <TextBlock x:Name="HydStatsText" TextWrapping="Wrap" FontSize="11"
+                                           Foreground="{StaticResource E3g.Brush.TextMuted}" />
+                            </StackPanel>
+                            <StackPanel Grid.Column="1">
+                                <TextBlock Text="Fluido" Style="{StaticResource SectionLabel}" />
+                                <TextBlock x:Name="HydFluidText" TextWrapping="Wrap" FontSize="11"
+                                           Foreground="{StaticResource E3g.Brush.TextMuted}" />
+                            </StackPanel>
+                            <StackPanel Grid.Column="2">
+                                <TextBlock Text="Criterio activo" Style="{StaticResource SectionLabel}" />
+                                <TextBlock x:Name="HydCriteriaText" TextWrapping="Wrap" FontSize="11"
+                                           Foreground="{StaticResource E3g.Brush.TextMuted}" />
+                            </StackPanel>
+                        </Grid>
+                    </Border>
+                </Grid>
+            </TabItem>
+
+            <!-- ============================================================ -->
+            <!--  Tab 2: Aeráulica                                            -->
+            <!-- ============================================================ -->
+            <TabItem Header="  Aeráulica  ">
+                <Grid Margin="8">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="130" />
+                    </Grid.RowDefinitions>
+
+                    <!-- Barra de acciones -->
+                    <Border Grid.Row="0" Padding="8,6"
+                            BorderBrush="{StaticResource E3g.Brush.Border}"
+                            BorderThickness="1" CornerRadius="4" Margin="0,0,0,6">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="200" />
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Grid.Column="0" Text="Sistema:" VerticalAlignment="Center"
+                                       Margin="0,0,6,0" Foreground="{StaticResource E3g.Brush.TextMuted}" />
+                            <ComboBox  Grid.Column="1" x:Name="AerSystemCombo"
+                                       SelectionChanged="OnAerSystemChanged" />
+                            <Button    Grid.Column="2" Content="Recargar"
+                                       Style="{StaticResource ActionButton}"
+                                       Click="OnAerReloadClick" />
+                            <TextBlock Grid.Column="3" Text="Preset:" VerticalAlignment="Center"
+                                       Margin="12,0,6,0" Foreground="{StaticResource E3g.Brush.TextMuted}" />
+                            <ComboBox  Grid.Column="4" x:Name="AerPresetCombo" Width="160" />
+                            <Button    Grid.Column="5" Content="Calcular"
+                                       Style="{StaticResource PrimaryButton}"
+                                       Click="OnAerCalcClick" />
+                            <Button    Grid.Column="6" Content="Escribir al modelo"
+                                       Style="{StaticResource ActionButton}"
+                                       Click="OnAerWriteClick" />
+                            <StackPanel Grid.Column="7" Orientation="Horizontal" HorizontalAlignment="Right">
+                                <Button Content="Memoria (DOCX)"
+                                        Style="{StaticResource ActionButton}"
+                                        Margin="0,0,6,0"
+                                        Click="OnAerExportReportClick"
+                                        ToolTip="Genera la memoria de cálculo en Word: metodología, normativa, datos de partida, tabla de resultados y justificación paso a paso del camino crítico." />
+                                <Button Content="Exportar CSV"
+                                        Style="{StaticResource ActionButton}"
+                                        Click="OnAerExportCsvClick" />
+                            </StackPanel>
+                        </Grid>
+                    </Border>
+
+                    <!-- Contenido principal: tabla izquierda | splitter | esquema derecha -->
+                    <!-- Ambas columnas usan * para que el GridSplitter redimensione las dos -->
+                    <Grid Grid.Row="1">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="3*" MinWidth="300" />
+                            <ColumnDefinition Width="5" />
+                            <ColumnDefinition Width="*"  MinWidth="180" />
+                        </Grid.ColumnDefinitions>
+
+                        <!-- Izquierda: tabla de resultados + resumen -->
+                        <Grid Grid.Column="0">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="*" />
+                                <RowDefinition Height="5" />
+                                <RowDefinition Height="110" />
+                            </Grid.RowDefinitions>
+
+                            <DataGrid Grid.Row="0" x:Name="AerResultsGrid"
+                                      RowStyle="{StaticResource CalcResultRowStyle}"
+                                      SelectionChanged="OnAerGridSelectionChanged"
+                                      MouseDoubleClick="OnAerRowDoubleClick">
+                                <DataGrid.ContextMenu>
+                                    <ContextMenu Opened="OnAerColumnVisibilityMenuOpened" />
+                                </DataGrid.ContextMenu>
+                                <DataGrid.Columns>
+                                    <DataGridTextColumn x:Name="AerColBfsIndex"
+                                                        Header="#"
+                                                        Binding="{Binding BfsIndexDisplay}"
+                                                        Width="36" />
+                                    <DataGridTextColumn x:Name="AerColNodos"
+                                                        Header="Nodos"
+                                                        Binding="{Binding NodePath}"
+                                                        Width="90" />
+                                    <DataGridTextColumn x:Name="AerColNivel"
+                                                        Header="Nivel"
+                                                        Binding="{Binding LevelName}"
+                                                        Width="80" />
+                                    <DataGridTextColumn x:Name="AerColRevitId"
+                                                        Header="Id Revit"
+                                                        Binding="{Binding RevitIdDisplay}"
+                                                        Width="75" />
+                                    <DataGridTextColumn x:Name="AerColTalla"
+                                                        Header="Talla"
+                                                        Binding="{Binding SizeDisplay}"
+                                                        Width="70" />
+                                    <DataGridTextColumn x:Name="AerColTallaRec"
+                                                        Header="Tamaño rec."
+                                                        Binding="{Binding RecommendedSizeDisplay}"
+                                                        Width="80" />
+                                    <DataGridTextColumn x:Name="AerColQ"
+                                                        Header="Q [l/s]"
+                                                        Binding="{Binding FlowLpsDisplay}"
+                                                        Width="65" />
+                                    <DataGridTextColumn x:Name="AerColV"
+                                                        Header="v [m/s]"
+                                                        Binding="{Binding VelocityDisplay}"
+                                                        Width="65" />
+                                    <DataGridTextColumn x:Name="AerColDpM"
+                                                        Header="Î”P/m [Pa/m]"
+                                                        Binding="{Binding FrictionPaPmDisplay}"
+                                                        Width="85" />
+                                    <DataGridTextColumn x:Name="AerColDpTot"
+                                                        Header="Î”P tot [Pa]"
+                                                        Binding="{Binding TotalLossDisplay}"
+                                                        Width="80" />
+                                    <DataGridTextColumn x:Name="AerColEstado"
+                                                        Header="Estado"
+                                                        Binding="{Binding Status}"
+                                                        Width="*" />
+                                </DataGrid.Columns>
+                            </DataGrid>
+
+                            <GridSplitter Grid.Row="1" HorizontalAlignment="Stretch" Height="5"
+                                          Background="{StaticResource E3g.Brush.SurfaceAlt}" />
+
+                            <Border Grid.Row="2" BorderBrush="{StaticResource E3g.Brush.Border}"
+                                    BorderThickness="1" CornerRadius="4" Padding="6">
+                                <ScrollViewer VerticalScrollBarVisibility="Auto">
+                                    <TextBlock x:Name="AerSummaryText" TextWrapping="Wrap"
+                                               FontSize="11" FontFamily="Consolas"
+                                               Foreground="{StaticResource E3g.Brush.Text}" />
+                                </ScrollViewer>
+                            </Border>
+                        </Grid>
+
+                        <!-- Splitter vertical -->
+                        <GridSplitter Grid.Column="1" Width="5" VerticalAlignment="Stretch"
+                                      Background="{StaticResource E3g.Brush.SurfaceAlt}" />
+
+                        <!-- Derecha: panel de filtros + esquema árbol aeráulico -->
+                        <Grid Grid.Column="2">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="*" />
+                            </Grid.RowDefinitions>
+
+                            <!-- Panel de filtros inline -->
+                            <Border Grid.Row="0"
+                                    BorderBrush="{StaticResource E3g.Brush.Border}"
+                                    BorderThickness="1" CornerRadius="4"
+                                    Padding="6,4" Margin="0,0,0,4"
+                                    Background="{StaticResource E3g.Brush.Surface}">
+                                <StackPanel Orientation="Vertical">
+                                    <StackPanel Orientation="Horizontal" Margin="0,0,0,3">
+                                        <TextBlock Text="v max:" VerticalAlignment="Center"
+                                                   FontSize="11" Margin="0,0,4,0"/>
+                                        <TextBox x:Name="AerFilterVMax"
+                                                 Width="46" FontSize="11"
+                                                 ToolTip="Filtrar tramos con v > valor (m/s). Vacío = sin filtro."
+                                                 TextChanged="OnAerFilterChanged"/>
+                                        <TextBlock Text="m/s" VerticalAlignment="Center"
+                                                   FontSize="11" Margin="2,0,10,0"/>
+                                        <TextBlock Text="Î”P/m max:" VerticalAlignment="Center"
+                                                   FontSize="11" Margin="0,0,4,0"/>
+                                        <TextBox x:Name="AerFilterDpMax"
+                                                 Width="52" FontSize="11"
+                                                 ToolTip="Filtrar tramos con Î”P/m > valor (Pa/m). Vacío = sin filtro."
+                                                 TextChanged="OnAerFilterChanged"/>
+                                        <TextBlock Text="Pa/m" VerticalAlignment="Center"
+                                                   FontSize="11" Margin="2,0,10,0"/>
+                                        <CheckBox x:Name="AerFilterOnlyIssues"
+                                                  Content="Solo avisos"
+                                                  VerticalAlignment="Center"
+                                                  FontSize="11"
+                                                  Checked="OnAerFilterChanged"
+                                                  Unchecked="OnAerFilterChanged"/>
+                                    </StackPanel>
+                                    <StackPanel Orientation="Horizontal">
+                                        <Button Content="â˜… Camino crítico"
+                                                FontSize="11" Padding="6,2" Margin="0,0,6,0"
+                                                Click="OnAerCritPathClick"
+                                                ToolTip="Calcular y resaltar el camino crítico en el esquema"/>
+                                        <Button Content="âœ• Limpiar filtros"
+                                                FontSize="11" Padding="6,2"
+                                                Click="OnAerFilterClearClick"
+                                                ToolTip="Quitar todos los filtros y restaurar el esquema"/>
+                                        <Button x:Name="AerView3DButton"
+                                                Content="Ver 3D"
+                                                FontSize="11" Padding="6,2" Margin="6,0,0,0"
+                                                Click="OnAerView3DClick"
+                                                ToolTip="Alternar entre el esquema en árbol y un visor 3D del sistema calculado (geometría real con codos, tes y accesorios)."/>
+                                        <Button x:Name="AerLocateDisconnectedButton"
+                                                Content="&#x26A0; Localizar desconectados"
+                                                Visibility="Collapsed"
+                                                FontSize="11" FontWeight="Bold" Padding="6,2" Margin="6,0,0,0"
+                                                Background="#FFE040FB" Foreground="White"
+                                                Click="OnAerLocateDisconnectedClick"
+                                                ToolTip="Selecciona y centra en Revit los tramos que están desconectados de la fuente (corte en un accesorio/unión)."/>
+                                    </StackPanel>
+                                </StackPanel>
+                            </Border>
+
+                            <!-- Esquema árbol aeráulico / visor 3D -->
+                            <Border Grid.Row="1"
+                                    BorderBrush="{StaticResource E3g.Brush.Border}"
+                                    BorderThickness="1" CornerRadius="4">
+                                <Grid x:Name="AerView3DHost" Background="{StaticResource E3g.Brush.Background}">
+                                    <ScrollViewer x:Name="AerSchematicScroll"
+                                                  VerticalScrollBarVisibility="Auto"
+                                                  HorizontalScrollBarVisibility="Auto">
+                                        <Canvas x:Name="AerSchematicCanvas" Width="600" Height="600"
+                                                Background="{StaticResource E3g.Brush.Background}" />
+                                    </ScrollViewer>
+                                    <!-- Fondo con degradado para dar profundidad al 3D -->
+                                    <Rectangle x:Name="Aer3DBackdrop" Visibility="Collapsed" IsHitTestVisible="False">
+                                        <Rectangle.Fill>
+                                            <RadialGradientBrush Center="0.5,0.42" GradientOrigin="0.5,0.42"
+                                                                 RadiusX="0.85" RadiusY="0.85">
+                                                <GradientStop Color="#FFF4F7FB" Offset="0" />
+                                                <GradientStop Color="#FFD7DFEA" Offset="0.62" />
+                                                <GradientStop Color="#FFB6C2D2" Offset="1" />
+                                            </RadialGradientBrush>
+                                        </Rectangle.Fill>
+                                    </Rectangle>
+                                    <Viewport3D x:Name="AerViewport3D" Visibility="Collapsed" ClipToBounds="True" />
+                                    <TextBlock x:Name="AerView3DHint"
+                                               Visibility="Collapsed"
+                                               IsHitTestVisible="False"
+                                               VerticalAlignment="Bottom" HorizontalAlignment="Left"
+                                               Margin="8" FontSize="10"
+                                               Foreground="{StaticResource E3g.Brush.TextMuted}"
+                                               Text="Rueda central = paneo · May&#250;s+central = orbitar · Rueda = zoom · Clic = seleccionar tubo" />
+                                    <!-- Panel de datos dinámico (se rellena al seleccionar un conducto) -->
+                                    <Border x:Name="Aer3DInfo" Visibility="Collapsed" IsHitTestVisible="False"
+                                            VerticalAlignment="Top" HorizontalAlignment="Right" Margin="10"
+                                            Background="#F2FFFFFF"
+                                            BorderBrush="{StaticResource E3g.Brush.Border}" BorderThickness="1"
+                                            CornerRadius="6" Padding="12,9" MaxWidth="250">
+                                        <StackPanel>
+                                            <TextBlock x:Name="Aer3DInfoTitle" FontWeight="SemiBold" FontSize="12"
+                                                       Foreground="{StaticResource E3g.Brush.Text}" Text="Conducto" />
+                                            <TextBlock x:Name="Aer3DInfoBody" FontSize="11" Margin="0,5,0,0"
+                                                       Foreground="{StaticResource E3g.Brush.TextMuted}" />
+                                        </StackPanel>
+                                    </Border>
+                                </Grid>
+                            </Border>
+                        </Grid>
+                    </Grid>
+
+                    <!-- Panel de parámetros -->
+                    <Border Grid.Row="2" Margin="0,6,0,0"
+                            BorderBrush="{StaticResource E3g.Brush.Border}"
+                            BorderThickness="1" CornerRadius="4" Padding="8">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <StackPanel Grid.Column="0">
+                                <TextBlock Text="Parámetros calculados" Style="{StaticResource SectionLabel}" />
+                                <TextBlock x:Name="AerStatsText" TextWrapping="Wrap" FontSize="11"
+                                           Foreground="{StaticResource E3g.Brush.TextMuted}" />
+                            </StackPanel>
+                            <StackPanel Grid.Column="1">
+                                <TextBlock Text="Fluido" Style="{StaticResource SectionLabel}" />
+                                <TextBlock x:Name="AerFluidText" TextWrapping="Wrap" FontSize="11"
+                                           Foreground="{StaticResource E3g.Brush.TextMuted}" />
+                            </StackPanel>
+                            <StackPanel Grid.Column="2">
+                                <TextBlock Text="Criterio activo" Style="{StaticResource SectionLabel}" />
+                                <TextBlock x:Name="AerCriteriaText" TextWrapping="Wrap" FontSize="11"
+                                           Foreground="{StaticResource E3g.Brush.TextMuted}" />
+                            </StackPanel>
+                        </Grid>
+                    </Border>
+                </Grid>
+            </TabItem>
+
+            <!-- ============================================================ -->
+            <!--  Tab 3: Camino crítico                                       -->
+            <!-- ============================================================ -->
+            <TabItem Header="  Camino crítico  ">
+                <Grid Margin="8">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+
+                    <Border Grid.Row="0" Padding="8,6"
+                            BorderBrush="{StaticResource E3g.Brush.Border}"
+                            BorderThickness="1" CornerRadius="4" Margin="0,0,0,6">
+                        <StackPanel Orientation="Horizontal">
+                            <Button Content="Calcular camino crítico (hidráulico)"
+                                    Style="{StaticResource PrimaryButton}"
+                                    Click="OnCriticalPathHydClick" />
+                            <Button Content="Calcular camino crítico (aeráulico)"
+                                    Style="{StaticResource ActionButton}"
+                                    Click="OnCriticalPathAerClick" />
+                            <Button Content="Exportar CSV"
+                                    Style="{StaticResource ActionButton}"
+                                    Click="OnCriticalPathExportClick" />
+                        </StackPanel>
+                    </Border>
+
+                    <Grid Grid.Row="1">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="6" />
+                            <ColumnDefinition Width="260" />
+                        </Grid.ColumnDefinitions>
+
+                        <DataGrid Grid.Column="0" x:Name="CritPathGrid">
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="Posición"      Binding="{Binding Position}"      Width="70" />
+                                <DataGridTextColumn Header="Id Revit"      Binding="{Binding RevitElementId}" Width="80" />
+                                <DataGridTextColumn Header="Î”P acum. (Pa)" Binding="{Binding CumLossPa, StringFormat=\{0:0\}}" Width="100" />
+                                <DataGridTextColumn Header="v (m/s)"       Binding="{Binding VelocityMs, StringFormat=\{0:0.00\}}" Width="70" />
+                                <DataGridTextColumn Header="DN / Tamaño"   Binding="{Binding RecommendedSize}" Width="90" />
+                            </DataGrid.Columns>
+                        </DataGrid>
+
+                        <GridSplitter Grid.Column="1" VerticalAlignment="Stretch" Width="5"
+                                      Background="{StaticResource E3g.Brush.SurfaceAlt}" />
+
+                        <Border Grid.Column="2" BorderBrush="{StaticResource E3g.Brush.Border}"
+                                BorderThickness="1" CornerRadius="4" Padding="8">
+                            <StackPanel>
+                                <TextBlock Text="Resumen" Style="{StaticResource SectionLabel}" />
+                                <TextBlock x:Name="CritPathSummaryText" TextWrapping="Wrap"
+                                           FontSize="11" Foreground="{StaticResource E3g.Brush.TextMuted}" />
+                            </StackPanel>
+                        </Border>
+                    </Grid>
+                </Grid>
+            </TabItem>
+
+            <!-- ============================================================ -->
+            <!--  Tab 4: Esquema standalone (vista completa para exportar)    -->
+            <!-- ============================================================ -->
+            <TabItem Header="  Esquema  ">
+                <Grid Margin="8">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+
+                    <Border Grid.Row="0" Padding="8,6"
+                            BorderBrush="{StaticResource E3g.Brush.Border}"
+                            BorderThickness="1" CornerRadius="4" Margin="0,0,0,6">
+                        <StackPanel Orientation="Horizontal">
+                            <Button Content="Ver esquema hidráulico (pantalla completa)"
+                                    Style="{StaticResource PrimaryButton}"
+                                    Click="OnSchematicHydClick" />
+                            <Button Content="Ver esquema aeráulico (pantalla completa)"
+                                    Style="{StaticResource ActionButton}"
+                                    Click="OnSchematicAerClick" />
+                            <Button Content="Previsualización de esquema"
+                                    Style="{StaticResource ActionButton}"
+                                    Click="OnOpenSchematicPreviewClick" />
+                            <Button Content="Exportar CSV nodos"
+                                    Style="{StaticResource ActionButton}"
+                                    Click="OnSchematicExportClick" />
+                        </StackPanel>
+                    </Border>
+
+                    <Border Grid.Row="1" BorderBrush="{StaticResource E3g.Brush.Border}"
+                            BorderThickness="1" CornerRadius="4" Padding="8">
+                        <ScrollViewer VerticalScrollBarVisibility="Auto"
+                                      HorizontalScrollBarVisibility="Auto">
+                            <Canvas x:Name="SchematicCanvas" Width="800" Height="600"
+                                    Background="{StaticResource E3g.Brush.Background}" />
+                        </ScrollViewer>
+                    </Border>
+                </Grid>
+            </TabItem>
+
+            <!-- ============================================================ -->
+            <!--  Tab 5: Self-test                                            -->
+            <!-- ============================================================ -->
+            <TabItem Header="  Self-test  ">
+                <Grid Margin="8">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+
+                    <Border Grid.Row="0" Padding="8,6"
+                            BorderBrush="{StaticResource E3g.Brush.Border}"
+                            BorderThickness="1" CornerRadius="4" Margin="0,0,0,6">
+                        <StackPanel Orientation="Horizontal">
+                            <Button Content="Ejecutar self-test"
+                                    Style="{StaticResource PrimaryButton}"
+                                    Click="OnRunSelfTestClick" />
+                            <TextBlock x:Name="SelfTestResultText"
+                                       VerticalAlignment="Center" Margin="16,0,0,0"
+                                       FontWeight="SemiBold"
+                                       Foreground="{StaticResource E3g.Brush.TextMuted}" />
+                        </StackPanel>
+                    </Border>
+
+                    <Border Grid.Row="1" BorderBrush="{StaticResource E3g.Brush.Border}"
+                            BorderThickness="1" CornerRadius="4" Padding="8">
+                        <ScrollViewer VerticalScrollBarVisibility="Auto">
+                            <TextBlock x:Name="SelfTestOutputText"
+                                       FontFamily="Consolas" FontSize="11"
+                                       TextWrapping="Wrap"
+                                       Foreground="{StaticResource E3g.Brush.Text}" />
+                        </ScrollViewer>
+                    </Border>
+                </Grid>
+            </TabItem>
+
+        </TabControl>
+
+        <!-- ================================================================ -->
+        <!--  Barra de estado y botón cerrar                                  -->
+        <!-- ================================================================ -->
+        <Border Grid.Row="1" Margin="8,0,8,8" Padding="8,4"
+                BorderBrush="{StaticResource E3g.Brush.Border}"
+                BorderThickness="1" CornerRadius="4"
+                Background="{StaticResource E3g.Brush.Surface}">
+            <Grid>
+                <TextBlock x:Name="StatusBarText"
+                           VerticalAlignment="Center" FontSize="11"
+                           Foreground="{StaticResource E3g.Brush.TextMuted}"
+                           Text="Listo. Selecciona un sistema y pulsa Calcular." />
+                <Button HorizontalAlignment="Right" Content="Cerrar"
+                        Style="{StaticResource ActionButton}"
+                        Click="OnCloseClick" />
+            </Grid>
+        </Border>
+    </Grid>
+            </DockPanel>
+        </Border>
+    </Border>
+</Window>
+

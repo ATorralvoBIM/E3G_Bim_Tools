@@ -1,0 +1,11 @@
+<Project>
+
+  <!-- Central Package Management deshabilitado en Sprint 0 para evitar
+       problemas con paquetes que no se restauran.  Los proyectos usan
+       referencias directas via HintPath a las DLLs locales de Revit. -->
+
+  <PropertyGroup>
+    <ManagePackageVersionsCentrally>false</ManagePackageVersionsCentrally>
+  </PropertyGroup>
+
+</Project>

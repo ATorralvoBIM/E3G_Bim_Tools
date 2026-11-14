@@ -1,0 +1,4 @@
+# build/ — scripts y manifests del pipeline.
+#   build/manifests/  -> templates .addin
+#   build/RevitRefs/  -> (gitignored) DLLs de RevitAPI por version (no se usa con Nice3point.* NuGet)
+#   build/build.ps1   -> wrapper local para CI matrix

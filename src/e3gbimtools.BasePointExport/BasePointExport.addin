@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RevitAddIns>
+  <!-- BasePointView — Exportador a GLB + JSON (Sprint 4).
+       Ajusta la ruta <Assembly> a tu salida de build si difiere. -->
+
+  <!-- Aplicación: crea la pestaña «BasePointView» con el botón del ribbon. -->
+  <AddIn Type="Application">
+    <Name>BasePointView</Name>
+    <Assembly>C:\Dev\E3GBIMTools\src\e3gbimtools.BasePointExport\bin\Release\net8.0-windows\e3gbimtools.BasePointExport.dll</Assembly>
+    <FullClassName>E3G.BimTools.BasePointExport.BasePointViewApp</FullClassName>
+    <ClientId>07289edc-aa1e-4df3-985b-cde725f421d6</ClientId>
+    <VendorId>E3G</VendorId>
+    <VendorDescription>E3G — equipo BIM</VendorDescription>
+  </AddIn>
+
+  <!-- Comandos: también accesibles desde Complementos → Comandos externos. -->
+  <AddIn Type="Command">
+    <Text>BasePointView — Exportar a GLB</Text>
+    <Description>Exporta la vista 3D activa a GLB (geometría) + JSON (propiedades por UniqueId) para el visor web BasePointView.</Description>
+    <Assembly>C:\Dev\E3GBIMTools\src\e3gbimtools.BasePointExport\bin\Release\net8.0-windows\e3gbimtools.BasePointExport.dll</Assembly>
+    <FullClassName>E3G.BimTools.BasePointExport.ExportCommand</FullClassName>
+    <AddInId>4640c327-3772-4550-b5d3-8e90486d2dfe</AddInId>
+    <VendorId>E3G</VendorId>
+    <VendorDescription>E3G — equipo BIM</VendorDescription>
+  </AddIn>
+  <AddIn Type="Command">
+    <Text>BasePointView — Publicar al visor</Text>
+    <Description>Publica la vista 3D activa en el backend de BasePointView; aparece versionada en el catálogo del visor.</Description>
+    <Assembly>C:\Dev\E3GBIMTools\src\e3gbimtools.BasePointExport\bin\Release\net8.0-windows\e3gbimtools.BasePointExport.dll</Assembly>
+    <FullClassName>E3G.BimTools.BasePointExport.PublishCommand</FullClassName>
+    <AddInId>9a9b9984-a0eb-40ca-8222-27788b68f20c</AddInId>
+    <VendorId>E3G</VendorId>
+    <VendorDescription>E3G — equipo BIM</VendorDescription>
+  </AddIn>
+  <AddIn Type="Command">
+    <Text>BasePointView — Publicar lámina</Text>
+    <Description>Publica la vista 2D activa (planta) como lámina georreferenciada en el visor, situada sobre el modelo 3D.</Description>
+    <Assembly>C:\Dev\E3GBIMTools\src\e3gbimtools.BasePointExport\bin\Release\net8.0-windows\e3gbimtools.BasePointExport.dll</Assembly>
+    <FullClassName>E3G.BimTools.BasePointExport.PublishSheetCommand</FullClassName>
+    <AddInId>3b6e2c4d-9f1a-4c8e-bb27-7c5a1d8e6f02</AddInId>
+    <VendorId>E3G</VendorId>
+    <VendorDescription>E3G — equipo BIM</VendorDescription>
+  </AddIn>
+</RevitAddIns>

@@ -1,0 +1,112 @@
+<Wix xmlns="http://wixtoolset.org/schemas/v4/wxs"
+     xmlns:ui="http://wixtoolset.org/schemas/v4/wxs/ui">
+
+  <!-- =====================================================
+       Definicion del producto: e3gbimtools — DiTools setup.
+       Per-user install (sin UAC).
+       ===================================================== -->
+
+  <Package
+      Name="e3gbimtools"
+      Manufacturer="E3G"
+      Version="0.1.0"
+      UpgradeCode="A12B3C4D-5E60-4F71-8A92-1B2C3D4E5F60"
+      Scope="perUser"
+      InstallerVersion="500"
+      Compressed="yes">
+
+    <SummaryInformation
+        Description="e3gbimtools — Suite de productividad BIM para Revit"
+        Manufacturer="E3G" />
+
+    <MediaTemplate EmbedCab="yes" />
+
+    <!-- Mayor major.minor reemplaza versiones anteriores automaticamente. -->
+    <MajorUpgrade
+        DowngradeErrorMessage="Hay una version mas reciente de e3gbimtools instalada."
+        AllowSameVersionUpgrades="yes" />
+
+    <!-- Carpeta destino: %LOCALAPPDATA%\Programs\e3g\BimTools\ -->
+    <StandardDirectory Id="LocalAppDataFolder">
+      <Directory Id="ProgramsFolder" Name="Programs">
+        <Directory Id="E3gFolder" Name="e3g">
+          <Directory Id="INSTALLFOLDER" Name="BimTools">
+            <Directory Id="Revit2025Folder" Name="Revit2025" />
+          </Directory>
+        </Directory>
+      </Directory>
+    </StandardDirectory>
+
+    <!-- Carpeta donde Revit busca .addin del usuario actual: %APPDATA%\Autodesk\Revit\Addins\<ver>\ -->
+    <StandardDirectory Id="AppDataFolder">
+      <Directory Id="AutodeskFolder" Name="Autodesk">
+        <Directory Id="RevitFolder" Name="Revit">
+          <Directory Id="AddinsFolder" Name="Addins">
+            <Directory Id="Addins2025Folder" Name="2025" />
+          </Directory>
+        </Directory>
+      </Directory>
+    </StandardDirectory>
+
+    <!-- ====== Componentes para Revit 2025 ====== -->
+    <ComponentGroup Id="DiTools.Revit2025">
+
+      <!-- DLLs principales del add-in -->
+      <Component Id="Cmp.DiTools.Dll.2025" Directory="Revit2025Folder" Guid="*">
+        <File Id="File.DiTools.Dll.2025"
+              Source="$(var.e3gbimtools.DiTools.TargetDir)e3gbimtools.DiTools.dll"
+              KeyPath="yes" />
+      </Component>
+      <Component Id="Cmp.DiTools.Core.Dll.2025" Directory="Revit2025Folder" Guid="*">
+        <File Id="File.DiTools.Core.Dll.2025"
+              Source="$(var.e3gbimtools.DiTools.TargetDir)e3gbimtools.DiTools.Core.dll"
+              KeyPath="yes" />
+      </Component>
+      <Component Id="Cmp.DiTools.UI.Dll.2025" Directory="Revit2025Folder" Guid="*">
+        <File Id="File.DiTools.UI.Dll.2025"
+              Source="$(var.e3gbimtools.DiTools.TargetDir)e3gbimtools.DiTools.UI.dll"
+              KeyPath="yes" />
+      </Component>
+
+      <!-- Iconos del ribbon -->
+      <Component Id="Cmp.Icon.Panel32.2025" Directory="Revit2025Folder" Guid="*">
+        <File Id="File.Icon.Panel32.2025"
+              Source="$(var.e3gbimtools.DiTools.TargetDir)Resources\icono_panel_32.png"
+              KeyPath="yes" />
+      </Component>
+      <Component Id="Cmp.Icon.Small16.2025" Directory="Revit2025Folder" Guid="*">
+        <File Id="File.Icon.Small16.2025"
+              Source="$(var.e3gbimtools.DiTools.TargetDir)Resources\icono_small_16.png"
+              KeyPath="yes" />
+      </Component>
+
+      <!-- Manifest .addin (apunta a la DLL de arriba) -->
+      <Component Id="Cmp.Addin.2025" Directory="Addins2025Folder" Guid="*">
+        <File Id="File.Addin.2025"
+              Source="..\build\manifests\e3gbimtools.DiTools.2025.addin"
+              KeyPath="yes" />
+        <!-- Reemplaza el placeholder %LOCALAPPDATA% por la ruta real al instalar.
+             WiX no procesa variables del .addin automaticamente, asi que dejamos
+             el placeholder y un CustomAction lo sustituiria.  En Sprint 0 dejamos
+             la cadena %LOCALAPPDATA% — Revit la expande al cargar. -->
+      </Component>
+
+    </ComponentGroup>
+
+    <!-- ====== Caracteristica visible al usuario ====== -->
+    <Feature
+        Id="Feature.Main"
+        Title="e3gbimtools — DiTools"
+        Description="Add-in principal de e3gbimtools para Revit 2025."
+        Level="1"
+        ConfigurableDirectory="INSTALLFOLDER">
+      <ComponentGroupRef Id="DiTools.Revit2025" />
+    </Feature>
+
+    <!-- ====== UI minima ====== -->
+    <ui:WixUI Id="WixUI_InstallDir" InstallDirectory="INSTALLFOLDER" />
+    <UIRef Id="WixUI_ErrorProgressText" />
+
+  </Package>
+
+</Wix>

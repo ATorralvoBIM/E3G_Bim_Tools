@@ -1,0 +1,33 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <AssemblyName>e3gbimtools.DiTools.Core</AssemblyName>
+    <RootNamespace>E3G.BimTools.DiTools.Core</RootNamespace>
+    <TargetFramework>net8.0-windows</TargetFramework>
+    <PlatformTarget>x64</PlatformTarget>
+    <UseWPF>false</UseWPF>
+  </PropertyGroup>
+
+  <!-- Referencias directas a las DLLs locales de Revit 2025 -->
+  <ItemGroup>
+    <Reference Include="RevitAPI">
+      <HintPath>$(RevitInstallDir)RevitAPI.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="RevitAPIUI">
+      <HintPath>$(RevitInstallDir)RevitAPIUI.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+  </ItemGroup>
+
+  <!-- NuGet: Excel I/O (Sprint 6 — SheetGen) -->
+  <ItemGroup>
+    <PackageReference Include="ClosedXML" Version="0.102.3" />
+  </ItemGroup>
+
+  <!-- NuGet: lectura DXF/DWG para "Leyenda desde DXF" (ACadSharp, MIT) -->
+  <ItemGroup>
+    <PackageReference Include="ACadSharp" Version="3.8.35" />
+  </ItemGroup>
+
+</Project>

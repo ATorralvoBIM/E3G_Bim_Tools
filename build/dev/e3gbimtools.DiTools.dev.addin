@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Manifest .addin de DESARROLLO para Revit 2025.
+
+  Apunta directamente al .dll compilado en el bin/Debug del proyecto, asi cada
+  vez que recompiles desde Visual Studio, Revit cargara la version mas
+  reciente al reiniciar.
+
+  Si cambias VS a Release, sustituye "Debug" por "Release" en la ruta de abajo.
+
+  Instalacion:
+    1) Compila la solucion en Visual Studio (lo acabas de hacer).
+    2) Copia ESTE archivo a:
+         %APPDATA%\Autodesk\Revit\Addins\2025\
+    3) Arranca Revit 2025.  En el ribbon debe aparecer la pestania
+       "e3gbimtools" con los paneles "Inicio Proyecto" y "DiTools".
+-->
+<RevitAddIns>
+  <AddIn Type="Application">
+    <Name>e3gbimtools — DiTools (dev)</Name>
+    <Assembly>C:\Dev\E3GBIMTools\src\e3gbimtools.DiTools\bin\Debug\net8.0-windows\e3gbimtools.DiTools.dll</Assembly>
+    <AddInId>F4E7C2A1-9B3D-4A12-B6FA-1A2B3C4D5E60</AddInId>
+    <FullClassName>E3G.BimTools.DiTools.DiToolsApplication</FullClassName>
+    <VendorId>E3G</VendorId>
+    <VendorDescription>E3G — e3g.es</VendorDescription>
+  </AddIn>
+</RevitAddIns>

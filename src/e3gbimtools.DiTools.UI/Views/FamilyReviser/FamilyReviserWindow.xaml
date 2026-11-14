@@ -1,0 +1,469 @@
+<Window
+    x:Class="E3G.BimTools.DiTools.UI.Views.FamilyReviser.FamilyReviserWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:shell="clr-namespace:System.Windows.Shell;assembly=PresentationFramework"
+    xmlns:e3gc="clr-namespace:E3G.BimTools.DiTools.UI.Controls"
+    Title="e3gbimtools — FamilyReviser"
+    Width="900" Height="820"
+    MinWidth="720" MinHeight="600"
+    WindowStartupLocation="CenterOwner"
+    WindowStyle="None"
+    AllowsTransparency="True"
+    Background="Transparent"
+    SnapsToDevicePixels="True"
+    UseLayoutRounding="True">
+
+    <shell:WindowChrome.WindowChrome>
+        <shell:WindowChrome
+            CaptionHeight="44"
+            ResizeBorderThickness="8"
+            CornerRadius="0"
+            GlassFrameThickness="0"
+            UseAeroCaptionButtons="False" />
+    </shell:WindowChrome.WindowChrome>
+
+    <Window.Resources>
+        <BooleanToVisibilityConverter x:Key="BoolToVis"/>
+        <Style x:Key="HeaderLabel" TargetType="TextBlock">
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Foreground" Value="{DynamicResource E3g.Brush.Primary}"/>
+            <Setter Property="Margin" Value="0,8,0,4"/>
+        </Style>
+        <Style x:Key="PrimaryButton" TargetType="Button">
+            <Setter Property="Background" Value="{DynamicResource E3g.Brush.Primary}"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="Padding" Value="14,6"/>
+            <Setter Property="Margin" Value="4,0"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Cursor" Value="Hand"/>
+        </Style>
+        <Style x:Key="SecondaryButton" TargetType="Button">
+            <Setter Property="Background" Value="{DynamicResource E3g.Brush.BorderSubtle}"/>
+            <Setter Property="Foreground" Value="{DynamicResource E3g.Brush.Text}"/>
+            <Setter Property="Padding" Value="12,6"/>
+            <Setter Property="Margin" Value="4,0"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Cursor" Value="Hand"/>
+        </Style>
+        <Style TargetType="DataGrid">
+            <Setter Property="AutoGenerateColumns" Value="False"/>
+            <Setter Property="CanUserAddRows" Value="False"/>
+            <Setter Property="CanUserDeleteRows" Value="False"/>
+            <Setter Property="SelectionMode" Value="Extended"/>
+            <Setter Property="AlternatingRowBackground" Value="{DynamicResource E3g.Brush.SurfaceSubtle}"/>
+            <Setter Property="GridLinesVisibility" Value="Horizontal"/>
+            <Setter Property="BorderBrush" Value="{DynamicResource E3g.Brush.TextSoft}"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="FontSize" Value="12"/>
+        </Style>
+    </Window.Resources>
+
+    <Border x:Name="ChromeRoot"
+            CornerRadius="10"
+            Background="{DynamicResource E3g.Brush.Background}"
+            BorderBrush="{DynamicResource E3g.Brush.Border}"
+            BorderThickness="1"
+            Margin="12">
+        <Border.Effect>
+            <DropShadowEffect Color="#000000" BlurRadius="18" ShadowDepth="0" Opacity="0.20" />
+        </Border.Effect>
+        <Border x:Name="ChromeClip" CornerRadius="9">
+            <Border.OpacityMask>
+                <VisualBrush>
+                    <VisualBrush.Visual>
+                        <Border Background="White"
+                                CornerRadius="{Binding CornerRadius, ElementName=ChromeClip}"
+                                Width="{Binding ActualWidth, ElementName=ChromeClip}"
+                                Height="{Binding ActualHeight, ElementName=ChromeClip}" />
+                    </VisualBrush.Visual>
+                </VisualBrush>
+            </Border.OpacityMask>
+            <DockPanel LastChildFill="True">
+                <e3gc:E3gTitleBar x:Name="TitleBar"
+                                  DockPanel.Dock="Top"
+                                  Title="e3gbimtools"
+                                  Subtitle="FamilyReviser"
+                                  ShowStatus="False"
+                                  ShowMinimize="False" />
+
+    <DockPanel>
+
+        <!-- Barra inferior -->
+        <Border DockPanel.Dock="Bottom" Background="{DynamicResource E3g.Brush.BorderSubtle}" BorderBrush="{DynamicResource E3g.Brush.Border}" BorderThickness="0,1,0,0" Padding="12,8"
+                CornerRadius="0,0,9,9">
+            <DockPanel>
+                <Button DockPanel.Dock="Right" Content="Cerrar" Style="{StaticResource SecondaryButton}"
+                        Click="OnCloseClick"/>
+                <Button DockPanel.Dock="Right" Content="&#x21BB; Actualizar" Style="{StaticResource SecondaryButton}"
+                        Click="OnRefreshClick"/>
+                <TextBlock x:Name="FooterStatus" Text="" VerticalAlignment="Center"
+                           Foreground="{DynamicResource E3g.Brush.TextMuted}" FontSize="11"/>
+            </DockPanel>
+        </Border>
+
+        <!-- Contenido principal con pestañas -->
+        <TabControl Margin="8">
+
+            <!-- ========================================================= -->
+            <!--  PESTAÃ‘A 1 — Renombrar familias                            -->
+            <!-- ========================================================= -->
+            <TabItem Header="Renombrar familias">
+                <Grid Margin="8">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+
+                    <!-- Reglas de transformación -->
+                    <GroupBox Grid.Row="0" Header="Transformaciones" Margin="0,0,0,6"
+                              BorderBrush="{DynamicResource E3g.Brush.Accent}" Padding="8">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+
+                            <TextBlock Grid.Row="0" Grid.Column="0" Text="Prefijo:" Margin="0,4,8,4" VerticalAlignment="Center"/>
+                            <TextBox  Grid.Row="0" Grid.Column="1" Text="{Binding RenamePrefix, UpdateSourceTrigger=PropertyChanged}" Margin="0,4,16,4" Padding="4,2"/>
+                            <TextBlock Grid.Row="0" Grid.Column="2" Text="Sufijo:" Margin="0,4,8,4" VerticalAlignment="Center"/>
+                            <TextBox  Grid.Row="0" Grid.Column="3" Text="{Binding RenameSuffix, UpdateSourceTrigger=PropertyChanged}" Margin="0,4,0,4" Padding="4,2"/>
+
+                            <TextBlock Grid.Row="1" Grid.Column="0" Text="Buscar:" Margin="0,4,8,4" VerticalAlignment="Center"/>
+                            <TextBox  Grid.Row="1" Grid.Column="1" Text="{Binding RenameFindText, UpdateSourceTrigger=PropertyChanged}" Margin="0,4,16,4" Padding="4,2"/>
+                            <TextBlock Grid.Row="1" Grid.Column="2" Text="Reemplazar:" Margin="0,4,8,4" VerticalAlignment="Center"/>
+                            <TextBox  Grid.Row="1" Grid.Column="3" Text="{Binding RenameReplaceText, UpdateSourceTrigger=PropertyChanged}" Margin="0,4,0,4" Padding="4,2"/>
+
+                            <CheckBox Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="4"
+                                      Content="Distinguir mayúsculas/minúsculas"
+                                      IsChecked="{Binding RenameCaseSensitive}"
+                                      Margin="0,4,0,2"/>
+                        </Grid>
+                    </GroupBox>
+
+                    <!-- Botonera selección + preview -->
+                    <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="0,0,0,6">
+                        <Button Content="Seleccionar todo" Style="{StaticResource SecondaryButton}" Click="OnSelectAllClick"/>
+                        <Button Content="Deseleccionar todo" Style="{StaticResource SecondaryButton}" Click="OnSelectNoneClick"/>
+                        <Button Content="&#x1F441; Vista previa" Style="{StaticResource SecondaryButton}" Click="OnPreviewRenameClick"/>
+                        <Button Content="&#x2714; Aplicar renombrado" Style="{StaticResource PrimaryButton}" Click="OnApplyRenameClick"/>
+                    </StackPanel>
+
+                    <!-- Grid de familias -->
+                    <DataGrid x:Name="FamiliesGrid" Grid.Row="2"
+                              ItemsSource="{Binding Families}">
+                        <DataGrid.Columns>
+                            <DataGridCheckBoxColumn Header="✓" Binding="{Binding IsSelected, UpdateSourceTrigger=PropertyChanged}" Width="36"/>
+                            <DataGridTextColumn Header="Nombre actual"   Binding="{Binding Name}"         Width="*"   IsReadOnly="True"/>
+                            <DataGridTextColumn Header="Nombre propuesto" Binding="{Binding ProposedName, UpdateSourceTrigger=PropertyChanged}" Width="*"/>
+                            <DataGridTextColumn Header="Categoría"       Binding="{Binding CategoryName}"  Width="160" IsReadOnly="True"/>
+                            <DataGridTextColumn Header="Disciplina"      Binding="{Binding Discipline}"    Width="120" IsReadOnly="True"/>
+                            <DataGridTextColumn Header="Tipos"           Binding="{Binding TypeCount}"     Width="60"  IsReadOnly="True"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
+
+                    <!-- Advertencia de checkout -->
+                    <Border Grid.Row="3" Background="{DynamicResource E3g.Brush.WarningBg}" BorderBrush="{DynamicResource E3g.Brush.Warning}" BorderThickness="1"
+                            Margin="0,6,0,0" Padding="8,4" Visibility="Collapsed" x:Name="CheckoutWarning">
+                        <TextBlock Text="Algunas familias están en sesión colaborativa. Asegúrate de sincronizar antes de renombrar."
+                                   Foreground="{DynamicResource E3g.Brush.WarningText}" FontSize="11"/>
+                    </Border>
+
+                    <!-- Status -->
+                    <TextBlock Grid.Row="4" Text="{Binding RenameStatus}" Margin="0,6,0,0"
+                               Foreground="{DynamicResource E3g.Brush.TextMuted}" FontSize="11"/>
+                </Grid>
+            </TabItem>
+
+            <!-- ========================================================= -->
+            <!--  PESTAÃ‘A 2 — Exportar a disco                              -->
+            <!-- ========================================================= -->
+            <TabItem Header="Exportar a disco">
+                <Grid Margin="8">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+
+                    <!-- Configuración -->
+                    <GroupBox Grid.Row="0" Header="Configuración de export" Margin="0,0,0,6"
+                              BorderBrush="{DynamicResource E3g.Brush.Accent}" Padding="8">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="120"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+
+                            <TextBlock Grid.Row="0" Grid.Column="0" Text="Carpeta raíz:" VerticalAlignment="Center" Margin="0,4,8,4"/>
+                            <TextBox   Grid.Row="0" Grid.Column="1" Text="{Binding ExportFolder, UpdateSourceTrigger=PropertyChanged}"
+                                       Padding="4,2" Margin="0,4,4,4" IsReadOnly="True" x:Name="ExportFolderBox"/>
+                            <Button    Grid.Row="0" Grid.Column="2" Content="…" Click="OnBrowseExportFolderClick"
+                                       Style="{StaticResource SecondaryButton}" Width="32"/>
+
+                            <TextBlock Grid.Row="1" Grid.Column="0" Text="Plantilla:" VerticalAlignment="Center" Margin="0,4,8,4"/>
+                            <TextBox   Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2"
+                                       Text="{Binding ExportPathTemplate, UpdateSourceTrigger=PropertyChanged}"
+                                       Padding="4,2" Margin="0,4,0,4"/>
+
+                            <CheckBox  Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="3"
+                                       Content="Sobrescribir archivos existentes"
+                                       IsChecked="{Binding ExportOverwrite}" Margin="0,4,0,2"/>
+                        </Grid>
+                    </GroupBox>
+
+                    <!-- Lista de familias seleccionadas -->
+                    <DataGrid x:Name="ExportFamiliesGrid" Grid.Row="1"
+                              ItemsSource="{Binding Families}">
+                        <DataGrid.Columns>
+                            <DataGridCheckBoxColumn Header="✓" Binding="{Binding IsSelected, UpdateSourceTrigger=PropertyChanged}" Width="36"/>
+                            <DataGridTextColumn Header="Familia"   Binding="{Binding Name}"         Width="*"   IsReadOnly="True"/>
+                            <DataGridTextColumn Header="Categoría" Binding="{Binding CategoryName}"  Width="160" IsReadOnly="True"/>
+                            <DataGridTextColumn Header="Disciplina" Binding="{Binding Discipline}"   Width="120" IsReadOnly="True"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
+
+                    <!-- Botones -->
+                    <StackPanel Grid.Row="2" Orientation="Horizontal" Margin="0,6,0,0">
+                        <Button Content="Seleccionar todo" Style="{StaticResource SecondaryButton}" Click="OnSelectAllClick"/>
+                        <Button Content="Deseleccionar todo" Style="{StaticResource SecondaryButton}" Click="OnSelectNoneClick"/>
+                        <Button Content="&#x1F4C1; Exportar familias seleccionadas" Style="{StaticResource PrimaryButton}"
+                                Click="OnExportClick"/>
+                    </StackPanel>
+
+                    <!-- Status -->
+                    <TextBlock Grid.Row="3" Text="{Binding ExportStatus}" Margin="0,6,0,0"
+                               Foreground="{DynamicResource E3g.Brush.TextMuted}" FontSize="11"/>
+                </Grid>
+            </TabItem>
+
+            <!-- ========================================================= -->
+            <!--  PESTAÃ‘A 3 — Worksets                                      -->
+            <!-- ========================================================= -->
+            <TabItem Header="Worksets">
+                <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+                <Grid Margin="8">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+
+                    <!-- Advertencia si no es workshared -->
+                    <Border Grid.Row="0" Background="{DynamicResource E3g.Brush.WarningBg}" BorderBrush="{DynamicResource E3g.Brush.Warning}" BorderThickness="1"
+                            Padding="8,4" Margin="0,0,0,6"
+                            Visibility="Collapsed"
+                            x:Name="NotWorksharedBanner">
+                        <TextBlock Text="Este documento no es workshared. La gestión de worksets no está disponible."
+                                   Foreground="{DynamicResource E3g.Brush.WarningText}" FontSize="11"/>
+                    </Border>
+
+                    <!-- Grid de worksets -->
+                    <DataGrid x:Name="WorksetsGrid" Grid.Row="1"
+                              Height="260" MinHeight="200"
+                              ItemsSource="{Binding Worksets}"
+                              SelectedItem="{Binding SelectedWorkset}">
+                        <DataGrid.Columns>
+                            <DataGridCheckBoxColumn Header="✓" Binding="{Binding IsSelected, UpdateSourceTrigger=PropertyChanged}" Width="36"/>
+                            <DataGridTextColumn Header="Nombre" Binding="{Binding Name}" Width="*" IsReadOnly="True"/>
+                            <DataGridTextColumn Header="Nuevo nombre" Binding="{Binding ProposedName, UpdateSourceTrigger=PropertyChanged}" Width="*"/>
+                            <DataGridTextColumn Header="Elementos" Binding="{Binding ElementCount}" Width="90" IsReadOnly="True"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
+
+                    <!-- Creación en lote desde archivo .txt -->
+                    <GroupBox Grid.Row="2" Header="Crear worksets en lote" Padding="8" Margin="0,6,0,0"
+                              BorderBrush="{DynamicResource E3g.Brush.Accent}">
+                        <StackPanel>
+                            <TextBlock Text="Importa un .txt con un nombre de workset por línea. Se descartan vacíos, duplicados y los que ya existen."
+                                       Foreground="{DynamicResource E3g.Brush.TextMuted}" FontSize="11" Margin="0,0,0,6"
+                                       TextWrapping="Wrap"/>
+
+                            <Button Content="&#x1F4C4; Importar .txt" Style="{StaticResource SecondaryButton}"
+                                    Click="OnImportWorksetListClick" HorizontalAlignment="Left"/>
+
+                            <!-- Listado desplegable: solo aparece cuando se ha importado un .txt -->
+                            <Expander Margin="0,8,0,0" IsExpanded="True"
+                                      Visibility="{Binding HasBatchNames, Converter={StaticResource BoolToVis}}"
+                                      Header="{Binding BatchWorksetNameLines.Count, StringFormat='Worksets a crear ({0})'}">
+                                <StackPanel Margin="0,4,0,0">
+                                    <TextBox Text="{Binding BatchWorksetNames, UpdateSourceTrigger=PropertyChanged}"
+                                             AcceptsReturn="True" AcceptsTab="False"
+                                             TextWrapping="NoWrap"
+                                             VerticalScrollBarVisibility="Auto"
+                                             Height="100" Padding="4,2" Margin="0,0,0,6"
+                                             FontFamily="Consolas"/>
+                                    <Button Content="+ Crear en lote" Style="{StaticResource PrimaryButton}"
+                                            Click="OnCreateWorksetsBatchClick" HorizontalAlignment="Left"/>
+                                </StackPanel>
+                            </Expander>
+                        </StackPanel>
+                    </GroupBox>
+
+                    <!-- Controles de gestión -->
+                    <GroupBox Grid.Row="3" Header="Operaciones" Padding="8" Margin="0,6,0,0"
+                              BorderBrush="{DynamicResource E3g.Brush.Accent}">
+                        <WrapPanel>
+                            <StackPanel Orientation="Horizontal" Margin="0,0,12,0">
+                                <TextBlock Text="Nuevo workset:" VerticalAlignment="Center" Margin="0,0,8,0"/>
+                                <TextBox   Text="{Binding NewWorksetName, UpdateSourceTrigger=PropertyChanged}"
+                                           Width="160" Padding="4,2" Margin="0,0,4,0"/>
+                                <Button    Content="+ Crear" Style="{StaticResource PrimaryButton}" Click="OnCreateWorksetClick"/>
+                            </StackPanel>
+
+                            <Button Content="&#x270F; Renombrar seleccionado" Style="{StaticResource SecondaryButton}"
+                                    Click="OnRenameWorksetClick" Margin="0,0,4,4"/>
+                            <Button Content="Renombrar en lote" Style="{StaticResource PrimaryButton}"
+                                    Click="OnBulkRenameWorksetsClick" Margin="0,0,4,4"/>
+                            <Button Content="&#x1F5D1; Eliminar seleccionado" Style="{StaticResource SecondaryButton}"
+                                    Click="OnDeleteWorksetClick" Margin="0,0,4,4"/>
+                            <Button Content="&#x27A1; Asignar familias al workset" Style="{StaticResource PrimaryButton}"
+                                    Click="OnAssignFamiliesToWorksetClick" Margin="0,0,4,4"/>
+                            <Button Content="Consolidar grids+niveles a 'Shared Levels and Grids'" Style="{StaticResource SecondaryButton}"
+                                    Click="OnConsolidateGridsLevelsClick" Margin="0,0,4,4"/>
+                            <Button Content="&#x1F50D; Auditar worksets" Style="{StaticResource SecondaryButton}"
+                                    Click="OnAuditWorksetsClick" Margin="0,0,4,4"/>
+                        </WrapPanel>
+                    </GroupBox>
+
+                    <!-- Asignar familias y vínculos a un workset (lista de elementos) -->
+                    <GroupBox Grid.Row="4" Header="Asignar familias y vínculos a un workset" Padding="8" Margin="0,6,0,0"
+                              BorderBrush="{DynamicResource E3g.Brush.Accent}">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+
+                            <TextBlock Grid.Row="0"
+                                       Text="Lista los elementos colocados en el modelo (una fila por instancia). Selecciona el workset de destino en la tabla de arriba, carga la lista, marca elementos y asígnalos. La ventana no bloquea Revit: puedes seguir navegando y seleccionando en el modelo."
+                                       TextWrapping="Wrap"
+                                       Foreground="{DynamicResource E3g.Brush.TextMuted}" FontSize="11" Margin="0,0,0,6"/>
+
+                            <WrapPanel Grid.Row="1" Margin="0,0,0,6" VerticalAlignment="Center">
+                                <CheckBox Content="Familias"       IsChecked="{Binding ShowFamilies}"   Margin="0,0,16,0" VerticalAlignment="Center"/>
+                                <CheckBox Content="Vínculos Revit" IsChecked="{Binding ShowRevitLinks}" Margin="0,0,16,0" VerticalAlignment="Center"/>
+                                <CheckBox Content="Vínculos CAD"   IsChecked="{Binding ShowCadLinks}"   Margin="0,0,16,0" VerticalAlignment="Center"/>
+                                <Button Content="&#x21BB; Cargar lista" Style="{StaticResource SecondaryButton}"
+                                        Click="OnLoadAssignablesClick" Margin="0,0,4,0"/>
+                                <Button Content="&#x27A1; Asignar marcados al workset seleccionado" Style="{StaticResource PrimaryButton}"
+                                        Click="OnAssignCheckedElementsClick"/>
+                            </WrapPanel>
+
+                            <DataGrid Grid.Row="2" ItemsSource="{Binding AssignableElements}"
+                                      Height="180" MinHeight="120">
+                                <DataGrid.Columns>
+                                    <DataGridCheckBoxColumn Header="✓" Binding="{Binding IsSelected, UpdateSourceTrigger=PropertyChanged}" Width="36"/>
+                                    <DataGridTextColumn Header="Tipo"           Binding="{Binding Kind}"           Width="90"  IsReadOnly="True"/>
+                                    <DataGridTextColumn Header="Nombre"         Binding="{Binding Name}"           Width="*"   IsReadOnly="True"/>
+                                    <DataGridTextColumn Header="Categoría"      Binding="{Binding Category}"       Width="150" IsReadOnly="True"/>
+                                    <DataGridTextColumn Header="Tipo de sistema" Binding="{Binding SystemType}"    Width="140" IsReadOnly="True"/>
+                                    <DataGridTextColumn Header="Workset actual" Binding="{Binding CurrentWorkset}" Width="160" IsReadOnly="True"/>
+                                </DataGrid.Columns>
+                            </DataGrid>
+                        </Grid>
+                    </GroupBox>
+
+                    <!-- Organizar vínculos en worksets -->
+                    <GroupBox Grid.Row="5" Header="Organizar vínculos en worksets" Padding="8" Margin="0,6,0,0"
+                              BorderBrush="{DynamicResource E3g.Brush.Accent}">
+                        <StackPanel>
+                            <TextBlock Text="Crea un workset por cada vínculo (nombrado por el tipo) y mueve sus instancias."
+                                       Foreground="{DynamicResource E3g.Brush.TextMuted}" FontSize="11" Margin="0,0,0,6"/>
+                            <WrapPanel VerticalAlignment="Center">
+                                <CheckBox Content="Vínculos Revit" IsChecked="{Binding OrganizeRevitLinks}" Margin="0,0,16,0" VerticalAlignment="Center"/>
+                                <CheckBox Content="Vínculos CAD"   IsChecked="{Binding OrganizeCadLinks}"   Margin="0,0,16,0" VerticalAlignment="Center"/>
+                                <TextBlock Text="Prefijo:" VerticalAlignment="Center" Margin="0,0,8,0"/>
+                                <TextBox Text="{Binding LinkWorksetPrefix, UpdateSourceTrigger=PropertyChanged}"
+                                         Width="120" Padding="4,2" Margin="0,0,16,0" VerticalAlignment="Center"/>
+                                <Button Content="Crear y asignar worksets de vínculos" Style="{StaticResource PrimaryButton}"
+                                        Click="OnOrganizeLinksClick"/>
+                            </WrapPanel>
+                        </StackPanel>
+                    </GroupBox>
+
+                    <!-- Visibilidad de worksets por vista / plantilla -->
+                    <GroupBox Grid.Row="6" Header="Visibilidad de worksets" Padding="8" Margin="0,6,0,0"
+                              BorderBrush="{DynamicResource E3g.Brush.Accent}">
+                        <StackPanel>
+                            <TextBlock Text="Marca worksets en la tabla (columna ✓), elige el ámbito de vistas y aplica."
+                                       Foreground="{DynamicResource E3g.Brush.TextMuted}" FontSize="11" Margin="0,0,0,6"/>
+                            <WrapPanel VerticalAlignment="Center">
+                                <TextBlock Text="Ámbito:" VerticalAlignment="Center" Margin="0,0,8,0"/>
+                                <ComboBox SelectedIndex="{Binding ViewScopeIndex}" Width="220" Margin="0,0,16,0" VerticalAlignment="Center">
+                                    <ComboBoxItem Content="Vista activa"/>
+                                    <ComboBoxItem Content="Todas las vistas"/>
+                                    <ComboBoxItem Content="Todas las plantillas de vista"/>
+                                    <ComboBoxItem Content="Vistas y plantillas"/>
+                                </ComboBox>
+                                <Button Content="Mostrar" Style="{StaticResource PrimaryButton}"
+                                        Click="OnShowWorksetsClick" Margin="0,0,4,0"/>
+                                <Button Content="Ocultar" Style="{StaticResource SecondaryButton}"
+                                        Click="OnHideWorksetsClick" Margin="0,0,4,0"/>
+                                <Button Content="Reporte de visibilidad" Style="{StaticResource SecondaryButton}"
+                                        Click="OnVisibilityReportClick" Margin="0,0,4,0"/>
+                                <Button Content="Panel acoplable" Style="{StaticResource PrimaryButton}"
+                                        Click="OnOpenVisibilityDockClick"
+                                        ToolTip="Abre un panel fijable en el UI de Revit que sigue la vista activa y permite encender/apagar worksets al vuelo."/>
+                            </WrapPanel>
+                        </StackPanel>
+                    </GroupBox>
+
+                    <!-- Vistas 3D por workset (aísla cada workset, o vista de coordinación combinada) -->
+                    <GroupBox Grid.Row="7" Header="Vistas 3D por workset" Padding="8" Margin="0,6,0,0"
+                              BorderBrush="{DynamicResource E3g.Brush.Accent}">
+                        <StackPanel>
+                            <TextBlock Text="Crea vistas 3D a partir de los worksets marcados (columna ✓). Elige el modo: una vista aislada por workset, o una sola vista de coordinación con todos visibles."
+                                       Foreground="{DynamicResource E3g.Brush.TextMuted}" FontSize="11" Margin="0,0,0,6" TextWrapping="Wrap"/>
+                            <WrapPanel VerticalAlignment="Center">
+                                <TextBlock Text="Modo:" VerticalAlignment="Center" Margin="0,0,8,0"/>
+                                <ComboBox SelectedIndex="{Binding ViewModeIndex}" Width="260" Margin="0,0,16,0" VerticalAlignment="Center">
+                                    <ComboBoxItem Content="Una vista por workset (aislada)"/>
+                                    <ComboBoxItem Content="Una vista combinada (coordinación)"/>
+                                </ComboBox>
+                                <TextBlock Text="Prefijo:" VerticalAlignment="Center" Margin="0,0,8,0"/>
+                                <TextBox Text="{Binding ViewPerWorksetPrefix, UpdateSourceTrigger=PropertyChanged}"
+                                         Width="120" Margin="0,0,16,0" VerticalAlignment="Center"/>
+                                <Button Content="Crear vistas 3D" Style="{StaticResource PrimaryButton}"
+                                        Click="OnCreateViewsPerWorksetClick"/>
+                            </WrapPanel>
+                        </StackPanel>
+                    </GroupBox>
+
+                    <!-- Status -->
+                    <TextBlock Grid.Row="8" Text="{Binding WorksetStatus}" Margin="0,6,0,0"
+                               Foreground="{DynamicResource E3g.Brush.TextMuted}" FontSize="11"/>
+                </Grid>
+                </ScrollViewer>
+            </TabItem>
+
+        </TabControl>
+    </DockPanel>
+            </DockPanel>
+        </Border>
+    </Border>
+</Window>

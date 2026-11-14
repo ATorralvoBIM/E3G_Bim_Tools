@@ -1,0 +1,277 @@
+<Window x:Class="E3G.BimTools.DiTools.UI.Views.ViewManager.ViewManagerWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:shell="clr-namespace:System.Windows.Shell;assembly=PresentationFramework"
+        xmlns:e3gc="clr-namespace:E3G.BimTools.DiTools.UI.Controls"
+        Title="e3gbimtools — ViewManager"
+        Width="1100" Height="720"
+        MinWidth="900" MinHeight="600"
+        WindowStartupLocation="CenterOwner"
+        ShowInTaskbar="False"
+        WindowStyle="None"
+        AllowsTransparency="True"
+        Background="Transparent"
+        SnapsToDevicePixels="True"
+        UseLayoutRounding="True">
+
+    <shell:WindowChrome.WindowChrome>
+        <shell:WindowChrome
+            CaptionHeight="44"
+            ResizeBorderThickness="8"
+            CornerRadius="0"
+            GlassFrameThickness="0"
+            UseAeroCaptionButtons="False" />
+    </shell:WindowChrome.WindowChrome>
+
+    <Window.Resources>
+        <Style TargetType="TextBlock" x:Key="SectionLabel">
+            <Setter Property="FontWeight" Value="SemiBold" />
+            <Setter Property="Margin" Value="0,4,0,4" />
+        </Style>
+    </Window.Resources>
+
+    <Border x:Name="ChromeRoot"
+            CornerRadius="10"
+            Background="{DynamicResource E3g.Brush.Background}"
+            BorderBrush="{DynamicResource E3g.Brush.Border}"
+            BorderThickness="1"
+            Margin="12">
+        <Border.Effect>
+            <DropShadowEffect Color="#000000" BlurRadius="18" ShadowDepth="0" Opacity="0.20" />
+        </Border.Effect>
+        <Border x:Name="ChromeClip" CornerRadius="{Binding CornerRadius, ElementName=ChromeRoot}">
+            <Border.OpacityMask>
+                <VisualBrush>
+                    <VisualBrush.Visual>
+                        <Border Background="White"
+                                CornerRadius="{Binding CornerRadius, ElementName=ChromeClip}"
+                                Width="{Binding ActualWidth, ElementName=ChromeClip}"
+                                Height="{Binding ActualHeight, ElementName=ChromeClip}" />
+                    </VisualBrush.Visual>
+                </VisualBrush>
+            </Border.OpacityMask>
+            <DockPanel LastChildFill="True">
+                <e3gc:E3gTitleBar x:Name="TitleBar"
+                                  DockPanel.Dock="Top"
+                                  Title="e3gbimtools"
+                                  Subtitle="ViewManager"
+                                  ShowStatus="False"
+                                  ShowMinimize="False" />
+
+    <Grid Margin="12">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <TabControl Grid.Row="0">
+
+            <!-- =========================================================== -->
+            <!-- Tab 1: Listado de View Templates                              -->
+            <!-- =========================================================== -->
+            <TabItem Header="Listado">
+                <Grid Margin="6">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+
+                    <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="0,0,0,8">
+                        <Button Content="Recargar"             Padding="10,4" Margin="0,0,6,0" Click="OnReloadListClick" />
+                        <Button Content="Renombrar…"           Padding="10,4" Margin="0,0,6,0" Click="OnRenameClick" />
+                        <Button Content="Duplicar…"            Padding="10,4" Margin="0,0,6,0" Click="OnDuplicateClick"
+                                ToolTip="Duplica la plantilla seleccionada con un nombre nuevo." />
+                        <Button Content="Eliminar"             Padding="10,4" Margin="0,0,6,0" Click="OnDeleteClick"
+                                ToolTip="Elimina la plantilla (pide confirmación si está en uso)." />
+                        <Button Content="Solo huérfanas"       Padding="10,4" Margin="0,0,6,0" Click="OnFilterOrphansClick" />
+                        <Button Content="Exportar matriz…"     Padding="10,4" Margin="6,0,0,0" Click="OnExportMatrixClick"
+                                ToolTip="Exporta a Excel la matriz Vista × Plantilla." />
+                        <TextBlock x:Name="ListInfoText" VerticalAlignment="Center" Margin="16,0,0,0" Foreground="{DynamicResource E3g.Brush.TextMuted}" FontStyle="Italic" />
+                    </StackPanel>
+
+                    <DataGrid Grid.Row="1"
+                              x:Name="TemplatesGrid"
+                              AutoGenerateColumns="False"
+                              IsReadOnly="True"
+                              SelectionMode="Single"
+                              HeadersVisibility="Column"
+                              GridLinesVisibility="Horizontal"
+                              RowHeight="22">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Nombre"   Binding="{Binding Name}"        Width="3*" />
+                            <DataGridTextColumn Header="Tipo"     Binding="{Binding ViewType}"    Width="*" />
+                            <DataGridTextColumn Header="Vistas"   Binding="{Binding UsageCount}"  Width="80" />
+                            <DataGridCheckBoxColumn Header="Huérfana" Binding="{Binding IsOrphan, Mode=OneWay}" Width="80" IsReadOnly="True" />
+                        </DataGrid.Columns>
+                    </DataGrid>
+
+                    <TextBlock Grid.Row="2"
+                               Margin="0,8,0,0"
+                               Foreground="{DynamicResource E3g.Brush.TextMuted}"
+                               Text="Doble clic sobre una fila para verla en la pestaña 'Aplicar'."
+                               FontStyle="Italic" />
+                </Grid>
+            </TabItem>
+
+            <!-- =========================================================== -->
+            <!-- Tab 2: Aplicar a vistas                                       -->
+            <!-- =========================================================== -->
+            <TabItem Header="Aplicar a vistas">
+                <Grid Margin="6">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="320" />
+                        <ColumnDefinition Width="6" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+
+                    <Border Grid.Column="0" BorderBrush="{DynamicResource E3g.Brush.Border}" BorderThickness="1" CornerRadius="4" Padding="10">
+                        <StackPanel>
+                            <TextBlock Text="Plantilla origen" Style="{StaticResource SectionLabel}" />
+                            <ComboBox x:Name="ApplyTemplateCombo" SelectionChanged="OnApplyTemplateChanged" />
+
+                            <TextBlock Text="Tipo de vista compatible" Margin="0,8,0,2" />
+                            <TextBlock x:Name="ApplyTemplateTypeLabel" Foreground="{DynamicResource E3g.Brush.TextMuted}" />
+
+                            <Button Content="Aplicar a vistas marcadas"
+                                    Margin="0,16,0,0" Padding="10,6" FontWeight="SemiBold"
+                                    Click="OnApplyTemplateClick" />
+
+                            <TextBlock x:Name="ApplyStatus" Margin="0,8,0,0" Foreground="{DynamicResource E3g.Brush.TextMuted}" TextWrapping="Wrap" />
+                        </StackPanel>
+                    </Border>
+
+                    <GridSplitter Grid.Column="1" Width="6" HorizontalAlignment="Stretch" Background="{DynamicResource E3g.Brush.SurfaceSubtle}" />
+
+                    <Border Grid.Column="2" BorderBrush="{DynamicResource E3g.Brush.Border}" BorderThickness="1" CornerRadius="4" Padding="10">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="*" />
+                                <RowDefinition Height="Auto" />
+                            </Grid.RowDefinitions>
+                            <TextBlock Grid.Row="0" Text="Vistas destino" Style="{StaticResource SectionLabel}" />
+                            <TextBox   Grid.Row="1" x:Name="ApplyViewsSearchBox" Margin="0,0,0,6"
+                                       ToolTip="Filtrar vistas por nombre"
+                                       TextChanged="OnApplyViewsSearchChanged" />
+                            <ListBox   Grid.Row="2" x:Name="ApplyViewsList" SelectionMode="Multiple">
+                                <ListBox.ItemTemplate>
+                                    <DataTemplate>
+                                        <CheckBox Content="{Binding Name}" IsChecked="{Binding IsSelected, Mode=TwoWay}" />
+                                    </DataTemplate>
+                                </ListBox.ItemTemplate>
+                            </ListBox>
+                            <StackPanel Grid.Row="3" Orientation="Horizontal" Margin="0,8,0,0">
+                                <Button Content="Marcar todas"    Padding="8,2" Margin="0,0,6,0" Click="OnSelectAllViewsClick" />
+                                <Button Content="Desmarcar todas" Padding="8,2"                  Click="OnSelectNoneViewsClick" />
+                            </StackPanel>
+                        </Grid>
+                    </Border>
+                </Grid>
+            </TabItem>
+
+            <!-- =========================================================== -->
+            <!-- Tab 3: View Range multi-vista                                 -->
+            <!-- =========================================================== -->
+            <TabItem Header="View Range">
+                <Grid Margin="6">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+
+                    <Border Grid.Row="0" BorderBrush="{DynamicResource E3g.Brush.Border}" BorderThickness="1" CornerRadius="4" Padding="10" Margin="0,0,0,8">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="Vista de referencia:" VerticalAlignment="Center" Margin="0,0,6,0" />
+                            <ComboBox  x:Name="RangeReferenceCombo" Width="260" SelectionChanged="OnRangeReferenceChanged" />
+                            <Button    Content="Leer de la vista"  Padding="10,4" Margin="10,0,0,0" Click="OnReadRangeClick" />
+                            <Button    Content="Aplicar a vistas marcadas" Padding="10,4" Margin="10,0,0,0" FontWeight="SemiBold" Click="OnApplyRangeClick" />
+                            <TextBlock x:Name="RangeStatus" VerticalAlignment="Center" Margin="16,0,0,0" Foreground="{DynamicResource E3g.Brush.TextMuted}" FontStyle="Italic" />
+                        </StackPanel>
+                    </Border>
+
+                    <Border Grid.Row="1" BorderBrush="{DynamicResource E3g.Brush.Border}" BorderThickness="1" CornerRadius="4" Padding="10" Margin="0,0,0,8">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="100" />
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="100" />
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="100" />
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="100" />
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Grid.Column="0" Text="Top:"        VerticalAlignment="Center" Margin="0,0,6,0" />
+                            <TextBox   Grid.Column="1" x:Name="TopOffsetBox" />
+                            <TextBlock Grid.Column="2" Text="Cut plane:"  VerticalAlignment="Center" Margin="10,0,6,0" />
+                            <TextBox   Grid.Column="3" x:Name="CutPlaneOffsetBox" />
+                            <TextBlock Grid.Column="4" Text="Bottom:"     VerticalAlignment="Center" Margin="10,0,6,0" />
+                            <TextBox   Grid.Column="5" x:Name="BottomOffsetBox" />
+                            <TextBlock Grid.Column="6" Text="View depth:" VerticalAlignment="Center" Margin="10,0,6,0" />
+                            <TextBox   Grid.Column="7" x:Name="ViewDepthOffsetBox" />
+                        </Grid>
+                    </Border>
+
+                    <ListBox Grid.Row="2" x:Name="RangeViewsList" SelectionMode="Multiple">
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <CheckBox Content="{Binding Name}" IsChecked="{Binding IsSelected, Mode=TwoWay}" />
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+                </Grid>
+            </TabItem>
+
+            <!-- =========================================================== -->
+            <!-- Tab 4: Diff entre 2 plantillas                                -->
+            <!-- =========================================================== -->
+            <TabItem Header="Diff plantillas">
+                <Grid Margin="6">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+
+                    <Border Grid.Row="0" BorderBrush="{DynamicResource E3g.Brush.Border}" BorderThickness="1" CornerRadius="4" Padding="10" Margin="0,0,0,8">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="Plantilla A:" VerticalAlignment="Center" Margin="0,0,6,0" />
+                            <ComboBox  x:Name="DiffTemplateACombo" Width="280" />
+                            <TextBlock Text="Plantilla B:" VerticalAlignment="Center" Margin="16,0,6,0" />
+                            <ComboBox  x:Name="DiffTemplateBCombo" Width="280" />
+                            <Button    Content="Comparar"  Padding="10,4" Margin="16,0,0,0" FontWeight="SemiBold" Click="OnCompareClick" />
+                            <TextBlock x:Name="DiffStatus" VerticalAlignment="Center" Margin="16,0,0,0" Foreground="{DynamicResource E3g.Brush.TextMuted}" FontStyle="Italic" />
+                        </StackPanel>
+                    </Border>
+
+                    <DataGrid Grid.Row="1"
+                              x:Name="DiffGrid"
+                              AutoGenerateColumns="False"
+                              IsReadOnly="True"
+                              SelectionMode="Single"
+                              HeadersVisibility="Column"
+                              GridLinesVisibility="Horizontal"
+                              RowHeight="22">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Sección" Binding="{Binding Section}"  Width="*" />
+                            <DataGridTextColumn Header="Campo"   Binding="{Binding FieldName}" Width="2*" />
+                            <DataGridTextColumn Header="Valor A" Binding="{Binding ValueA}"   Width="2*" />
+                            <DataGridTextColumn Header="Valor B" Binding="{Binding ValueB}"   Width="2*" />
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </Grid>
+            </TabItem>
+
+        </TabControl>
+
+        <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,8,0,0">
+            <Button Content="Cerrar" Padding="14,4" Click="OnCloseClick" />
+        </StackPanel>
+    </Grid>
+            </DockPanel>
+        </Border>
+    </Border>
+</Window>
+

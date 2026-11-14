@@ -1,0 +1,1510 @@
+<Window
+    x:Class="E3G.BimTools.RevitBC3.Views.RevitBC3MainWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:dd="urn:gong-wpf-dragdrop"
+    xmlns:shell="clr-namespace:System.Windows.Shell;assembly=PresentationFramework"
+    xmlns:e3gc="clr-namespace:E3G.BimTools.DiTools.UI.Controls;assembly=e3gbimtools.DiTools.UI"
+    xmlns:views="clr-namespace:E3G.BimTools.RevitBC3.Views"
+    Title="e3gbimtools — Revit → BC3"
+    Width="1320" Height="820"
+    WindowStartupLocation="CenterScreen"
+    ResizeMode="CanResize"
+    MinWidth="1000" MinHeight="600"
+    WindowStyle="None"
+    AllowsTransparency="True"
+    Background="Transparent"
+    FontFamily="{DynamicResource E3g.Font.Family}"
+    FontSize="{DynamicResource E3g.Font.Size.Body}"
+    SnapsToDevicePixels="True"
+    UseLayoutRounding="True">
+
+    <shell:WindowChrome.WindowChrome>
+        <shell:WindowChrome
+            CaptionHeight="44"
+            ResizeBorderThickness="8"
+            CornerRadius="0"
+            GlassFrameThickness="0"
+            UseAeroCaptionButtons="False" />
+    </shell:WindowChrome.WindowChrome>
+
+    <Window.Resources>
+
+        <!-- ============================================================
+             Colores y brushes locales (tema blanco / mockup white) -
+             se apoyan en los brushes E3G existentes pero anaden tonos
+             secundarios neutros para no depender de un tema nuevo.
+             ============================================================ -->
+        <SolidColorBrush x:Key="Mockup.Bg.Body"        Color="{DynamicResource E3g.Color.Background}" />
+        <SolidColorBrush x:Key="Mockup.Bg.Panel"       Color="{DynamicResource E3g.Color.SurfaceSubtle}" />
+        <SolidColorBrush x:Key="Mockup.Bg.PanelAlt"    Color="{DynamicResource E3g.Color.SurfaceSubtle}" />
+        <SolidColorBrush x:Key="Mockup.Bg.Header"      Color="{DynamicResource E3g.Color.SurfaceSubtle}" />
+        <SolidColorBrush x:Key="Mockup.Bg.RowHover"    Color="{DynamicResource E3g.Color.SurfaceSubtle}" />
+        <SolidColorBrush x:Key="Mockup.Bg.RowSelected" Color="{DynamicResource E3g.Color.Module.FilterBg}" />
+
+        <SolidColorBrush x:Key="Mockup.Border"         Color="{DynamicResource E3g.Color.BorderSubtle}" />
+        <SolidColorBrush x:Key="Mockup.Border.Strong"  Color="{DynamicResource E3g.Color.BorderSubtle}" />
+
+        <SolidColorBrush x:Key="Mockup.Text"           Color="{DynamicResource E3g.Color.Text}" />
+        <SolidColorBrush x:Key="Mockup.Text.Muted"     Color="{DynamicResource E3g.Color.TextMuted}" />
+        <SolidColorBrush x:Key="Mockup.Text.Soft"      Color="{DynamicResource E3g.Color.TextSoft}" />
+
+        <SolidColorBrush x:Key="Mockup.Accent.Blue"    Color="{DynamicResource E3g.Color.Accent}" />
+        <SolidColorBrush x:Key="Mockup.Accent.BlueBg"  Color="{DynamicResource E3g.Color.Module.FilterBg}" />
+        <SolidColorBrush x:Key="Mockup.Accent.Amber"   Color="{DynamicResource E3g.Color.WarningText}" />
+        <SolidColorBrush x:Key="Mockup.Accent.AmberBg" Color="{DynamicResource E3g.Color.WarningBg}" />
+        <SolidColorBrush x:Key="Mockup.Accent.Green"   Color="{DynamicResource E3g.Color.Primary}" />
+        <SolidColorBrush x:Key="Mockup.Accent.GreenBg" Color="{DynamicResource E3g.Color.BrandTint}" />
+        <SolidColorBrush x:Key="Mockup.Accent.Red"     Color="{DynamicResource E3g.Color.ErrorText}" />
+        <SolidColorBrush x:Key="Mockup.Accent.RedBg"   Color="{DynamicResource E3g.Color.ErrorBg}" />
+
+        <!-- ============================================================
+             Tipografias
+             ============================================================ -->
+        <FontFamily x:Key="Mockup.Mono">Consolas</FontFamily>
+
+        <!-- Iconos vectoriales: Segoe Fluent (Win11) con fallback a MDL2 (Win10).
+             Se usan via glyphs en TextBlock dentro de los botones. -->
+        <FontFamily x:Key="Mockup.Icons">Segoe Fluent Icons, Segoe MDL2 Assets</FontFamily>
+
+        <!-- ============================================================
+             Estilos de texto
+             ============================================================ -->
+        <Style x:Key="PanelHeaderLabel" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="12" />
+            <Setter Property="FontWeight" Value="SemiBold" />
+            <Setter Property="Foreground" Value="{DynamicResource Mockup.Text}" />
+            <Setter Property="TextOptions.TextFormattingMode" Value="Display" />
+            <Setter Property="Margin" Value="0" />
+        </Style>
+
+        <Style x:Key="FieldLabel" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="10" />
+            <Setter Property="FontFamily" Value="{StaticResource Mockup.Mono}" />
+            <Setter Property="Foreground" Value="{DynamicResource Mockup.Text.Soft}" />
+            <Setter Property="Margin" Value="0,0,0,3" />
+        </Style>
+
+        <Style x:Key="MonoCell" TargetType="TextBlock">
+            <Setter Property="FontFamily" Value="{StaticResource Mockup.Mono}" />
+            <Setter Property="FontSize" Value="11" />
+        </Style>
+
+        <!-- ============================================================
+             Botones de la toolbar (estilo plano tipo mockup)
+             ============================================================ -->
+        <Style x:Key="ToolbarButton" TargetType="Button">
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="Foreground" Value="{DynamicResource Mockup.Text.Muted}" />
+            <Setter Property="BorderBrush" Value="Transparent" />
+            <Setter Property="BorderThickness" Value="1" />
+            <Setter Property="Padding" Value="10,6" />
+            <Setter Property="Margin" Value="0,0,2,0" />
+            <Setter Property="Cursor" Value="Hand" />
+            <Setter Property="FontSize" Value="12" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="Bd"
+                                Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                CornerRadius="6"
+                                Padding="{TemplateBinding Padding}">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="Bd" Property="Background" Value="{DynamicResource Mockup.Bg.PanelAlt}" />
+                                <Setter Property="Foreground" Value="{DynamicResource Mockup.Text}" />
+                            </Trigger>
+                            <Trigger Property="IsEnabled" Value="False">
+                                <Setter TargetName="Bd" Property="Opacity" Value="0.4" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- CTA relleno reutilizable: define el Background donde se use -->
+        <Style x:Key="ToolbarButton.Filled" TargetType="Button" BasedOn="{StaticResource ToolbarButton}">
+            <Setter Property="Foreground" Value="White" />
+            <Setter Property="FontWeight" Value="SemiBold" />
+            <Setter Property="Padding" Value="14,7" />
+            <Setter Property="Margin" Value="2,0" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <ControlTemplate.Resources>
+                            <Style TargetType="TextBlock">
+                                <Setter Property="Foreground" Value="White" />
+                            </Style>
+                        </ControlTemplate.Resources>
+                        <Border x:Name="Bd"
+                                Background="{TemplateBinding Background}"
+                                CornerRadius="6"
+                                Padding="{TemplateBinding Padding}">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="Bd" Property="Opacity" Value="0.88" />
+                            </Trigger>
+                            <Trigger Property="IsEnabled" Value="False">
+                                <Setter TargetName="Bd" Property="Opacity" Value="0.4" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- Primario azul (relleno) -->
+        <Style x:Key="ToolbarButton.Primary" TargetType="Button" BasedOn="{StaticResource ToolbarButton.Filled}">
+            <Setter Property="Background" Value="{DynamicResource Mockup.Accent.Blue}" />
+        </Style>
+
+        <!-- Calcular: accion principal del flujo (azul relleno) -->
+        <Style x:Key="ToolbarButton.Amber" TargetType="Button" BasedOn="{StaticResource ToolbarButton.Filled}">
+            <Setter Property="Background" Value="{DynamicResource Mockup.Accent.Blue}" />
+        </Style>
+
+        <!-- Exportar: CTA de salida (verde relleno) -->
+        <Style x:Key="ToolbarButton.Green" TargetType="Button" BasedOn="{StaticResource ToolbarButton.Filled}">
+            <Setter Property="Background" Value="{DynamicResource Mockup.Accent.Green}" />
+        </Style>
+
+        <Style x:Key="ToolbarSeparator" TargetType="Border">
+            <Setter Property="Width" Value="1" />
+            <Setter Property="Margin" Value="4,4,8,4" />
+            <Setter Property="Background" Value="{DynamicResource Mockup.Border}" />
+        </Style>
+
+        <!-- ============================================================
+             Badges
+             ============================================================ -->
+        <Style x:Key="Badge" TargetType="Border">
+            <Setter Property="CornerRadius" Value="10" />
+            <Setter Property="Padding" Value="8,2" />
+            <Setter Property="BorderThickness" Value="1" />
+            <Setter Property="VerticalAlignment" Value="Center" />
+        </Style>
+
+        <!-- ============================================================
+             Sub-tabs (Mapping / Huerfanos)
+             ============================================================ -->
+        <Style x:Key="SubTabButton" TargetType="RadioButton">
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="Foreground" Value="{DynamicResource Mockup.Text.Muted}" />
+            <Setter Property="BorderThickness" Value="0,0,0,2" />
+            <Setter Property="BorderBrush" Value="Transparent" />
+            <Setter Property="Padding" Value="4,10" />
+            <Setter Property="Margin" Value="0,0,20,0" />
+            <Setter Property="FontSize" Value="13" />
+            <Setter Property="FontWeight" Value="SemiBold" />
+            <Setter Property="Cursor" Value="Hand" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="RadioButton">
+                        <Border x:Name="Bd"
+                                Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                Padding="{TemplateBinding Padding}">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsChecked" Value="True">
+                                <Setter Property="Foreground" Value="{DynamicResource Mockup.Accent.Blue}" />
+                                <Setter TargetName="Bd" Property="BorderBrush" Value="{DynamicResource Mockup.Accent.Blue}" />
+                            </Trigger>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Foreground" Value="{DynamicResource Mockup.Text}" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- ============================================================
+             TreeView (estilo simple sin templating profundo)
+             ============================================================ -->
+        <Style TargetType="TreeViewItem" x:Key="MockupTreeViewItem">
+            <Setter Property="FontSize" Value="12" />
+            <Setter Property="Padding" Value="2" />
+        </Style>
+
+        <!-- ============================================================
+             DataGrid - estilo claro tipo mockup
+             ============================================================ -->
+        <Style x:Key="MockupDataGrid" TargetType="DataGrid">
+            <Setter Property="Background" Value="{DynamicResource Mockup.Bg.Body}" />
+            <Setter Property="BorderBrush" Value="{DynamicResource Mockup.Border}" />
+            <Setter Property="BorderThickness" Value="0,1,0,0" />
+            <Setter Property="GridLinesVisibility" Value="Horizontal" />
+            <Setter Property="HorizontalGridLinesBrush" Value="{DynamicResource Mockup.Border}" />
+            <Setter Property="RowBackground" Value="White" />
+            <Setter Property="AlternatingRowBackground" Value="{DynamicResource E3g.Brush.SurfaceSubtle}" />
+            <Setter Property="RowHeaderWidth" Value="0" />
+            <Setter Property="HeadersVisibility" Value="Column" />
+            <Setter Property="AutoGenerateColumns" Value="False" />
+            <Setter Property="CanUserAddRows" Value="False" />
+            <Setter Property="CanUserDeleteRows" Value="False" />
+            <Setter Property="FontSize" Value="12" />
+            <Setter Property="ColumnHeaderStyle">
+                <Setter.Value>
+                    <Style TargetType="DataGridColumnHeader">
+                        <Setter Property="Background" Value="{DynamicResource Mockup.Bg.PanelAlt}" />
+                        <Setter Property="Foreground" Value="{DynamicResource Mockup.Text.Soft}" />
+                        <Setter Property="FontFamily" Value="{StaticResource Mockup.Mono}" />
+                        <Setter Property="FontSize" Value="10" />
+                        <Setter Property="FontWeight" Value="SemiBold" />
+                        <Setter Property="Padding" Value="10,7" />
+                        <Setter Property="BorderBrush" Value="{DynamicResource Mockup.Border}" />
+                        <Setter Property="BorderThickness" Value="0,0,1,1" />
+                        <Setter Property="HorizontalContentAlignment" Value="Left" />
+                    </Style>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="CellStyle">
+                <Setter.Value>
+                    <Style TargetType="DataGridCell">
+                        <Setter Property="BorderThickness" Value="0" />
+                        <Setter Property="Padding" Value="8,6" />
+                        <Setter Property="Template">
+                            <Setter.Value>
+                                <ControlTemplate TargetType="DataGridCell">
+                                    <Border Background="{TemplateBinding Background}" Padding="{TemplateBinding Padding}">
+                                        <ContentPresenter VerticalAlignment="Center" />
+                                    </Border>
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
+                        <Style.Triggers>
+                            <Trigger Property="IsSelected" Value="True">
+                                <Setter Property="Background" Value="{DynamicResource Mockup.Bg.RowSelected}" />
+                                <Setter Property="Foreground" Value="{DynamicResource Mockup.Text}" />
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- ============================================================
+             TextBox estilo mockup
+             ============================================================ -->
+        <Style x:Key="MockupTextBox" TargetType="TextBox">
+            <Setter Property="Background" Value="White" />
+            <Setter Property="BorderBrush" Value="{DynamicResource Mockup.Border.Strong}" />
+            <Setter Property="BorderThickness" Value="1" />
+            <Setter Property="Padding" Value="8,5" />
+            <Setter Property="FontSize" Value="12" />
+            <Setter Property="VerticalContentAlignment" Value="Center" />
+        </Style>
+
+        <Style x:Key="MockupComboBox" TargetType="ComboBox">
+            <Setter Property="FontSize" Value="12" />
+            <Setter Property="Padding" Value="6,3" />
+            <Setter Property="MinHeight" Value="26" />
+        </Style>
+
+        <!-- ============================================================
+             Mini-buttons del editor
+             ============================================================ -->
+        <Style x:Key="GhostMiniButton" TargetType="Button" BasedOn="{StaticResource ToolbarButton}">
+            <Setter Property="Padding" Value="6,3" />
+            <Setter Property="FontSize" Value="11" />
+        </Style>
+
+    </Window.Resources>
+
+    <!-- Border exterior: esquinas redondeadas + sombra (chrome custom).
+         El margen deja ver la sombra; E3gTitleBar lo ajusta al maximizar. -->
+    <Border x:Name="ChromeRoot"
+            CornerRadius="10"
+            Background="{DynamicResource E3g.Brush.Background}"
+            BorderBrush="{DynamicResource E3g.Brush.Border}"
+            BorderThickness="1"
+            Margin="12">
+        <Border.Effect>
+            <DropShadowEffect Color="#000000" BlurRadius="18" ShadowDepth="0" Opacity="0.20" />
+        </Border.Effect>
+
+        <!-- Recorta el contenido a las esquinas redondeadas (sigue al ChromeRoot
+             al maximizar via binding del CornerRadius). -->
+        <Border x:Name="ChromeClip"
+                CornerRadius="{Binding CornerRadius, ElementName=ChromeRoot}">
+            <Border.OpacityMask>
+                <VisualBrush>
+                    <VisualBrush.Visual>
+                        <Border Background="White"
+                                CornerRadius="{Binding CornerRadius, ElementName=ChromeClip}"
+                                Width="{Binding ActualWidth, ElementName=ChromeClip}"
+                                Height="{Binding ActualHeight, ElementName=ChromeClip}" />
+                    </VisualBrush.Visual>
+                </VisualBrush>
+            </Border.OpacityMask>
+
+        <DockPanel LastChildFill="True">
+
+        <!-- ================= BARRA DE TITULO custom (Fluent Light) ================= -->
+        <e3gc:E3gTitleBar x:Name="TitleBar"
+                          DockPanel.Dock="Top"
+                          Title="e3gbimtools"
+                          Subtitle="&#8212;  Revit &#8594; BC3"
+                          StatusText="Revit conectado" />
+
+        <!-- Breadcrumb de modulo -->
+        <Border DockPanel.Dock="Top" Padding="16,8" Background="Transparent">
+            <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                <TextBlock Text="Inicio" FontSize="12"
+                           Foreground="{DynamicResource E3g.Brush.TextSoft}" VerticalAlignment="Center" />
+                <TextBlock Text="&#8250;" FontSize="13" Margin="8,0"
+                           Foreground="{DynamicResource E3g.Brush.TextSoft}" VerticalAlignment="Center" />
+                <Border CornerRadius="6" Padding="9,3"
+                        Background="{DynamicResource E3g.Brush.Primary}" VerticalAlignment="Center">
+                    <TextBlock Text="Mediciones BC3" FontSize="11" FontWeight="SemiBold"
+                               Foreground="White" />
+                </Border>
+            </StackPanel>
+        </Border>
+
+        <!-- ================= TOOLBAR superior ================= -->
+        <Border DockPanel.Dock="Top"
+                Background="{DynamicResource Mockup.Bg.Header}"
+                BorderBrush="{DynamicResource Mockup.Border}"
+                BorderThickness="0,0,0,1"
+                Padding="12,8">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+
+                <!-- Acciones izquierda -->
+                <StackPanel Grid.Column="0" Orientation="Horizontal">
+                    <Button x:Name="ImportButton"
+                            Style="{StaticResource ToolbarButton}"
+                            Click="OnImportClick">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="&#xE8E5;" FontFamily="{StaticResource Mockup.Icons}" FontSize="14" VerticalAlignment="Center" Margin="0,0,7,0" />
+                            <TextBlock Text="Importar BC3" VerticalAlignment="Center" />
+                        </StackPanel>
+                    </Button>
+                    <Button x:Name="ClearButton"
+                            Style="{StaticResource ToolbarButton}"
+                            Click="OnClearClick"
+                            IsEnabled="False"
+                            ToolTip="Descarga el BC3 actual de la sesion (las reglas se mantienen).">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="&#xE711;" FontFamily="{StaticResource Mockup.Icons}" FontSize="14" VerticalAlignment="Center" Margin="0,0,7,0" />
+                            <TextBlock Text="Limpiar BC3" VerticalAlignment="Center" />
+                        </StackPanel>
+                    </Button>
+                    <Border Style="{StaticResource ToolbarSeparator}" />
+                    <Button x:Name="SaveRulesButton"
+                            Style="{StaticResource ToolbarButton}"
+                            Click="OnSaveRulesClick">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="&#xE74E;" FontFamily="{StaticResource Mockup.Icons}" FontSize="14" VerticalAlignment="Center" Margin="0,0,7,0" />
+                            <TextBlock Text="Guardar mapeo" VerticalAlignment="Center" />
+                        </StackPanel>
+                    </Button>
+                    <Button x:Name="LoadRulesButton"
+                            Style="{StaticResource ToolbarButton}"
+                            Click="OnLoadRulesClick">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="&#xE8E5;" FontFamily="{StaticResource Mockup.Icons}" FontSize="14" VerticalAlignment="Center" Margin="0,0,7,0" />
+                            <TextBlock Text="Cargar mapeo" VerticalAlignment="Center" />
+                        </StackPanel>
+                    </Button>
+                    <Button x:Name="SaveRulesLegacyButton"
+                            Content="Legacy"
+                            Style="{StaticResource ToolbarButton}"
+                            ToolTip="Exportar el mapeo en formato V1 (sin Chapters/SubChapters como entidades). Util para compatibilidad temporal con versiones anteriores del modulo."
+                            Click="OnSaveRulesLegacyClick" />
+                    <Border Style="{StaticResource ToolbarSeparator}" />
+                    <Button x:Name="CalculateButton"
+                            Style="{StaticResource ToolbarButton.Amber}"
+                            Click="OnCalculateClick">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="&#xE768;" FontFamily="{StaticResource Mockup.Icons}" FontSize="13" VerticalAlignment="Center" Margin="0,0,7,0" />
+                            <TextBlock Text="Calcular mediciones" VerticalAlignment="Center" />
+                        </StackPanel>
+                    </Button>
+                </StackPanel>
+
+                <!-- Centro: badge del archivo BC3 cargado -->
+                <Border Grid.Column="1"
+                        x:Name="HeaderBC3Badge"
+                        Style="{StaticResource Badge}"
+                        Background="{DynamicResource E3g.Brush.Primary}"
+                        BorderBrush="{DynamicResource E3g.Brush.Primary}"
+                        HorizontalAlignment="Center"
+                        Visibility="Collapsed">
+                    <TextBlock x:Name="HeaderBC3Text"
+                               FontSize="11"
+                               FontFamily="{StaticResource Mockup.Mono}"
+                               Foreground="White"
+                               Text="" />
+                </Border>
+
+                <!-- Acciones derecha -->
+                <StackPanel Grid.Column="2" Orientation="Horizontal">
+                    <Button x:Name="PrepareIfcButton"
+                            Style="{StaticResource ToolbarButton}"
+                            ToolTip="Escribe los parámetros E3G_BC3_Code/Quantity en los elementos Revit para que aparezcan en el IFC al exportar. Ejecutar ANTES de exportar a IFC desde Revit."
+                            Click="OnPrepareIfcClick"
+                            IsEnabled="False">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="&#xE71B;" FontFamily="{StaticResource Mockup.Icons}" FontSize="14" VerticalAlignment="Center" Margin="0,0,7,0" />
+                            <TextBlock Text="Preparar IFC" VerticalAlignment="Center" />
+                        </StackPanel>
+                    </Button>
+                    <Border Style="{StaticResource ToolbarSeparator}" />
+                    <Button x:Name="ExportButton"
+                            Style="{StaticResource ToolbarButton.Green}"
+                            Click="OnExportClick">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="&#xEDE1;" FontFamily="{StaticResource Mockup.Icons}" FontSize="13" VerticalAlignment="Center" Margin="0,0,7,0" />
+                            <TextBlock Text="Exportar BC3" VerticalAlignment="Center" />
+                        </StackPanel>
+                    </Button>
+                    <Button x:Name="ValidateExportButton"
+                            Style="{StaticResource ToolbarButton}"
+                            ToolTip="Valida el último BC3 y .bimlink.json exportados: GUIDs IFC, códigos de partida, suma de cantidades y cobertura."
+                            Click="OnValidateExportClick"
+                            IsEnabled="False">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="&#xE721;" FontFamily="{StaticResource Mockup.Icons}" FontSize="14" VerticalAlignment="Center" Margin="0,0,7,0" />
+                            <TextBlock Text="Validar exportación" VerticalAlignment="Center" />
+                        </StackPanel>
+                    </Button>
+                    <Button x:Name="OpenExportFolderButton"
+                            Style="{StaticResource ToolbarButton}"
+                            Click="OnOpenExportFolderClick"
+                            IsEnabled="False">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="&#xE838;" FontFamily="{StaticResource Mockup.Icons}" FontSize="14" VerticalAlignment="Center" Margin="0,0,7,0" />
+                            <TextBlock Text="Abrir carpeta" VerticalAlignment="Center" />
+                        </StackPanel>
+                    </Button>
+                </StackPanel>
+            </Grid>
+        </Border>
+
+        <!-- ================= STATUS BAR inferior ================= -->
+        <Border DockPanel.Dock="Bottom"
+                Background="{DynamicResource Mockup.Bg.Header}"
+                BorderBrush="{DynamicResource Mockup.Border}"
+                BorderThickness="0,1,0,0"
+                Height="26">
+            <StackPanel Orientation="Horizontal" Margin="12,0">
+                <Ellipse x:Name="RevitStatusDot" Width="8" Height="8" Fill="{DynamicResource Mockup.Accent.Green}" VerticalAlignment="Center" />
+                <TextBlock x:Name="RevitStatusText"
+                           Margin="6,0,16,0"
+                           FontSize="11"
+                           FontFamily="{StaticResource Mockup.Mono}"
+                           Foreground="{DynamicResource Mockup.Text.Muted}"
+                           VerticalAlignment="Center"
+                           Text="Revit API conectado" />
+                <Border Width="1" Background="{DynamicResource Mockup.Border}" Margin="0,4" />
+                <TextBlock x:Name="StatusBC3Text"
+                           Margin="16,0"
+                           FontSize="11"
+                           FontFamily="{StaticResource Mockup.Mono}"
+                           Foreground="{DynamicResource Mockup.Text.Muted}"
+                           VerticalAlignment="Center"
+                           Text="Sin BC3 cargado" />
+                <Border Width="1" Background="{DynamicResource Mockup.Border}" Margin="0,4" />
+                <TextBlock x:Name="StatusRulesText"
+                           Margin="16,0"
+                           FontSize="11"
+                           FontFamily="{StaticResource Mockup.Mono}"
+                           Foreground="{DynamicResource Mockup.Text.Muted}"
+                           VerticalAlignment="Center"
+                           Text="Sin reglas" />
+                <Border Width="1" Background="{DynamicResource Mockup.Border}" Margin="0,4" />
+                <TextBlock x:Name="StatusOrphansText"
+                           Margin="16,0"
+                           FontSize="11"
+                           FontFamily="{StaticResource Mockup.Mono}"
+                           Foreground="{DynamicResource Mockup.Accent.Amber}"
+                           VerticalAlignment="Center"
+                           Text="" />
+                <TextBlock VerticalAlignment="Center"
+                           HorizontalAlignment="Right"
+                           FontSize="11"
+                           FontFamily="{StaticResource Mockup.Mono}"
+                           Foreground="{DynamicResource Mockup.Text.Soft}"
+                           Margin="16,0">
+                    <Run>e3gbimtools Â· Revit → BC3</Run>
+                </TextBlock>
+            </StackPanel>
+        </Border>
+
+        <!-- ================= FRANJA INFERIOR: Previsualizacion ================= -->
+        <Border DockPanel.Dock="Bottom"
+                Background="{DynamicResource Mockup.Bg.Panel}"
+                BorderBrush="{DynamicResource Mockup.Border}"
+                BorderThickness="0,2,0,0"
+                Height="240">
+            <DockPanel>
+
+                <!-- Header de la franja con KPIs -->
+                <Border DockPanel.Dock="Top"
+                        Background="{DynamicResource Mockup.Bg.Header}"
+                        BorderBrush="{DynamicResource Mockup.Border}"
+                        BorderThickness="0,0,0,1"
+                        Padding="14,8">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+
+                        <StackPanel Grid.Column="0" Orientation="Horizontal">
+                            <TextBlock Style="{StaticResource PanelHeaderLabel}"
+                                       Text="Previsualización de mediciones"
+                                       VerticalAlignment="Center" />
+
+                            <Border Width="1" Background="{DynamicResource Mockup.Border}" Margin="14,2" />
+
+                            <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                <TextBlock x:Name="KpiPartidasValue"
+                                           FontFamily="{StaticResource Mockup.Mono}"
+                                           FontSize="16" FontWeight="SemiBold"
+                                           Foreground="{DynamicResource Mockup.Accent.Blue}"
+                                           Text="0" />
+                                <TextBlock Margin="5,0,0,0" Foreground="{DynamicResource Mockup.Text.Soft}" FontSize="10" Text="partidas" VerticalAlignment="Center" />
+                            </StackPanel>
+
+                            <Border Width="1" Background="{DynamicResource Mockup.Border}" Margin="14,2" />
+
+                            <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                <TextBlock x:Name="KpiElementosValue"
+                                           FontFamily="{StaticResource Mockup.Mono}"
+                                           FontSize="16" FontWeight="SemiBold"
+                                           Foreground="{DynamicResource Mockup.Accent.Blue}"
+                                           Text="0" />
+                                <TextBlock Margin="5,0,0,0" Foreground="{DynamicResource Mockup.Text.Soft}" FontSize="10" Text="elementos medidos" VerticalAlignment="Center" />
+                            </StackPanel>
+
+                            <Border Width="1" Background="{DynamicResource Mockup.Border}" Margin="14,2" />
+
+                            <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                <TextBlock x:Name="KpiImporteValue"
+                                           FontFamily="{StaticResource Mockup.Mono}"
+                                           FontSize="16" FontWeight="SemiBold"
+                                           Foreground="{DynamicResource Mockup.Accent.Green}"
+                                           Text="0,00 â‚¬" />
+                                <TextBlock Margin="5,0,0,0" Foreground="{DynamicResource Mockup.Text.Soft}" FontSize="10" Text="importe total" VerticalAlignment="Center" />
+                            </StackPanel>
+
+                            <Border Width="1" Background="{DynamicResource Mockup.Border}" Margin="14,2" />
+
+                            <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                <TextBlock x:Name="KpiOrphansValue"
+                                           FontFamily="{StaticResource Mockup.Mono}"
+                                           FontSize="16" FontWeight="SemiBold"
+                                           Foreground="{DynamicResource Mockup.Accent.Red}"
+                                           Text="0" />
+                                <TextBlock Margin="5,0,0,0" Foreground="{DynamicResource Mockup.Text.Soft}" FontSize="10" Text="huérfanos" VerticalAlignment="Center" />
+                            </StackPanel>
+                        </StackPanel>
+
+                        <!-- Botones de accion sobre la fila seleccionada -->
+                        <StackPanel Grid.Column="2" Orientation="Horizontal">
+                            <Button x:Name="ClearOverrideButton"
+                                    Content="Limpiar override"
+                                    Style="{StaticResource GhostMiniButton}"
+                                    Click="OnClearOverrideClick"
+                                    ToolTip="Quita el valor manual de la partida seleccionada y vuelve a la cantidad calculada." />
+                            <Button x:Name="SelectInRevitButton"
+                                    Content="Seleccionar en Revit"
+                                    Style="{StaticResource GhostMiniButton}"
+                                    Click="OnSelectInRevitClick" />
+                            <Button x:Name="ViewContributingElementsButton"
+                                    Content="Ver elementos..."
+                                    Style="{StaticResource GhostMiniButton}"
+                                    Click="OnViewContributingElementsClick" />
+                            <Button x:Name="RemoveMeasurementButton"
+                                    Content="Eliminar partida"
+                                    Style="{StaticResource GhostMiniButton}"
+                                    Click="OnRemoveMeasurementClick" />
+                            <Button x:Name="RecalculateButton"
+                                    Content="Recalcular"
+                                    Style="{StaticResource ToolbarButton}"
+                                    Margin="6,0,0,0"
+                                    Click="OnCalculateClick" />
+                        </StackPanel>
+                    </Grid>
+                </Border>
+
+                <!-- Tabla de mediciones con override editable -->
+                <DataGrid x:Name="ReviewGrid"
+                          Style="{StaticResource MockupDataGrid}"
+                          SelectionMode="Single"
+                          ColumnWidth="*"
+                          IsReadOnly="False">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="CÓDIGO" Binding="{Binding BC3Code}" IsReadOnly="True" MinWidth="100" Width="Auto">
+                            <DataGridTextColumn.ElementStyle>
+                                <Style TargetType="TextBlock">
+                                    <Setter Property="FontFamily" Value="{StaticResource Mockup.Mono}" />
+                                    <Setter Property="FontSize" Value="11" />
+                                    <Setter Property="Foreground" Value="{DynamicResource Mockup.Accent.Blue}" />
+                                </Style>
+                            </DataGridTextColumn.ElementStyle>
+                        </DataGridTextColumn>
+                        <DataGridTextColumn Header="REGLA" Binding="{Binding ContributingRulesSummary}" IsReadOnly="True" MinWidth="110" Width="Auto">
+                            <DataGridTextColumn.ElementStyle>
+                                <Style TargetType="TextBlock">
+                                    <Setter Property="FontSize" Value="11" />
+                                    <Setter Property="FontStyle" Value="Italic" />
+                                    <Setter Property="Foreground" Value="{DynamicResource Mockup.Text.Muted}" />
+                                    <Setter Property="TextTrimming" Value="CharacterEllipsis" />
+                                    <Setter Property="ToolTip" Value="{Binding ContributingRulesSummary}" />
+                                </Style>
+                            </DataGridTextColumn.ElementStyle>
+                        </DataGridTextColumn>
+                        <DataGridTextColumn Header="DESCRIPCIÓN" Binding="{Binding Description, UpdateSourceTrigger=LostFocus}" MinWidth="240" Width="3*">
+                            <DataGridTextColumn.ElementStyle>
+                                <Style TargetType="TextBlock">
+                                    <Setter Property="TextTrimming" Value="CharacterEllipsis" />
+                                    <Setter Property="ToolTip" Value="{Binding Description}" />
+                                </Style>
+                            </DataGridTextColumn.ElementStyle>
+                        </DataGridTextColumn>
+                        <DataGridTextColumn Header="UD" Binding="{Binding Unit, UpdateSourceTrigger=LostFocus}" MinWidth="55" Width="Auto" />
+                        <DataGridTextColumn Header="MEDICIÓN CALC." Binding="{Binding Quantity, StringFormat=N3}" IsReadOnly="True" MinWidth="100" Width="Auto" />
+                        <DataGridTextColumn Header="OVERRIDE" Binding="{Binding ManualOverride, StringFormat=N3, UpdateSourceTrigger=PropertyChanged, TargetNullValue=''}" MinWidth="90" Width="Auto">
+                            <DataGridTextColumn.ElementStyle>
+                                <Style TargetType="TextBlock">
+                                    <Setter Property="Foreground" Value="{DynamicResource Mockup.Accent.Amber}" />
+                                    <Setter Property="FontFamily" Value="{StaticResource Mockup.Mono}" />
+                                </Style>
+                            </DataGridTextColumn.ElementStyle>
+                        </DataGridTextColumn>
+                        <DataGridTextColumn Header="P. UNIT." Binding="{Binding PriceUnit, StringFormat=N2, UpdateSourceTrigger=LostFocus}" MinWidth="80" Width="Auto" />
+                        <DataGridTextColumn Header="TOTAL â‚¬" Binding="{Binding Importe, StringFormat=N2}" IsReadOnly="True" MinWidth="100" Width="Auto">
+                            <DataGridTextColumn.ElementStyle>
+                                <Style TargetType="TextBlock">
+                                    <Setter Property="FontFamily" Value="{StaticResource Mockup.Mono}" />
+                                    <Setter Property="FontWeight" Value="SemiBold" />
+                                    <Setter Property="Foreground" Value="{DynamicResource Mockup.Accent.Green}" />
+                                    <Setter Property="HorizontalAlignment" Value="Right" />
+                                </Style>
+                            </DataGridTextColumn.ElementStyle>
+                        </DataGridTextColumn>
+                        <DataGridTextColumn Header="ELEM." Binding="{Binding ElementCount}" IsReadOnly="True" MinWidth="60" Width="Auto" />
+                    </DataGrid.Columns>
+
+                    <DataGrid.RowStyle>
+                        <Style TargetType="DataGridRow">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding HasOverride}" Value="True">
+                                    <Setter Property="Background" Value="{DynamicResource E3g.Brush.WarningBg}" />
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding IsEmpty}" Value="True">
+                                    <Setter Property="Background" Value="{DynamicResource E3g.Brush.SurfaceSubtle}" />
+                                    <Setter Property="Foreground" Value="{DynamicResource E3g.Brush.TextSoft}" />
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </DataGrid.RowStyle>
+                </DataGrid>
+
+            </DockPanel>
+        </Border>
+
+        <!-- ================= WORKSPACE central (3 paneles) ================= -->
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="280" MinWidth="220" />
+                <ColumnDefinition Width="6" />
+                <ColumnDefinition Width="*" MinWidth="500" />
+                <ColumnDefinition Width="6" />
+                <ColumnDefinition x:Name="RightPanelColumn" Width="0" />
+            </Grid.ColumnDefinitions>
+
+            <!-- =============== PANEL IZQUIERDO: dos arboles BC3 (importado / a exportar) =============== -->
+            <Border Grid.Column="0"
+                    Background="{DynamicResource Mockup.Bg.Panel}"
+                    BorderBrush="{DynamicResource Mockup.Border}"
+                    BorderThickness="0,0,1,0">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="6" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+
+                    <!-- ============ ÃRBOL SUPERIOR: BC3 IMPORTADO ============ -->
+                    <Border Grid.Row="0"
+                            BorderBrush="{DynamicResource Mockup.Border}"
+                            BorderThickness="0,0,0,1">
+                        <DockPanel>
+                            <Border DockPanel.Dock="Top"
+                                    Background="{DynamicResource Mockup.Bg.Header}"
+                                    BorderBrush="{DynamicResource Mockup.Border}"
+                                    BorderThickness="0,0,0,1"
+                                    Padding="14,10,14,8">
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="Auto" />
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock Grid.Column="0"
+                                               Style="{StaticResource PanelHeaderLabel}"
+                                               Text="BC3 importado"
+                                               VerticalAlignment="Center" />
+                                    <Border Grid.Column="1"
+                                            x:Name="PanelBC3FileBadge"
+                                            Style="{StaticResource Badge}"
+                                            Background="{DynamicResource Mockup.Bg.PanelAlt}"
+                                            BorderBrush="{DynamicResource Mockup.Border.Strong}"
+                                            Visibility="Collapsed">
+                                        <TextBlock x:Name="PanelBC3FileText"
+                                                   FontSize="10"
+                                                   FontFamily="{StaticResource Mockup.Mono}"
+                                                   Foreground="{DynamicResource Mockup.Text.Muted}"
+                                                   Text="" />
+                                    </Border>
+                                </Grid>
+                            </Border>
+
+                            <Border DockPanel.Dock="Bottom"
+                                    Background="{DynamicResource Mockup.Bg.Header}"
+                                    BorderBrush="{DynamicResource Mockup.Border}"
+                                    BorderThickness="0,1,0,0"
+                                    Padding="14,6">
+                                <TextBlock x:Name="SummaryText"
+                                           FontSize="10"
+                                           Foreground="{DynamicResource Mockup.Text.Muted}"
+                                           TextWrapping="Wrap"
+                                           Text="Sin BC3 cargado." />
+                            </Border>
+
+                            <Border DockPanel.Dock="Top"
+                                    Background="Transparent"
+                                    Padding="14,8">
+                                <TextBlock x:Name="FileInfoText"
+                                           FontSize="11"
+                                           Foreground="{DynamicResource Mockup.Text.Muted}"
+                                           TextWrapping="Wrap"
+                                           Text="Pulsa 'Importar BC3' arriba para empezar." />
+                            </Border>
+
+                            <TreeView x:Name="ConceptsTree"
+                                      Background="Transparent"
+                                      BorderThickness="0"
+                                      ItemContainerStyle="{StaticResource MockupTreeViewItem}"
+                                      PreviewMouseLeftButtonDown="OnConceptTreeMouseDown"
+                                      PreviewMouseMove="OnConceptTreeMouseMove"
+                                      ToolTip="Arrastra una partida sobre una regla de la tabla central para asignarle el código BC3." />
+                        </DockPanel>
+                    </Border>
+
+                    <!-- Splitter horizontal entre los dos arboles -->
+                    <GridSplitter Grid.Row="1"
+                                  Height="6"
+                                  HorizontalAlignment="Stretch"
+                                  Background="Transparent"
+                                  ResizeBehavior="PreviousAndNext"
+                                  ResizeDirection="Rows" />
+
+                    <!-- ============ ÃRBOL INFERIOR: CAPITULOS DEL MAPEO (Sprint B) ============ -->
+                    <!-- Era "BC3 A EXPORTAR" (read-only).  Ahora es el ARBOL EDITABLE
+                         de capitulos/subcapitulos/reglas con drag-and-drop. -->
+                    <Border Grid.Row="2"
+                            BorderBrush="{DynamicResource Mockup.Border}"
+                            BorderThickness="0,1,0,0">
+                        <DockPanel>
+                            <Border DockPanel.Dock="Top"
+                                    Background="{DynamicResource Mockup.Bg.Header}"
+                                    BorderBrush="{DynamicResource Mockup.Border}"
+                                    BorderThickness="0,0,0,1"
+                                    Padding="14,10,14,8">
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="Auto" />
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock Grid.Column="0"
+                                               Style="{StaticResource PanelHeaderLabel}"
+                                               Text="Capítulos del mapeo"
+                                               VerticalAlignment="Center" />
+                                    <Border Grid.Column="1"
+                                            Style="{StaticResource Badge}"
+                                            Background="{DynamicResource E3g.Brush.Primary}"
+                                            BorderBrush="{DynamicResource E3g.Brush.Primary}">
+                                        <TextBlock x:Name="ExportTreeCountText"
+                                                   FontSize="10"
+                                                   FontFamily="{StaticResource Mockup.Mono}"
+                                                   Foreground="White"
+                                                   Text="0 partidas" />
+                                    </Border>
+                                </Grid>
+                            </Border>
+
+                            <!-- Sprint B: barra de acciones para gestionar capitulos -->
+                            <Border DockPanel.Dock="Top"
+                                    Background="{DynamicResource Mockup.Bg.Panel}"
+                                    BorderBrush="{DynamicResource Mockup.Border}"
+                                    BorderThickness="0,0,0,1"
+                                    Padding="8,6">
+                                <WrapPanel Orientation="Horizontal">
+                                    <Button x:Name="AddChapterButton"
+                                            Content="Capítulo"
+                                            Style="{StaticResource GhostMiniButton}"
+                                            Margin="0,0,4,0"
+                                            ToolTip="Crear capitulo vacio"
+                                            Click="OnAddChapterClick" />
+                                    <Button x:Name="AddSubChapterButton"
+                                            Content="Subcapítulo"
+                                            Style="{StaticResource GhostMiniButton}"
+                                            Margin="0,0,4,0"
+                                            ToolTip="Crear subcapitulo dentro del capitulo seleccionado"
+                                            IsEnabled="False"
+                                            Click="OnAddSubChapterClick" />
+                                    <Button x:Name="RenameNodeButton"
+                                            Content="Editar"
+                                            Style="{StaticResource GhostMiniButton}"
+                                            Margin="0,0,4,0"
+                                            ToolTip="Renombrar capitulo o subcapitulo seleccionado"
+                                            IsEnabled="False"
+                                            Click="OnRenameNodeClick" />
+                                    <Button x:Name="DeleteNodeButton"
+                                            Content="Borrar"
+                                            Style="{StaticResource GhostMiniButton}"
+                                            Margin="0,0,4,0"
+                                            ToolTip="Borrar capitulo/subcapitulo seleccionado (las reglas que contiene se vuelven huerfanas)"
+                                            IsEnabled="False"
+                                            Foreground="{DynamicResource Mockup.Accent.Red}"
+                                            Click="OnDeleteNodeClick" />
+                                    <Button x:Name="MoveNodeUpButton"
+                                            Content="↑"
+                                            Style="{StaticResource GhostMiniButton}"
+                                            Margin="0,0,4,0"
+                                            ToolTip="Subir el capitulo/subcapitulo seleccionado"
+                                            IsEnabled="False"
+                                            Click="OnMoveNodeUpClick" />
+                                    <Button x:Name="MoveNodeDownButton"
+                                            Content="â†“"
+                                            Style="{StaticResource GhostMiniButton}"
+                                            Margin="0,0,4,0"
+                                            ToolTip="Bajar el capitulo/subcapitulo seleccionado"
+                                            IsEnabled="False"
+                                            Click="OnMoveNodeDownClick" />
+                                </WrapPanel>
+                            </Border>
+
+                            <Border DockPanel.Dock="Bottom"
+                                    Background="{DynamicResource Mockup.Bg.Header}"
+                                    BorderBrush="{DynamicResource Mockup.Border}"
+                                    BorderThickness="0,1,0,0"
+                                    Padding="14,6">
+                                <TextBlock x:Name="ExportTreeHint"
+                                           FontSize="10"
+                                           FontStyle="Italic"
+                                           Foreground="{DynamicResource Mockup.Text.Muted}"
+                                           TextWrapping="Wrap"
+                                           Text="Arrastra reglas o subcapitulos entre capitulos para reorganizarlos." />
+                            </Border>
+
+                            <TreeView x:Name="ExportTree"
+                                      Background="Transparent"
+                                      BorderThickness="0"
+                                      SelectedItemChanged="OnExportTreeSelectionChanged"
+                                      dd:DragDrop.IsDragSource="True"
+                                      dd:DragDrop.IsDropTarget="True"
+                                      dd:DragDrop.UseDefaultDragAdorner="True"
+                                      dd:DragDrop.UseDefaultEffectDataTemplate="True">
+                                <TreeView.ItemContainerStyle>
+                                    <Style TargetType="TreeViewItem">
+                                        <Setter Property="FontSize" Value="12" />
+                                        <Setter Property="Padding" Value="2" />
+                                        <Setter Property="IsExpanded" Value="{Binding IsExpanded, Mode=TwoWay}" />
+                                        <Setter Property="IsSelected" Value="{Binding IsSelected, Mode=TwoWay}" />
+                                    </Style>
+                                </TreeView.ItemContainerStyle>
+                                <TreeView.Resources>
+                                    <HierarchicalDataTemplate DataType="{x:Type views:ChapterTreeNode}" ItemsSource="{Binding Children}">
+                                        <StackPanel Orientation="Horizontal">
+                                            <TextBlock Text="ðŸ“‚ " />
+                                            <TextBlock Text="{Binding Header}" FontWeight="SemiBold" />
+                                        </StackPanel>
+                                    </HierarchicalDataTemplate>
+                                    <HierarchicalDataTemplate DataType="{x:Type views:SubChapterTreeNode}" ItemsSource="{Binding Children}">
+                                        <StackPanel Orientation="Horizontal">
+                                            <TextBlock Text="ðŸ“ " />
+                                            <TextBlock Text="{Binding Header}" />
+                                        </StackPanel>
+                                    </HierarchicalDataTemplate>
+                                    <DataTemplate DataType="{x:Type views:RuleTreeNode}">
+                                        <StackPanel Orientation="Horizontal">
+                                            <TextBlock Text="ðŸ“„ " />
+                                            <TextBlock Text="{Binding Header}" />
+                                        </StackPanel>
+                                    </DataTemplate>
+                                    <HierarchicalDataTemplate DataType="{x:Type views:UnassignedTreeNode}" ItemsSource="{Binding Children}">
+                                        <StackPanel Orientation="Horizontal">
+                                            <TextBlock Text="ðŸ“¥ " />
+                                            <TextBlock Text="{Binding Header}" FontStyle="Italic" Foreground="{DynamicResource E3g.Brush.WarningText}" />
+                                        </StackPanel>
+                                    </HierarchicalDataTemplate>
+                                </TreeView.Resources>
+                            </TreeView>
+                        </DockPanel>
+                    </Border>
+                </Grid>
+            </Border>
+
+            <!-- =============== Splitter izquierdo/centro =============== -->
+            <GridSplitter Grid.Column="1" Width="6" HorizontalAlignment="Stretch" Background="Transparent" />
+
+            <!-- =============== PANEL CENTRAL: tabla de reglas / huerfanos =============== -->
+            <Border Grid.Column="2"
+                    Background="{DynamicResource Mockup.Bg.Body}"
+                    BorderBrush="{DynamicResource Mockup.Border}"
+                    BorderThickness="0,0,1,0">
+                <DockPanel>
+
+                    <!-- Sub-tabs (Mapeo / Huerfanos) -->
+                    <Border DockPanel.Dock="Top"
+                            Background="{DynamicResource Mockup.Bg.Header}"
+                            BorderBrush="{DynamicResource Mockup.Border}"
+                            BorderThickness="0,0,0,1">
+                        <StackPanel Orientation="Horizontal" Margin="14,0,0,0">
+                            <RadioButton x:Name="MappingTab"
+                                         GroupName="CenterSubTabs"
+                                         Style="{StaticResource SubTabButton}"
+                                         IsChecked="True"
+                                         Checked="OnMappingTabChecked">
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="Tabla de Mapeo" />
+                                    <Border Margin="6,0,0,0"
+                                            CornerRadius="9"
+                                            Padding="6,1"
+                                            Background="{DynamicResource E3g.Brush.Primary}">
+                                        <TextBlock x:Name="MappingTabCount"
+                                                   FontFamily="{StaticResource Mockup.Mono}"
+                                                   FontSize="10"
+                                                   Foreground="White"
+                                                   Text="0" />
+                                    </Border>
+                                </StackPanel>
+                            </RadioButton>
+                            <RadioButton x:Name="OrphansTab"
+                                         GroupName="CenterSubTabs"
+                                         Style="{StaticResource SubTabButton}"
+                                         Checked="OnOrphansTabChecked">
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="Huérfanos" />
+                                    <Border Margin="6,0,0,0"
+                                            CornerRadius="9"
+                                            Padding="6,1"
+                                            Background="{DynamicResource Mockup.Accent.RedBg}">
+                                        <TextBlock x:Name="OrphansTabCount"
+                                                   FontFamily="{StaticResource Mockup.Mono}"
+                                                   FontSize="10"
+                                                   Foreground="{DynamicResource Mockup.Accent.Red}"
+                                                   Text="0" />
+                                    </Border>
+                                </StackPanel>
+                            </RadioButton>
+                        </StackPanel>
+                    </Border>
+
+                    <!-- Toolbar central: acciones sobre reglas -->
+                    <Border DockPanel.Dock="Top"
+                            Background="{DynamicResource Mockup.Bg.Panel}"
+                            BorderBrush="{DynamicResource Mockup.Border}"
+                            BorderThickness="0,0,0,1"
+                            Padding="12,8">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+
+                            <StackPanel Grid.Column="0" Orientation="Horizontal">
+                                <Button x:Name="NewRuleButton"
+                                        Style="{StaticResource ToolbarButton.Primary}"
+                                        Click="OnNewRuleClick">
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock Text="&#xE710;" FontFamily="{StaticResource Mockup.Icons}" FontSize="13" VerticalAlignment="Center" Margin="0,0,7,0" />
+                                        <TextBlock Text="Nueva regla" VerticalAlignment="Center" />
+                                    </StackPanel>
+                                </Button>
+                                <Button x:Name="EditRuleButton"
+                                        Style="{StaticResource GhostMiniButton}"
+                                        Click="OnEditRuleClick">
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock Text="&#xE70F;" FontFamily="{StaticResource Mockup.Icons}" FontSize="13" VerticalAlignment="Center" Margin="0,0,6,0" />
+                                        <TextBlock Text="Editar" VerticalAlignment="Center" />
+                                    </StackPanel>
+                                </Button>
+                                <Button x:Name="DuplicateRuleButton"
+                                        Style="{StaticResource GhostMiniButton}"
+                                        Click="OnDuplicateRuleClick">
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock Text="&#xE8C8;" FontFamily="{StaticResource Mockup.Icons}" FontSize="13" VerticalAlignment="Center" Margin="0,0,6,0" />
+                                        <TextBlock Text="Duplicar" VerticalAlignment="Center" />
+                                    </StackPanel>
+                                </Button>
+                                <Button x:Name="DeleteRuleButton"
+                                        Style="{StaticResource GhostMiniButton}"
+                                        Foreground="{DynamicResource Mockup.Accent.Red}"
+                                        Click="OnDeleteRuleClick">
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock Text="&#xE74D;" FontFamily="{StaticResource Mockup.Icons}" FontSize="13" VerticalAlignment="Center" Margin="0,0,6,0" />
+                                        <TextBlock Text="Eliminar" VerticalAlignment="Center" />
+                                    </StackPanel>
+                                </Button>
+                                <Border Style="{StaticResource ToolbarSeparator}" />
+                                <Button x:Name="TestRuleButton"
+                                        Content="Probar regla"
+                                        Style="{StaticResource GhostMiniButton}"
+                                        Click="OnTestRuleClick" />
+                                <Button x:Name="ShowRuleElementIdsButton"
+                                        Content="Ver IDs elementos"
+                                        Style="{StaticResource GhostMiniButton}"
+                                        Click="OnShowRuleElementIdsClick"
+                                        ToolTip="Lista los ElementId de Revit que matchea la regla seleccionada (trazabilidad)." />
+                                <Button x:Name="DiagnoseMeasurementButton"
+                                        Content="Diagnosticar partida"
+                                        Style="{StaticResource GhostMiniButton}"
+                                        Click="OnDiagnoseMeasurementClick"
+                                        ToolTip="Diagnostico de las reglas que generaron la partida seleccionada en la previsualizacion." />
+                            </StackPanel>
+
+                            <TextBox Grid.Column="2"
+                                     x:Name="RulesSearchBox"
+                                     Style="{StaticResource MockupTextBox}"
+                                     Width="200"
+                                     Foreground="{DynamicResource Mockup.Text}"
+                                     TextChanged="OnRulesSearchChanged"
+                                     Tag="Filtrar reglas..." />
+                        </Grid>
+                    </Border>
+
+                    <!-- Pie del panel central: resumen reglas / mensaje BC3 -->
+                    <Border DockPanel.Dock="Bottom"
+                            Background="{DynamicResource Mockup.Bg.Header}"
+                            BorderBrush="{DynamicResource Mockup.Border}"
+                            BorderThickness="0,1,0,0"
+                            Padding="12,6">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Grid.Column="0"
+                                       x:Name="RulesSummaryText"
+                                       FontSize="11"
+                                       FontStyle="Italic"
+                                       Foreground="{DynamicResource Mockup.Text.Muted}"
+                                       VerticalAlignment="Center"
+                                       Text="Sin reglas. Pulsa 'ï¼‹ Nueva regla' para empezar." />
+                            <TextBlock Grid.Column="1"
+                                       x:Name="MappingBC3InfoText"
+                                       FontSize="11"
+                                       Foreground="{DynamicResource Mockup.Text.Muted}"
+                                       VerticalAlignment="Center"
+                                       Text="" />
+                        </Grid>
+                    </Border>
+
+                    <!-- Contenido: o reglas o huerfanos -->
+                    <Grid>
+                        <!-- Tabla de reglas — IsReadOnly se gestiona por columna para
+                             permitir editar SOLO la casilla ACT (issue #2). -->
+                        <DataGrid x:Name="RulesGrid"
+                                  Style="{StaticResource MockupDataGrid}"
+                                  IsReadOnly="False"
+                                  SelectionMode="Single"
+                                  SelectionChanged="OnRuleSelectionChanged"
+                                  CellEditEnding="OnRuleCellEditEnding"
+                                  AllowDrop="True"
+                                  DragOver="OnRulesGridDragOver"
+                                  Drop="OnRulesGridDrop"
+                                  DragLeave="OnRulesGridDragLeave"
+                                  dd:DragDrop.IsDragSource="True"
+                                  dd:DragDrop.UseDefaultDragAdorner="True">
+                            <DataGrid.Columns>
+                                <DataGridCheckBoxColumn Header="ACT"
+                                                        Binding="{Binding Enabled, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+                                                        Width="40"
+                                                        IsReadOnly="False" />
+                                <DataGridTextColumn Header="NOMBRE" Binding="{Binding DisplayLabel}" Width="1.6*" IsReadOnly="True" />
+                                <DataGridTextColumn Header="CATEGORÃA REVIT" Binding="{Binding CategoryDisplayName}" Width="1.2*" IsReadOnly="True">
+                                    <DataGridTextColumn.ElementStyle>
+                                        <Style TargetType="TextBlock">
+                                            <Setter Property="FontFamily" Value="{StaticResource Mockup.Mono}" />
+                                            <Setter Property="FontSize" Value="11" />
+                                            <Setter Property="Foreground" Value="{DynamicResource Mockup.Accent.Amber}" />
+                                        </Style>
+                                    </DataGridTextColumn.ElementStyle>
+                                </DataGridTextColumn>
+                                <DataGridTextColumn Header="FILTROS" Binding="{Binding FiltersSummary}" Width="2*" IsReadOnly="True">
+                                    <DataGridTextColumn.ElementStyle>
+                                        <Style TargetType="TextBlock">
+                                            <Setter Property="FontSize" Value="11" />
+                                            <Setter Property="Foreground" Value="{DynamicResource Mockup.Text.Muted}" />
+                                            <Setter Property="TextTrimming" Value="CharacterEllipsis" />
+                                            <Setter Property="ToolTip" Value="{Binding FiltersSummary}" />
+                                        </Style>
+                                    </DataGridTextColumn.ElementStyle>
+                                </DataGridTextColumn>
+                                <DataGridTextColumn Header="PARTIDA BC3" Binding="{Binding BC3Code}" Width="1*" IsReadOnly="True">
+                                    <DataGridTextColumn.ElementStyle>
+                                        <Style TargetType="TextBlock">
+                                            <Setter Property="FontFamily" Value="{StaticResource Mockup.Mono}" />
+                                            <Setter Property="FontSize" Value="11" />
+                                            <Setter Property="Foreground" Value="{DynamicResource Mockup.Accent.Blue}" />
+                                        </Style>
+                                    </DataGridTextColumn.ElementStyle>
+                                </DataGridTextColumn>
+                                <DataGridTextColumn Header="MEDIR" Binding="{Binding MeasurementSummary}" Width="1*" IsReadOnly="True">
+                                    <DataGridTextColumn.ElementStyle>
+                                        <Style TargetType="TextBlock">
+                                            <Setter Property="FontFamily" Value="{StaticResource Mockup.Mono}" />
+                                            <Setter Property="FontSize" Value="11" />
+                                            <Setter Property="Foreground" Value="{DynamicResource Mockup.Accent.Green}" />
+                                        </Style>
+                                    </DataGridTextColumn.ElementStyle>
+                                </DataGridTextColumn>
+                                <DataGridTextColumn Header="FACTOR" Binding="{Binding UnitFactor}" Width="60" IsReadOnly="True">
+                                    <DataGridTextColumn.ElementStyle>
+                                        <Style TargetType="TextBlock">
+                                            <Setter Property="FontFamily" Value="{StaticResource Mockup.Mono}" />
+                                            <Setter Property="FontSize" Value="11" />
+                                            <Setter Property="Foreground" Value="{DynamicResource Mockup.Text.Muted}" />
+                                        </Style>
+                                    </DataGridTextColumn.ElementStyle>
+                                </DataGridTextColumn>
+                                <DataGridTextColumn Header="ESTADO" Binding="{Binding ValidationStatus}" Width="140" IsReadOnly="True">
+                                    <DataGridTextColumn.ElementStyle>
+                                        <Style TargetType="TextBlock">
+                                            <Setter Property="FontSize" Value="11" />
+                                            <Setter Property="FontFamily" Value="{StaticResource Mockup.Mono}" />
+                                            <Setter Property="Foreground" Value="{DynamicResource Mockup.Text.Muted}" />
+                                            <Style.Triggers>
+                                                <!-- Sprint A: resaltar el aviso de duplicado de partida. -->
+                                                <DataTrigger Binding="{Binding HasConflict}" Value="True">
+                                                    <Setter Property="Foreground" Value="{DynamicResource E3g.Brush.WarningText}" />
+                                                    <Setter Property="FontWeight" Value="SemiBold" />
+                                                    <Setter Property="ToolTip" Value="{Binding ConflictTooltip}" />
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </DataGridTextColumn.ElementStyle>
+                                </DataGridTextColumn>
+                            </DataGrid.Columns>
+
+                            <!-- Sprint A — pintar las filas con conflicto de partida duplicada
+                                 con un fondo ambar suave y un tooltip que explica la colision. -->
+                            <DataGrid.RowStyle>
+                                <Style TargetType="DataGridRow">
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding HasConflict}" Value="True">
+                                            <Setter Property="Background" Value="{DynamicResource E3g.Brush.WarningBg}" />
+                                            <Setter Property="ToolTip" Value="{Binding ConflictTooltip}" />
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </DataGrid.RowStyle>
+                        </DataGrid>
+
+                        <!-- Tabla de huerfanos (oculta hasta seleccionar el sub-tab) -->
+                        <DataGrid x:Name="OrphansGrid"
+                                  Style="{StaticResource MockupDataGrid}"
+                                  IsReadOnly="True"
+                                  SelectionMode="Single"
+                                  Visibility="Collapsed">
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="CATEGORÃA" Binding="{Binding CategoryDisplayName}" Width="2*">
+                                    <DataGridTextColumn.ElementStyle>
+                                        <Style TargetType="TextBlock">
+                                            <Setter Property="FontFamily" Value="{StaticResource Mockup.Mono}" />
+                                            <Setter Property="FontSize" Value="11" />
+                                            <Setter Property="Foreground" Value="{DynamicResource Mockup.Accent.Amber}" />
+                                        </Style>
+                                    </DataGridTextColumn.ElementStyle>
+                                </DataGridTextColumn>
+                                <DataGridTextColumn Header="TIPO / FAMILIA" Binding="{Binding TypeOrFamilyName}" Width="3*" />
+                                <DataGridTextColumn Header="CUENTA" Binding="{Binding Count}" Width="100" />
+                            </DataGrid.Columns>
+                        </DataGrid>
+                    </Grid>
+
+                </DockPanel>
+            </Border>
+
+            <!-- =============== Splitter centro/derecha =============== -->
+            <GridSplitter Grid.Column="3" Width="6" HorizontalAlignment="Stretch" Background="Transparent" />
+
+            <!-- =============== PANEL DERECHO: editor de regla (colapsable) =============== -->
+            <Border Grid.Column="4"
+                    Background="{DynamicResource Mockup.Bg.Panel}"
+                    BorderBrush="{DynamicResource Mockup.Border}"
+                    BorderThickness="1,0,0,0"
+                    ClipToBounds="True">
+                <DockPanel>
+
+                    <!-- Header -->
+                    <Border DockPanel.Dock="Top"
+                            Background="{DynamicResource Mockup.Bg.Header}"
+                            BorderBrush="{DynamicResource Mockup.Border}"
+                            BorderThickness="0,0,0,1"
+                            Padding="14,10">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <StackPanel Grid.Column="0">
+                                <TextBlock x:Name="EditorTitle"
+                                           Text="Editar regla"
+                                           FontSize="13"
+                                           FontWeight="SemiBold"
+                                           Foreground="{DynamicResource Mockup.Text}" />
+                                <TextBlock x:Name="EditorSubtitle"
+                                           Text=""
+                                           FontFamily="{StaticResource Mockup.Mono}"
+                                           FontSize="10"
+                                           Foreground="{DynamicResource Mockup.Text.Soft}"
+                                           Margin="0,2,0,0" />
+                            </StackPanel>
+                            <Border Grid.Column="1"
+                                    x:Name="EditorActiveBadge"
+                                    Style="{StaticResource Badge}"
+                                    Background="{DynamicResource E3g.Brush.Primary}"
+                                    BorderBrush="{DynamicResource E3g.Brush.Primary}"
+                                    VerticalAlignment="Center"
+                                    Margin="0,0,6,0">
+                                <TextBlock Text="Activa"
+                                           FontFamily="{StaticResource Mockup.Mono}"
+                                           FontSize="10"
+                                           Foreground="White" />
+                            </Border>
+                            <Button Grid.Column="2"
+                                    x:Name="CloseEditorButton"
+                                    Content="âœ•"
+                                    Style="{StaticResource GhostMiniButton}"
+                                    Click="OnCloseEditorClick"
+                                    ToolTip="Cerrar panel de edicion" />
+                        </Grid>
+                    </Border>
+
+                    <!-- Footer con botones -->
+                    <Border DockPanel.Dock="Bottom"
+                            Background="{DynamicResource Mockup.Bg.Header}"
+                            BorderBrush="{DynamicResource Mockup.Border}"
+                            BorderThickness="0,1,0,0"
+                            Padding="14,10">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="2*" />
+                            </Grid.ColumnDefinitions>
+                            <Button Grid.Column="0"
+                                    Content="Cancelar"
+                                    Style="{StaticResource ToolbarButton}"
+                                    Margin="0,0,6,0"
+                                    Click="OnCloseEditorClick" />
+                            <Button Grid.Column="1"
+                                    x:Name="SaveRuleEditorButton"
+                                    Content="Guardar regla"
+                                    Style="{StaticResource ToolbarButton.Primary}"
+                                    Click="OnSaveRuleEditorClick" />
+                        </Grid>
+                    </Border>
+
+                    <!-- Body -->
+                    <ScrollViewer VerticalScrollBarVisibility="Auto" Padding="14,12">
+                        <StackPanel>
+
+                            <!-- Categoria Revit -->
+                            <TextBlock Style="{StaticResource FieldLabel}" Text="CATEGORÃA REVIT" />
+                            <ComboBox x:Name="EditorCategoryCombo"
+                                      Style="{StaticResource MockupComboBox}"
+                                      DisplayMemberPath="DisplayName"
+                                      SelectionChanged="OnEditorCategoryChanged" />
+                            <Border Height="10" />
+
+                            <!-- Nombre + capitulo -->
+                            <TextBlock Style="{StaticResource FieldLabel}" Text="NOMBRE (OPCIONAL)" />
+                            <TextBox x:Name="EditorNameBox" Style="{StaticResource MockupTextBox}" />
+                            <Border Height="10" />
+
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition Width="6" />
+                                    <ColumnDefinition Width="*" />
+                                </Grid.ColumnDefinitions>
+                                <StackPanel Grid.Column="0">
+                                    <TextBlock Style="{StaticResource FieldLabel}" Text="CAP. CÓDIGO" />
+                                    <TextBox x:Name="EditorChapterCodeBox" Style="{StaticResource MockupTextBox}" Width="60" />
+                                </StackPanel>
+                                <StackPanel Grid.Column="2">
+                                    <TextBlock Style="{StaticResource FieldLabel}" Text="CAP. NOMBRE" />
+                                    <ComboBox x:Name="EditorChapterNameCombo"
+                                              Style="{StaticResource MockupComboBox}"
+                                              IsEditable="True" />
+                                </StackPanel>
+                            </Grid>
+                            <Border Height="8" />
+
+                            <!-- Subcapitulo (issue #4) -->
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition Width="6" />
+                                    <ColumnDefinition Width="*" />
+                                </Grid.ColumnDefinitions>
+                                <StackPanel Grid.Column="0">
+                                    <TextBlock Style="{StaticResource FieldLabel}" Text="SUBCAP. CÓDIGO" />
+                                    <TextBox x:Name="EditorSubChapterCodeBox"
+                                             Style="{StaticResource MockupTextBox}"
+                                             Width="60"
+                                             ToolTip="Opcional. Si se deja vacio, la partida cuelga directamente del capitulo." />
+                                </StackPanel>
+                                <StackPanel Grid.Column="2">
+                                    <TextBlock Style="{StaticResource FieldLabel}" Text="SUBCAP. NOMBRE" />
+                                    <ComboBox x:Name="EditorSubChapterNameCombo"
+                                              Style="{StaticResource MockupComboBox}"
+                                              IsEditable="True"
+                                              ToolTip="Opcional. Permite anidar Capitulo > Subcapitulo > Partida." />
+                                </StackPanel>
+                            </Grid>
+                            <Border Height="12" />
+
+                            <!-- Partida BC3 -->
+                            <TextBlock Style="{StaticResource FieldLabel}" Text="PARTIDA BC3" />
+                            <ComboBox x:Name="EditorBC3CodeCombo"
+                                      Style="{StaticResource MockupComboBox}"
+                                      IsEditable="True"
+                                      IsTextSearchEnabled="True"
+                                      StaysOpenOnEdit="True"
+                                      DisplayMemberPath="Display"
+                                      SelectedValuePath="Code"
+                                      VirtualizingPanel.IsVirtualizing="True"
+                                      VirtualizingPanel.VirtualizationMode="Recycling"
+                                      SelectionChanged="OnEditorBC3CodeChanged" />
+                            <Border Height="12" />
+
+                            <!-- Filtros multi-parametro -->
+                            <TextBlock Style="{StaticResource FieldLabel}" Text="FILTROS MULTI-PARÃMETRO (AND)" />
+                            <ItemsControl x:Name="EditorFiltersList">
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <Grid Margin="0,2">
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="*" />
+                                                <ColumnDefinition Width="4" />
+                                                <ColumnDefinition Width="86" />
+                                                <ColumnDefinition Width="4" />
+                                                <ColumnDefinition Width="*" />
+                                                <ColumnDefinition Width="2" />
+                                                <ColumnDefinition Width="22" />
+                                            </Grid.ColumnDefinitions>
+                                            <ComboBox Grid.Column="0"
+                                                      Style="{StaticResource MockupComboBox}"
+                                                      ItemsSource="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=EditorParameterOptions}"
+                                                      Text="{Binding ParameterName, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+                                                      IsEditable="True"
+                                                      IsTextSearchEnabled="True"
+                                                      StaysOpenOnEdit="True" />
+                                            <ComboBox Grid.Column="2"
+                                                      Style="{StaticResource MockupComboBox}"
+                                                      ItemsSource="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=OperatorOptions}"
+                                                      SelectedItem="{Binding Operator, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
+                                            <ComboBox Grid.Column="4"
+                                                      Style="{StaticResource MockupComboBox}"
+                                                      ItemsSource="{Binding AvailableValues}"
+                                                      Text="{Binding Value, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+                                                      IsEditable="True"
+                                                      IsTextSearchEnabled="True"
+                                                      StaysOpenOnEdit="True" />
+                                            <Button Grid.Column="6"
+                                                    Content="âœ•"
+                                                    Background="Transparent"
+                                                    BorderThickness="0"
+                                                    Foreground="{DynamicResource Mockup.Text.Soft}"
+                                                    Cursor="Hand"
+                                                    Click="OnEditorRemoveFilterClick"
+                                                    Tag="{Binding}" />
+                                        </Grid>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                            <Button Content="Añadir filtro"
+                                    Margin="0,4,0,0"
+                                    Background="Transparent"
+                                    BorderBrush="{DynamicResource Mockup.Border.Strong}"
+                                    BorderThickness="1"
+                                    Foreground="{DynamicResource Mockup.Text.Muted}"
+                                    Padding="6,5"
+                                    Cursor="Hand"
+                                    HorizontalAlignment="Stretch"
+                                    Click="OnEditorAddFilterClick" />
+                            <Border Height="12" />
+
+                            <!-- Parametro de medicion -->
+                            <TextBlock Style="{StaticResource FieldLabel}" Text="PARÃMETRO DE MEDICIÓN" />
+                            <ComboBox x:Name="EditorMeasurementCombo"
+                                      Style="{StaticResource MockupComboBox}" />
+                            <Border Height="10" />
+
+                            <!-- Factor + prioridad + activa -->
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="6" />
+                                    <ColumnDefinition Width="*" />
+                                </Grid.ColumnDefinitions>
+                                <StackPanel Grid.Column="0">
+                                    <TextBlock Style="{StaticResource FieldLabel}" Text="FACTOR" />
+                                    <TextBox x:Name="EditorFactorBox" Style="{StaticResource MockupTextBox}" Text="1" />
+                                </StackPanel>
+                                <StackPanel Grid.Column="2">
+                                    <TextBlock Style="{StaticResource FieldLabel}" Text="PRIORIDAD" />
+                                    <TextBox x:Name="EditorPriorityBox" Style="{StaticResource MockupTextBox}" Text="100" />
+                                </StackPanel>
+                            </Grid>
+                            <Border Height="10" />
+
+                            <CheckBox x:Name="EditorEnabledCheck" Content="Regla activa" IsChecked="True" FontSize="12" />
+                            <Border Height="10" />
+
+                            <TextBlock Style="{StaticResource FieldLabel}" Text="NOTAS" />
+                            <TextBox x:Name="EditorNotesBox"
+                                     Style="{StaticResource MockupTextBox}"
+                                     AcceptsReturn="True"
+                                     TextWrapping="Wrap"
+                                     Height="50"
+                                     VerticalScrollBarVisibility="Auto" />
+
+                        </StackPanel>
+                    </ScrollViewer>
+
+                </DockPanel>
+            </Border>
+
+        </Grid>
+
+    </DockPanel>
+        </Border>
+    </Border>
+</Window>

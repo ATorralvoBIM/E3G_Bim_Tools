@@ -1,5 +1,61 @@
-.vs/ 
-bin/  
-obj/ 
+# =========================================================
+# e3gbimtools — .gitignore
+# =========================================================
+
+# Build output
+[Bb]in/
+[Oo]bj/
+[Ll]og/
+[Ll]ogs/
+*.binlog
+
+# Visual Studio
+.vs/
 *.user
 *.suo
+*.userprefs
+*.userosscache
+*.sln.docstates
+.idea/
+.vscode/
+
+# NuGet
+*.nupkg
+*.snupkg
+.nuget/
+packages/
+
+# Generated AssemblyInfo + WPF temporary
+*_wpftmp.AssemblyInfo.cs
+*.g.cs
+*.g.i.cs
+
+# Revit API binaries (no se commitean — vienen del NuGet)
+build/RevitRefs/
+
+# Local user state
+*.lock.json
+project.lock.json
+
+# OS noise
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+
+# WiX intermediate
+*.wixobj
+*.wixpdb
+*.msi
+
+# Coverage
+coverage/
+*.coverage
+*.coveragexml
+TestResults/
+.tmp_mcp/
+
+# Instaladores y paquetes portables generados
+installer/dist/
+installer/portable/
+installer/**/*.dll

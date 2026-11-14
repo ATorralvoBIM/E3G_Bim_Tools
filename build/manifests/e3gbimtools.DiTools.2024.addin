@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RevitAddIns>
+  <AddIn Type="Application">
+    <Name>e3gbimtools — DiTools</Name>
+    <Assembly>%LOCALAPPDATA%\Programs\e3g\BimTools\Revit2024\e3gbimtools.DiTools.dll</Assembly>
+    <AddInId>F4E7C2A1-9B3D-4A12-B6FA-1A2B3C4D5E60</AddInId>
+    <FullClassName>E3G.BimTools.DiTools.DiToolsApplication</FullClassName>
+    <VendorId>E3G</VendorId>
+    <VendorDescription>E3G — e3g.es</VendorDescription>
+  </AddIn>
+</RevitAddIns>

@@ -1,0 +1,38 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <AssemblyName>e3gbimtools.DiTools.UI</AssemblyName>
+    <RootNamespace>E3G.BimTools.DiTools.UI</RootNamespace>
+    <TargetFramework>net8.0-windows</TargetFramework>
+    <PlatformTarget>x64</PlatformTarget>
+    <UseWPF>true</UseWPF>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\e3gbimtools.DiTools.Core\e3gbimtools.DiTools.Core.csproj" />
+  </ItemGroup>
+
+  <!-- Fuente Inter embebida (reskin Fluent Light). Build action Resource
+       para referenciar via pack URI ".../Fonts/#Inter" en Typography.xaml -->
+  <ItemGroup>
+    <Resource Include="Fonts\Inter-Regular.ttf" />
+    <Resource Include="Fonts\Inter-Medium.ttf" />
+    <Resource Include="Fonts\Inter-SemiBold.ttf" />
+    <Resource Include="Fonts\Inter-Bold.ttf" />
+  </ItemGroup>
+
+  <!-- Referencias directas a las DLLs locales de Revit 2025.
+       Necesarias desde Sprint 1 (CopyLevels) porque alguna ventana WPF
+       recibe Document/UIDocument para listar y actuar sobre vinculos. -->
+  <ItemGroup>
+    <Reference Include="RevitAPI">
+      <HintPath>$(RevitInstallDir)RevitAPI.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="RevitAPIUI">
+      <HintPath>$(RevitInstallDir)RevitAPIUI.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+  </ItemGroup>
+
+</Project>

@@ -1,0 +1,68 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!-- =========================================================
+       BasePointView — Exportador Revit (Sprint 4)
+       Genera GLB (geometria) + JSON (propiedades por UniqueId)
+       que consume el visor web BasePointView, sin dependencia de
+       Autodesk APS/Forge.  Reutiliza RevitBridge del MEP CALC PLUGIN.
+       ========================================================= -->
+  <PropertyGroup>
+    <AssemblyName>e3gbimtools.BasePointExport</AssemblyName>
+    <RootNamespace>E3G.BimTools.BasePointExport</RootNamespace>
+    <!-- Revit 2025 corre sobre .NET 8; Revit 2026 sobre .NET 10. -->
+    <TargetFrameworks>net8.0-windows;net10.0-windows</TargetFrameworks>
+    <PlatformTarget>x64</PlatformTarget>
+    <!-- SaveFileDialog (Microsoft.Win32) requiere WPF. -->
+    <UseWPF>true</UseWPF>
+    <!-- Copiar las DLLs de NuGet (SharpGLTF) junto al plugin: un proyecto de
+         librería no las copia por defecto, y Revit las necesita en runtime. -->
+    <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
+  </PropertyGroup>
+
+  <!-- Serializacion glTF/GLB. SharpGLTF.Toolkit arrastra SharpGLTF.Core. -->
+  <ItemGroup>
+    <PackageReference Include="SharpGLTF.Toolkit" Version="1.0.6" />
+  </ItemGroup>
+
+  <!-- Iconos del boton del ribbon: copiados junto al plugin y cargados por
+       ruta de archivo en tiempo de ejecucion. -->
+  <ItemGroup>
+    <Content Include="Resources\bpv-export-16.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\bpv-export-32.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\bpv-publish-16.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\bpv-publish-32.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+  <!-- Reutilizacion de RevitBridge: la frontera de unidades Revit ↔ SI.
+       Se enlaza el archivo (no se duplica logica). -->
+  <ItemGroup>
+    <Compile Include="..\..\RevitBridge\RevitUnits.cs" Link="RevitBridge\RevitUnits.cs" />
+  </ItemGroup>
+
+  <!-- Revit 2026 está instalado en otra ruta que 2025 (ver Directory.Build.props). -->
+  <PropertyGroup Condition="'$(TargetFramework)' == 'net10.0-windows'">
+    <RevitInstallDir>E:\Autodesk\Revit 2026\</RevitInstallDir>
+    <DefineConstants>$(DefineConstants);REVIT2026</DefineConstants>
+  </PropertyGroup>
+
+  <!-- Referencias directas a las DLLs locales de Revit (2025 o 2026 según el TFM) -->
+  <ItemGroup>
+    <Reference Include="RevitAPI">
+      <HintPath>$(RevitInstallDir)RevitAPI.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="RevitAPIUI">
+      <HintPath>$(RevitInstallDir)RevitAPIUI.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+  </ItemGroup>
+
+</Project>

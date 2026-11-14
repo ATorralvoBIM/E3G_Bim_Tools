@@ -1,0 +1,124 @@
+<Window x:Class="E3G.BimTools.DiTools.UI.Views.FilterGraphics.FilterImportWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="e3gbimtools — Importar grafismo de filtros"
+        Width="980" Height="680" MinWidth="760" MinHeight="480"
+        WindowStartupLocation="CenterScreen" ResizeMode="CanResize">
+    <Grid Margin="14">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <!-- Cabecera -->
+        <StackPanel Grid.Row="0" Margin="0,0,0,10">
+            <TextBlock Style="{DynamicResource E3g.Style.H2}" Text="Importar grafismo de filtros"/>
+            <TextBlock x:Name="PresetText" Foreground="{DynamicResource E3g.Brush.TextMuted}" TextWrapping="Wrap" Margin="0,2,0,0"/>
+        </StackPanel>
+
+        <!-- Destinos + opciones -->
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="300"/>
+            </Grid.ColumnDefinitions>
+
+            <DockPanel Grid.Column="0" Margin="0,0,12,0">
+                <TextBlock DockPanel.Dock="Top" FontWeight="SemiBold" Text="Aplicar a"/>
+                <TextBlock DockPanel.Dock="Top" FontSize="10" TextWrapping="Wrap" Margin="0,2,0,4"
+                           Foreground="{DynamicResource E3g.Brush.TextMuted}"
+                           Text="Las vistas cuya plantilla controla los filtros no aparecen: marca su plantilla."/>
+                <DockPanel DockPanel.Dock="Top" Margin="0,0,0,4">
+                    <CheckBox x:Name="ShowTemplates" DockPanel.Dock="Right" IsChecked="True" Margin="8,0,0,0"
+                              VerticalAlignment="Center" Checked="OnFilterChanged" Unchecked="OnFilterChanged">
+                        <TextBlock Text="Plantillas"/>
+                    </CheckBox>
+                    <CheckBox x:Name="ShowViews" DockPanel.Dock="Right" IsChecked="True" Margin="8,0,0,0"
+                              VerticalAlignment="Center" Checked="OnFilterChanged" Unchecked="OnFilterChanged">
+                        <TextBlock Text="Vistas"/>
+                    </CheckBox>
+                    <TextBox x:Name="SearchBox" TextChanged="OnFilterChanged" ToolTip="Buscar por nombre"/>
+                </DockPanel>
+                <DataGrid x:Name="TargetsGrid" AutoGenerateColumns="False" CanUserAddRows="False"
+                          CanUserDeleteRows="False" HeadersVisibility="Column" SelectionMode="Extended"
+                          GridLinesVisibility="Horizontal" RowHeight="22"
+                          HorizontalGridLinesBrush="{DynamicResource E3g.Brush.GridLine}">
+                    <DataGrid.Columns>
+                        <DataGridTemplateColumn Header="&#x2713;" Width="28">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <CheckBox IsChecked="{Binding IsChecked, UpdateSourceTrigger=PropertyChanged}"
+                                              HorizontalAlignment="Center"/>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                        <DataGridTextColumn Header="Tipo" Binding="{Binding Kind}" Width="80" IsReadOnly="True"/>
+                        <DataGridTextColumn Header="Nombre" Binding="{Binding Name}" Width="*" IsReadOnly="True"/>
+                        <DataGridTextColumn Header="Info" Binding="{Binding Info}" Width="190" IsReadOnly="True"/>
+                    </DataGrid.Columns>
+                </DataGrid>
+            </DockPanel>
+
+            <StackPanel Grid.Column="1">
+                <TextBlock FontWeight="SemiBold" Text="Opciones" Margin="0,0,0,6"/>
+                <CheckBox x:Name="OptAdd" IsChecked="True" Margin="0,0,0,6">
+                    <TextBlock TextWrapping="Wrap" Text="Añadir a la vista los filtros que falten"/>
+                </CheckBox>
+                <CheckBox x:Name="OptCreate" IsChecked="True" Margin="0,0,0,6">
+                    <TextBlock TextWrapping="Wrap" Text="Crear en el proyecto los filtros que no existan (con las reglas del JSON)"/>
+                </CheckBox>
+                <CheckBox x:Name="OptUpdate" Margin="0,0,0,6">
+                    <TextBlock TextWrapping="Wrap" Text="Si un filtro homónimo tiene reglas distintas, sustituirlas por las del JSON"/>
+                </CheckBox>
+                <CheckBox x:Name="OptOrder" Margin="0,0,0,6">
+                    <TextBlock TextWrapping="Wrap" Text="Respetar el orden del JSON (sus filtros arriba, con más prioridad)"/>
+                </CheckBox>
+                <CheckBox x:Name="OptReplace" Margin="0,0,0,6">
+                    <TextBlock TextWrapping="Wrap" Text="Reemplazar: quitar de la vista los filtros que no estén en el JSON"/>
+                </CheckBox>
+                <TextBlock FontSize="10" TextWrapping="Wrap" Margin="0,6,0,0"
+                           Foreground="{DynamicResource E3g.Brush.TextMuted}"
+                           Text="Los filtros se identifican por nombre. Usa «Vista previa» para revisar qué cambiará antes de aplicar. Todo va en una única transacción (un Ctrl+Z lo deshace)."/>
+            </StackPanel>
+        </Grid>
+
+        <DockPanel Grid.Row="2" Margin="0,10,0,4">
+            <Button DockPanel.Dock="Right" Content="&#x1F441; Vista previa" Click="OnPreviewClick"
+                    Style="{DynamicResource E3g.Style.Button.Secondary}"/>
+            <TextBlock x:Name="PreviewSummary" FontWeight="SemiBold" VerticalAlignment="Center" Text="Vista previa"/>
+        </DockPanel>
+
+        <!-- Vista previa -->
+        <DataGrid Grid.Row="3" x:Name="PreviewGrid" AutoGenerateColumns="False" IsReadOnly="True"
+                  HeadersVisibility="Column" GridLinesVisibility="Horizontal" RowHeight="20"
+                  HorizontalGridLinesBrush="{DynamicResource E3g.Brush.GridLine}">
+            <DataGrid.RowStyle>
+                <Style TargetType="DataGridRow">
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding Level}" Value="0">
+                            <Setter Property="Foreground" Value="{DynamicResource E3g.Brush.TextMuted}"/>
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding Level}" Value="2">
+                            <Setter Property="Background" Value="{DynamicResource E3g.Brush.WarningBg}"/>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </DataGrid.RowStyle>
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Destino" Binding="{Binding Target}" Width="240"/>
+                <DataGridTextColumn Header="Filtro" Binding="{Binding Filter}" Width="260"/>
+                <DataGridTextColumn Header="Acción" Binding="{Binding Action}" Width="*"/>
+            </DataGrid.Columns>
+        </DataGrid>
+
+        <StackPanel Grid.Row="4" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,12,0,0">
+            <Button Content="Cancelar" IsCancel="True" Margin="0,0,8,0"
+                    Style="{DynamicResource E3g.Style.Button.Secondary}"/>
+            <Button Content="&#x2714; Aplicar" Click="OnApplyClick" IsDefault="True"
+                    Style="{DynamicResource E3g.Style.Button.Primary}"/>
+        </StackPanel>
+    </Grid>
+</Window>

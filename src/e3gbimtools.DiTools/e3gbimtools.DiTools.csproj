@@ -1,0 +1,63 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <AssemblyName>e3gbimtools.DiTools</AssemblyName>
+    <RootNamespace>E3G.BimTools.DiTools</RootNamespace>
+    <TargetFramework>net8.0-windows</TargetFramework>
+    <PlatformTarget>x64</PlatformTarget>
+    <UseWPF>true</UseWPF>
+    <GenerateDependencyFile>false</GenerateDependencyFile>
+    <!-- Sprint B: este proyecto es el entry point del addin de Revit
+         (su DLL es el que apunta el manifest .addin).  Activamos copia
+         local de assemblies transitivas de NuGet para que GongSolutions
+         .Wpf.DragDrop.dll y System.Text.Encoding.CodePages.dll lleguen
+         a la carpeta bin/ junto a este DLL.  Si falta, Revit tira
+         "Could not load file or assembly 'GongSolutions.WPF.DragDrop'". -->
+    <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\e3gbimtools.DiTools.Core\e3gbimtools.DiTools.Core.csproj" />
+    <ProjectReference Include="..\e3gbimtools.DiTools.UI\e3gbimtools.DiTools.UI.csproj" />
+    <ProjectReference Include="..\e3gbimtools.RevitBC3\e3gbimtools.RevitBC3.csproj" />
+    <ProjectReference Include="..\e3gbimtools.Calc\e3gbimtools.Calc.csproj" />
+  </ItemGroup>
+
+  <!-- Referencias directas a las DLLs locales de Revit 2025 -->
+  <ItemGroup>
+    <Reference Include="RevitAPI">
+      <HintPath>$(RevitInstallDir)RevitAPI.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="RevitAPIUI">
+      <HintPath>$(RevitInstallDir)RevitAPIUI.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="AdWindows" Condition="Exists('$(RevitInstallDir)AdWindows.dll')">
+      <HintPath>$(RevitInstallDir)AdWindows.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+  </ItemGroup>
+
+  <!-- Iconos del ribbon: tomados del monolito Resources/ y copiados al
+       output como Content para que RibbonBuilder los encuentre en bin\...\Resources\. -->
+  <ItemGroup>
+    <Content Include="..\..\Resources\icono_panel_32.png" Condition="Exists('..\..\Resources\icono_panel_32.png')">
+      <Link>Resources\icono_panel_32.png</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\Resources\icono_panel_64.png" Condition="Exists('..\..\Resources\icono_panel_64.png')">
+      <Link>Resources\icono_panel_64.png</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\Resources\icono_small_16.png" Condition="Exists('..\..\Resources\icono_small_16.png')">
+      <Link>Resources\icono_small_16.png</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\Resources\icono_small_32.png" Condition="Exists('..\..\Resources\icono_small_32.png')">
+      <Link>Resources\icono_small_32.png</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+</Project>

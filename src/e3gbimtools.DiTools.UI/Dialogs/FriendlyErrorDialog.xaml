@@ -1,0 +1,66 @@
+<Window
+    x:Class="E3G.BimTools.DiTools.UI.Dialogs.FriendlyErrorDialog"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    Title="e3gbimtools — Error inesperado"
+    Width="520" Height="360"
+    WindowStartupLocation="CenterOwner"
+    ResizeMode="CanResize">
+
+    <Grid Margin="16">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <!-- Cabecera -->
+        <StackPanel Orientation="Horizontal" Grid.Row="0" Margin="0,0,0,12">
+            <TextBlock Text="!"
+                       FontSize="28"
+                       VerticalAlignment="Center"
+                       Foreground="{DynamicResource E3g.Brush.Error}"
+                       Margin="0,0,12,0" />
+            <TextBlock Style="{DynamicResource E3g.Style.H2}"
+                       Text="Algo ha ido mal"
+                       VerticalAlignment="Center" />
+        </StackPanel>
+
+        <!-- Mensaje principal -->
+        <TextBlock Grid.Row="1"
+                   x:Name="MessageText"
+                   TextWrapping="Wrap"
+                   Margin="0,0,0,12" />
+
+        <!-- Detalles tecnicos (colapsable) -->
+        <Expander Grid.Row="2" Header="Detalles tecnicos">
+            <TextBox x:Name="DetailsBox"
+                     IsReadOnly="True"
+                     TextWrapping="Wrap"
+                     VerticalScrollBarVisibility="Auto"
+                     HorizontalScrollBarVisibility="Auto"
+                     FontFamily="Consolas"
+                     FontSize="11"
+                     Background="{DynamicResource E3g.Brush.Surface}"
+                     Padding="8"
+                     MinHeight="120" />
+        </Expander>
+
+        <!-- Botones -->
+        <StackPanel Grid.Row="3" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,16,0,0">
+            <Button Content="Copiar detalles"
+                    Style="{DynamicResource E3g.Style.Button.Secondary}"
+                    Margin="0,0,8,0"
+                    Click="OnCopyClick" />
+            <Button Content="Abrir carpeta de logs"
+                    Style="{DynamicResource E3g.Style.Button.Secondary}"
+                    Margin="0,0,8,0"
+                    Click="OnOpenLogsClick" />
+            <Button Content="Cerrar"
+                    Style="{DynamicResource E3g.Style.Button.Primary}"
+                    IsDefault="True"
+                    Click="OnCloseClick" />
+        </StackPanel>
+    </Grid>
+</Window>

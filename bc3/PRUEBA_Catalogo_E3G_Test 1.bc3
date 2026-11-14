@@ -1,0 +1,17 @@
+~V|e3gbimtools.RevitBC3|FIEBDC-3/2016|e3gbimtools|260520|ES|ANSI||0||||
+~C|##||Presupuesto e3gbimtools|0|260520|0|
+~C|0000||000000|0|260520|0|
+~C|02SAN##||(sin nombre)|0|260520|0|
+~C|ED15B871.001|m|Bajante PVC SN-4 D=110 mm, junta elastica, instalÂ·lada amb abracaderes (PLUVIALS Ø110 A)|18.45|260520|3|
+~C|ED15B873|m|PLUVIALS Ø125|0|260520|3|
+~C|ED15B873.001|m|Bajante PVC SN-4 D=125 mm, junta elastica, instalÂ·lada amb abracaderes (FECALS)|24.8|260520|3|
+~C|ED15B873.002|m|Bajante PVC SN-4 D=125 mm, junta elastica, instalÂ·lada amb abracaderes (GRISES)|24.8|260520|3|
+~C|ED15B871|m|PLUVIALS Ø110 B|0|260520|3|
+~D|##|0000\1\1\02SAN##\1\1\|
+~D|0000|ED15B871.001\1\1\|
+~D|02SAN##|ED15B873\1\1\ED15B873.001\1\1\ED15B873.002\1\1\ED15B871\1\1\|
+~M|##\0000\ED15B871.001\||5.5||
+~M|##\02SAN##\ED15B873\||2.8||
+~M|##\02SAN##\ED15B873.001\||5.5||
+~M|##\02SAN##\ED15B873.002\||6.3||
+~M|##\02SAN##\ED15B871\||4.463||

@@ -1,0 +1,485 @@
+<Window x:Class="E3G.BimTools.DiTools.UI.Views.ViewSheetManager.ViewSheetManagerWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:shell="clr-namespace:System.Windows.Shell;assembly=PresentationFramework"
+        xmlns:e3gc="clr-namespace:E3G.BimTools.DiTools.UI.Controls"
+        xmlns:conv="clr-namespace:E3G.BimTools.DiTools.UI.Converters"
+        Title="e3gbimtools — View &amp; Sheet Manager"
+        Width="1180" Height="800"
+        MinWidth="980" MinHeight="680"
+        WindowStartupLocation="CenterOwner"
+        ShowInTaskbar="False"
+        WindowStyle="None"
+        AllowsTransparency="True"
+        Background="Transparent"
+        SnapsToDevicePixels="True"
+        UseLayoutRounding="True">
+
+    <shell:WindowChrome.WindowChrome>
+        <shell:WindowChrome CaptionHeight="44" ResizeBorderThickness="8" CornerRadius="0"
+                            GlassFrameThickness="0" UseAeroCaptionButtons="False" />
+    </shell:WindowChrome.WindowChrome>
+
+    <Window.Resources>
+        <conv:HexToColorConverter x:Key="HexToBrush" />
+        <Style TargetType="TextBlock" x:Key="SectionLabel">
+            <Setter Property="FontWeight" Value="SemiBold" />
+            <Setter Property="Margin" Value="0,4,0,6" />
+        </Style>
+    </Window.Resources>
+
+    <Border x:Name="ChromeRoot" CornerRadius="10"
+            Background="{DynamicResource E3g.Brush.Background}"
+            BorderBrush="{DynamicResource E3g.Brush.Border}" BorderThickness="1" Margin="12">
+        <Border.Effect>
+            <DropShadowEffect Color="#000000" BlurRadius="18" ShadowDepth="0" Opacity="0.20" />
+        </Border.Effect>
+        <Border x:Name="ChromeClip" CornerRadius="{Binding CornerRadius, ElementName=ChromeRoot}">
+            <Border.OpacityMask>
+                <VisualBrush>
+                    <VisualBrush.Visual>
+                        <Border Background="White" CornerRadius="{Binding CornerRadius, ElementName=ChromeClip}"
+                                Width="{Binding ActualWidth, ElementName=ChromeClip}"
+                                Height="{Binding ActualHeight, ElementName=ChromeClip}" />
+                    </VisualBrush.Visual>
+                </VisualBrush>
+            </Border.OpacityMask>
+
+            <DockPanel LastChildFill="True">
+                <e3gc:E3gTitleBar x:Name="TitleBar" DockPanel.Dock="Top"
+                                  Title="e3gbimtools" Subtitle="View &amp; Sheet Manager"
+                                  ShowStatus="False" ShowMinimize="False" />
+
+                <Grid Margin="12">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+
+                    <TabControl Grid.Row="0">
+
+                        <!-- ============================================================ -->
+                        <!-- TAB 1 — Configuración                                          -->
+                        <!-- ============================================================ -->
+                        <TabItem Header="1 · Configuración">
+                            <Grid Margin="6">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="280" />
+                                    <ColumnDefinition Width="6" />
+                                    <ColumnDefinition Width="280" />
+                                    <ColumnDefinition Width="6" />
+                                    <ColumnDefinition Width="*" />
+                                </Grid.ColumnDefinitions>
+
+                                <!-- Niveles -->
+                                <Border Grid.Column="0" BorderBrush="{DynamicResource E3g.Brush.Border}"
+                                        BorderThickness="1" CornerRadius="4" Padding="10">
+                                    <Grid>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="Auto" />
+                                            <RowDefinition Height="*" />
+                                            <RowDefinition Height="Auto" />
+                                        </Grid.RowDefinitions>
+                                        <TextBlock Grid.Row="0" Text="Niveles" Style="{StaticResource SectionLabel}" />
+                                        <ListBox Grid.Row="1" x:Name="NivelesList">
+                                            <ListBox.ItemTemplate>
+                                                <DataTemplate>
+                                                    <CheckBox Content="{Binding Name}" IsChecked="{Binding IsSelected, Mode=TwoWay}" />
+                                                </DataTemplate>
+                                            </ListBox.ItemTemplate>
+                                        </ListBox>
+                                        <StackPanel Grid.Row="2" Orientation="Horizontal" Margin="0,8,0,0">
+                                            <Button Content="Todos"   Padding="8,2" Margin="0,0,6,0" Click="OnSelectAllLevelsClick" />
+                                            <Button Content="Ninguno" Padding="8,2" Click="OnSelectNoneLevelsClick" />
+                                        </StackPanel>
+                                    </Grid>
+                                </Border>
+
+                                <GridSplitter Grid.Column="1" Width="6" HorizontalAlignment="Stretch"
+                                              Background="{DynamicResource E3g.Brush.SurfaceSubtle}" />
+
+                                <!-- Sectores (Scope Boxes) -->
+                                <Border Grid.Column="2" BorderBrush="{DynamicResource E3g.Brush.Border}"
+                                        BorderThickness="1" CornerRadius="4" Padding="10">
+                                    <Grid>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="Auto" />
+                                            <RowDefinition Height="*" />
+                                            <RowDefinition Height="Auto" />
+                                        </Grid.RowDefinitions>
+                                        <TextBlock Grid.Row="0" Text="Sectores (Scope Boxes)" Style="{StaticResource SectionLabel}" />
+                                        <ListBox Grid.Row="1" x:Name="SectoresList">
+                                            <ListBox.ItemTemplate>
+                                                <DataTemplate>
+                                                    <CheckBox Content="{Binding Name}" IsChecked="{Binding IsSelected, Mode=TwoWay}" />
+                                                </DataTemplate>
+                                            </ListBox.ItemTemplate>
+                                        </ListBox>
+                                        <TextBlock Grid.Row="2" Margin="0,8,0,0" TextWrapping="Wrap"
+                                                   Foreground="{DynamicResource E3g.Brush.TextMuted}" FontStyle="Italic"
+                                                   Text="Sin sectores: 1 vista por instalación×nivel. Con sectores: la vista se recorta a cada Scope Box (más hojas)." />
+                                    </Grid>
+                                </Border>
+
+                                <GridSplitter Grid.Column="3" Width="6" HorizontalAlignment="Stretch"
+                                              Background="{DynamicResource E3g.Brush.SurfaceSubtle}" />
+
+                                <!-- Instalaciones + globales -->
+                                <Grid Grid.Column="4">
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="*" />
+                                        <RowDefinition Height="Auto" />
+                                    </Grid.RowDefinitions>
+
+                                    <Border Grid.Row="0" BorderBrush="{DynamicResource E3g.Brush.Border}"
+                                            BorderThickness="1" CornerRadius="4" Padding="10">
+                                        <Grid>
+                                            <Grid.RowDefinitions>
+                                                <RowDefinition Height="Auto" />
+                                                <RowDefinition Height="*" />
+                                            </Grid.RowDefinitions>
+                                            <DockPanel Grid.Row="0">
+                                                <Button DockPanel.Dock="Right" Content="Guardar config" Padding="10,2"
+                                                        Click="OnSaveConfigClick"
+                                                        ToolTip="Persiste las instalaciones en JSON (memoria entre sesiones)." />
+                                                <Button DockPanel.Dock="Right" Content="+ Añadir" Padding="10,2" Margin="0,0,6,0"
+                                                        Click="OnAddInstalacionClick" />
+                                                <TextBlock Text="Grupos de vistas o planos" Style="{StaticResource SectionLabel}" />
+                                            </DockPanel>
+
+                                            <ListBox Grid.Row="1" x:Name="InstalacionesList"
+                                                     HorizontalContentAlignment="Stretch"
+                                                     ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+                                                <ListBox.ItemTemplate>
+                                                    <DataTemplate>
+                                                        <Border BorderBrush="{DynamicResource E3g.Brush.Border}"
+                                                                BorderThickness="0,0,0,1" Padding="2,6">
+                                                            <Grid>
+                                                                <Grid.ColumnDefinitions>
+                                                                    <ColumnDefinition Width="Auto" />
+                                                                    <ColumnDefinition Width="10" />
+                                                                    <ColumnDefinition Width="140" />
+                                                                    <ColumnDefinition Width="64" />
+                                                                    <ColumnDefinition Width="*" />
+                                                                    <ColumnDefinition Width="52" />
+                                                                    <ColumnDefinition Width="Auto" />
+                                                                </Grid.ColumnDefinitions>
+                                                                <CheckBox Grid.Column="0" VerticalAlignment="Center"
+                                                                          IsChecked="{Binding Usar, Mode=TwoWay}" />
+                                                                <Border Grid.Column="1" Width="10" Height="10" CornerRadius="2"
+                                                                        VerticalAlignment="Center"
+                                                                        Background="{Binding ColorHex, Converter={StaticResource HexToBrush}}" />
+                                                                <TextBox Grid.Column="2" Margin="4,0" VerticalAlignment="Center"
+                                                                         Text="{Binding Nombre, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                                                         ToolTip="Nombre de la instalación" />
+                                                                <TextBox Grid.Column="3" Margin="4,0" VerticalAlignment="Center"
+                                                                         Text="{Binding PrefijoHoja, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                                                         ToolTip="Prefijo de hoja" />
+                                                                <ComboBox Grid.Column="4" Margin="4,0" VerticalAlignment="Center"
+                                                                          ItemsSource="{Binding Templates}" DisplayMemberPath="Name"
+                                                                          SelectedItem="{Binding Plantilla, Mode=TwoWay}"
+                                                                          ToolTip="Plantilla de vista (View Template)" />
+                                                                <TextBox Grid.Column="5" Margin="4,0" VerticalAlignment="Center"
+                                                                         Text="{Binding Escala, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                                                         ToolTip="Escala (1:N)" />
+                                                                <Button Grid.Column="6" Content="✕" Width="24" Margin="4,0"
+                                                                        VerticalAlignment="Center" Click="OnRemoveInstalacionClick"
+                                                                        ToolTip="Quitar esta instalación" />
+                                                            </Grid>
+                                                        </Border>
+                                                    </DataTemplate>
+                                                </ListBox.ItemTemplate>
+                                            </ListBox>
+                                        </Grid>
+                                    </Border>
+
+                                    <Border Grid.Row="1" Margin="0,8,0,0" BorderBrush="{DynamicResource E3g.Brush.Border}"
+                                            BorderThickness="1" CornerRadius="4" Padding="10">
+                                        <Grid>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="Auto" />
+                                                <ColumnDefinition Width="*" />
+                                                <ColumnDefinition Width="Auto" />
+                                                <ColumnDefinition Width="*" />
+                                            </Grid.ColumnDefinitions>
+                                            <Grid.RowDefinitions>
+                                                <RowDefinition Height="Auto" />
+                                                <RowDefinition Height="Auto" />
+                                                <RowDefinition Height="Auto" />
+                                                <RowDefinition Height="Auto" />
+                                                <RowDefinition Height="Auto" />
+                                            </Grid.RowDefinitions>
+                                            <TextBlock Grid.Row="0" Grid.Column="0" Text="Title block:" VerticalAlignment="Center" Margin="0,4,8,4" />
+                                            <ComboBox  Grid.Row="0" Grid.Column="1" x:Name="TitleBlockCombo" Margin="0,4,12,4" DisplayMemberPath="Name" />
+                                            <TextBlock Grid.Row="0" Grid.Column="2" Text="Tipo vista planta:" VerticalAlignment="Center" Margin="0,4,8,4" />
+                                            <ComboBox  Grid.Row="0" Grid.Column="3" x:Name="ViewFamilyTypeCombo" Margin="0,4,0,4" DisplayMemberPath="Name" />
+
+                                            <TextBlock Grid.Row="1" Grid.Column="0" Text="Escala global (1:N):" VerticalAlignment="Center" Margin="0,4,8,4" />
+                                            <TextBox   Grid.Row="1" Grid.Column="1" x:Name="EscalaGlobalBox" Text="50" Margin="0,4,12,4" />
+                                            <TextBlock Grid.Row="1" Grid.Column="2" Text="Padding contador:" VerticalAlignment="Center" Margin="0,4,8,4" />
+                                            <TextBox   Grid.Row="1" Grid.Column="3" x:Name="PaddingBox" Text="2" Margin="0,4,0,4"
+                                                       ToolTip="Dígitos del token {contador} con ceros a la izquierda (2 → 01, 02…)." />
+
+                                            <TextBlock Grid.Row="2" Grid.Column="0" Text="Nº hoja (patrón):" VerticalAlignment="Center" Margin="0,4,8,4" />
+                                            <TextBox   Grid.Row="2" Grid.Column="1" x:Name="PatronNumeroBox" Text="{}{prefijo}-{contador}" Margin="0,4,12,4"
+                                                       ToolTip="Tokens: {prefijo} {nivel} {instalacion} {sector} {contador}" />
+                                            <TextBlock Grid.Row="2" Grid.Column="2" Text="Nombre hoja (patrón):" VerticalAlignment="Center" Margin="0,4,8,4" />
+                                            <TextBox   Grid.Row="2" Grid.Column="3" x:Name="PatronNombreBox" Text="{}{instalacion} - {nivel}" Margin="0,4,0,4"
+                                                       ToolTip="Tokens: {prefijo} {nivel} {instalacion} {sector} {contador}" />
+
+                                            <TextBlock Grid.Row="3" Grid.Column="0" Text="Tipo de viewport:" VerticalAlignment="Center" Margin="0,4,8,4" />
+                                            <ComboBox  Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="3" x:Name="ViewportTypeCombo" Margin="0,4,0,4"
+                                                       DisplayMemberPath="Name"
+                                                       ToolTip="Tipo de viewport (con/sin título). 'Sin título' reduce el tamaño del viewport en la hoja." />
+
+                                            <CheckBox  Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2" x:Name="SoloVistasCheck"
+                                                       Margin="0,8,0,0" Content="Solo crear vistas (sin hojas)"
+                                                       ToolTip="Genera y nombra las vistas en lote; no crea planos." />
+                                            <CheckBox  Grid.Row="4" Grid.Column="2" Grid.ColumnSpan="2" x:Name="AgruparSectoresCheck"
+                                                       Margin="0,8,0,0" Content="Agrupar sectores por hoja"
+                                                       ToolTip="Coloca todos los sectores de un nivel en UNA hoja (varios viewports). Arrastra cada uno en el preview." />
+                                        </Grid>
+                                    </Border>
+                                </Grid>
+                            </Grid>
+                        </TabItem>
+
+                        <!-- ============================================================ -->
+                        <!-- TAB 2 — Previsualizar y generar                                -->
+                        <!-- ============================================================ -->
+                        <TabItem Header="2 · Previsualizar y generar">
+                            <Grid Margin="6">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="*" />
+                                    <RowDefinition Height="170" />
+                                </Grid.RowDefinitions>
+
+                                <!-- Barra de acciones del preview -->
+                                <DockPanel Grid.Row="0" Margin="0,0,0,8">
+                                    <Button DockPanel.Dock="Left" Content="↻ Previsualizar" Padding="14,6" FontWeight="SemiBold"
+                                            Click="OnPreviewClick"
+                                            ToolTip="Calcula el listado de vistas y hojas sin tocar el modelo." />
+                                    <Button DockPanel.Dock="Left" Content="Marcar todo" Padding="10,6" Margin="8,0,0,0" Click="OnCheckAllClick" />
+                                    <Button DockPanel.Dock="Left" Content="Desmarcar todo" Padding="10,6" Margin="6,0,0,0" Click="OnUncheckAllClick" />
+                                    <Button DockPanel.Dock="Right" Content="✔ Generar marcados" Padding="16,6" FontWeight="SemiBold"
+                                            Click="OnGenerateClick" />
+                                    <TextBlock x:Name="PreviewInfo" VerticalAlignment="Center" Margin="16,0"
+                                               Foreground="{DynamicResource E3g.Brush.TextMuted}" TextWrapping="Wrap" />
+                                </DockPanel>
+
+                                <!-- Clasificación del navegador: dos bloques (Planos y Vistas) -->
+                                <Expander Grid.Row="1" Margin="0,0,0,8" IsExpanded="False"
+                                          Header="Clasificación del navegador (Planos / Vistas)">
+                                    <Border BorderBrush="{DynamicResource E3g.Brush.Border}" BorderThickness="1"
+                                            CornerRadius="4" Padding="10" Margin="0,4,0,0">
+                                        <Grid>
+                                            <Grid.RowDefinitions>
+                                                <RowDefinition Height="Auto" />
+                                                <RowDefinition Height="Auto" />
+                                            </Grid.RowDefinitions>
+
+                                            <DockPanel Grid.Row="0" Margin="0,0,0,6">
+                                                <TextBlock DockPanel.Dock="Left" Text="Niveles subcapítulo:" VerticalAlignment="Center" Margin="0,0,6,0" />
+                                                <TextBox   DockPanel.Dock="Left" x:Name="SubcapNivelesBox" Width="40" Text="1" VerticalAlignment="Center"
+                                                           ToolTip="Cuántos 'Subcapítulo N' además de 'Capítulo'. 0 = solo Capítulo." />
+                                                <Button DockPanel.Dock="Right" Content="Crear parám." Padding="10,2" Click="OnCrearClasificacionClick"
+                                                        ToolTip="Crea Capítulo y Subcapítulo N en Vistas y Planos si no existen." />
+                                                <Button DockPanel.Dock="Right" Content="↻" Width="24" Margin="0,0,6,0" Click="OnRebuildClasifClick"
+                                                        ToolTip="Reconstruir filas según 'Niveles subcapítulo'." />
+                                                <TextBlock VerticalAlignment="Center" Margin="12,0,0,0" TextWrapping="Wrap"
+                                                           Foreground="{DynamicResource E3g.Brush.TextMuted}" FontStyle="Italic"
+                                                           Text="Mismos parámetros, valores distintos: Revit organiza Planos y Vistas por separado. Tokens: {instalacion} {nivel} {sector}." />
+                                            </DockPanel>
+
+                                            <Grid Grid.Row="1">
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="*" />
+                                                    <ColumnDefinition Width="10" />
+                                                    <ColumnDefinition Width="*" />
+                                                </Grid.ColumnDefinitions>
+
+                                                <!-- Bloque PLANOS -->
+                                                <Border Grid.Column="0" BorderBrush="{DynamicResource E3g.Brush.Border}"
+                                                        BorderThickness="1" CornerRadius="4" Padding="8">
+                                                    <DockPanel>
+                                                        <CheckBox DockPanel.Dock="Top" x:Name="RellenarPlanosCheck" Margin="0,0,0,6"
+                                                                  Content="Planos (hojas) — rellenar al generar" FontWeight="SemiBold" />
+                                                        <ItemsControl x:Name="ClasifPlanosList" MaxHeight="110"
+                                                                      ScrollViewer.VerticalScrollBarVisibility="Auto">
+                                                            <ItemsControl.ItemTemplate>
+                                                                <DataTemplate>
+                                                                    <Grid Margin="0,2">
+                                                                        <Grid.ColumnDefinitions>
+                                                                            <ColumnDefinition Width="110" />
+                                                                            <ColumnDefinition Width="*" />
+                                                                        </Grid.ColumnDefinitions>
+                                                                        <TextBlock Grid.Column="0" Text="{Binding Parametro}" VerticalAlignment="Center" />
+                                                                        <TextBox  Grid.Column="1" Margin="4,0,0,0"
+                                                                                  Text="{Binding Patron, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                                                                    </Grid>
+                                                                </DataTemplate>
+                                                            </ItemsControl.ItemTemplate>
+                                                        </ItemsControl>
+                                                    </DockPanel>
+                                                </Border>
+
+                                                <!-- Bloque VISTAS -->
+                                                <Border Grid.Column="2" BorderBrush="{DynamicResource E3g.Brush.Border}"
+                                                        BorderThickness="1" CornerRadius="4" Padding="8">
+                                                    <DockPanel>
+                                                        <CheckBox DockPanel.Dock="Top" x:Name="RellenarVistasCheck" Margin="0,0,0,6"
+                                                                  Content="Vistas — rellenar al generar" FontWeight="SemiBold" />
+                                                        <ItemsControl x:Name="ClasifVistasList" MaxHeight="110"
+                                                                      ScrollViewer.VerticalScrollBarVisibility="Auto">
+                                                            <ItemsControl.ItemTemplate>
+                                                                <DataTemplate>
+                                                                    <Grid Margin="0,2">
+                                                                        <Grid.ColumnDefinitions>
+                                                                            <ColumnDefinition Width="110" />
+                                                                            <ColumnDefinition Width="*" />
+                                                                        </Grid.ColumnDefinitions>
+                                                                        <TextBlock Grid.Column="0" Text="{Binding Parametro}" VerticalAlignment="Center" />
+                                                                        <TextBox  Grid.Column="1" Margin="4,0,0,0"
+                                                                                  Text="{Binding Patron, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                                                                    </Grid>
+                                                                </DataTemplate>
+                                                            </ItemsControl.ItemTemplate>
+                                                        </ItemsControl>
+                                                    </DockPanel>
+                                                </Border>
+                                            </Grid>
+                                        </Grid>
+                                    </Border>
+                                </Expander>
+
+                                <!-- Árbol (izq) + mock de composición (der) -->
+                                <Grid Grid.Row="2">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="2*" />
+                                        <ColumnDefinition Width="6" />
+                                        <ColumnDefinition Width="*" />
+                                    </Grid.ColumnDefinitions>
+
+                                    <Border Grid.Column="0" BorderBrush="{DynamicResource E3g.Brush.Border}"
+                                            BorderThickness="1" CornerRadius="4" Padding="6">
+                                        <TreeView x:Name="PreviewTree" BorderThickness="0"
+                                                  SelectedItemChanged="OnPreviewTreeSelected">
+                                            <TreeView.Resources>
+                                                <!-- Hoja: PlanLeaf -->
+                                                <DataTemplate x:Key="LeafTemplate">
+                                                    <StackPanel Orientation="Horizontal">
+                                                        <CheckBox IsChecked="{Binding IsChecked, Mode=TwoWay}" VerticalAlignment="Center" />
+                                                        <TextBlock Text="{Binding Display}" Margin="6,0,0,0" />
+                                                        <TextBlock Text="{Binding AvisoCorto}" Margin="8,0,0,0"
+                                                                   Foreground="#C2410C" FontStyle="Italic" />
+                                                    </StackPanel>
+                                                </DataTemplate>
+                                            </TreeView.Resources>
+                                            <TreeView.ItemTemplate>
+                                                <!-- Instalación -> Nivel -> Hoja -->
+                                                <HierarchicalDataTemplate ItemsSource="{Binding Niveles}">
+                                                    <StackPanel Orientation="Horizontal">
+                                                        <Border Width="10" Height="10" CornerRadius="2" Margin="0,0,6,0"
+                                                                VerticalAlignment="Center"
+                                                                Background="{Binding ColorHex, Converter={StaticResource HexToBrush}}" />
+                                                        <TextBlock Text="{Binding Header}" FontWeight="SemiBold" />
+                                                    </StackPanel>
+                                                    <HierarchicalDataTemplate.ItemTemplate>
+                                                        <HierarchicalDataTemplate ItemsSource="{Binding Leaves}"
+                                                                                  ItemTemplate="{StaticResource LeafTemplate}">
+                                                            <TextBlock Text="{Binding Header}" />
+                                                        </HierarchicalDataTemplate>
+                                                    </HierarchicalDataTemplate.ItemTemplate>
+                                                </HierarchicalDataTemplate>
+                                            </TreeView.ItemTemplate>
+                                        </TreeView>
+                                    </Border>
+
+                                    <GridSplitter Grid.Column="1" Width="6" HorizontalAlignment="Stretch"
+                                                  Background="{DynamicResource E3g.Brush.SurfaceSubtle}" />
+
+                                    <Border Grid.Column="2" BorderBrush="{DynamicResource E3g.Brush.Border}"
+                                            BorderThickness="1" CornerRadius="4" Padding="10">
+                                        <Grid>
+                                            <Grid.RowDefinitions>
+                                                <RowDefinition Height="Auto" />
+                                                <RowDefinition Height="*" />
+                                                <RowDefinition Height="Auto" />
+                                            </Grid.RowDefinitions>
+                                            <DockPanel Grid.Row="0">
+                                                <CheckBox DockPanel.Dock="Right" x:Name="GridCheck" Content="Rejilla"
+                                                          VerticalAlignment="Center" Margin="6,0,0,0" Click="OnGridToggle"
+                                                          ToolTip="Imanta las esquinas del viewport a las intersecciones de la rejilla al arrastrar." />
+                                                <Button DockPanel.Dock="Right" Content="+" Width="22" Padding="0" Click="OnGridPlus"
+                                                        ToolTip="Rejilla más fina (más divisiones)." />
+                                                <Button DockPanel.Dock="Right" Content="−" Width="22" Padding="0" Margin="0,0,4,0" Click="OnGridMinus"
+                                                        ToolTip="Rejilla más gruesa (menos divisiones)." />
+                                                <TextBlock x:Name="GridInfo" DockPanel.Dock="Right" VerticalAlignment="Center" Margin="0,0,8,0"
+                                                           Foreground="{DynamicResource E3g.Brush.TextMuted}" />
+                                                <TextBlock Text="Composición de hoja (esquemático)" Style="{StaticResource SectionLabel}" />
+                                            </DockPanel>
+                                            <Border Grid.Row="1" Background="{DynamicResource E3g.Brush.SurfaceSubtle}" CornerRadius="3">
+                                                <Canvas x:Name="MockCanvas" Background="Transparent" ClipToBounds="True" />
+                                            </Border>
+                                            <TextBlock Grid.Row="2" x:Name="MockInfo" Margin="0,8,0,0" TextWrapping="Wrap"
+                                                       Foreground="{DynamicResource E3g.Brush.TextMuted}" />
+                                        </Grid>
+                                    </Border>
+                                </Grid>
+
+                                <!-- Resultados + thumbnail -->
+                                <Grid Grid.Row="3" Margin="0,8,0,0">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="2*" />
+                                        <ColumnDefinition Width="6" />
+                                        <ColumnDefinition Width="*" />
+                                    </Grid.ColumnDefinitions>
+
+                                    <DataGrid Grid.Column="0" x:Name="ResultadosGrid" AutoGenerateColumns="False"
+                                              IsReadOnly="True" SelectionMode="Single" HeadersVisibility="Column"
+                                              GridLinesVisibility="Horizontal" RowHeight="22"
+                                              SelectionChanged="OnResultSelected">
+                                        <DataGrid.Columns>
+                                            <DataGridTextColumn Header="" Binding="{Binding Estado}" Width="26" />
+                                            <DataGridTextColumn Header="Instalación" Binding="{Binding Instalacion}" Width="*" />
+                                            <DataGridTextColumn Header="Nivel/Sector" Binding="{Binding Nivel}" Width="*" />
+                                            <DataGridTextColumn Header="Nº hoja" Binding="{Binding NumeroHoja}" Width="90" />
+                                            <DataGridTextColumn Header="Motivo" Binding="{Binding Motivo}" Width="2*" />
+                                        </DataGrid.Columns>
+                                    </DataGrid>
+
+                                    <GridSplitter Grid.Column="1" Width="6" HorizontalAlignment="Stretch"
+                                                  Background="{DynamicResource E3g.Brush.SurfaceSubtle}" />
+
+                                    <Border Grid.Column="2" BorderBrush="{DynamicResource E3g.Brush.Border}"
+                                            BorderThickness="1" CornerRadius="4" Padding="6">
+                                        <Grid>
+                                            <Grid.RowDefinitions>
+                                                <RowDefinition Height="Auto" />
+                                                <RowDefinition Height="*" />
+                                            </Grid.RowDefinitions>
+                                            <Button Grid.Row="0" Content="Ver imagen real (PNG)" Padding="8,3"
+                                                    Click="OnThumbnailClick" HorizontalAlignment="Left"
+                                                    ToolTip="Exporta la hoja seleccionada a imagen y la muestra." />
+                                            <Image Grid.Row="1" x:Name="ThumbnailImage" Margin="0,6,0,0" Stretch="Uniform" />
+                                        </Grid>
+                                    </Border>
+                                </Grid>
+                            </Grid>
+                        </TabItem>
+                    </TabControl>
+
+                    <TextBlock Grid.Row="1" x:Name="StatusText" Margin="0,8,0,0" TextWrapping="Wrap"
+                               Foreground="{DynamicResource E3g.Brush.TextMuted}" />
+
+                    <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,8,0,0">
+                        <Button Content="Cerrar" Padding="14,4" Click="OnCloseClick" />
+                    </StackPanel>
+                </Grid>
+            </DockPanel>
+        </Border>
+    </Border>
+</Window>

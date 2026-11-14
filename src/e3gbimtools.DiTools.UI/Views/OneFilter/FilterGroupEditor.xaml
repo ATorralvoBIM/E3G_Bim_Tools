@@ -1,0 +1,92 @@
+<UserControl x:Class="E3G.BimTools.DiTools.UI.Views.OneFilter.FilterGroupEditor"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <Border BorderBrush="#CCC" BorderThickness="1" CornerRadius="4" Padding="8" Margin="0,4">
+        <StackPanel>
+
+            <!-- Cabecera: logica AND/OR del grupo + botones para añadir -->
+            <Grid Margin="0,0,0,6">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+
+                <TextBlock Grid.Column="0" Text="Combinar con: " VerticalAlignment="Center" />
+                <ComboBox  Grid.Column="1"
+                           x:Name="LogicCombo"
+                           Width="80"
+                           SelectionChanged="OnLogicChanged">
+                    <ComboBoxItem Content="AND" />
+                    <ComboBoxItem Content="OR" />
+                </ComboBox>
+
+                <Button Grid.Column="3"
+                        Content="+ Condición"
+                        Margin="8,0,0,0"
+                        Padding="8,2"
+                        Click="OnAddConditionClick" />
+                <Button Grid.Column="4"
+                        Content="+ Subgrupo"
+                        Margin="6,0,0,0"
+                        Padding="8,2"
+                        Click="OnAddSubGroupClick" />
+                <Button Grid.Column="5"
+                        x:Name="RemoveSelfButton"
+                        Content="✕ Eliminar grupo"
+                        Margin="6,0,0,0"
+                        Padding="8,2"
+                        Click="OnRemoveSelfClick"
+                        Visibility="Collapsed" />
+            </Grid>
+
+            <!-- Lista de condiciones -->
+            <ItemsControl x:Name="ConditionsList">
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Grid Margin="0,2">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="160" />
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+
+                            <ComboBox Grid.Column="0"
+                                      ItemsSource="{Binding ParameterChoices}"
+                                      DisplayMemberPath="DisplayName"
+                                      IsEditable="True"
+                                      Text="{Binding ParameterName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                      SelectionChanged="OnParameterComboChanged" />
+
+                            <ComboBox Grid.Column="1"
+                                      Margin="6,0,0,0"
+                                      ItemsSource="{Binding OperatorChoices}"
+                                      DisplayMemberPath="Display"
+                                      SelectedValue="{Binding Operator, Mode=TwoWay}"
+                                      SelectedValuePath="Operator" />
+
+                            <TextBox  Grid.Column="2"
+                                      Margin="6,0,0,0"
+                                      Text="{Binding Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+
+                            <Button   Grid.Column="3"
+                                      Content="✕"
+                                      Margin="6,0,0,0"
+                                      Padding="6,0"
+                                      Tag="{Binding}"
+                                      Click="OnRemoveConditionClick" />
+                        </Grid>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+
+            <!-- Subgrupos: se añaden dinamicamente en code-behind -->
+            <StackPanel x:Name="SubGroupsHost" Margin="16,8,0,0" />
+
+        </StackPanel>
+    </Border>
+</UserControl>

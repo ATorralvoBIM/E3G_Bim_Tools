@@ -1,0 +1,210 @@
+<UserControl x:Class="E3G.BimTools.DiTools.UI.Views.RefrigerantRouting.RefrigerantRoutingView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:leg="clr-namespace:E3G.BimTools.DiTools.UI.Views.DxfLegend"
+             Background="{DynamicResource E3g.Brush.Background}">
+
+    <!-- Trazado de refrigerante desde DXF (pestaña «Trazado DXF» de Climatizacion,
+         2026-11-12).  Panel estrecho: tarjetas apiladas y la accion fija abajo.
+         DXF del fabricante (LG LATS) → planta encajada con los muros de Revit →
+         tuberias de liquido y gas con derivadores y cajas. -->
+    <UserControl.Resources>
+        <Style TargetType="TextBlock" x:Key="Hint">
+            <Setter Property="Margin" Value="0,4,0,0" />
+            <Setter Property="FontSize" Value="10.5" />
+            <Setter Property="TextWrapping" Value="Wrap" />
+            <Setter Property="Foreground" Value="{DynamicResource E3g.Brush.TextMuted}" />
+        </Style>
+        <Style TargetType="TextBlock" x:Key="Titulo">
+            <Setter Property="FontSize" Value="12" />
+            <Setter Property="FontWeight" Value="SemiBold" />
+            <Setter Property="Margin" Value="0,0,0,6" />
+            <Setter Property="Foreground" Value="{DynamicResource E3g.Brush.Text}" />
+        </Style>
+        <Style TargetType="TextBlock" x:Key="Rotulo">
+            <Setter Property="FontSize" Value="10" />
+            <Setter Property="Margin" Value="0,0,0,2" />
+            <Setter Property="Foreground" Value="{DynamicResource E3g.Brush.TextMuted}" />
+        </Style>
+        <Style TargetType="Border" x:Key="Tarjeta">
+            <Setter Property="Background" Value="{DynamicResource E3g.Brush.Card}" />
+            <Setter Property="BorderBrush" Value="{DynamicResource E3g.Brush.Border}" />
+            <Setter Property="BorderThickness" Value="1" />
+            <Setter Property="CornerRadius" Value="8" />
+            <Setter Property="Padding" Value="10,8" />
+            <Setter Property="Margin" Value="0,0,0,8" />
+        </Style>
+    </UserControl.Resources>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+            <StackPanel Margin="10">
+
+                <!-- 1. Archivo -->
+                <Border Style="{StaticResource Tarjeta}">
+                    <StackPanel>
+                        <TextBlock Text="1 · Plano de tuberías del fabricante" Style="{StaticResource Titulo}" />
+                        <DockPanel>
+                            <Button DockPanel.Dock="Right" Content="Examinar…" Margin="6,0,0,0" Padding="12,4"
+                                    Click="OnBrowseClick" />
+                            <TextBox x:Name="FileBox" IsReadOnly="True" VerticalContentAlignment="Center" FontSize="11" />
+                        </DockPanel>
+                        <TextBlock x:Name="FileInfo" Style="{StaticResource Hint}"
+                                   Text="DXF / DWG de LG LATS con la distribución de tuberías de refrigerante en planta." />
+                    </StackPanel>
+                </Border>
+
+                <!-- 2. Destino -->
+                <Border Style="{StaticResource Tarjeta}">
+                    <StackPanel>
+                        <TextBlock Text="2 · Dónde se modela" Style="{StaticResource Titulo}" />
+                        <TextBlock Text="Vista" Style="{StaticResource Rotulo}" />
+                        <ComboBox x:Name="ViewCombo" FontSize="11" DisplayMemberPath="DisplayName"
+                                  SelectionChanged="OnViewChanged"
+                                  ToolTip="Vista de planta donde se va a modelar; propone su nivel y se abre al terminar." />
+                        <Grid Margin="0,8,0,0">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="1.5*" />
+                                <ColumnDefinition Width="6" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <StackPanel>
+                                <TextBlock Text="Nivel asociado" Style="{StaticResource Rotulo}" />
+                                <ComboBox x:Name="LevelCombo" FontSize="11" DisplayMemberPath="DisplayName"
+                                          SelectionChanged="OnLevelChanged"
+                                          ToolTip="Nivel de referencia de las tuberías y los accesorios; su arquitectura es la que se casa con el DXF." />
+                            </StackPanel>
+                            <StackPanel Grid.Column="2">
+                                <TextBlock Text="Altura del eje (mm)" Style="{StaticResource Rotulo}" />
+                                <TextBox x:Name="HeightBox" FontSize="11" Text="2650" TextChanged="OnOptionChanged"
+                                         ToolTip="Cota del eje de las tuberías sobre el nivel asociado." />
+                            </StackPanel>
+                        </Grid>
+                    </StackPanel>
+                </Border>
+
+                <!-- 3. Encaje -->
+                <Border Style="{StaticResource Tarjeta}">
+                    <StackPanel>
+                        <DockPanel Margin="0,0,0,6">
+                            <Button x:Name="AlignButton" DockPanel.Dock="Right" Content="Encajar con Revit" Padding="10,2" FontSize="10.5"
+                                    IsEnabled="False" Click="OnAlignClick"
+                                    ToolTip="Casa la planta de arquitectura del DXF con los muros del nivel (modelo y vínculos)." />
+                            <TextBlock Text="3 · Encaje con la arquitectura" Style="{StaticResource Titulo}" Margin="0" VerticalAlignment="Center" />
+                        </DockPanel>
+                        <Border x:Name="AlignBadge" CornerRadius="4" Padding="8,5" Background="{DynamicResource E3g.Brush.SurfaceSubtle}">
+                            <TextBlock x:Name="AlignInfo" FontSize="11" TextWrapping="Wrap" Foreground="{DynamicResource E3g.Brush.Text}"
+                                       Text="Sin encajar. Carga el DXF y pulsa «Encajar con Revit»." />
+                        </Border>
+                        <Expander x:Name="ManualExpander" Header="Ajuste manual" Margin="0,8,0,0" FontSize="11">
+                            <StackPanel Margin="0,6,0,0">
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="6" />
+                                        <ColumnDefinition Width="*" />
+                                    </Grid.ColumnDefinitions>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="Auto" />
+                                        <RowDefinition Height="Auto" />
+                                    </Grid.RowDefinitions>
+                                    <StackPanel>
+                                        <TextBlock Text="X (m)" Style="{StaticResource Rotulo}" />
+                                        <TextBox x:Name="TxBox" FontSize="11" Text="0" />
+                                    </StackPanel>
+                                    <StackPanel Grid.Column="2">
+                                        <TextBlock Text="Y (m)" Style="{StaticResource Rotulo}" />
+                                        <TextBox x:Name="TyBox" FontSize="11" Text="0" />
+                                    </StackPanel>
+                                    <StackPanel Grid.Row="1" Margin="0,6,0,0">
+                                        <TextBlock Text="Giro (°)" Style="{StaticResource Rotulo}" />
+                                        <TextBox x:Name="RotBox" FontSize="11" Text="0" />
+                                    </StackPanel>
+                                    <StackPanel Grid.Row="1" Grid.Column="2" Margin="0,6,0,0">
+                                        <TextBlock Text="Metros por unidad" Style="{StaticResource Rotulo}" />
+                                        <TextBox x:Name="ScaleBox" FontSize="11" Text="1"
+                                                 ToolTip="1 si el DXF está en metros; 0,001 si está en milímetros." />
+                                    </StackPanel>
+                                </Grid>
+                                <Button Content="Aplicar y comprobar" HorizontalAlignment="Left" Padding="10,2" Margin="0,8,0,0" FontSize="10.5"
+                                        Click="OnManualClick" />
+                                <TextBlock Style="{StaticResource Hint}"
+                                           Text="Punto del modelo = giro · (escala · punto del DXF) + (X, Y), en coordenadas internas." />
+                            </StackPanel>
+                        </Expander>
+                    </StackPanel>
+                </Border>
+
+                <!-- Vista previa -->
+                <Border Style="{StaticResource Tarjeta}">
+                    <StackPanel>
+                        <DockPanel Margin="0,0,0,6">
+                            <Button DockPanel.Dock="Right" Content="Encuadrar" Padding="8,1" FontSize="10.5" Click="OnFitClick" />
+                            <TextBlock Text="Vista previa" Style="{StaticResource Titulo}" Margin="0" VerticalAlignment="Center" />
+                        </DockPanel>
+                        <Border Height="260" BorderThickness="1" CornerRadius="4"
+                                BorderBrush="{DynamicResource E3g.Brush.Border}" Background="White">
+                            <Grid>
+                                <leg:LegendPreview x:Name="Preview" />
+                                <TextBlock x:Name="PreviewHint" HorizontalAlignment="Center" VerticalAlignment="Center"
+                                           Foreground="{DynamicResource E3g.Brush.TextMuted}" FontStyle="Italic" FontSize="11"
+                                           IsHitTestVisible="False" Text="Carga un archivo para verlo aquí." />
+                            </Grid>
+                        </Border>
+                        <TextBlock Style="{StaticResource Hint}"
+                                   Text="Gris: muros de Revit · naranja: arquitectura del DXF · verde: líquido · granate: gas · azul: accesorios." />
+                    </StackPanel>
+                </Border>
+
+                <!-- 4. Accesorios -->
+                <Border Style="{StaticResource Tarjeta}">
+                    <StackPanel>
+                        <TextBlock Text="4 · Accesorios de tubería" Style="{StaticResource Titulo}" />
+                        <ItemsControl x:Name="MappingList">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <Border BorderThickness="0,0,0,1" BorderBrush="{DynamicResource E3g.Brush.BorderSubtle}" Padding="0,6">
+                                        <StackPanel>
+                                            <DockPanel>
+                                                <TextBlock DockPanel.Dock="Right" Text="{Binding Info}" FontSize="10.5"
+                                                           Foreground="{DynamicResource E3g.Brush.TextMuted}" VerticalAlignment="Center" />
+                                                <TextBlock Text="{Binding BlockName}" FontSize="11" FontWeight="SemiBold"
+                                                           TextTrimming="CharacterEllipsis" ToolTip="{Binding BlockName}"
+                                                           Foreground="{DynamicResource E3g.Brush.Text}" />
+                                            </DockPanel>
+                                            <ComboBox Margin="0,4,0,0" FontSize="11" ItemsSource="{Binding Roles}" DisplayMemberPath="Label"
+                                                      SelectedItem="{Binding Role, Mode=TwoWay}" />
+                                            <ComboBox Margin="0,4,0,0" FontSize="11" ItemsSource="{Binding Families}" DisplayMemberPath="Name"
+                                                      SelectedItem="{Binding Family, Mode=TwoWay}" IsEnabled="{Binding UsesFamily}"
+                                                      ToolTip="Familia de accesorio de tubería del proyecto, o crearla a partir del bloque del DXF." />
+                                        </StackPanel>
+                                    </Border>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                        <TextBlock x:Name="MappingHint" Style="{StaticResource Hint}"
+                                   Text="Derivador: uno por tubo (líquido y gas), conectado. Caja: se coloca sin conectar para no unir los dos sistemas. Unidad interior: no se modela; el trazado acaba al entrar en su recinto." />
+                    </StackPanel>
+                </Border>
+            </StackPanel>
+        </ScrollViewer>
+
+        <!-- Estado y accion: siempre a la vista. -->
+        <Border Grid.Row="1" Padding="10,8" BorderThickness="0,1,0,0"
+                BorderBrush="{DynamicResource E3g.Brush.Border}" Background="{DynamicResource E3g.Brush.Card}">
+            <StackPanel>
+                <TextBlock x:Name="StatusText" FontSize="11" TextWrapping="Wrap"
+                           Foreground="{DynamicResource E3g.Brush.TextMuted}"
+                           Text="Carga un DXF de tuberías para empezar." />
+                <Button x:Name="ModelButton" Content="Modelar tuberías" Padding="6,5" Margin="0,8,0,0"
+                        IsEnabled="False" Click="OnModelClick" Style="{DynamicResource E3g.Style.Button.Primary}"
+                        ToolTip="Crea las tuberías, codos, derivadores y cajas. Se deshace con un solo Ctrl+Z." />
+            </StackPanel>
+        </Border>
+    </Grid>
+</UserControl>

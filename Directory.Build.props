@@ -1,0 +1,35 @@
+<Project>
+
+  <!-- =========================================================
+       Propiedades globales para todos los proyectos
+       Sprint 0: configuracion minima y robusta sin CPM ni
+       multi-targeting complejo.  Apunta a Revit 2025 unicamente;
+       las otras versiones se anadiran en sprints posteriores.
+       ========================================================= -->
+  <PropertyGroup>
+    <LangVersion>12.0</LangVersion>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <GenerateAssemblyInfo>true</GenerateAssemblyInfo>
+    <Deterministic>true</Deterministic>
+    <Company>E3G</Company>
+    <Authors>E3G — equipo BIM</Authors>
+    <Product>e3gbimtools</Product>
+    <Copyright>Copyright © E3G $([System.DateTime]::Now.Year)</Copyright>
+    <Version>0.1.0</Version>
+    <FileVersion>$(Version).0</FileVersion>
+    <InformationalVersion>$(Version)+sprint0</InformationalVersion>
+
+    <!-- Warnings conocidos suprimidos -->
+    <NoWarn>$(NoWarn);MSB3277;CS0618;CS8632</NoWarn>
+  </PropertyGroup>
+
+  <!-- Path local a la instalacion de Revit (default 2025).
+       Se puede sobreescribir con /p:RevitInstallDir="C:\..."  -->
+  <PropertyGroup>
+    <RevitVersion Condition="'$(RevitVersion)' == ''">2025</RevitVersion>
+    <RevitInstallDir Condition="'$(RevitInstallDir)' == ''">E:\APPS\Autodesk\Revit $(RevitVersion)\</RevitInstallDir>
+  </PropertyGroup>
+
+</Project>

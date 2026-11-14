@@ -1,0 +1,1419 @@
+﻿<Page x:Class="E3G.Saneamiento.AjustesWindow"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+      xmlns:local="clr-namespace:E3G.Saneamiento"
+      mc:Ignorable="d"
+      d:DesignHeight="700" d:DesignWidth="860"
+      Background="{DynamicResource E3g.Brush.Background}">
+
+    <Page.Resources>
+
+        <!-- Converters estàndard de WPF -->
+        <BooleanToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
+
+        <!-- ══════════════════════════════════════════════
+             TOKENS NEUMÒRFICS — coherents amb el projecte
+        ══════════════════════════════════════════════ -->
+        <SolidColorBrush x:Key="BgBase"         Color="#EFEDEA"/>
+        <SolidColorBrush x:Key="BgCard"         Color="#F6F4F1"/>
+        <SolidColorBrush x:Key="ShadowDark"     Color="#CDC9C4"/>
+        <SolidColorBrush x:Key="ShadowLight"    Color="#F6F4F1"/>
+        <SolidColorBrush x:Key="AccentSan"      Color="#0F6CBD"/>
+        <SolidColorBrush x:Key="AccentFont"     Color="#1D9E75"/>
+        <SolidColorBrush x:Key="AccentGris"     Color="#605E5C"/>
+        <SolidColorBrush x:Key="TextPrimary"    Color="#201F1E"/>
+        <SolidColorBrush x:Key="TextSecondary"  Color="#605E5C"/>
+        <SolidColorBrush x:Key="TextMuted"      Color="#A19F9D"/>
+        <SolidColorBrush x:Key="Divider"        Color="#CDC9C4"/>
+
+        <!-- ══════════════════════════════════════════════
+             CARD NEUMÒRFIC (contenidor de secció)
+        ══════════════════════════════════════════════ -->
+        <Style x:Key="NeuCard" TargetType="Border">
+            <Setter Property="Background"    Value="{DynamicResource E3g.Brush.Card}"/>
+            <Setter Property="CornerRadius"  Value="8"/>
+            <Setter Property="Padding"       Value="20,16"/>
+            <Setter Property="Margin"        Value="0,0,0,12"/>
+            <Setter Property="BorderBrush"   Value="{DynamicResource E3g.Brush.BorderSubtle}"/>
+            <Setter Property="BorderThickness" Value="1"/>
+        </Style>
+
+        <!-- ══════════════════════════════════════════════
+             BOTÓ NAV ESQUERRE (settings sidebar intern)
+        ══════════════════════════════════════════════ -->
+        <Style x:Key="SettingsNavBtn" TargetType="Button">
+            <Setter Property="Background"              Value="Transparent"/>
+            <Setter Property="BorderThickness"         Value="0"/>
+            <Setter Property="Padding"                 Value="12,9"/>
+            <Setter Property="HorizontalContentAlignment" Value="Left"/>
+            <Setter Property="FontSize"                Value="12"/>
+            <Setter Property="Foreground"              Value="{DynamicResource E3g.Brush.TextMuted}"/>
+            <Setter Property="Cursor"                  Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="NavBorder" CornerRadius="10"
+                                Background="{TemplateBinding Background}"
+                                Padding="{TemplateBinding Padding}">
+                            <ContentPresenter HorizontalAlignment="Left"
+                                              VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="NavBorder" Property="Background" Value="{DynamicResource E3g.Brush.GhostHover}"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- ══════════════════════════════════════════════
+             TOGGLE (CheckBox estilitzat)
+        ══════════════════════════════════════════════ -->
+        <Style x:Key="ToggleStyle" TargetType="CheckBox">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="CheckBox">
+                        <Grid Width="36" Height="20">
+                            <Border x:Name="Track" CornerRadius="10" Background="{DynamicResource E3g.Brush.Border}"/>
+                            <Ellipse x:Name="Thumb" Width="16" Height="16" Fill="{DynamicResource E3g.Brush.Card}"
+                                     HorizontalAlignment="Left" Margin="2,0,0,0">
+                                <Ellipse.Effect>
+                                    <DropShadowEffect Color="#CDC9C4" BlurRadius="3"
+                                                      ShadowDepth="1" Opacity="0.8"/>
+                                </Ellipse.Effect>
+                            </Ellipse>
+                        </Grid>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsChecked" Value="True">
+                                <Setter TargetName="Track"  Property="Background" Value="{DynamicResource E3g.Brush.Primary}"/>
+                                <Setter TargetName="Thumb"  Property="HorizontalAlignment" Value="Right"/>
+                                <Setter TargetName="Thumb"  Property="Margin" Value="0,0,2,0"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- ══════════════════════════════════════════════
+             TEXTBOX NEUMÒRFIC
+        ══════════════════════════════════════════════ -->
+        <Style x:Key="NeuTextBox" TargetType="TextBox">
+            <Setter Property="Background"       Value="{DynamicResource E3g.Brush.Background}"/>
+            <Setter Property="BorderThickness"  Value="0"/>
+            <Setter Property="Padding"          Value="8,5"/>
+            <Setter Property="FontSize"         Value="12"/>
+            <Setter Property="Foreground"       Value="{DynamicResource E3g.Brush.Text}"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="TextBox">
+                        <Border CornerRadius="6" Background="{DynamicResource E3g.Brush.SurfaceSubtle}" Padding="8,5"
+                                BorderBrush="{DynamicResource E3g.Brush.Border}" BorderThickness="1">
+                            <ScrollViewer x:Name="PART_ContentHost"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- ══════════════════════════════════════════════
+             COMBOBOX NEUMÒRFIC
+        ══════════════════════════════════════════════ -->
+        <Style x:Key="NeuComboBox" TargetType="ComboBox">
+            <Setter Property="Background"      Value="{DynamicResource E3g.Brush.Background}"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Padding"         Value="8,5"/>
+            <Setter Property="FontSize"        Value="12"/>
+            <Setter Property="Foreground"      Value="{DynamicResource E3g.Brush.Text}"/>
+            <Setter Property="MinWidth"        Value="140"/>
+        </Style>
+
+        <!-- ══════════════════════════════════════════════
+             BADGE
+        ══════════════════════════════════════════════ -->
+        <Style x:Key="BadgeWarn" TargetType="Border">
+            <Setter Property="Background"    Value="#FEF9C3"/>
+            <Setter Property="CornerRadius"  Value="4"/>
+            <Setter Property="Padding"       Value="6,2"/>
+            <Setter Property="Margin"        Value="0,3,0,0"/>
+        </Style>
+        <Style x:Key="BadgeOk" TargetType="Border">
+            <Setter Property="Background"    Value="#DCFCE7"/>
+            <Setter Property="CornerRadius"  Value="4"/>
+            <Setter Property="Padding"       Value="6,2"/>
+            <Setter Property="Margin"        Value="0,3,0,0"/>
+        </Style>
+
+        <!-- ══════════════════════════════════════════════
+             BOTONES E3G (como Toolbar.Primary / Ghost de DiTools)
+        ══════════════════════════════════════════════ -->
+        <Style x:Key="BtnPrimary" TargetType="Button">
+            <Setter Property="Background" Value="{DynamicResource E3g.Brush.Primary}"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="FontSize" Value="12"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Padding" Value="13,6"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="Bd" Background="{TemplateBinding Background}" CornerRadius="6" Padding="{TemplateBinding Padding}">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="Bd" Property="Background" Value="{DynamicResource E3g.Brush.PrimaryHover}"/>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter TargetName="Bd" Property="Background" Value="{DynamicResource E3g.Brush.PrimaryPressed}"/>
+                            </Trigger>
+                            <Trigger Property="IsEnabled" Value="False">
+                                <Setter TargetName="Bd" Property="Opacity" Value="0.5"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style x:Key="BtnGhost" TargetType="Button">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="Foreground" Value="{DynamicResource E3g.Brush.Text}"/>
+            <Setter Property="BorderBrush" Value="{DynamicResource E3g.Brush.BorderSubtle}"/>
+            <Setter Property="FontSize" Value="12"/>
+            <Setter Property="Padding" Value="12,6"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="Bd" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="1" CornerRadius="6" Padding="{TemplateBinding Padding}">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="Bd" Property="Background" Value="{DynamicResource E3g.Brush.GhostHover}"/>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter TargetName="Bd" Property="Background" Value="{DynamicResource E3g.Brush.GhostPressed}"/>
+                            </Trigger>
+                            <Trigger Property="IsEnabled" Value="False">
+                                <Setter TargetName="Bd" Property="Opacity" Value="0.5"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <!-- Boton de texto (acciones secundarias dentro de una tarjeta) -->
+        <Style x:Key="BtnLink" TargetType="Button">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="Foreground" Value="{DynamicResource E3g.Brush.Primary}"/>
+            <Setter Property="FontSize" Value="11"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Padding" Value="8,4"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="Bd" Background="{TemplateBinding Background}" CornerRadius="6" Padding="{TemplateBinding Padding}">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="Bd" Property="Background" Value="{DynamicResource E3g.Brush.GhostHover}"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+    </Page.Resources>
+
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="186"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
+        <!-- ══════════════════════════════════════════════
+             NAV ESQUERRE (seccions d'ajustos)
+        ══════════════════════════════════════════════ -->
+        <Border Style="{StaticResource NeuCard}" Margin="12,12,6,12" Padding="8,12">
+            <StackPanel>
+                <TextBlock Text="AJUSTES" FontSize="9" FontWeight="SemiBold"
+                           Foreground="{StaticResource TextMuted}"
+                           Margin="12,0,0,10"/>
+
+                <!-- General -->
+                <TextBlock Text="GENERAL" FontSize="8" FontWeight="SemiBold"
+                           Foreground="{StaticResource TextMuted}"
+                           Margin="12,6,0,4"/>
+                <Button x:Name="BtnNavIdioma"        Click="BtnNavIdioma_Click"
+                        Style="{StaticResource SettingsNavBtn}" Content="🌐  Idioma"/>
+                <Button x:Name="BtnNavUnidades"      Click="BtnNavUnidades_Click"
+                        Style="{StaticResource SettingsNavBtn}" Content="📐  Unidades"/>
+                <Button x:Name="BtnNavConfirmaciones" Click="BtnNavConfirmaciones_Click"
+                        Style="{StaticResource SettingsNavBtn}" Content="✅  Confirmaciones"/>
+                <Button x:Name="BtnNavNomenclatura"  Click="BtnNavNomenclatura_Click"
+                        Style="{StaticResource SettingsNavBtn}" Content="🏷️  Nomenclatura"/>
+				<Button x:Name="BtnNavClassificacio" Click="BtnNavClassificacio_Click"
+                        Style="{StaticResource SettingsNavBtn}" Content="🗂️  Sistemas"/>
+				<Button x:Name="BtnNavPartides"
+                        Style="{StaticResource SettingsNavBtn}"
+                        Content="🧾  Partidas BC3"
+                        Click="BtnNavPartides_Click"/>
+                <Button x:Name="BtnNavProtocol"
+                        Content="📋  Protocolo"
+                        Style="{StaticResource SettingsNavBtn}"
+                        Click="BtnNavProtocol_Click"/>
+
+                <Rectangle Height="1" Fill="{DynamicResource E3g.Brush.Border}" Margin="8,10"/>
+
+                <!-- Per instal·lació -->
+                <TextBlock Text="POR INSTALACIÓN" FontSize="8" FontWeight="SemiBold"
+                           Foreground="{StaticResource TextMuted}"
+                           Margin="12,0,0,4"/>
+                <Button x:Name="BtnNavSaneamiento"   Click="BtnNavSaneamiento_Click"
+                        Style="{StaticResource SettingsNavBtn}" Content="💧  Saneamiento"/>
+                <Button x:Name="BtnNavFontaneria"    Click="BtnNavFontaneria_Click"
+                        Style="{StaticResource SettingsNavBtn}" Content="🔧  Fontanería"/>
+            </StackPanel>
+        </Border>
+
+        <!-- ══════════════════════════════════════════════
+             ÀREA DE CONTINGUT
+        ══════════════════════════════════════════════ -->
+        <ScrollViewer Grid.Column="1" VerticalScrollBarVisibility="Auto"
+                      Margin="6,12,12,12">
+            <StackPanel>
+
+                <!-- ─── IDIOMA ─── -->
+                <Border x:Name="SecIdioma" Style="{StaticResource NeuCard}">
+                    <StackPanel>
+                        <TextBlock Text="Idioma" FontSize="15" FontWeight="SemiBold"
+                                   Foreground="{StaticResource TextPrimary}" Margin="0,0,0,14"/>
+
+                        <!-- Idioma interfície -->
+                        <Grid Margin="0,0,0,10">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <StackPanel>
+                                <TextBlock Text="Idioma de la interfaz" FontSize="12" FontWeight="SemiBold"
+                                           Foreground="{StaticResource TextPrimary}"/>
+                                <TextBlock Text="Idioma de botones, etiquetas y mensajes del plugin"
+                                           FontSize="11" Foreground="{StaticResource TextSecondary}" Margin="0,2,0,0"/>
+                            </StackPanel>
+                            <ComboBox x:Name="CbxIdiomaPlugin" Grid.Column="1"
+                                      Style="{StaticResource NeuComboBox}" VerticalAlignment="Center">
+                                <ComboBoxItem Content="Català" IsSelected="True"/>
+                                <ComboBoxItem Content="Español"/>
+                                <ComboBoxItem Content="English"/>
+                            </ComboBox>
+                        </Grid>
+                        <Rectangle Height="1" Fill="{DynamicResource E3g.Brush.Background}" Margin="0,0,0,10"/>
+
+                        <!-- Idioma reportes -->
+                        <Grid Margin="0,0,0,10">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <StackPanel>
+                                <TextBlock Text="Idioma de los informes exportados" FontSize="12" FontWeight="SemiBold"
+                                           Foreground="{StaticResource TextPrimary}"/>
+                                <TextBlock Text="Cabeceras y etiquetas de los CSV exportados"
+                                           FontSize="11" Foreground="{StaticResource TextSecondary}" Margin="0,2,0,0"/>
+                            </StackPanel>
+                            <ComboBox x:Name="CbxIdiomaReporte" Grid.Column="1"
+                                      Style="{StaticResource NeuComboBox}" VerticalAlignment="Center">
+                                <ComboBoxItem Content="Igual que la interfaz" IsSelected="True"/>
+                                <ComboBoxItem Content="Català"/>
+                                <ComboBoxItem Content="Español"/>
+                                <ComboBoxItem Content="English"/>
+                            </ComboBox>
+                        </Grid>
+                        <Rectangle Height="1" Fill="{DynamicResource E3g.Brush.Background}" Margin="0,0,0,10"/>
+
+                        <!-- Noms tècnics -->
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <StackPanel>
+                                <TextBlock Text="Mantener sin traducir los nombres técnicos de Revit" FontSize="12" FontWeight="SemiBold"
+                                           Foreground="{StaticResource TextPrimary}"/>
+                                <TextBlock Text="Ej.: OST_PipeCurves en lugar de 'Tuberías'"
+                                           FontSize="11" Foreground="{StaticResource TextSecondary}" Margin="0,2,0,0"/>
+                            </StackPanel>
+                            <CheckBox x:Name="ChkNombresTecnicos" Grid.Column="1"
+                                      Style="{StaticResource ToggleStyle}" IsChecked="True"
+                                      VerticalAlignment="Center"/>
+                        </Grid>
+                    </StackPanel>
+                </Border>
+
+                <!-- ─── UNITATS ─── -->
+                <Border x:Name="SecUnidades" Style="{StaticResource NeuCard}" Visibility="Collapsed">
+                    <StackPanel>
+                        <TextBlock Text="Unidades y formato de salida" FontSize="15" FontWeight="SemiBold"
+                                   Foreground="{StaticResource TextPrimary}" Margin="0,0,0,14"/>
+
+                        <Grid Margin="0,0,0,10">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Text="Longitud" FontSize="12" FontWeight="SemiBold"
+                                       Foreground="{StaticResource TextPrimary}" VerticalAlignment="Center"/>
+                            <ComboBox x:Name="CbxUnidadLongitud" Grid.Column="1"
+                                      Style="{StaticResource NeuComboBox}" VerticalAlignment="Center">
+                                <ComboBoxItem Content="Metros (m)" IsSelected="True"/>
+                                <ComboBoxItem Content="Centímetros (cm)"/>
+                                <ComboBoxItem Content="Milímetros (mm)"/>
+                            </ComboBox>
+                        </Grid>
+                        <Rectangle Height="1" Fill="{DynamicResource E3g.Brush.Background}" Margin="0,0,0,10"/>
+
+                        <Grid Margin="0,0,0,10">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Text="Decimales en los resultados" FontSize="12" FontWeight="SemiBold"
+                                       Foreground="{StaticResource TextPrimary}" VerticalAlignment="Center"/>
+                            <TextBox x:Name="TxtDecimales" Grid.Column="1"
+                                     Style="{StaticResource NeuTextBox}" Text="2" Width="60"
+                                     VerticalAlignment="Center"/>
+                        </Grid>
+                        <Rectangle Height="1" Fill="{DynamicResource E3g.Brush.Background}" Margin="0,0,0,10"/>
+
+                        <Grid Margin="0,0,0,10">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Text="Diámetro" FontSize="12" FontWeight="SemiBold"
+                                       Foreground="{StaticResource TextPrimary}" VerticalAlignment="Center"/>
+                            <ComboBox x:Name="CbxUnidadDiametro" Grid.Column="1"
+                                      Style="{StaticResource NeuComboBox}" VerticalAlignment="Center">
+                                <ComboBoxItem Content="Milímetros (mm)" IsSelected="True"/>
+                                <ComboBoxItem Content="Pulgadas (&quot;)"/>
+                            </ComboBox>
+                        </Grid>
+                        <Rectangle Height="1" Fill="{DynamicResource E3g.Brush.Background}" Margin="0,0,0,10"/>
+
+                        <Grid Margin="0,0,0,10">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Text="Formato de pendiente" FontSize="12" FontWeight="SemiBold"
+                                       Foreground="{StaticResource TextPrimary}" VerticalAlignment="Center"/>
+                            <ComboBox x:Name="CbxFormatoPendiente" Grid.Column="1"
+                                      Style="{StaticResource NeuComboBox}" VerticalAlignment="Center">
+                                <ComboBoxItem Content="Porcentaje (%)" IsSelected="True"/>
+                                <ComboBoxItem Content="Por mil (‰)"/>
+                                <ComboBoxItem Content="Decimal (0.02)"/>
+                            </ComboBox>
+                        </Grid>
+                        <Rectangle Height="1" Fill="{DynamicResource E3g.Brush.Background}" Margin="0,0,0,10"/>
+
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <StackPanel>
+                                <TextBlock Text="Cabecera en los CSV exportados" FontSize="12" FontWeight="SemiBold"
+                                           Foreground="{StaticResource TextPrimary}"/>
+                                <TextBlock Text="Incluye nombre del proyecto, fecha y versión del plugin"
+                                           FontSize="11" Foreground="{StaticResource TextSecondary}" Margin="0,2,0,0"/>
+                            </StackPanel>
+                            <CheckBox x:Name="ChkCabeceraExportacion" Grid.Column="1"
+                                      Style="{StaticResource ToggleStyle}" IsChecked="True"
+                                      VerticalAlignment="Center"/>
+                        </Grid>
+                    </StackPanel>
+                </Border>
+
+                <!-- ─── CONFIRMACIONS ─── -->
+                <Border x:Name="SecConfirmaciones" Style="{StaticResource NeuCard}" Visibility="Collapsed">
+                    <StackPanel>
+                        <TextBlock Text="Confirmaciones" FontSize="15" FontWeight="SemiBold"
+                                   Foreground="{StaticResource TextPrimary}" Margin="0,0,0,14"/>
+
+                        <Grid Margin="0,0,0,10">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <StackPanel>
+                                <TextBlock Text="Confirmar antes de eliminar elementos" FontSize="12" FontWeight="SemiBold"
+                                           Foreground="{StaticResource TextPrimary}"/>
+                                <TextBlock Text="Pide confirmación antes de cualquier eliminación"
+                                           FontSize="11" Foreground="{StaticResource TextSecondary}" Margin="0,2,0,0"/>
+                            </StackPanel>
+                            <CheckBox x:Name="ChkConfirmarEliminar" Grid.Column="1"
+                                      Style="{StaticResource ToggleStyle}" IsChecked="True"
+                                      VerticalAlignment="Center"/>
+                        </Grid>
+                        <Rectangle Height="1" Fill="{DynamicResource E3g.Brush.Background}" Margin="0,0,0,10"/>
+
+                        <Grid Margin="0,0,0,10">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <StackPanel>
+                                <TextBlock Text="Confirmar copias masivas de vistas" FontSize="12" FontWeight="SemiBold"
+                                           Foreground="{StaticResource TextPrimary}"/>
+                                <TextBlock Text="Pide confirmación cuando la copia afecta a más vistas que el umbral"
+                                           FontSize="11" Foreground="{StaticResource TextSecondary}" Margin="0,2,0,0"/>
+                            </StackPanel>
+                            <CheckBox x:Name="ChkConfirmarVistas" Grid.Column="1"
+                                      Style="{StaticResource ToggleStyle}" IsChecked="True"
+                                      VerticalAlignment="Center"/>
+                        </Grid>
+                        <Rectangle Height="1" Fill="{DynamicResource E3g.Brush.Background}" Margin="0,0,0,10"/>
+
+                        <Grid Margin="0,0,0,10">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <StackPanel>
+                                <TextBlock Text="Confirmar copias entre plantas" FontSize="12" FontWeight="SemiBold"
+                                           Foreground="{StaticResource TextPrimary}"/>
+                                <TextBlock Text="Pide confirmación antes de copiar entre varias plantas"
+                                           FontSize="11" Foreground="{StaticResource TextSecondary}" Margin="0,2,0,0"/>
+                            </StackPanel>
+                            <CheckBox x:Name="ChkConfirmarCopia" Grid.Column="1"
+                                      Style="{StaticResource ToggleStyle}" IsChecked="True"
+                                      VerticalAlignment="Center"/>
+                        </Grid>
+                        <Rectangle Height="1" Fill="{DynamicResource E3g.Brush.Background}" Margin="0,0,0,10"/>
+
+                        <Grid Margin="0,0,0,10">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <StackPanel>
+                                <TextBlock Text="Umbral de elementos para pedir confirmación" FontSize="12" FontWeight="SemiBold"
+                                           Foreground="{StaticResource TextPrimary}"/>
+                                <TextBlock Text="Número de elementos a partir del cual se pide confirmación"
+                                           FontSize="11" Foreground="{StaticResource TextSecondary}" Margin="0,2,0,0"/>
+                            </StackPanel>
+                            <TextBox x:Name="TxtUmbralConfirmacion" Grid.Column="1"
+                                     Style="{StaticResource NeuTextBox}" Text="200" Width="70"
+                                     VerticalAlignment="Center"/>
+                        </Grid>
+                        <Rectangle Height="1" Fill="{DynamicResource E3g.Brush.Background}" Margin="0,0,0,10"/>
+
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <StackPanel>
+                                <TextBlock Text="Modo detallado" FontSize="12" FontWeight="SemiBold"
+                                           Foreground="{StaticResource TextPrimary}"/>
+                                <TextBlock Text="Muestra mensajes detallados de cada operación"
+                                           FontSize="11" Foreground="{StaticResource TextSecondary}" Margin="0,2,0,0"/>
+                            </StackPanel>
+                            <CheckBox x:Name="ChkVerbose" Grid.Column="1"
+                                      Style="{StaticResource ToggleStyle}" IsChecked="False"
+                                      VerticalAlignment="Center"/>
+                        </Grid>
+                    </StackPanel>
+                </Border>
+
+                <!-- ─── NOMENCLATURA ─── -->
+                <Border x:Name="SecNomenclatura" Style="{StaticResource NeuCard}" Visibility="Collapsed">
+                    <StackPanel>
+                        <TextBlock Text="Nomenclatura del modelo" FontSize="15" FontWeight="SemiBold"
+                                   Foreground="{StaticResource TextPrimary}" Margin="0,0,0,4"/>
+                        <Border Style="{StaticResource BadgeWarn}" HorizontalAlignment="Left" Margin="0,0,0,14">
+                            <TextBlock Text="⚠️  Una nomenclatura incorrecta puede hacer fallar las copias y el esquema"
+                                       FontSize="11" Foreground="#92400E"/>
+                        </Border>
+
+                        <Grid Margin="0,0,0,10">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <StackPanel>
+                                <TextBlock Text="Formato de planta" FontSize="12" FontWeight="SemiBold"
+                                           Foreground="{StaticResource TextPrimary}"/>
+                                <TextBlock Text="Patrón obligatorio para el nombre de los niveles de Revit"
+                                           FontSize="11" Foreground="{StaticResource TextSecondary}" Margin="0,2,0,0"/>
+                                <Border Style="{StaticResource BadgeOk}" HorizontalAlignment="Left">
+                                    <TextBlock Text="Correcto: P01.A · P02.B1 · P03.B2"
+                                               FontSize="10" Foreground="#166534"/>
+                                </Border>
+                            </StackPanel>
+                            <ComboBox x:Name="CbxFormatoPlanta" Grid.Column="1"
+                                      Style="{StaticResource NeuComboBox}" VerticalAlignment="Center">
+                                <ComboBoxItem Content="P##.EDIF" IsSelected="True"/>
+                                <ComboBoxItem Content="P##"/>
+                                <ComboBoxItem Content="Planta ##"/>
+                            </ComboBox>
+                        </Grid>
+                        <Rectangle Height="1" Fill="{DynamicResource E3g.Brush.Background}" Margin="0,0,0,10"/>
+
+                        <Grid Margin="0,0,0,10">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Text="Formato de sótano" FontSize="12" FontWeight="SemiBold"
+                                       Foreground="{StaticResource TextPrimary}" VerticalAlignment="Center"/>
+                            <ComboBox x:Name="CbxFormatoSotano" Grid.Column="1"
+                                      Style="{StaticResource NeuComboBox}" VerticalAlignment="Center">
+                                <ComboBoxItem Content="S##.EDIF" IsSelected="True"/>
+                                <ComboBoxItem Content="S##"/>
+                                <ComboBoxItem Content="Sótano ##"/>
+                            </ComboBox>
+                        </Grid>
+                        <Rectangle Height="1" Fill="{DynamicResource E3g.Brush.Background}" Margin="0,0,0,10"/>
+
+                        <Grid Margin="0,0,0,10">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Text="Separador de edificio" FontSize="12" FontWeight="SemiBold"
+                                       Foreground="{StaticResource TextPrimary}" VerticalAlignment="Center"/>
+                            <ComboBox x:Name="CbxSeparadorEdificio" Grid.Column="1"
+                                      Style="{StaticResource NeuComboBox}" VerticalAlignment="Center">
+                                <ComboBoxItem Content="Punto ( . )" IsSelected="True"/>
+                                <ComboBoxItem Content="Guion bajo ( _ )"/>
+                                <ComboBoxItem Content="Guion ( - )"/>
+                            </ComboBox>
+                        </Grid>
+                        <Rectangle Height="1" Fill="{DynamicResource E3g.Brush.Background}" Margin="0,0,0,10"/>
+
+                        <Grid Margin="0,0,0,10">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <StackPanel>
+                                <TextBlock Text="Identificadores de edificio" FontSize="12" FontWeight="SemiBold"
+                                           Foreground="{StaticResource TextPrimary}"/>
+                                <TextBlock Text="Separados por comas. Ej.: A, B1, B2"
+                                           FontSize="11" Foreground="{StaticResource TextSecondary}" Margin="0,2,0,0"/>
+                            </StackPanel>
+                            <TextBox x:Name="TxtIdsEdificio" Grid.Column="1"
+                                     Style="{StaticResource NeuTextBox}" Text="A, B1, B2" Width="120"
+                                     VerticalAlignment="Center"/>
+                        </Grid>
+                        <Rectangle Height="1" Fill="{DynamicResource E3g.Brush.Background}" Margin="0,0,0,10"/>
+
+                        <Grid Margin="0,0,0,10">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <StackPanel>
+                                <TextBlock Text="Prefijo de familias E3G" FontSize="12" FontWeight="SemiBold"
+                                           Foreground="{StaticResource TextPrimary}"/>
+                                <TextBlock Text="El nombre de familia debe coincidir exactamente (mayúsculas incluidas)"
+                                           FontSize="11" Foreground="{StaticResource TextSecondary}" Margin="0,2,0,0"/>
+                            </StackPanel>
+                            <TextBox x:Name="TxtPrefijoE3G" Grid.Column="1"
+                                     Style="{StaticResource NeuTextBox}" Text="MC_E3G_" Width="120"
+                                     VerticalAlignment="Center"/>
+                        </Grid>
+                        <Rectangle Height="1" Fill="{DynamicResource E3g.Brush.Background}" Margin="0,0,0,10"/>
+
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <StackPanel>
+                                <TextBlock Text="Avisar si la familia no sigue el prefijo E3G" FontSize="12" FontWeight="SemiBold"
+                                           Foreground="{StaticResource TextPrimary}"/>
+                                <TextBlock Text="Muestra un aviso cuando se detectan familias fuera de la convención"
+                                           FontSize="11" Foreground="{StaticResource TextSecondary}" Margin="0,2,0,0"/>
+                            </StackPanel>
+                            <CheckBox x:Name="ChkAvisarFamilias" Grid.Column="1"
+                                      Style="{StaticResource ToggleStyle}" IsChecked="True"
+                                      VerticalAlignment="Center"/>
+                        </Grid>
+                    </StackPanel>
+                </Border>
+				<!-- ─── CLASSIFICACIÓ DE SISTEMES ─── -->
+				<Border x:Name="SecClassificacio" Style="{StaticResource NeuCard}" Visibility="Collapsed">
+					<StackPanel>
+
+						<Grid Margin="0,0,0,4">
+							<Grid.ColumnDefinitions>
+								<ColumnDefinition Width="*"/>
+								<ColumnDefinition Width="Auto"/>
+							</Grid.ColumnDefinitions>
+							<StackPanel>
+								<TextBlock Text="Clasificación de sistemas de tuberías"
+                                           FontSize="15" FontWeight="SemiBold"
+                                           Foreground="{StaticResource TextPrimary}"/>
+								<TextBlock Text="Indica a qué categoría funcional pertenece cada PipingSystemType del proyecto."
+                                           FontSize="11"
+                                           Foreground="{StaticResource TextSecondary}"
+                                           TextWrapping="Wrap"
+                                           Margin="0,2,0,0"/>
+							</StackPanel>
+							<Border Grid.Column="1"
+                                    Background="{DynamicResource E3g.Brush.SurfaceSubtle}"
+                                    CornerRadius="8"
+                                    Padding="10,6"
+                                    VerticalAlignment="Top">
+								<TextBlock x:Name="LblContadorClassificacio"
+                                           Text="0 de 0 clasificados"
+                                           FontSize="11"
+                                           FontWeight="SemiBold"
+                                           Foreground="{StaticResource TextSecondary}"/>
+							</Border>
+						</Grid>
+
+						<Rectangle Height="1" Fill="{DynamicResource E3g.Brush.Background}" Margin="0,12,0,12"/>
+
+						<Border x:Name="PnlClassifAviso"
+                                Background="#FEF3C7"
+                                CornerRadius="8"
+                                Padding="12,10"
+                                Margin="0,0,0,12"
+                                Visibility="Collapsed">
+							<StackPanel Orientation="Horizontal">
+								<TextBlock Text="⚠"
+                                           FontSize="14"
+                                           Foreground="#92400E"
+                                           VerticalAlignment="Center"
+                                           Margin="0,0,8,0"/>
+								<TextBlock x:Name="LblClassifAviso"
+                                           FontSize="12"
+                                           Foreground="#92400E"
+                                           TextWrapping="Wrap"
+                                           VerticalAlignment="Center"
+                                           Text="Abre un proyecto de Revit para editar la clasificación de sistemas."/>
+							</StackPanel>
+						</Border>
+
+						<DataGrid x:Name="DgClassificacioSistemes"
+                                  AutoGenerateColumns="False"
+                                  HeadersVisibility="Column"
+                                  GridLinesVisibility="Horizontal"
+                                  HorizontalGridLinesBrush="#E8ECF0"
+                                  Background="{StaticResource BgCard}"
+                                  RowBackground="{StaticResource BgCard}"
+                                  AlternatingRowBackground="#FAFBFD"
+                                  BorderThickness="1"
+                                  BorderBrush="{DynamicResource E3g.Brush.Background}"
+                                  CanUserAddRows="False"
+                                  CanUserDeleteRows="False"
+                                  CanUserReorderColumns="False"
+                                  CanUserResizeRows="False"
+                                  IsReadOnly="False"
+                                  SelectionMode="Single"
+                                  SelectionUnit="FullRow"
+                                  RowHeight="36"
+                                  ColumnHeaderHeight="32"
+                                  FontSize="12"
+                                  Foreground="{StaticResource TextPrimary}"
+                                  MinHeight="200"
+                                  MaxHeight="500">
+							<DataGrid.Columns>
+								<DataGridTextColumn Header="Sistema (PipingSystemType)"
+                                                    Binding="{Binding NombreTipo}"
+                                                    Width="*"
+                                                    IsReadOnly="True"/>
+								<DataGridTextColumn Header="Clasificación Revit"
+                                                    Binding="{Binding NombreClasificacionRevit}"
+                                                    Width="160"
+                                                    IsReadOnly="True"/>
+								<DataGridComboBoxColumn Header="Categoría E3G"
+                                                        SelectedValueBinding="{Binding CategoriaActual, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                                        Width="240"/>
+							</DataGrid.Columns>
+						</DataGrid>
+
+						<Grid Margin="0,12,0,0">
+							<Grid.ColumnDefinitions>
+								<ColumnDefinition Width="*"/>
+								<ColumnDefinition Width="Auto"/>
+							</Grid.ColumnDefinitions>
+							<TextBlock Grid.Column="0"
+                                       Text="Los cambios se guardan en este proyecto (.rvt)."
+                                       FontSize="11"
+                                       Foreground="{StaticResource TextMuted}"
+                                       VerticalAlignment="Center"
+                                       TextWrapping="Wrap"/>
+							<Button Grid.Column="1"
+                                    x:Name="BtnRecalcularSugerencias"
+                                    Content="Recalcular sugerencias"
+                                    Style="{StaticResource SettingsNavBtn}"
+                                    Padding="12,6"
+                                    FontSize="11"
+                                    Click="BtnRecalcularSugerencias_Click"/>
+						</Grid>
+
+					</StackPanel>
+				</Border>
+				
+				<!-- ─── PARTIDES BC3 ─── -->
+				<Border x:Name="SecPartides" Style="{StaticResource NeuCard}" Visibility="Collapsed">
+					<StackPanel>
+						<TextBlock Text="Partidas y exportación BC3"
+								   FontSize="15" FontWeight="SemiBold"
+								   Foreground="{StaticResource TextPrimary}"/>
+						<TextBlock Text="Define N reglas por categoría. Cada regla enlaza un grupo de elementos con una partida del catálogo y un criterio de medición."
+								   FontSize="11"
+								   Foreground="{StaticResource TextSecondary}"
+								   TextWrapping="Wrap"
+								   Margin="0,2,0,0"/>
+                        <Rectangle Height="1" Fill="{DynamicResource E3g.Brush.Background}" Margin="0,12,0,12"/>
+
+                        <!-- ─── CARD 1 — Catàlegs (multi-catàleg) ─────────────────── -->
+                        <Border Background="{DynamicResource E3g.Brush.SurfaceSubtle}" CornerRadius="10" Padding="14,12" Margin="0,0,0,12">
+                            <StackPanel>
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="Auto"/>
+                                    </Grid.ColumnDefinitions>
+                                    <StackPanel Grid.Column="0">
+                                        <TextBlock Text="Catálogos cargados"
+                           FontWeight="SemiBold" FontSize="13"
+                           Foreground="{StaticResource TextPrimary}"/>
+                                        <TextBlock Text="Importa BC3 (BEDEC, Precio Centro, plantilla del estudio…). Puedes tener varios a la vez: el primario (★) sale primero en las búsquedas."
+                           FontSize="11"
+                           Foreground="{StaticResource TextSecondary}"
+                           TextWrapping="Wrap"
+                           Margin="0,2,0,0"/>
+                                    </StackPanel>
+                                    <Button Grid.Column="1"
+                    x:Name="BtnImportarBc3"
+                    Content="+ Importar BC3…"
+                    Style="{StaticResource BtnPrimary}"
+                    VerticalAlignment="Top"
+                    Click="BtnImportarBc3_Click"/>
+                                </Grid>
+
+                                <ItemsControl ItemsSource="{Binding CatalogosUi}"
+                      Margin="0,8,0,0"
+                      Visibility="{Binding HayCatalogos, Converter={StaticResource BoolToVisibilityConverter}}">
+                                    <ItemsControl.ItemTemplate>
+                                        <DataTemplate>
+                                            <Border Background="{DynamicResource E3g.Brush.Card}" BorderBrush="{DynamicResource E3g.Brush.Background}" BorderThickness="1"
+                            CornerRadius="8" Padding="10,8" Margin="0,0,0,4">
+                                                <Grid>
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition Width="Auto"/>
+                                                        <ColumnDefinition Width="*"/>
+                                                        <ColumnDefinition Width="Auto"/>
+                                                    </Grid.ColumnDefinitions>
+                                                    <TextBlock Grid.Column="0" FontWeight="Bold" FontSize="14"
+                                       VerticalAlignment="Center" Margin="0,0,10,0">
+                                                        <TextBlock.Style>
+                                                            <Style TargetType="TextBlock">
+                                                                <Setter Property="Text" Value="·"/>
+                                                                <Setter Property="Foreground" Value="{DynamicResource E3g.Brush.TextSoft}"/>
+                                                                <Style.Triggers>
+                                                                    <DataTrigger Binding="{Binding EsPrimario}" Value="True">
+                                                                        <Setter Property="Text" Value="★"/>
+                                                                        <Setter Property="Foreground" Value="#1D9E75"/>
+                                                                    </DataTrigger>
+                                                                </Style.Triggers>
+                                                            </Style>
+                                                        </TextBlock.Style>
+                                                    </TextBlock>
+                                                    <StackPanel Grid.Column="1" VerticalAlignment="Center">
+                                                        <TextBlock Text="{Binding Etiqueta}" FontWeight="SemiBold" FontSize="12" Foreground="{StaticResource TextPrimary}"/>
+                                                        <TextBlock Text="{Binding Detalle}" FontSize="10" Foreground="{StaticResource TextSecondary}"/>
+                                                    </StackPanel>
+                                                    <StackPanel Grid.Column="2" Orientation="Horizontal" VerticalAlignment="Center">
+                                                        <Button Content="Marcar primario" Style="{StaticResource BtnLink}" Margin="0,0,4,0"
+                                        Click="BtnMarcarPrimario_Click" Tag="{Binding Id}"/>
+                                                        <Button Content="✕" Padding="6,4" FontSize="11" Foreground="#B91C1C"
+                                        Background="Transparent" BorderThickness="0"
+                                        Click="BtnEliminarCatalogo_Click" Tag="{Binding Id}"/>
+                                                    </StackPanel>
+                                                </Grid>
+                                            </Border>
+                                        </DataTemplate>
+                                    </ItemsControl.ItemTemplate>
+                                </ItemsControl>
+                            </StackPanel>
+                        </Border>
+
+                        <!-- ─── CARD 2 — Regles de mesurament ─────────────────────── -->
+                        <TextBlock Text="Reglas de medición" FontSize="13" FontWeight="SemiBold"
+           Foreground="{StaticResource TextPrimary}" Margin="0,0,0,8"/>
+
+                        <ItemsControl ItemsSource="{Binding GruposReglas}">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <Expander IsExpanded="True" Margin="0,0,0,6" Header="{Binding NombreCategoria}">
+                                        <StackPanel>
+                                            <DataGrid ItemsSource="{Binding Reglas}"
+                              AutoGenerateColumns="False"
+                              CanUserAddRows="False" CanUserDeleteRows="False"
+                              IsReadOnly="True" RowHeight="32" FontSize="11" Margin="0,4,0,0">
+                                                <DataGrid.Columns>
+                                                    <DataGridTextColumn Header="Nombre" Binding="{Binding Nombre}" Width="200"/>
+                                                    <DataGridTextColumn Header="Subfiltro" Binding="{Binding SubFiltro.Descripcion}" Width="140"/>
+                                                    <DataGridTextColumn Header="Criterio" Binding="{Binding Criterio.Descripcion}" Width="110"/>
+                                                    <DataGridTextColumn Header="Partida" Binding="{Binding PartidaCodigo}" Width="*"/>
+                                                    <DataGridTemplateColumn Header="" Width="60">
+                                                        <DataGridTemplateColumn.CellTemplate>
+                                                            <DataTemplate>
+                                                                <StackPanel Orientation="Horizontal">
+                                                                    <Button Content="✎" Width="22" Height="22" Margin="2,0"
+                                                    Click="BtnEditarRegla_Click" Tag="{Binding Id}"
+                                                    Background="Transparent" BorderThickness="0"/>
+                                                                    <Button Content="✕" Width="22" Height="22" Margin="2,0"
+                                                    Foreground="#B91C1C"
+                                                    Click="BtnEliminarRegla_Click" Tag="{Binding Id}"
+                                                    Background="Transparent" BorderThickness="0"/>
+                                                                </StackPanel>
+                                                            </DataTemplate>
+                                                        </DataGridTemplateColumn.CellTemplate>
+                                                    </DataGridTemplateColumn>
+                                                </DataGrid.Columns>
+                                            </DataGrid>
+                                            <Button Content="+ Añadir regla a esta categoría" Style="{StaticResource BtnLink}"
+                            Margin="0,8,0,0" HorizontalAlignment="Left"
+                            Click="BtnAnadirRegla_Click" Tag="{Binding Categoria}"/>
+                                        </StackPanel>
+                                    </Expander>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+
+                        <!-- ─── CARD 3 — Pie ───────────────────────────────────────── -->
+                        <Border Background="{DynamicResource E3g.Brush.SurfaceSubtle}" CornerRadius="10" Padding="14,12" Margin="0,12,0,0">
+                            <Button Content="Aplicar reglas sugeridas de saneamiento" Style="{StaticResource BtnGhost}"
+            HorizontalAlignment="Right"
+            Click="BtnAplicarSugeridas_Click"/>
+                        </Border>
+                    </StackPanel>
+				</Border>
+				
+                <!-- ─── SANEAMENT ─── -->
+                <Border x:Name="SecSaneamiento" Style="{StaticResource NeuCard}" Visibility="Collapsed">
+                    <StackPanel>
+                        <!-- Capçalera amb accent de color -->
+                        <StackPanel Orientation="Horizontal" Margin="0,0,0,14">
+                            <Border Width="4" CornerRadius="2" Background="{DynamicResource E3g.Brush.Primary}" Margin="0,0,10,0"/>
+                            <TextBlock Text="Saneamiento HS5" FontSize="15" FontWeight="SemiBold"
+                                       Foreground="{StaticResource TextPrimary}" VerticalAlignment="Center"/>
+                        </StackPanel>
+
+                        <!-- Bajants -->
+                        <TextBlock Text="BAJANTES" FontSize="9" FontWeight="SemiBold"
+                                   Foreground="{StaticResource TextMuted}" Margin="0,0,0,8"/>
+
+                        <Grid Margin="0,0,0,10">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <StackPanel>
+                                <TextBlock Text="Medir bajantes residuales" FontSize="12" FontWeight="SemiBold"
+                                           Foreground="{StaticResource TextPrimary}"/>
+                                <TextBox x:Name="TxtSistemaBr" Style="{StaticResource NeuTextBox}"
+                                         Text="Bajante residual" Width="160" HorizontalAlignment="Left"
+                                         Margin="0,4,0,0" ToolTip="Nombre exacto del sistema MEP en Revit"/>
+                            </StackPanel>
+                            <CheckBox x:Name="ChkMedirBr" Grid.Column="1"
+                                      Style="{StaticResource ToggleStyle}" IsChecked="True"
+                                      VerticalAlignment="Center"/>
+                        </Grid>
+                        <Rectangle Height="1" Fill="{DynamicResource E3g.Brush.Background}" Margin="0,0,0,10"/>
+
+                        <Grid Margin="0,0,0,10">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <StackPanel>
+                                <TextBlock Text="Medir bajantes pluviales" FontSize="12" FontWeight="SemiBold"
+                                           Foreground="{StaticResource TextPrimary}"/>
+                                <TextBox x:Name="TxtSistemaBp" Style="{StaticResource NeuTextBox}"
+                                         Text="Bajante pluvial" Width="160" HorizontalAlignment="Left"
+                                         Margin="0,4,0,0" ToolTip="Nombre exacto del sistema MEP en Revit"/>
+                            </StackPanel>
+                            <CheckBox x:Name="ChkMedirBp" Grid.Column="1"
+                                      Style="{StaticResource ToggleStyle}" IsChecked="True"
+                                      VerticalAlignment="Center"/>
+                        </Grid>
+                        <Rectangle Height="1" Fill="{DynamicResource E3g.Brush.Background}" Margin="0,0,0,10"/>
+
+                        <Grid Margin="0,0,0,16">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Text="Agrupar bajantes por planta" FontSize="12" FontWeight="SemiBold"
+                                       Foreground="{StaticResource TextPrimary}" VerticalAlignment="Center"/>
+                            <CheckBox x:Name="ChkSanAgruparNivel" Grid.Column="1"
+                                      Style="{StaticResource ToggleStyle}" IsChecked="True"
+                                      VerticalAlignment="Center"/>
+                        </Grid>
+
+                        <!-- Col·lectors -->
+                        <TextBlock Text="COLECTORES" FontSize="9" FontWeight="SemiBold"
+                                   Foreground="{StaticResource TextMuted}" Margin="0,0,0,8"/>
+
+
+                        <Grid Margin="0,0,0,10">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <StackPanel>
+                                <TextBlock Text="Medir colectores residuales" FontSize="12" FontWeight="SemiBold"
+                                           Foreground="{StaticResource TextPrimary}"/>
+                                <TextBox x:Name="TxtSistemaColRes" Style="{StaticResource NeuTextBox}"
+                                         Text="Colector residual" Width="160" HorizontalAlignment="Left"
+                                         Margin="0,4,0,0" ToolTip="Nombre exacto del sistema MEP en Revit"/>
+                            </StackPanel>
+                            <CheckBox x:Name="ChkMedirColRes" Grid.Column="1"
+                                      Style="{StaticResource ToggleStyle}" IsChecked="True"
+                                      VerticalAlignment="Center"/>
+                        </Grid>
+                        <Rectangle Height="1" Fill="{DynamicResource E3g.Brush.Background}" Margin="0,0,0,10"/>
+
+                        <Grid Margin="0,0,0,10">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <StackPanel>
+                                <TextBlock Text="Medir colectores pluviales" FontSize="12" FontWeight="SemiBold"
+                                           Foreground="{StaticResource TextPrimary}"/>
+                                <TextBox x:Name="TxtSistemaColPlu" Style="{StaticResource NeuTextBox}"
+                                         Text="Colector pluvial" Width="160" HorizontalAlignment="Left"
+                                         Margin="0,4,0,0" ToolTip="Nombre exacto del sistema MEP en Revit"/>
+                            </StackPanel>
+                            <CheckBox x:Name="ChkMedirColPlu" Grid.Column="1"
+                                      Style="{StaticResource ToggleStyle}" IsChecked="True"
+                                      VerticalAlignment="Center"/>
+                        </Grid>
+                        <Rectangle Height="1" Fill="{DynamicResource E3g.Brush.Background}" Margin="0,0,0,10"/>
+
+                        <Grid Margin="0,0,0,10">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <StackPanel>
+                                <TextBlock Text="Pendiente mínima de colectores (%)" FontSize="12" FontWeight="SemiBold"
+                                           Foreground="{StaticResource TextPrimary}"/>
+                                <TextBlock Text="Valor CTE HS5 por defecto: 2 %"
+                                           FontSize="11" Foreground="{StaticResource TextSecondary}" Margin="0,2,0,0"/>
+                            </StackPanel>
+                            <TextBox x:Name="TxtPendienteMinima" Grid.Column="1"
+                                     Style="{StaticResource NeuTextBox}" Text="2.0" Width="70"
+                                     VerticalAlignment="Center"/>
+                        </Grid>
+                        <Rectangle Height="1" Fill="{DynamicResource E3g.Brush.Background}" Margin="0,0,0,10"/>
+
+                        <Grid Margin="0,0,0,10">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Text="Validar la pendiente al analizar" FontSize="12" FontWeight="SemiBold"
+                                       Foreground="{StaticResource TextPrimary}" VerticalAlignment="Center"/>
+                            <CheckBox x:Name="ChkSanValidarPendiente" Grid.Column="1"
+                                      Style="{StaticResource ToggleStyle}" IsChecked="True"
+                                      VerticalAlignment="Center"/>
+                        </Grid>
+                        <Rectangle Height="1" Fill="{DynamicResource E3g.Brush.Background}" Margin="0,0,0,10"/>
+
+                        <Grid Margin="0,0,0,16">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Text="Agrupar colectores por diámetro" FontSize="12" FontWeight="SemiBold"
+                                       Foreground="{StaticResource TextPrimary}" VerticalAlignment="Center"/>
+                            <CheckBox x:Name="ChkSanAgruparDiametro" Grid.Column="1"
+                                      Style="{StaticResource ToggleStyle}" IsChecked="True"
+                                      VerticalAlignment="Center"/>
+                        </Grid>
+
+                        <!-- Categories -->
+                        <TextBlock Text="CATEGORÍAS ANALIZADAS" FontSize="9" FontWeight="SemiBold"
+                                   Foreground="{StaticResource TextMuted}" Margin="0,0,0,8"/>
+
+                        <Grid Margin="0,0,0,10">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <StackPanel>
+                                <TextBlock Text="Tuberías de saneamiento" FontSize="12" FontWeight="SemiBold"
+                                           Foreground="{StaticResource TextPrimary}"/>
+                                <TextBlock Text="OST_PipeCurves" FontSize="10" FontFamily="Consolas"
+                                           Foreground="{StaticResource TextMuted}"/>
+                            </StackPanel>
+                            <CheckBox x:Name="ChkSanCatTuberias" Grid.Column="1"
+                                      Style="{StaticResource ToggleStyle}" IsChecked="True"
+                                      VerticalAlignment="Center"/>
+                        </Grid>
+                        <Rectangle Height="1" Fill="{DynamicResource E3g.Brush.Background}" Margin="0,0,0,10"/>
+
+                        <Grid Margin="0,0,0,10">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <StackPanel>
+                                <TextBlock Text="Uniones de saneamiento" FontSize="12" FontWeight="SemiBold"
+                                           Foreground="{StaticResource TextPrimary}"/>
+                                <TextBlock Text="OST_PipeFitting" FontSize="10" FontFamily="Consolas"
+                                           Foreground="{StaticResource TextMuted}"/>
+                            </StackPanel>
+                            <CheckBox x:Name="ChkSanCatUniones" Grid.Column="1"
+                                      Style="{StaticResource ToggleStyle}" IsChecked="True"
+                                      VerticalAlignment="Center"/>
+                        </Grid>
+                        <Rectangle Height="1" Fill="{DynamicResource E3g.Brush.Background}" Margin="0,0,0,10"/>
+
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <StackPanel>
+                                <TextBlock Text="Arquetas y registros" FontSize="12" FontWeight="SemiBold"
+                                           Foreground="{StaticResource TextPrimary}"/>
+                                <TextBlock Text="OST_PlumbingFixtures" FontSize="10" FontFamily="Consolas"
+                                           Foreground="{StaticResource TextMuted}"/>
+                            </StackPanel>
+                            <CheckBox x:Name="ChkSanCatArquetas" Grid.Column="1"
+                                      Style="{StaticResource ToggleStyle}" IsChecked="True"
+                                      VerticalAlignment="Center"/>
+                        </Grid>
+                    </StackPanel>
+                </Border>
+
+                <!-- ─── FONTANERIA ─── -->
+                <Border x:Name="SecFontaneria" Style="{StaticResource NeuCard}" Visibility="Collapsed">
+                    <StackPanel>
+                        <StackPanel Orientation="Horizontal" Margin="0,0,0,14">
+                            <Border Width="4" CornerRadius="2" Background="#1D9E75" Margin="0,0,10,0"/>
+                            <TextBlock Text="Fontanería" FontSize="15" FontWeight="SemiBold"
+                                       Foreground="{StaticResource TextPrimary}" VerticalAlignment="Center"/>
+                        </StackPanel>
+
+                        <!-- Sistemes -->
+                        <TextBlock Text="SISTEMAS A MEDIR" FontSize="9" FontWeight="SemiBold"
+                                   Foreground="{StaticResource TextMuted}"  Margin="0,0,0,8"/>
+
+                        <Grid Margin="0,0,0,10">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Text="Agua fría sanitaria (AFS)" FontSize="12" FontWeight="SemiBold"
+                                       Foreground="{StaticResource TextPrimary}" VerticalAlignment="Center"/>
+                            <CheckBox x:Name="ChkMedirAfs" Grid.Column="1"
+                                      Style="{StaticResource ToggleStyle}" IsChecked="True"
+                                      VerticalAlignment="Center"/>
+                        </Grid>
+                        <Rectangle Height="1" Fill="{DynamicResource E3g.Brush.Background}" Margin="0,0,0,10"/>
+
+                        <Grid Margin="0,0,0,10">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Text="Agua caliente sanitaria (ACS)" FontSize="12" FontWeight="SemiBold"
+                                       Foreground="{StaticResource TextPrimary}" VerticalAlignment="Center"/>
+                            <CheckBox x:Name="ChkMedirAcs" Grid.Column="1"
+                                      Style="{StaticResource ToggleStyle}" IsChecked="True"
+                                      VerticalAlignment="Center"/>
+                        </Grid>
+                        <Rectangle Height="1" Fill="{DynamicResource E3g.Brush.Background}" Margin="0,0,0,10"/>
+
+                        <Grid Margin="0,0,0,16">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Text="Agua de retorno (AR)" FontSize="12" FontWeight="SemiBold"
+                                       Foreground="{StaticResource TextPrimary}" VerticalAlignment="Center"/>
+                            <CheckBox x:Name="ChkMedirAr" Grid.Column="1"
+                                      Style="{StaticResource ToggleStyle}" IsChecked="True"
+                                      VerticalAlignment="Center"/>
+                        </Grid>
+
+                        <!-- Paràmetres Revit -->
+                        <TextBlock Text="PARÁMETROS REVIT" FontSize="9" FontWeight="SemiBold"
+                                   Foreground="{StaticResource TextMuted}"  Margin="0,0,0,8"/>
+
+                        <Grid Margin="0,0,0,10">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <StackPanel>
+                                <TextBlock Text="Parámetro de longitud" FontSize="12" FontWeight="SemiBold"
+                                           Foreground="{StaticResource TextPrimary}"/>
+                                <TextBlock Text="Nombre exacto del parámetro en Revit"
+                                           FontSize="11" Foreground="{StaticResource TextSecondary}" Margin="0,2,0,0"/>
+                            </StackPanel>
+                            <TextBox x:Name="TxtParamLongitudFont" Grid.Column="1"
+                                     Style="{StaticResource NeuTextBox}" Text="Longitud" Width="140"
+                                     VerticalAlignment="Center"/>
+                        </Grid>
+                        <Rectangle Height="1" Fill="{DynamicResource E3g.Brush.Background}" Margin="0,0,0,10"/>
+
+                        <Grid Margin="0,0,0,10">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <StackPanel>
+                                <TextBlock Text="Parámetro de sistema" FontSize="12" FontWeight="SemiBold"
+                                           Foreground="{StaticResource TextPrimary}"/>
+                                <TextBlock Text="Identifica AFS / ACS / AR en cada tramo"
+                                           FontSize="11" Foreground="{StaticResource TextSecondary}" Margin="0,2,0,0"/>
+                            </StackPanel>
+                            <TextBox x:Name="TxtParamSistemaFont" Grid.Column="1"
+                                     Style="{StaticResource NeuTextBox}" Text="Nombre del sistema" Width="140"
+                                     VerticalAlignment="Center"/>
+                        </Grid>
+                        <Rectangle Height="1" Fill="{DynamicResource E3g.Brush.Background}" Margin="0,0,0,10"/>
+
+                        <Grid Margin="0,0,0,10">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Text="Parámetro de diámetro" FontSize="12" FontWeight="SemiBold"
+                                       Foreground="{StaticResource TextPrimary}" VerticalAlignment="Center"/>
+                            <TextBox x:Name="TxtParamDiametroFont" Grid.Column="1"
+                                     Style="{StaticResource NeuTextBox}" Text="Diámetro" Width="140"
+                                     VerticalAlignment="Center"/>
+                        </Grid>
+                        <Rectangle Height="1" Fill="{DynamicResource E3g.Brush.Background}" Margin="0,0,0,10"/>
+
+                        <Grid Margin="0,0,0,16">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Text="Parámetro de material" FontSize="12" FontWeight="SemiBold"
+                                       Foreground="{StaticResource TextPrimary}" VerticalAlignment="Center"/>
+                            <TextBox x:Name="TxtParamMaterial" Grid.Column="1"
+                                     Style="{StaticResource NeuTextBox}" Text="Material" Width="140"
+                                     VerticalAlignment="Center"/>
+                        </Grid>
+
+                        <!-- Famílies -->
+                        <TextBlock Text="FAMILIAS E3G" FontSize="9" FontWeight="SemiBold"
+                                   Foreground="{StaticResource TextMuted}"  Margin="0,0,0,8"/>
+
+                        <Grid Margin="0,0,0,10">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <StackPanel>
+                                <TextBlock Text="Familia AFS" FontSize="12" FontWeight="SemiBold"
+                                           Foreground="{StaticResource TextPrimary}"/>
+                                <TextBlock Text="Nombre exacto (mayúsculas incluidas)"
+                                           FontSize="11" Foreground="{StaticResource TextSecondary}" Margin="0,2,0,0"/>
+                            </StackPanel>
+                            <TextBox x:Name="TxtFamiliaAfs" Grid.Column="1"
+                                     Style="{StaticResource NeuTextBox}" Text="MC_E3G_PEX" Width="160"
+                                     VerticalAlignment="Center"/>
+                        </Grid>
+                        <Rectangle Height="1" Fill="{DynamicResource E3g.Brush.Background}" Margin="0,0,0,10"/>
+
+                        <Grid Margin="0,0,0,16">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <StackPanel>
+                                <TextBlock Text="Familia ACS" FontSize="12" FontWeight="SemiBold"
+                                           Foreground="{StaticResource TextPrimary}"/>
+                                <TextBlock Text="Nombre exacto (mayúsculas incluidas)"
+                                           FontSize="11" Foreground="{StaticResource TextSecondary}" Margin="0,2,0,0"/>
+                            </StackPanel>
+                            <TextBox x:Name="TxtFamiliaAcs" Grid.Column="1"
+                                     Style="{StaticResource NeuTextBox}" Text="MC_E3G_PPR_FIBER BLUE" Width="160"
+                                     VerticalAlignment="Center"/>
+                        </Grid>
+
+                        <!-- Opcions -->
+                        <TextBlock Text="OPCIONES DE MEDICIÓN" FontSize="9" FontWeight="SemiBold"
+                                   Foreground="{StaticResource TextMuted}"  Margin="0,0,0,8"/>
+
+                        <Grid Margin="0,0,0,10">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Text="Agrupar por diámetro" FontSize="12" FontWeight="SemiBold"
+                                       Foreground="{StaticResource TextPrimary}" VerticalAlignment="Center"/>
+                            <CheckBox x:Name="ChkFontAgruparDiametro" Grid.Column="1"
+                                      Style="{StaticResource ToggleStyle}" IsChecked="True"
+                                      VerticalAlignment="Center"/>
+                        </Grid>
+                        <Rectangle Height="1" Fill="{DynamicResource E3g.Brush.Background}" Margin="0,0,0,10"/>
+
+                        <Grid Margin="0,0,0,10">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Text="Incluir montantes" FontSize="12" FontWeight="SemiBold"
+                                       Foreground="{StaticResource TextPrimary}" VerticalAlignment="Center"/>
+                            <CheckBox x:Name="ChkFontMontantes" Grid.Column="1"
+                                      Style="{StaticResource ToggleStyle}" IsChecked="True"
+                                      VerticalAlignment="Center"/>
+                        </Grid>
+                        <Rectangle Height="1" Fill="{DynamicResource E3g.Brush.Background}" Margin="0,0,0,10"/>
+
+                        <Grid Margin="0,0,0,10">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Text="Incluir accesorios" FontSize="12" FontWeight="SemiBold"
+                                       Foreground="{StaticResource TextPrimary}" VerticalAlignment="Center"/>
+                            <CheckBox x:Name="ChkFontAccesorios" Grid.Column="1"
+                                      Style="{StaticResource ToggleStyle}" IsChecked="True"
+                                      VerticalAlignment="Center"/>
+                        </Grid>
+                        <Rectangle Height="1" Fill="{DynamicResource E3g.Brush.Background}" Margin="0,0,0,10"/>
+
+                        <Grid Margin="0,0,0,10">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Text="Agrupar por planta" FontSize="12" FontWeight="SemiBold"
+                                       Foreground="{StaticResource TextPrimary}" VerticalAlignment="Center"/>
+                            <CheckBox x:Name="ChkFontAgruparNivel" Grid.Column="1"
+                                      Style="{StaticResource ToggleStyle}" IsChecked="False"
+                                      VerticalAlignment="Center"/>
+                        </Grid>
+                        <Rectangle Height="1" Fill="{DynamicResource E3g.Brush.Background}" Margin="0,0,0,10"/>
+
+                        <Grid Margin="0,0,0,10">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Text="Filtrar por la vista activa" FontSize="12" FontWeight="SemiBold"
+                                       Foreground="{StaticResource TextPrimary}" VerticalAlignment="Center"/>
+                            <CheckBox x:Name="ChkFontFiltrarVista" Grid.Column="1"
+                                      Style="{StaticResource ToggleStyle}" IsChecked="False"
+                                      VerticalAlignment="Center"/>
+                        </Grid>
+                        <Rectangle Height="1" Fill="{DynamicResource E3g.Brush.Background}" Margin="0,0,0,10"/>
+
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <StackPanel>
+                                <TextBlock Text="Avisar si la categoría no es OST_PipeCurves" FontSize="12" FontWeight="SemiBold"
+                                           Foreground="{StaticResource TextPrimary}"/>
+                                <TextBlock Text="Detecta elementos de fontanería fuera de la categoría estándar"
+                                           FontSize="11" Foreground="{StaticResource TextSecondary}" Margin="0,2,0,0"/>
+                            </StackPanel>
+                            <CheckBox x:Name="ChkFontAvisarCategoria" Grid.Column="1"
+                                      Style="{StaticResource ToggleStyle}" IsChecked="True"
+                                      VerticalAlignment="Center"/>
+                        </Grid>
+                    </StackPanel>
+                </Border>
+                <Border x:Name="SecProtocol" Style="{StaticResource NeuCard}" Visibility="Collapsed">
+                    <StackPanel>
+                        <TextBlock Text="Protocolo de clasificación — Saneamiento"
+                                   FontWeight="SemiBold" FontSize="15"
+                                   Foreground="{StaticResource TextPrimary}" Margin="0,0,0,4"/>
+                        <TextBlock Text="Define secciones de agrupación y las reglas de cada una. Las secciones y sus nombres se pueden editar, añadir o eliminar."
+                                   FontSize="11" Foreground="{StaticResource TextSecondary}"
+                                   TextWrapping="Wrap" Margin="0,0,0,12"/>
+
+                        <!-- Diagnóstico (colores según estado en ActualitzarDiagnosticProtocol) -->
+                        <Border x:Name="PnlDiagnostic" Background="{DynamicResource E3g.Brush.SurfaceSubtle}"
+                                CornerRadius="6" Padding="12,8" Margin="0,0,0,12">
+                            <TextBlock x:Name="TxtDiagnostic" FontSize="11"
+                                       Foreground="{DynamicResource E3g.Brush.TextMuted}" TextWrapping="Wrap"
+                                       Text="Abre un proyecto de Revit para ver el diagnóstico."/>
+                        </Border>
+
+                        <!-- Acciones -->
+                        <WrapPanel Margin="0,0,0,16">
+                            <Button Content="Autodetectar" Style="{StaticResource BtnGhost}"
+                                    Margin="0,0,6,6" Click="BtnAutoDetectar_Click"
+                                    ToolTip="Propone secciones y reglas a partir del modelo"/>
+                            <Button Content="Guardar protocolo" Style="{StaticResource BtnPrimary}"
+                                    Margin="0,0,6,6" Click="BtnDesarProtocol_Click"
+                                    ToolTip="Guarda el protocolo en el proyecto (.rvt)"/>
+                            <Button Content="Exportar .e3gprot" Style="{StaticResource BtnGhost}"
+                                    Margin="0,0,6,6" Click="BtnExportarProtocol_Click"/>
+                            <Button Content="Importar .e3gprot" Style="{StaticResource BtnGhost}"
+                                    Margin="0,0,6,6" Click="BtnImportarProtocol_Click"/>
+                        </WrapPanel>
+
+                        <!-- Secciones dinámicas -->
+                        <ItemsControl x:Name="LstSeccions"/>
+
+                        <!-- Añadir sección -->
+                        <Button Content="+ Añadir sección de agrupación" Style="{StaticResource BtnLink}"
+                                HorizontalAlignment="Left" Margin="0,4,0,12"
+                                Click="BtnAfegirSeccio_Click"/>
+
+                        <!-- Parámetros geométricos globales -->
+                        <Border Background="{DynamicResource E3g.Brush.SurfaceSubtle}" CornerRadius="8" Padding="14,12" Margin="0,4,0,0">
+                            <StackPanel>
+                                <TextBlock Text="Criterios geométricos globales"
+                                           FontWeight="SemiBold" FontSize="12"
+                                           Foreground="{StaticResource TextPrimary}" Margin="0,0,0,8"/>
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
+                                    <StackPanel Grid.Column="0" Margin="0,0,8,0">
+                                        <TextBlock Text="Longitud mínima de bajante (m)"
+                                                   FontSize="11" Foreground="{StaticResource TextSecondary}" Margin="0,0,0,4"/>
+                                        <TextBox x:Name="TxtBajantLongMin" Text="1.0" Style="{StaticResource NeuTextBox}"/>
+                                    </StackPanel>
+                                    <StackPanel Grid.Column="1">
+                                        <TextBlock Text="Tolerancia de elevación (m)"
+                                                   FontSize="11" Foreground="{StaticResource TextSecondary}" Margin="0,0,0,4"/>
+                                        <TextBox x:Name="TxtToleranciaElev" Text="0.5" Style="{StaticResource NeuTextBox}"/>
+                                    </StackPanel>
+                                </Grid>
+                            </StackPanel>
+                        </Border>
+                    </StackPanel>
+                </Border>
+
+            </StackPanel>
+        </ScrollViewer>
+    </Grid>
+</Page>

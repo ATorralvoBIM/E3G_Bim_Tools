@@ -1,0 +1,138 @@
+{
+  "SchemaVersion": 1,
+  "LastBC3Path": "C:\\Dev\\E3GBIMTools\\bc3\\2020 01 NIR BdPrecios ING Descompuestos.bc3",
+  "Rules": [
+    {
+      "Id": "3448b92b-a04b-45cb-ac9d-2d524ebc7092",
+      "Name": "PLUVIAL \u00D8110 A",
+      "ChapterCode": "00",
+      "ChapterName": "PRESUPUESTO",
+      "SubChapterCode": "01",
+      "SubChapterName": "SANEAMIENTO EDIFICIO A",
+      "CatalogSummary": "Tuber\u00EDa Niron Monocapa con PP-RCT RF: NIRON RED SDR 11/ Serie 5, D= 110 mm",
+      "CatalogUnit": "m",
+      "CatalogPrice": 67.57,
+      "CatalogDescription": "Suministro y montaje de tubo de polipropileno copol\u00EDmero random PP-RCT RF monocapa resistente al fuego, SDR 11 serie 5, de di\u00E1metro 110 mm y 10 mm de espesor. En cumplimiento con DB-SI del CTE con clasificaci\u00F3n de reacci\u00F3n al fuego Bs1d0 seg\u00FAn  Euroclase norma EN 13501.  y con la acreditaci\u00F3n DIT n\u00BA643/19 para rociadores autom\u00E1ticos y DIT n\u00BA644/19 para BIEs de EDUARDO TORROJA seg\u00FAn RIPCI aprobado por el RD 513/2017. Para uso en instalaciones de extinci\u00F3n de incendios por bocas de incendios equipadas (BIEs) o rociadores autom\u00E1ticos para Riesgo Ligero, Riesgo Ordinario 1, Riesgo Ordinario 2, Riesgo Ordinario 3, Riesgo Ordinario 4, seg\u00FAn CTE y Anexo A de la UNE 12845; y para Riesgo Bajo y Riesgo Medio seg\u00FAn RSCIEI. Para uso en instalaciones de extinci\u00F3n de incendios por bocas de incendios equipadas ?BIEs? o por rociadores. Incluida p/p de accesorios y material auxiliar para montaje y sujeci\u00F3n. Instalado con abrazaderas isof\u00F3nicas Niron de goma lisa. Presentaci\u00F3n en barra de 5,8m/6m color rojo, ref. 03TNIRRCTRED11011 de la serie Niron de ITALSAN.",
+      "CategoryValue": -2008044,
+      "CategoryDisplayName": "Tuber\u00EDas",
+      "Filters": [
+        {
+          "ParameterName": "Tipo de sistema",
+          "ParameterDisplayName": "Tipo de sistema",
+          "Operator": "Equals",
+          "Value": "10_20_Pluvials"
+        },
+        {
+          "ParameterName": "Di\u00E1metro",
+          "ParameterDisplayName": "Di\u00E1metro",
+          "Operator": "Equals",
+          "Value": "110 mm"
+        },
+        {
+          "ParameterName": "Comentarios",
+          "ParameterDisplayName": "Comentarios",
+          "Operator": "Equals",
+          "Value": "A"
+        }
+      ],
+      "BC3Code": "03TNIRRCTRED11011",
+      "Measurement": {
+        "BuiltIn": "Length",
+        "CustomParameterName": "",
+        "IsBuiltIn": true
+      },
+      "UnitFactor": 1,
+      "Priority": 100,
+      "Enabled": true,
+      "Notes": ""
+    },
+    {
+      "Id": "01915d38-2b77-49e6-99d2-4ad807f276cf",
+      "Name": "PLUVIAL \u00D8110 B",
+      "ChapterCode": "00",
+      "ChapterName": "PRESUPUESTO",
+      "SubChapterCode": "01",
+      "SubChapterName": "SANEAMIENTO EDIFICIO B",
+      "CatalogSummary": "Tuber\u00EDa Niron Monocapa con PP-RCT RF: NIRON RED SDR 11/ Serie 5, D= 110 mm",
+      "CatalogUnit": "m",
+      "CatalogPrice": 67.57,
+      "CatalogDescription": "Suministro y montaje de tubo de polipropileno copol\u00EDmero random PP-RCT RF monocapa resistente al fuego, SDR 11 serie 5, de di\u00E1metro 110 mm y 10 mm de espesor. En cumplimiento con DB-SI del CTE con clasificaci\u00F3n de reacci\u00F3n al fuego Bs1d0 seg\u00FAn  Euroclase norma EN 13501.  y con la acreditaci\u00F3n DIT n\u00BA643/19 para rociadores autom\u00E1ticos y DIT n\u00BA644/19 para BIEs de EDUARDO TORROJA seg\u00FAn RIPCI aprobado por el RD 513/2017. Para uso en instalaciones de extinci\u00F3n de incendios por bocas de incendios equipadas (BIEs) o rociadores autom\u00E1ticos para Riesgo Ligero, Riesgo Ordinario 1, Riesgo Ordinario 2, Riesgo Ordinario 3, Riesgo Ordinario 4, seg\u00FAn CTE y Anexo A de la UNE 12845; y para Riesgo Bajo y Riesgo Medio seg\u00FAn RSCIEI. Para uso en instalaciones de extinci\u00F3n de incendios por bocas de incendios equipadas ?BIEs? o por rociadores. Incluida p/p de accesorios y material auxiliar para montaje y sujeci\u00F3n. Instalado con abrazaderas isof\u00F3nicas Niron de goma lisa. Presentaci\u00F3n en barra de 5,8m/6m color rojo, ref. 03TNIRRCTRED11011 de la serie Niron de ITALSAN.",
+      "CategoryValue": -2008044,
+      "CategoryDisplayName": "Tuber\u00EDas",
+      "Filters": [
+        {
+          "ParameterName": "Tipo de sistema",
+          "ParameterDisplayName": "Tipo de sistema",
+          "Operator": "Equals",
+          "Value": "10_20_Pluvials"
+        },
+        {
+          "ParameterName": "Di\u00E1metro",
+          "ParameterDisplayName": "Di\u00E1metro",
+          "Operator": "Equals",
+          "Value": "110 mm"
+        },
+        {
+          "ParameterName": "Comentarios",
+          "ParameterDisplayName": "Comentarios",
+          "Operator": "Equals",
+          "Value": "B"
+        }
+      ],
+      "BC3Code": "03TNIRRCTRED11011",
+      "Measurement": {
+        "BuiltIn": "Length",
+        "CustomParameterName": "",
+        "IsBuiltIn": true
+      },
+      "UnitFactor": 1,
+      "Priority": 100,
+      "Enabled": true,
+      "Notes": ""
+    },
+    {
+      "Id": "1ca75753-6add-4c9f-9870-59f13a280d7b",
+      "Name": "BAJANTE PLUVIAL \u00D8110",
+      "ChapterCode": "00",
+      "ChapterName": "PRESUPUESTO",
+      "SubChapterCode": "",
+      "SubChapterName": "",
+      "CatalogSummary": "Tuber\u00EDa Niron Monocapa con PP-RCT RF: NIRON RED SDR 11/ Serie 5, D= 110 mm",
+      "CatalogUnit": "m",
+      "CatalogPrice": 67.57,
+      "CatalogDescription": "Suministro y montaje de tubo de polipropileno copol\u00EDmero random PP-RCT RF monocapa resistente al fuego, SDR 11 serie 5, de di\u00E1metro 110 mm y 10 mm de espesor. En cumplimiento con DB-SI del CTE con clasificaci\u00F3n de reacci\u00F3n al fuego Bs1d0 seg\u00FAn  Euroclase norma EN 13501.  y con la acreditaci\u00F3n DIT n\u00BA643/19 para rociadores autom\u00E1ticos y DIT n\u00BA644/19 para BIEs de EDUARDO TORROJA seg\u00FAn RIPCI aprobado por el RD 513/2017. Para uso en instalaciones de extinci\u00F3n de incendios por bocas de incendios equipadas (BIEs) o rociadores autom\u00E1ticos para Riesgo Ligero, Riesgo Ordinario 1, Riesgo Ordinario 2, Riesgo Ordinario 3, Riesgo Ordinario 4, seg\u00FAn CTE y Anexo A de la UNE 12845; y para Riesgo Bajo y Riesgo Medio seg\u00FAn RSCIEI. Para uso en instalaciones de extinci\u00F3n de incendios por bocas de incendios equipadas ?BIEs? o por rociadores. Incluida p/p de accesorios y material auxiliar para montaje y sujeci\u00F3n. Instalado con abrazaderas isof\u00F3nicas Niron de goma lisa. Presentaci\u00F3n en barra de 5,8m/6m color rojo, ref. 03TNIRRCTRED11011 de la serie Niron de ITALSAN.",
+      "CategoryValue": -2008044,
+      "CategoryDisplayName": "Tuber\u00EDas",
+      "Filters": [
+        {
+          "ParameterName": "Tipo de sistema",
+          "ParameterDisplayName": "Tipo de sistema",
+          "Operator": "Equals",
+          "Value": "10_20_Pluvials"
+        },
+        {
+          "ParameterName": "Di\u00E1metro",
+          "ParameterDisplayName": "Di\u00E1metro",
+          "Operator": "Equals",
+          "Value": "110 mm"
+        },
+        {
+          "ParameterName": "APP_BAJANTE",
+          "ParameterDisplayName": "APP_BAJANTE",
+          "Operator": "Equals",
+          "Value": "1"
+        }
+      ],
+      "BC3Code": "03TNIRRCTRED11011",
+      "Measurement": {
+        "BuiltIn": "Length",
+        "CustomParameterName": "",
+        "IsBuiltIn": true
+      },
+      "UnitFactor": 1,
+      "Priority": 100,
+      "Enabled": true,
+      "Notes": ""
+    }
+  ]
+}

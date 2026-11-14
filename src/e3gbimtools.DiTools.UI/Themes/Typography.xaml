@@ -1,0 +1,23 @@
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:sys="clr-namespace:System;assembly=mscorlib">
+
+    <!-- ============================================================
+         Tipografia corporativa e3g — reskin Fluent Light
+         Inter EMBEBIDA (no depende de instalacion local). Pack URI
+         apunta a las .ttf con build action Resource en este ensamblado.
+         Fallback a Segoe UI/Arial si el recurso fallara.
+         ============================================================ -->
+
+    <FontFamily x:Key="E3g.Font.Family">pack://application:,,,/e3gbimtools.DiTools.UI;component/Fonts/#Inter, Segoe UI, Arial</FontFamily>
+    <FontFamily x:Key="E3g.Font.Mono">Consolas, Cascadia Mono, monospace</FontFamily>
+
+    <sys:Double x:Key="E3g.Font.Size.Small">11</sys:Double>
+    <sys:Double x:Key="E3g.Font.Size.Body">13</sys:Double>
+    <sys:Double x:Key="E3g.Font.Size.H3">16</sys:Double>
+    <sys:Double x:Key="E3g.Font.Size.H2">20</sys:Double>
+    <sys:Double x:Key="E3g.Font.Size.H1">26</sys:Double>
+    <sys:Double x:Key="E3g.Font.Size.Brand">18</sys:Double>
+    <sys:Double x:Key="E3g.Font.Size.BrandSub">12</sys:Double>
+
+</ResourceDictionary>

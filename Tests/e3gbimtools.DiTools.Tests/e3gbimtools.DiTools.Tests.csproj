@@ -1,0 +1,53 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!-- Proyecto de pruebas automaticas.
+       Sprint 0: vacio, solo guarda sitio en la solucion.
+       Sprint 4 (ViewManager): activamos xUnit + FluentAssertions + Moq y
+       añadimos los primeros tests sobre los servicios de Core. -->
+
+  <PropertyGroup>
+    <AssemblyName>e3gbimtools.DiTools.Tests</AssemblyName>
+    <RootNamespace>E3G.BimTools.DiTools.Tests</RootNamespace>
+    <TargetFramework>net8.0-windows</TargetFramework>
+    <IsPackable>false</IsPackable>
+    <PlatformTarget>x64</PlatformTarget>
+    <Nullable>enable</Nullable>
+    <LangVersion>latest</LangVersion>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\e3gbimtools.DiTools.Core\e3gbimtools.DiTools.Core.csproj" />
+    <!-- Sprint A: tests del MappingRuleValidator. -->
+    <ProjectReference Include="..\..\src\e3gbimtools.RevitBC3\e3gbimtools.RevitBC3.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.NET.Test.Sdk"        Version="17.10.0" />
+    <PackageReference Include="xunit"                         Version="2.9.0" />
+    <PackageReference Include="xunit.runner.visualstudio"     Version="2.8.2">
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+    <PackageReference Include="FluentAssertions"              Version="6.12.0" />
+    <PackageReference Include="Moq"                           Version="4.20.70" />
+    <!-- ClosedXML necesario para ExcelTableReader en los tests de TableGen (Sprint 8) -->
+    <PackageReference Include="ClosedXML"                     Version="0.102.3" />
+  </ItemGroup>
+
+  <!-- Tablas Excel de muestra para los tests de TableGen -->
+  <ItemGroup>
+    <Content Include="TableGen\SampleData\*.xlsx">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+  <!-- Referencia directa a la RevitAPI: los tests pueden necesitar tipos como
+       ElementId; no hacemos shim porque Moq lo soporta nativamente. -->
+  <ItemGroup>
+    <Reference Include="RevitAPI" Condition="Exists('$(RevitInstallDir)RevitAPI.dll')">
+      <HintPath>$(RevitInstallDir)RevitAPI.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+  </ItemGroup>
+
+</Project>

@@ -1,0 +1,12 @@
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <!-- Diccionario maestro: cargalo en cualquier Window (o mejor, en App)
+         para tener disponible todos los recursos del tema e3g. -->
+    <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="pack://application:,,,/e3gbimtools.DiTools.UI;component/Themes/Colors.xaml" />
+        <ResourceDictionary Source="pack://application:,,,/e3gbimtools.DiTools.UI;component/Themes/Typography.xaml" />
+        <ResourceDictionary Source="pack://application:,,,/e3gbimtools.DiTools.UI;component/Themes/Controls.xaml" />
+    </ResourceDictionary.MergedDictionaries>
+
+</ResourceDictionary>

@@ -1,0 +1,154 @@
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <!-- ============================================================
+         Paleta e3g — "Fluent Light" (reskin 2026)
+         Mismas claves que la paleta anterior (Primary/Secondary/...)
+         para no romper bindings. Solo cambian los VALORES.
+         Tokens nuevos al final: superficies/bordes sutiles y
+         estados con fondo (Success/Warning/Error Bg + Text).
+         Fuente de verdad del mapeo: assets/ui-kit/RESKIN_MAPPING.md
+         ============================================================ -->
+
+    <!-- Acentos principales -->
+    <Color x:Key="E3g.Color.Primary">#0F6CBD</Color>          <!-- Marca (Fluent brand) -->
+    <Color x:Key="E3g.Color.Secondary">#107C41</Color>        <!-- Verde accion -->
+    <Color x:Key="E3g.Color.Tertiary">#616161</Color>         <!-- Neutros -->
+    <Color x:Key="E3g.Color.Accent">#2B88D8</Color>           <!-- Acento azul -->
+
+    <!-- Banda de marca (degradado de cabecera) -->
+    <Color x:Key="E3g.Color.BrandStart">#0F6CBD</Color>
+    <Color x:Key="E3g.Color.BrandEnd">#2B88D8</Color>
+    <Color x:Key="E3g.Color.OnBrand">#FFFFFF</Color>
+    <Color x:Key="E3g.Color.OnBrandMuted">#D6E8FA</Color>
+
+    <!-- Acentos por modulo (chips / iconos) -->
+    <Color x:Key="E3g.Color.Module.Bc3">#0F6E56</Color>
+    <Color x:Key="E3g.Color.Module.Bc3Bg">#E1F5EE</Color>
+    <Color x:Key="E3g.Color.Module.Filter">#185FA5</Color>
+    <Color x:Key="E3g.Color.Module.FilterBg">#E6F1FB</Color>
+    <Color x:Key="E3g.Color.Module.Param">#854F0B</Color>
+    <Color x:Key="E3g.Color.Module.ParamBg">#FAEEDA</Color>
+    <Color x:Key="E3g.Color.Module.Sheet">#3C3489</Color>
+    <Color x:Key="E3g.Color.Module.SheetBg">#EEEDFE</Color>
+
+    <!-- Fondos y superficies — tono "subido" (Fluent Light, menos palido) -->
+    <Color x:Key="E3g.Color.Background">#EFEDEA</Color>       <!-- Body -->
+    <Color x:Key="E3g.Color.TitleBar">#DFDCD7</Color>         <!-- Barra de titulo -->
+    <Color x:Key="E3g.Color.Surface">#E6E3DF</Color>          <!-- Surface / Header -->
+    <Color x:Key="E3g.Color.SurfaceAlt">#E0DCD6</Color>
+    <Color x:Key="E3g.Color.Card">#F6F4F1</Color>            <!-- Tarjetas (mas claro que body) -->
+    <Color x:Key="E3g.Color.Border">#CDC9C4</Color>
+    <Color x:Key="E3g.Color.BorderStrong">#BDB8B2</Color>
+
+    <!-- Texto -->
+    <Color x:Key="E3g.Color.Text">#201F1E</Color>
+    <Color x:Key="E3g.Color.TextMuted">#605E5C</Color>
+    <Color x:Key="E3g.Color.TextSoft">#A19F9D</Color>
+    <Color x:Key="E3g.Color.TextOnPrimary">#FFFFFF</Color>
+
+    <!-- Estados -->
+    <Color x:Key="E3g.Color.Success">#107C41</Color>
+    <Color x:Key="E3g.Color.Warning">#FFB900</Color>
+    <Color x:Key="E3g.Color.Error">#D13438</Color>
+
+    <!-- ============================================================
+         Tokens NUEVOS (gaps del hex hardcodeado migrado)
+         ============================================================ -->
+    <Color x:Key="E3g.Color.SurfaceSubtle">#F1EFEC</Color>
+    <Color x:Key="E3g.Color.BorderSubtle">#DDD9D4</Color>
+    <Color x:Key="E3g.Color.GridLine">#CDC9C4</Color>
+
+    <!-- ============================================================
+         Tokens de marca y estados de boton (chrome / toolbar reskin)
+         Azul (accion/acento) + gris (neutro). El verde Secondary se
+         conserva SOLO como semantico de exito real, nunca como acento.
+         ============================================================ -->
+    <Color x:Key="E3g.Color.BrandTint">#E6F1FB</Color>           <!-- Tinte azul suave -->
+    <Color x:Key="E3g.Color.PrimaryHover">#0E5FA6</Color>
+    <Color x:Key="E3g.Color.PrimaryPressed">#0B5394</Color>
+    <Color x:Key="E3g.Color.TintHover">#D2E4F7</Color>
+    <Color x:Key="E3g.Color.TintPressed">#BFD8F2</Color>
+    <Color x:Key="E3g.Color.GhostHover">#E0DCD6</Color>
+    <Color x:Key="E3g.Color.GhostPressed">#D2CDC6</Color>
+    <Color x:Key="E3g.Color.CaptionCloseHover">#D13438</Color>
+
+    <Color x:Key="E3g.Color.SuccessText">#0E5E31</Color>
+    <Color x:Key="E3g.Color.SuccessBg">#DFF6E5</Color>
+    <Color x:Key="E3g.Color.WarningText">#8A5A00</Color>
+    <Color x:Key="E3g.Color.WarningBg">#FFF4CE</Color>
+    <Color x:Key="E3g.Color.ErrorText">#A4262C</Color>
+    <Color x:Key="E3g.Color.ErrorBg">#FDE7E9</Color>
+
+    <!-- ============================================================
+         Brushes derivados
+         ============================================================ -->
+    <SolidColorBrush x:Key="E3g.Brush.Primary"       Color="{StaticResource E3g.Color.Primary}" />
+    <SolidColorBrush x:Key="E3g.Brush.Secondary"     Color="{StaticResource E3g.Color.Secondary}" />
+    <SolidColorBrush x:Key="E3g.Brush.Tertiary"      Color="{StaticResource E3g.Color.Tertiary}" />
+    <SolidColorBrush x:Key="E3g.Brush.Accent"        Color="{StaticResource E3g.Color.Accent}" />
+    <SolidColorBrush x:Key="E3g.Brush.Background"    Color="{StaticResource E3g.Color.Background}" />
+    <SolidColorBrush x:Key="E3g.Brush.TitleBar"      Color="{StaticResource E3g.Color.TitleBar}" />
+    <SolidColorBrush x:Key="E3g.Brush.Surface"       Color="{StaticResource E3g.Color.Surface}" />
+    <SolidColorBrush x:Key="E3g.Brush.SurfaceAlt"    Color="{StaticResource E3g.Color.SurfaceAlt}" />
+    <SolidColorBrush x:Key="E3g.Brush.Card"          Color="{StaticResource E3g.Color.Card}" />
+    <SolidColorBrush x:Key="E3g.Brush.Border"        Color="{StaticResource E3g.Color.Border}" />
+    <SolidColorBrush x:Key="E3g.Brush.BorderStrong"  Color="{StaticResource E3g.Color.BorderStrong}" />
+    <SolidColorBrush x:Key="E3g.Brush.Text"          Color="{StaticResource E3g.Color.Text}" />
+    <SolidColorBrush x:Key="E3g.Brush.TextMuted"     Color="{StaticResource E3g.Color.TextMuted}" />
+    <SolidColorBrush x:Key="E3g.Brush.TextSoft"      Color="{StaticResource E3g.Color.TextSoft}" />
+    <SolidColorBrush x:Key="E3g.Brush.TextOnPrimary" Color="{StaticResource E3g.Color.TextOnPrimary}" />
+    <SolidColorBrush x:Key="E3g.Brush.Success"       Color="{StaticResource E3g.Color.Success}" />
+    <SolidColorBrush x:Key="E3g.Brush.Warning"       Color="{StaticResource E3g.Color.Warning}" />
+    <SolidColorBrush x:Key="E3g.Brush.Error"         Color="{StaticResource E3g.Color.Error}" />
+
+    <!-- Marca -->
+    <SolidColorBrush x:Key="E3g.Brush.OnBrand"       Color="{StaticResource E3g.Color.OnBrand}" />
+    <SolidColorBrush x:Key="E3g.Brush.OnBrandMuted"  Color="{StaticResource E3g.Color.OnBrandMuted}" />
+
+    <!-- Banda de marca: degradado horizontal -->
+    <LinearGradientBrush x:Key="E3g.Brush.BrandBand" StartPoint="0,0" EndPoint="1,0">
+        <GradientStop Color="{StaticResource E3g.Color.BrandStart}" Offset="0" />
+        <GradientStop Color="{StaticResource E3g.Color.BrandEnd}" Offset="1" />
+    </LinearGradientBrush>
+
+    <!-- Acentos por modulo -->
+    <SolidColorBrush x:Key="E3g.Brush.Module.Bc3"      Color="{StaticResource E3g.Color.Module.Bc3}" />
+    <SolidColorBrush x:Key="E3g.Brush.Module.Bc3Bg"    Color="{StaticResource E3g.Color.Module.Bc3Bg}" />
+    <SolidColorBrush x:Key="E3g.Brush.Module.Filter"   Color="{StaticResource E3g.Color.Module.Filter}" />
+    <SolidColorBrush x:Key="E3g.Brush.Module.FilterBg" Color="{StaticResource E3g.Color.Module.FilterBg}" />
+    <SolidColorBrush x:Key="E3g.Brush.Module.Param"    Color="{StaticResource E3g.Color.Module.Param}" />
+    <SolidColorBrush x:Key="E3g.Brush.Module.ParamBg"  Color="{StaticResource E3g.Color.Module.ParamBg}" />
+    <SolidColorBrush x:Key="E3g.Brush.Module.Sheet"    Color="{StaticResource E3g.Color.Module.Sheet}" />
+    <SolidColorBrush x:Key="E3g.Brush.Module.SheetBg"  Color="{StaticResource E3g.Color.Module.SheetBg}" />
+
+    <!-- Tokens nuevos: brushes -->
+    <SolidColorBrush x:Key="E3g.Brush.SurfaceSubtle" Color="{StaticResource E3g.Color.SurfaceSubtle}" />
+    <SolidColorBrush x:Key="E3g.Brush.BorderSubtle"  Color="{StaticResource E3g.Color.BorderSubtle}" />
+    <SolidColorBrush x:Key="E3g.Brush.GridLine"      Color="{StaticResource E3g.Color.GridLine}" />
+    <SolidColorBrush x:Key="E3g.Brush.SuccessText"   Color="{StaticResource E3g.Color.SuccessText}" />
+    <SolidColorBrush x:Key="E3g.Brush.SuccessBg"     Color="{StaticResource E3g.Color.SuccessBg}" />
+    <SolidColorBrush x:Key="E3g.Brush.WarningText"   Color="{StaticResource E3g.Color.WarningText}" />
+    <SolidColorBrush x:Key="E3g.Brush.WarningBg"     Color="{StaticResource E3g.Color.WarningBg}" />
+    <SolidColorBrush x:Key="E3g.Brush.ErrorText"     Color="{StaticResource E3g.Color.ErrorText}" />
+    <SolidColorBrush x:Key="E3g.Brush.ErrorBg"       Color="{StaticResource E3g.Color.ErrorBg}" />
+
+    <!-- Tinte azul + estados de boton (chrome / toolbar reskin) -->
+    <SolidColorBrush x:Key="E3g.Brush.BrandTint"          Color="{StaticResource E3g.Color.BrandTint}" />
+    <SolidColorBrush x:Key="E3g.Brush.PrimaryHover"       Color="{StaticResource E3g.Color.PrimaryHover}" />
+    <SolidColorBrush x:Key="E3g.Brush.PrimaryPressed"     Color="{StaticResource E3g.Color.PrimaryPressed}" />
+    <SolidColorBrush x:Key="E3g.Brush.TintHover"          Color="{StaticResource E3g.Color.TintHover}" />
+    <SolidColorBrush x:Key="E3g.Brush.TintPressed"        Color="{StaticResource E3g.Color.TintPressed}" />
+    <SolidColorBrush x:Key="E3g.Brush.GhostHover"         Color="{StaticResource E3g.Color.GhostHover}" />
+    <SolidColorBrush x:Key="E3g.Brush.GhostPressed"       Color="{StaticResource E3g.Color.GhostPressed}" />
+    <SolidColorBrush x:Key="E3g.Brush.CaptionCloseHover"  Color="{StaticResource E3g.Color.CaptionCloseHover}" />
+
+    <!-- Linea de acento de marca: 1px que se desvanece en los bordes.
+         Usar como Background de un Border de 1px bajo la barra de titulo. -->
+    <LinearGradientBrush x:Key="E3g.Brush.BrandAccentLine" StartPoint="0,0" EndPoint="1,0">
+        <GradientStop Color="#000F6CBD" Offset="0" />
+        <GradientStop Color="#3D0F6CBD" Offset="0.5" />
+        <GradientStop Color="#002B88D8" Offset="1" />
+    </LinearGradientBrush>
+
+</ResourceDictionary>

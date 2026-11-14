@@ -1,0 +1,17 @@
+~V|e3gbimtools.RevitBC3|FIEBDC-3/2016|e3gbimtools|260520|ES|ANSI||0||||
+~C|##||Presupuesto e3gbimtools|0|260520|0|
+~C|02SAN##||(sin nombre)|0|260520|0|
+~C|ED15B871|m|Bajante PVC SN-4 D=110 mm, junta elastica, instal·lada amb abracaderes|18.45|260520|3|
+~C|ED15B873.001|m|Bajante PVC SN-4 D=125 mm, junta elastica, instal·lada amb abracaderes (FECALS)|24.8|260520|3|
+~C|ED15B873.002|m|Bajante PVC SN-4 D=125 mm, junta elastica, instal·lada amb abracaderes (GRISES)|24.8|260520|3|
+~C|ED15B873.003|m|Bajante PVC SN-4 D=125 mm, junta elastica, instal·lada amb abracaderes (PLUVIALS �125)|24.8|260520|3|
+~T|ED15B871|Tub de PVC sèrie SN-4 DN110. Junta elàstica. Abraçaderes isofòniques cada 1 m segons CTE DB-HS5. Pendent mínima 1%. Prova d'estanquitat.|
+~T|ED15B873.001|Tub de PVC sèrie SN-4 DN125. Junta elàstica. Pendents i abraçaderes segons CTE DB-HS5.|
+~T|ED15B873.002|Tub de PVC sèrie SN-4 DN125. Junta elàstica. Pendents i abraçaderes segons CTE DB-HS5.|
+~T|ED15B873.003|Tub de PVC sèrie SN-4 DN125. Junta elàstica. Pendents i abraçaderes segons CTE DB-HS5.|
+~D|##|02SAN##\1\1\|
+~D|02SAN##|ED15B871\1\1\ED15B873.001\1\1\ED15B873.002\1\1\ED15B873.003\1\1\|
+~M|##\02SAN##\ED15B871||Bajante PVC SN-4 D=110 mm, junta elastica, instal·lada amb abracaderes|5.5|
+~M|##\02SAN##\ED15B873.001||Bajante PVC SN-4 D=125 mm, junta elastica, instal·lada amb abracaderes (FECALS)|5.5|
+~M|##\02SAN##\ED15B873.002||Bajante PVC SN-4 D=125 mm, junta elastica, instal·lada amb abracaderes (GRISES)|6.3|
+~M|##\02SAN##\ED15B873.003||Bajante PVC SN-4 D=125 mm, junta elastica, instal·lada amb abracaderes (PLUVIALS �125)|2.8|

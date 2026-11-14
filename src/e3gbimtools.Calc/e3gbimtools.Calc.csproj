@@ -1,0 +1,48 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <AssemblyName>e3gbimtools.Calc</AssemblyName>
+    <RootNamespace>e3gbimtools.Calc</RootNamespace>
+    <TargetFramework>net8.0-windows</TargetFramework>
+    <PlatformTarget>x64</PlatformTarget>
+    <UseWPF>true</UseWPF>
+
+    <!-- El motor MEP migrado del monolito se escribio con Nullable e
+         ImplicitUsings deshabilitados.  Mantenemos ese contrato para
+         que la copia compile sin tocar el codigo de calculo. -->
+    <Nullable>disable</Nullable>
+    <ImplicitUsings>disable</ImplicitUsings>
+  </PropertyGroup>
+
+  <!-- Sprint Calc: este proyecto contiene el motor de calculo MEP
+       (Common, Hydraulics, Aeraulics, Analytics, Schematic, Filtering)
+       y la ventana CalcWindow. Se registra en el contenedor de DI del
+       Core (DiToolsCoreBuilder) y se invoca desde el ribbon de DiTools. -->
+
+  <ItemGroup>
+    <ProjectReference Include="..\e3gbimtools.DiTools.Core\e3gbimtools.DiTools.Core.csproj" />
+    <!-- Reskin Fluent Light: CalcWindow usa el control E3gTitleBar (chrome custom). -->
+    <ProjectReference Include="..\e3gbimtools.DiTools.UI\e3gbimtools.DiTools.UI.csproj" />
+  </ItemGroup>
+
+  <!-- Memoria de cálculo en DOCX (OpenXML SDK puro, sin nativos).
+       Se fija a la rama 2.x para NO chocar con ClosedXML (que exige <3.0.0
+       y se arrastra transitivamente por DiTools.Core); cargar 3.x rompería
+       ClosedXML en runtime. La API Wordprocessing usada es idéntica en 2.x. -->
+  <ItemGroup>
+    <PackageReference Include="DocumentFormat.OpenXml" Version="2.20.0" />
+  </ItemGroup>
+
+  <!-- Referencias directas a las DLLs locales de Revit 2025 -->
+  <ItemGroup>
+    <Reference Include="RevitAPI">
+      <HintPath>$(RevitInstallDir)RevitAPI.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="RevitAPIUI">
+      <HintPath>$(RevitInstallDir)RevitAPIUI.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+  </ItemGroup>
+
+</Project>

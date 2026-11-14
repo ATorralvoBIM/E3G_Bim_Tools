@@ -1,0 +1,321 @@
+<Window x:Class="E3G.BimTools.DiTools.UI.Views.ScheduleExcel.ScheduleExcelWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:shell="clr-namespace:System.Windows.Shell;assembly=PresentationFramework"
+        xmlns:e3gc="clr-namespace:E3G.BimTools.DiTools.UI.Controls"
+        xmlns:local="clr-namespace:E3G.BimTools.DiTools.UI.Views.ScheduleExcel"
+        Title="e3gbimtools — TableLink"
+        Width="1300" Height="800"
+        MinWidth="980" MinHeight="600"
+        WindowStartupLocation="CenterOwner"
+        ShowInTaskbar="False"
+        WindowStyle="None"
+        AllowsTransparency="True"
+        Background="Transparent"
+        SnapsToDevicePixels="True"
+        UseLayoutRounding="True">
+
+    <shell:WindowChrome.WindowChrome>
+        <shell:WindowChrome
+            CaptionHeight="44"
+            ResizeBorderThickness="8"
+            CornerRadius="0"
+            GlassFrameThickness="0"
+            UseAeroCaptionButtons="False" />
+    </shell:WindowChrome.WindowChrome>
+
+    <Window.Resources>
+        <Style TargetType="TextBlock" x:Key="SectionLabel">
+            <Setter Property="FontWeight" Value="SemiBold" />
+            <Setter Property="Margin" Value="0,10,0,4" />
+        </Style>
+        <Style TargetType="TextBlock" x:Key="Hint">
+            <Setter Property="Margin" Value="0,4,0,0" />
+            <Setter Property="FontStyle" Value="Italic" />
+            <Setter Property="TextWrapping" Value="Wrap" />
+            <Setter Property="Foreground" Value="{DynamicResource E3g.Brush.TextMuted}" />
+        </Style>
+        <Style x:Key="LegendChip" TargetType="Border">
+            <Setter Property="Width" Value="14" />
+            <Setter Property="Height" Value="14" />
+            <Setter Property="CornerRadius" Value="2" />
+            <Setter Property="BorderBrush" Value="#40000000" />
+            <Setter Property="BorderThickness" Value="1" />
+            <Setter Property="Margin" Value="12,0,5,0" />
+            <Setter Property="VerticalAlignment" Value="Center" />
+        </Style>
+        <Style x:Key="ChangeRowStyle" TargetType="DataGridRow">
+            <Setter Property="ToolTip" Value="{Binding Message}" />
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding StatusCode}" Value="Error">
+                    <Setter Property="Background" Value="#F4A6A6" />
+                </DataTrigger>
+                <DataTrigger Binding="{Binding StatusCode}" Value="Conflict">
+                    <Setter Property="Background" Value="#F4A6A6" />
+                </DataTrigger>
+                <DataTrigger Binding="{Binding StatusCode}" Value="Applied">
+                    <Setter Property="Background" Value="#C6EFCE" />
+                </DataTrigger>
+                <DataTrigger Binding="{Binding StatusCode}" Value="Failed">
+                    <Setter Property="Background" Value="#FFC7CE" />
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+    </Window.Resources>
+
+    <Border x:Name="ChromeRoot"
+            CornerRadius="10"
+            Background="{DynamicResource E3g.Brush.Background}"
+            BorderBrush="{DynamicResource E3g.Brush.Border}"
+            BorderThickness="1"
+            Margin="12">
+        <Border.Effect>
+            <DropShadowEffect Color="#000000" BlurRadius="18" ShadowDepth="0" Opacity="0.20" />
+        </Border.Effect>
+        <Border x:Name="ChromeClip" CornerRadius="{Binding CornerRadius, ElementName=ChromeRoot}">
+            <Border.OpacityMask>
+                <VisualBrush>
+                    <VisualBrush.Visual>
+                        <Border Background="White"
+                                CornerRadius="{Binding CornerRadius, ElementName=ChromeClip}"
+                                Width="{Binding ActualWidth, ElementName=ChromeClip}"
+                                Height="{Binding ActualHeight, ElementName=ChromeClip}" />
+                    </VisualBrush.Visual>
+                </VisualBrush>
+            </Border.OpacityMask>
+            <DockPanel LastChildFill="True">
+                <e3gc:E3gTitleBar x:Name="TitleBar"
+                                  DockPanel.Dock="Top"
+                                  Title="e3gbimtools"
+                                  Subtitle="TableLink"
+                                  ShowStatus="False"
+                                  ShowMinimize="False" />
+
+    <Grid Margin="16">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />   <!-- 0: carpeta del proyecto -->
+            <RowDefinition Height="*" />      <!-- 1: pestañas -->
+            <RowDefinition Height="Auto" />   <!-- 2: estado + progreso + cerrar -->
+        </Grid.RowDefinitions>
+
+        <!-- 0. Carpeta habitual del proyecto -->
+        <StackPanel x:Name="FolderPanel" Grid.Row="0">
+            <TextBlock Text="Carpeta de exportación del proyecto" Style="{StaticResource SectionLabel}" Margin="0,0,0,4" />
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+                <TextBox x:Name="FolderBox" Grid.Column="0" VerticalContentAlignment="Center"
+                         LostFocus="OnFolderEdited" />
+                <Button Grid.Column="1" Margin="8,0,0,0" Padding="14,4" Content="Examinar…" Click="OnBrowseFolderClick" />
+                <Button Grid.Column="2" Margin="8,0,0,0" Padding="14,4" Content="Abrir carpeta" Click="OnOpenFolderClick" />
+            </Grid>
+            <TextBlock x:Name="FolderHint" Style="{StaticResource Hint}" />
+        </StackPanel>
+
+        <!-- 1. Pestañas -->
+        <TabControl x:Name="Tabs" Grid.Row="1" Margin="0,12,0,0">
+
+            <!-- ===================== EXPORTAR ===================== -->
+            <TabItem Header="Exportar tablas">
+                <Grid Margin="12">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="360" />
+                        <ColumnDefinition Width="12" />
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="12" />
+                        <ColumnDefinition Width="250" />
+                    </Grid.ColumnDefinitions>
+
+                    <!-- Listado de tablas -->
+                    <Grid Grid.Column="0">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="*" />
+                            <RowDefinition Height="Auto" />
+                        </Grid.RowDefinitions>
+                        <Grid Grid.Row="0" Margin="0,0,0,6">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Text="Buscar:" VerticalAlignment="Center" Margin="0,0,8,0" />
+                            <TextBox x:Name="SearchBox" Grid.Column="1" VerticalContentAlignment="Center"
+                                     TextChanged="OnSearchChanged" />
+                        </Grid>
+                        <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="0,0,0,6">
+                            <Button Content="Marcar visibles" Padding="8,2" Click="OnCheckVisibleClick" />
+                            <Button Content="Ninguna" Padding="8,2" Margin="6,0,0,0" Click="OnUncheckAllClick" />
+                        </StackPanel>
+                        <DataGrid x:Name="SchedulesGrid" Grid.Row="2"
+                                  AutoGenerateColumns="False" CanUserAddRows="False" CanUserDeleteRows="False"
+                                  HeadersVisibility="Column" SelectionMode="Extended" GridLinesVisibility="Horizontal"
+                                  SelectionChanged="OnScheduleSelectionChanged"
+                                  MouseDoubleClick="OnScheduleDoubleClick">
+                            <DataGrid.Columns>
+                                <DataGridTemplateColumn Width="32">
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <CheckBox IsChecked="{Binding IsChecked, UpdateSourceTrigger=PropertyChanged}"
+                                                      HorizontalAlignment="Center" Click="OnScheduleChecked" />
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+                                <DataGridTextColumn Header="Tabla" Binding="{Binding Name}" Width="*" IsReadOnly="True" />
+                                <DataGridTextColumn Header="Categoría" Binding="{Binding Category}" Width="110" IsReadOnly="True" />
+                            </DataGrid.Columns>
+                        </DataGrid>
+                        <TextBlock x:Name="SelectionInfo" Grid.Row="3" Style="{StaticResource Hint}" />
+                    </Grid>
+
+                    <!-- Vista previa -->
+                    <Grid Grid.Column="2">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="*" />
+                        </Grid.RowDefinitions>
+                        <TextBlock x:Name="ExportPreviewTitle" Style="{StaticResource SectionLabel}" Margin="0,0,0,6"
+                                   Text="Vista previa" TextTrimming="CharacterEllipsis" />
+                        <local:SheetGridView x:Name="ExportPreview" Grid.Row="1" />
+                    </Grid>
+
+                    <!-- Opciones -->
+                    <ScrollViewer Grid.Column="4" VerticalScrollBarVisibility="Auto">
+                        <StackPanel>
+                            <TextBlock Text="Archivo" Style="{StaticResource SectionLabel}" Margin="0,0,0,4" />
+                            <TextBox x:Name="FileNameBox" VerticalContentAlignment="Center" />
+                            <TextBlock x:Name="FileNameHint" Style="{StaticResource Hint}" Text=".xlsx" />
+                            <CheckBox x:Name="DatePrefixCheck" Margin="0,10,0,0" Content="Prefijo de fecha (AAMMDD_)"
+                                      Click="OnFileOptionChanged" />
+                            <CheckBox x:Name="AskPathCheck" Margin="0,6,0,0" Content="Preguntar dónde guardar cada vez" />
+                            <CheckBox x:Name="OpenAfterCheck" Margin="0,6,0,0" Content="Abrir el Excel al terminar" />
+
+                            <CheckBox x:Name="PerElementCheck" Margin="0,16,0,0" Content="Una fila por elemento"
+                                      Click="OnFormatChanged" />
+                            <TextBlock Style="{StaticResource Hint}" Margin="20,2,0,0"
+                                       Text="Solo si necesitas dar valores distintos a elementos que en la tabla salen en la misma fila." />
+
+                            <Button x:Name="ExportButton" Margin="0,20,0,0" Padding="20,8" HorizontalAlignment="Stretch"
+                                    Content="Exportar" IsEnabled="False" Click="OnExportClick" />
+                        </StackPanel>
+                    </ScrollViewer>
+                </Grid>
+            </TabItem>
+
+            <!-- ===================== IMPORTAR ===================== -->
+            <TabItem Header="Importar datos">
+                <Grid Margin="12">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+
+                    <Grid Grid.Row="0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+                        <TextBox x:Name="ImportFileBox" IsReadOnly="True" VerticalContentAlignment="Center" />
+                        <Button Grid.Column="1" Margin="8,0,0,0" Padding="14,4" Content="Examinar…" Click="OnBrowseImportClick" />
+                        <Button x:Name="ReloadButton" Grid.Column="2" Margin="8,0,0,0" Padding="14,4" Content="Volver a leer"
+                                IsEnabled="False" Click="OnReloadClick"
+                                ToolTip="Vuelve a leer el Excel (después de guardarlo) y a compararlo con el modelo." />
+                    </Grid>
+                    <TextBlock x:Name="ImportInfo" Grid.Row="1" Style="{StaticResource Hint}" Margin="0,6,0,6"
+                               Text="Elige un Excel exportado con esta herramienta en el que hayas cambiado valores. Se compara con el modelo y se marcan en color los cambios antes de aplicarlos." />
+
+                    <!-- Barra de la vista: tabla / lista + leyenda -->
+                    <DockPanel Grid.Row="2" Margin="0,0,0,6" LastChildFill="False">
+                        <RadioButton x:Name="TableViewRadio" GroupName="ImpView" Content="Tabla" IsChecked="True"
+                                     VerticalAlignment="Center" Click="OnImportViewChanged" />
+                        <RadioButton x:Name="ListViewRadio" GroupName="ImpView" Content="Lista de cambios" Margin="12,0,0,0"
+                                     VerticalAlignment="Center" Click="OnImportViewChanged" />
+                        <TextBlock Text="Pestaña:" x:Name="SheetLabel" Margin="20,0,6,0" VerticalAlignment="Center" Visibility="Collapsed" />
+                        <ComboBox x:Name="SheetCombo" MinWidth="220" Visibility="Collapsed" DisplayMemberPath="ScheduleName"
+                                  SelectionChanged="OnSheetChanged" />
+                        <StackPanel DockPanel.Dock="Right" Orientation="Horizontal">
+                            <Border Style="{StaticResource LegendChip}" Background="#F9B49B" />
+                            <TextBlock Text="Cambio" VerticalAlignment="Center" />
+                            <Border Style="{StaticResource LegendChip}" Background="#E7E6E6" />
+                            <TextBlock Text="No se aplicará" VerticalAlignment="Center" />
+                            <Border Style="{StaticResource LegendChip}" Background="#F4A6A6" />
+                            <TextBlock Text="Error" VerticalAlignment="Center" />
+                            <Border Style="{StaticResource LegendChip}" Background="#C6EFCE" />
+                            <TextBlock Text="Aplicado" VerticalAlignment="Center" />
+                        </StackPanel>
+                    </DockPanel>
+
+                    <Grid Grid.Row="3">
+                        <local:SheetGridView x:Name="ImportPreview" />
+                        <DataGrid x:Name="ChangesGrid" Visibility="Collapsed"
+                                  AutoGenerateColumns="False" CanUserAddRows="False" CanUserDeleteRows="False"
+                                  HeadersVisibility="Column" GridLinesVisibility="Horizontal"
+                                  RowStyle="{StaticResource ChangeRowStyle}">
+                            <DataGrid.Columns>
+                                <DataGridTemplateColumn Width="32">
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <CheckBox IsChecked="{Binding IsSelected, UpdateSourceTrigger=PropertyChanged}"
+                                                      IsEnabled="{Binding CanSelect}" HorizontalAlignment="Center"
+                                                      Click="OnChangeChecked" />
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+                                <DataGridTextColumn Header="Tabla" Binding="{Binding ScheduleName}" Width="170" IsReadOnly="True" />
+                                <DataGridTextColumn Header="Elemento" Binding="{Binding ElementLabel}" Width="2*" IsReadOnly="True" />
+                                <DataGridTextColumn Header="Parámetro" Binding="{Binding ColumnHeading}" Width="*" IsReadOnly="True" />
+                                <DataGridTextColumn Header="Valor actual" Binding="{Binding OldText}" Width="*" IsReadOnly="True" />
+                                <DataGridTextColumn Header="Valor nuevo" Binding="{Binding NewText}" Width="*" IsReadOnly="True" />
+                                <DataGridTextColumn Header="Estado" Binding="{Binding StatusText}" Width="1.4*" IsReadOnly="True" />
+                            </DataGrid.Columns>
+                        </DataGrid>
+                    </Grid>
+
+                    <Grid Grid.Row="4" Margin="0,10,0,0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+                        <StackPanel Orientation="Horizontal">
+                            <Button Content="Marcar todos" Padding="8,2" Click="OnSelectAllChangesClick" />
+                            <Button Content="Ninguno" Padding="8,2" Margin="6,0,0,0" Click="OnSelectNoChangesClick" />
+                            <TextBlock Style="{StaticResource Hint}" Margin="12,0,0,0" VerticalAlignment="Center"
+                                       Text="Clic en una celda en color para incluirla o no." />
+                        </StackPanel>
+                        <Button x:Name="ApplyButton" Grid.Column="2" Padding="20,6" Content="Aplicar cambios"
+                                IsEnabled="False" Click="OnApplyClick" />
+                    </Grid>
+                </Grid>
+            </TabItem>
+        </TabControl>
+
+        <!-- 2. Estado + progreso + cerrar -->
+        <Grid Grid.Row="2" Margin="0,10,0,0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+            <TextBlock x:Name="StatusText" Grid.Column="0" TextWrapping="Wrap" VerticalAlignment="Center"
+                       Foreground="{DynamicResource E3g.Brush.TextMuted}" FontStyle="Italic" />
+            <StackPanel x:Name="ProgressPanel" Grid.Column="1" Orientation="Horizontal" Margin="12,0,12,0"
+                        VerticalAlignment="Center" Visibility="Collapsed">
+                <TextBlock x:Name="ProgressText" VerticalAlignment="Center" Margin="0,0,8,0" MinWidth="230"
+                           TextAlignment="Right" />
+                <ProgressBar x:Name="ProgressBar" Width="240" Height="14" Minimum="0" Maximum="100" />
+            </StackPanel>
+            <Button Grid.Column="2" Content="Cerrar" Padding="20,6" IsCancel="True" Click="OnCloseClick" />
+        </Grid>
+    </Grid>
+            </DockPanel>
+        </Border>
+    </Border>
+</Window>

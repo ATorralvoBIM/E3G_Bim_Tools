@@ -1,0 +1,289 @@
+<Window x:Class="E3G.BimTools.DiTools.UI.Views.ParaManager.ParaManagerWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:shell="clr-namespace:System.Windows.Shell;assembly=PresentationFramework"
+        xmlns:e3gc="clr-namespace:E3G.BimTools.DiTools.UI.Controls"
+        Title="e3gbimtools — ParaManager"
+        Width="1100" Height="720"
+        MinWidth="900" MinHeight="600"
+        WindowStartupLocation="CenterOwner"
+        ShowInTaskbar="False"
+        WindowStyle="None"
+        AllowsTransparency="True"
+        Background="Transparent"
+        SnapsToDevicePixels="True"
+        UseLayoutRounding="True">
+
+    <shell:WindowChrome.WindowChrome>
+        <shell:WindowChrome
+            CaptionHeight="44"
+            ResizeBorderThickness="8"
+            CornerRadius="0"
+            GlassFrameThickness="0"
+            UseAeroCaptionButtons="False" />
+    </shell:WindowChrome.WindowChrome>
+
+    <Window.Resources>
+        <Style TargetType="TextBlock" x:Key="SectionLabel">
+            <Setter Property="FontWeight" Value="SemiBold" />
+            <Setter Property="Margin" Value="0,4,0,4" />
+        </Style>
+    </Window.Resources>
+
+    <Border x:Name="ChromeRoot"
+            CornerRadius="10"
+            Background="{DynamicResource E3g.Brush.Background}"
+            BorderBrush="{DynamicResource E3g.Brush.Border}"
+            BorderThickness="1"
+            Margin="12">
+        <Border.Effect>
+            <DropShadowEffect Color="#000000" BlurRadius="18" ShadowDepth="0" Opacity="0.20" />
+        </Border.Effect>
+        <Border x:Name="ChromeClip" CornerRadius="{Binding CornerRadius, ElementName=ChromeRoot}">
+            <Border.OpacityMask>
+                <VisualBrush>
+                    <VisualBrush.Visual>
+                        <Border Background="White"
+                                CornerRadius="{Binding CornerRadius, ElementName=ChromeClip}"
+                                Width="{Binding ActualWidth, ElementName=ChromeClip}"
+                                Height="{Binding ActualHeight, ElementName=ChromeClip}" />
+                    </VisualBrush.Visual>
+                </VisualBrush>
+            </Border.OpacityMask>
+            <DockPanel LastChildFill="True">
+                <e3gc:E3gTitleBar x:Name="TitleBar"
+                                  DockPanel.Dock="Top"
+                                  Title="e3gbimtools"
+                                  Subtitle="ParaManager"
+                                  ShowStatus="False"
+                                  ShowMinimize="False" />
+
+    <Grid Margin="12">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <TabControl Grid.Row="0">
+
+            <!-- =========================================================== -->
+            <!-- Tab 1: Lista de parametros del documento                     -->
+            <!-- =========================================================== -->
+            <TabItem Header="Lista de parámetros">
+                <Grid Margin="6">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+
+                    <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="0,0,0,8">
+                        <Button Content="Recargar lista" Padding="10,4" Margin="0,0,6,0" Click="OnReloadListClick" />
+                        <Button Content="Recategorizar…" Padding="10,4" Margin="0,0,6,0" Click="OnRecategorizeClick" />
+                        <Button Content="Eliminar del proyecto"  Padding="10,4" Margin="0,0,6,0" Click="OnDeleteParamClick" />
+                        <TextBlock x:Name="ListInfoText" VerticalAlignment="Center" Margin="16,0,0,0" Foreground="{DynamicResource E3g.Brush.TextMuted}" FontStyle="Italic"/>
+                    </StackPanel>
+
+                    <DataGrid Grid.Row="1"
+                              x:Name="ParamsGrid"
+                              AutoGenerateColumns="False"
+                              IsReadOnly="True"
+                              SelectionMode="Single"
+                              HeadersVisibility="Column"
+                              GridLinesVisibility="Horizontal"
+                              RowHeight="22">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Nombre"      Binding="{Binding Name}"            Width="2*" />
+                            <DataGridTextColumn Header="Origen"      Binding="{Binding Source}"          Width="80" />
+                            <DataGridTextColumn Header="Scope"       Binding="{Binding Scope}"           Width="80" />
+                            <DataGridTextColumn Header="Grupo"       Binding="{Binding GroupName}"       Width="*" />
+                            <DataGridTextColumn Header="Tipo dato"   Binding="{Binding DataTypeName}"    Width="*" />
+                            <DataGridTextColumn Header="Categorías"  Binding="{Binding CategoriesLabel}" Width="3*" />
+                        </DataGrid.Columns>
+                    </DataGrid>
+
+                    <TextBlock Grid.Row="2"
+                               Margin="0,8,0,0"
+                               Foreground="{DynamicResource E3g.Brush.TextMuted}"
+                               Text="Doble clic sobre una fila para recategorizar. Los parámetros built-in y de familia no aparecen aquí."
+                               FontStyle="Italic" />
+                </Grid>
+            </TabItem>
+
+            <!-- =========================================================== -->
+            <!-- Tab 2: Crear parametro nuevo                                  -->
+            <!-- =========================================================== -->
+            <TabItem Header="Crear parámetro">
+                <Grid Margin="6">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="320" />
+                        <ColumnDefinition Width="6" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+
+                    <!-- Columna izquierda: form -->
+                    <Border Grid.Column="0" BorderBrush="{DynamicResource E3g.Brush.Border}" BorderThickness="1" CornerRadius="4" Padding="10">
+                        <StackPanel>
+                            <TextBlock Text="Datos del parámetro" Style="{StaticResource SectionLabel}" />
+
+                            <TextBlock Text="Nombre" Margin="0,4,0,2" />
+                            <TextBox   x:Name="CreateName" />
+
+                            <TextBlock Text="Tipo de dato" Margin="0,8,0,2" />
+                            <ComboBox  x:Name="CreateDataType" />
+
+                            <TextBlock Text="Vinculación (scope)" Margin="0,8,0,2" />
+                            <ComboBox  x:Name="CreateScope" />
+
+                            <CheckBox  x:Name="CreateAsShared" Margin="0,10,0,4" Content="Crear como parámetro compartido (recomendado)" IsChecked="True" />
+
+                            <TextBlock Text="Grupo en archivo de compartidos" Margin="0,4,0,2" />
+                            <TextBox   x:Name="CreateSharedGroup" Text="e3gbimtools" />
+
+                            <TextBlock Text="Grupo de propiedades visible" Margin="0,8,0,2" />
+                            <ComboBox  x:Name="CreatePropertyGroup" />
+
+                            <Button    Content="Crear parámetro y vincular" Margin="0,16,0,0" Padding="10,6" FontWeight="SemiBold" Click="OnCreateParamClick" />
+
+                            <TextBlock x:Name="CreateStatus" Margin="0,8,0,0" Foreground="{DynamicResource E3g.Brush.TextMuted}" TextWrapping="Wrap" />
+                        </StackPanel>
+                    </Border>
+
+                    <GridSplitter Grid.Column="1" Width="6" HorizontalAlignment="Stretch" Background="{DynamicResource E3g.Brush.SurfaceSubtle}" />
+
+                    <!-- Columna derecha: categorias -->
+                    <Border Grid.Column="2" BorderBrush="{DynamicResource E3g.Brush.Border}" BorderThickness="1" CornerRadius="4" Padding="10">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="*" />
+                                <RowDefinition Height="Auto" />
+                            </Grid.RowDefinitions>
+                            <TextBlock Grid.Row="0" Text="Categorías a vincular" Style="{StaticResource SectionLabel}" />
+                            <TextBox   Grid.Row="1" x:Name="CategorySearchBox" Margin="0,0,0,6"
+                                       ToolTip="Filtrar categorías por nombre"
+                                       TextChanged="OnCategorySearchChanged" />
+                            <ListBox   Grid.Row="2" x:Name="CategoriesList" SelectionMode="Multiple">
+                                <ListBox.ItemTemplate>
+                                    <DataTemplate>
+                                        <CheckBox Content="{Binding Name}" IsChecked="{Binding IsSelected, Mode=TwoWay}" />
+                                    </DataTemplate>
+                                </ListBox.ItemTemplate>
+                            </ListBox>
+                            <StackPanel Grid.Row="3" Orientation="Horizontal" Margin="0,8,0,0">
+                                <Button Content="Marcar todas"     Padding="8,2" Margin="0,0,6,0" Click="OnSelectAllCategoriesClick" />
+                                <Button Content="Desmarcar todas"  Padding="8,2"                  Click="OnSelectNoneCategoriesClick" />
+                            </StackPanel>
+                        </Grid>
+                    </Border>
+                </Grid>
+            </TabItem>
+
+            <!-- =========================================================== -->
+            <!-- Tab 3: Shared Parameter File                                  -->
+            <!-- =========================================================== -->
+            <TabItem Header="Shared Parameter File">
+                <Grid Margin="6">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+
+                    <Border Grid.Row="0" BorderBrush="{DynamicResource E3g.Brush.Border}" BorderThickness="1" CornerRadius="4" Padding="8" Margin="0,0,0,8">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="Archivo:" VerticalAlignment="Center" Margin="0,0,6,0" />
+                            <TextBox   x:Name="SharedFilePath" Width="600" IsReadOnly="True" />
+                            <Button    Content="Cambiar…" Padding="10,4" Margin="6,0,0,0" Click="OnChangeSharedFileClick" />
+                            <Button    Content="Recargar" Padding="10,4" Margin="6,0,0,0" Click="OnReloadSharedFileClick" />
+                        </StackPanel>
+                    </Border>
+
+                    <TreeView Grid.Row="1" x:Name="SharedTree" />
+
+                    <Border Grid.Row="2" Margin="0,8,0,0" BorderBrush="{DynamicResource E3g.Brush.Border}" BorderThickness="1" CornerRadius="4" Padding="8">
+                        <StackPanel Orientation="Horizontal">
+                            <Button Content="Crear grupo nuevo…"   Padding="10,4" Margin="0,0,6,0" Click="OnNewGroupClick" />
+                            <Button Content="Crear parámetro nuevo…" Padding="10,4" Margin="0,0,6,0" Click="OnNewSharedDefinitionClick" />
+                            <Button Content="Vincular al proyecto" Padding="10,4" Click="OnBindSelectedSharedClick" />
+                            <TextBlock x:Name="SharedStatus" VerticalAlignment="Center" Margin="16,0,0,0" Foreground="{DynamicResource E3g.Brush.TextMuted}" FontStyle="Italic" />
+                        </StackPanel>
+                    </Border>
+                </Grid>
+            </TabItem>
+
+            <!-- =========================================================== -->
+            <!-- Tab 4: Editar valores en lote                                 -->
+            <!-- =========================================================== -->
+            <TabItem Header="Editar valores en lote">
+                <Grid Margin="6">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+
+                    <Border Grid.Row="0" BorderBrush="{DynamicResource E3g.Brush.Border}" BorderThickness="1" CornerRadius="4" Padding="10" Margin="0,0,0,8">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="260" />
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="260" />
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Grid.Column="0" Text="Categoría:"     VerticalAlignment="Center" Margin="0,0,6,0" />
+                            <ComboBox  Grid.Column="1" x:Name="BulkCategoryCombo" SelectionChanged="OnBulkCategoryChanged" />
+                            <TextBlock Grid.Column="2" Text="Parámetro:"     VerticalAlignment="Center" Margin="10,0,6,0" />
+                            <ComboBox  Grid.Column="3" x:Name="BulkParamCombo" />
+                            <TextBlock Grid.Column="4" Text="Valor nuevo:"   VerticalAlignment="Center" Margin="10,0,6,0" />
+                            <TextBox   Grid.Column="5" x:Name="BulkValueBox" />
+                            <ComboBox  Grid.Column="6" x:Name="BulkScopeCombo" Margin="10,0,0,0" Width="120" />
+                            <Button    Grid.Column="7" Content="Previsualizar" Padding="10,4" Margin="10,0,0,0" Click="OnBulkPreviewClick" />
+                            <Button    Grid.Column="8" Content="Aplicar"       Padding="10,4" Margin="6,0,0,0" FontWeight="SemiBold" Click="OnBulkApplyClick" />
+                        </Grid>
+                    </Border>
+
+                    <TextBlock Grid.Row="1" x:Name="BulkInfoText" Foreground="{DynamicResource E3g.Brush.TextMuted}" FontStyle="Italic" Margin="2,0,0,6" />
+
+                    <DataGrid Grid.Row="2"
+                              x:Name="BulkPreviewGrid"
+                              AutoGenerateColumns="False"
+                              IsReadOnly="True"
+                              SelectionMode="Single"
+                              HeadersVisibility="Column"
+                              GridLinesVisibility="Horizontal"
+                              RowHeight="22">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="ID"     Binding="{Binding ElementId}" Width="100" />
+                            <DataGridTextColumn Header="Nombre" Binding="{Binding Name}"      Width="2*" />
+                            <DataGridTextColumn Header="Familia" Binding="{Binding Family}"   Width="*" />
+                            <DataGridTextColumn Header="Tipo"   Binding="{Binding Type}"      Width="*" />
+                            <DataGridTextColumn Header="Valor actual" Binding="{Binding CurrentValue}" Width="2*" />
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </Grid>
+            </TabItem>
+
+        </TabControl>
+
+        <!-- Pie con botón de cerrar -->
+        <Grid Grid.Row="1" Margin="0,10,0,0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+            <TextBlock Grid.Column="0" x:Name="StatusText" VerticalAlignment="Center" Foreground="{DynamicResource E3g.Brush.TextMuted}" />
+            <Button    Grid.Column="1" Content="Cerrar" Padding="14,4" Click="OnCloseClick" />
+        </Grid>
+    </Grid>
+            </DockPanel>
+        </Border>
+    </Border>
+</Window>
+

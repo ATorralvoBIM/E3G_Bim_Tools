@@ -1,0 +1,105 @@
+﻿<Window x:Class="E3G.Saneamiento.UI.Schematic.SchematicPreviewWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:local="clr-namespace:E3G.Saneamiento.UI.Schematic"
+        Title="Previsualización de esquema"
+        Height="800" Width="1400"
+        WindowStartupLocation="CenterOwner"
+        FontFamily="Segoe UI" FontSize="12"
+        Background="{DynamicResource E3g.Brush.Card}">
+    <Window.Resources>
+        <Style TargetType="Button">
+            <Setter Property="Padding" Value="12,4"/>
+            <Setter Property="Margin" Value="4,0"/>
+            <Setter Property="MinWidth" Value="110"/>
+            <Setter Property="Height" Value="28"/>
+        </Style>
+    </Window.Resources>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <!-- ════════════════════ Toolbar superior ════════════════════ -->
+        <Border Grid.Row="0" Background="#F5F5F5" BorderBrush="#CCCCCC" BorderThickness="0,0,0,1">
+            <StackPanel Orientation="Horizontal" Margin="8,6">
+                <TextBlock Text="Zoom:" VerticalAlignment="Center" Margin="0,0,6,0"/>
+                <Slider x:Name="SldZoom" Minimum="0.2" Maximum="4.0" Value="1.0"
+                        Width="180" VerticalAlignment="Center" TickFrequency="0.1"
+                        IsSnapToTickEnabled="False"
+                        ValueChanged="OnZoomChanged"/>
+                <TextBlock x:Name="LblZoom" Text="100%" Width="50"
+                           VerticalAlignment="Center" Margin="6,0,16,0"/>
+                <Button x:Name="BtnFit" Content="Ajustar" Click="OnFitClick"/>
+                <Button x:Name="BtnActualSize" Content="1:1" Click="OnActualSizeClick" MinWidth="60"/>
+
+                <Separator Width="2" Background="#CCC" Margin="12,4"/>
+
+                <TextBlock Text="Escala vista Revit:" VerticalAlignment="Center"
+                           Margin="0,0,6,0"/>
+                <ComboBox x:Name="CboScale" Width="80" VerticalAlignment="Center"
+                          SelectionChanged="OnScaleChanged">
+                    <ComboBoxItem Content="1:50" Tag="50" IsSelected="True"/>
+                    <ComboBoxItem Content="1:100" Tag="100"/>
+                </ComboBox>
+
+                <TextBlock x:Name="LblStatus" VerticalAlignment="Center"
+                           Margin="24,0,0,0" Foreground="#555"/>
+            </StackPanel>
+        </Border>
+
+        <!-- ════════════════════ Cuerpo: 2 columnas ════════════════════ -->
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="380" MinWidth="320" MaxWidth="540"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*" MinWidth="300"/>
+            </Grid.ColumnDefinitions>
+
+            <!-- Panel de configuración MVVM -->
+            <local:SchematicConfigPanel x:Name="ConfigPanel"
+                                        Grid.Column="0"/>
+
+            <!-- Separador redimensionable -->
+            <GridSplitter Grid.Column="1" Width="4"
+                          HorizontalAlignment="Stretch"
+                          VerticalAlignment="Stretch"
+                          Background="#E0E0E0"
+                          ShowsPreview="True"
+                          ResizeBehavior="PreviousAndNext"/>
+
+            <!-- Lienzo con zoom -->
+            <ScrollViewer Grid.Column="2" x:Name="Scroll"
+                          HorizontalScrollBarVisibility="Auto"
+                          VerticalScrollBarVisibility="Auto"
+                          Background="#FAFAFA"
+                          PreviewMouseWheel="OnPreviewMouseWheel"
+                          PreviewMouseDown="OnPreviewMouseDown"
+                          PreviewMouseUp="OnPreviewMouseUp"
+                          PreviewMouseMove="OnPreviewMouseMove">
+                <Grid>
+                    <Canvas x:Name="PreviewCanvas"
+                            Width="1200" Height="800"
+                            Background="{DynamicResource E3g.Brush.Card}">
+                        <Canvas.LayoutTransform>
+                            <ScaleTransform x:Name="ZoomTransform" ScaleX="1" ScaleY="1"/>
+                        </Canvas.LayoutTransform>
+                    </Canvas>
+                </Grid>
+            </ScrollViewer>
+        </Grid>
+
+        <!-- ════════════════════ Toolbar inferior ════════════════════ -->
+        <Border Grid.Row="2" Background="#F5F5F5" BorderBrush="#CCCCCC" BorderThickness="0,1,0,0">
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="8,6">
+                <Button x:Name="BtnGenerate" Content="▶ Generar en Revit"
+                        Click="OnGenerateClick" MinWidth="160" FontWeight="SemiBold"/>
+                <Button x:Name="BtnExportDwg" Content="📥 Generar + Exportar a DWG"
+                        Click="OnExportDwgClick" MinWidth="200"/>
+                <Button x:Name="BtnClose" Content="Cerrar" Click="OnCloseClick"/>
+            </StackPanel>
+        </Border>
+    </Grid>
+</Window>

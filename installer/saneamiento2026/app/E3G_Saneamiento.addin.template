@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RevitAddIns>
+  <AddIn Type="Application">
+    <Name>E3G BIM Tools</Name>
+    <Assembly>{ASSEMBLY}</Assembly>
+    <FullClassName>E3G.Saneamiento.App</FullClassName>
+    <ClientId>a1b2c3d4-e5f6-7890-abcd-ef1234567890</ClientId>
+    <VendorId>E3G</VendorId>
+  </AddIn>
+  <AddIn Type="Command">
+    <Text>E3G BIM Tools</Text>
+    <Assembly>{ASSEMBLY}</Assembly>
+    <FullClassName>E3G.Saneamiento.CmdAbrirPanelMain</FullClassName>
+    <AddInId>f1c6d5e7-8a2b-4c3d-e456-7f9a0b1c2d34</AddInId>
+    <VendorId>E3G</VendorId>
+  </AddIn>
+  <AddIn Type="Command">
+    <Text>MEP Calc Self-Test</Text>
+    <Description>Ejecuta los smoke-tests del motor de cÃƒÆ’Ã‚Â¡lculo MEP (Sprint 1 ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â Core.Common).</Description>
+    <Assembly>{ASSEMBLY}</Assembly>
+    <FullClassName>E3G.Saneamiento.CmdMepCalcSelfTest</FullClassName>
+    <AddInId>b8d2e1f3-4a5c-6789-bdef-0123456789ab</AddInId>
+    <VendorId>E3G</VendorId>
+  </AddIn>
+  <AddIn Type="Command">
+    <Text>MEP Calc - Tuberias</Text>
+    <Description>Calcula un PipingSystem del modelo (Darcy-Weisbach + Colebrook-White).</Description>
+    <Assembly>{ASSEMBLY}</Assembly>
+    <FullClassName>E3G.Saneamiento.CmdCalcPipingNetwork</FullClassName>
+    <AddInId>c9e3f2a4-5b6d-789a-cdef-1234567890ab</AddInId>
+    <VendorId>E3G</VendorId>
+  </AddIn>
+  <AddIn Type="Command">
+    <Text>MEP Calc - Conductos</Text>
+    <Description>Calcula un MechanicalSystem del modelo (igual friccion / velocidad maxima).</Description>
+    <Assembly>{ASSEMBLY}</Assembly>
+    <FullClassName>E3G.Saneamiento.CmdCalcDuctNetwork</FullClassName>
+    <AddInId>d0f4a3b5-6c7e-89ab-def0-2345678901bc</AddInId>
+    <VendorId>E3G</VendorId>
+  </AddIn>
+  <AddIn Type="Command">
+    <Text>MEP Calc - Ventana</Text>
+    <Description>Abre la ventana principal de calculo MEP (Sprint 5).</Description>
+    <Assembly>{ASSEMBLY}</Assembly>
+    <FullClassName>E3G.Saneamiento.CmdShowCalcWindow</FullClassName>
+    <AddInId>e1a5b4c6-7d8f-9abc-ef01-3456789012cd</AddInId>
+    <VendorId>E3G</VendorId>
+  </AddIn>
+</RevitAddIns>

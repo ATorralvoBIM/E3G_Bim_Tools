@@ -1,3 +1,40 @@
+# e3gbimtools
+
+Add-in interno de Revit para E3G. Modulos:
+
+- **DiTools** — replica nativa de funcionalidades clave de DiRootsOne:
+  - ✓ CopyLevels (Sprint 1)
+  - ✓ OneFilter (Sprint 2)
+  - ✓ ParaManager (Sprint 3)
+  - ✓ ViewManager (Sprint 4)
+  - ✓ SectionBoxer (Sprint 5)
+  - ✓ SheetGen (Sprint 6)
+  - ✓ FamilyReviser (Sprint 7)
+  - ✓ TableGen (Sprints 8-9)
+  - ✓ OneParameter (Sprint 10)
+  - ✓ SheetLink P1 — Export/Import Excel (Sprint 11)
+  - ✓ SheetLink P2 — Diff Before/After selectivo (Sprint 12)
+  - ○ SheetLink P3 — Google Sheets + sync avanzado (Sprint 13)
+- **Saneamiento** — herramientas internas de disciplina (BC3, clasificacion de sistemas, mediciones).
+- **Fontaneria** — herramientas internas de disciplina.
+
+Compatible con Revit 2022 a 2027. Stack: .NET Framework 4.8 (2022-2024) / .NET 8 (2025+), WPF + CommunityToolkit.Mvvm, Serilog, ClosedXML.
+
+## Documentacion
+
+- [Arquitectura](docs/ARCHITECTURE.md)
+- [Dev setup](docs/DEV_SETUP.md)
+- [Roadmap maestro](Roadmap_DiTools_e3gbimtools.html)
+
+## Quick build
+
+```powershell
+dotnet build /p:RevitVersion=2025 -c Release
+```
+
+---
+
+# Notas historicas de QA
 
 ## [2026-04-13] NOTES ATorralvoBIM 
 

@@ -1,0 +1,382 @@
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:shell="clr-namespace:System.Windows.Shell;assembly=PresentationFramework">
+
+    <!-- ============================================================
+         Estilos base de controles para el tema e3g "Brand Bold".
+         Aplica a Window, Button, TextBlock por defecto + estilos de
+         marca (banda, cabecera, chips de modulo).
+         ============================================================ -->
+
+    <!-- Window -->
+    <Style TargetType="Window" x:Key="E3g.Style.Window">
+        <Setter Property="Background"     Value="{DynamicResource E3g.Brush.Background}" />
+        <Setter Property="Foreground"     Value="{DynamicResource E3g.Brush.Text}" />
+        <Setter Property="FontFamily"     Value="{DynamicResource E3g.Font.Family}" />
+        <Setter Property="FontSize"       Value="{DynamicResource E3g.Font.Size.Body}" />
+        <Setter Property="UseLayoutRounding" Value="True" />
+        <Setter Property="SnapsToDevicePixels" Value="True" />
+    </Style>
+
+    <!-- TextBlock -->
+    <Style TargetType="TextBlock">
+        <Setter Property="FontFamily" Value="{DynamicResource E3g.Font.Family}" />
+        <Setter Property="FontSize"   Value="{DynamicResource E3g.Font.Size.Body}" />
+        <Setter Property="Foreground" Value="{DynamicResource E3g.Brush.Text}" />
+    </Style>
+
+    <!-- Headings -->
+    <Style TargetType="TextBlock" x:Key="E3g.Style.H1">
+        <Setter Property="FontSize"  Value="{DynamicResource E3g.Font.Size.H1}" />
+        <Setter Property="FontWeight" Value="SemiBold" />
+        <Setter Property="Foreground" Value="{DynamicResource E3g.Brush.Primary}" />
+        <Setter Property="Margin"     Value="0,0,0,8" />
+    </Style>
+    <Style TargetType="TextBlock" x:Key="E3g.Style.H2">
+        <Setter Property="FontSize"  Value="{DynamicResource E3g.Font.Size.H2}" />
+        <Setter Property="FontWeight" Value="SemiBold" />
+        <Setter Property="Foreground" Value="{DynamicResource E3g.Brush.Primary}" />
+        <Setter Property="Margin"     Value="0,8,0,4" />
+    </Style>
+    <Style TargetType="TextBlock" x:Key="E3g.Style.Muted">
+        <Setter Property="Foreground" Value="{DynamicResource E3g.Brush.TextMuted}" />
+    </Style>
+
+    <!-- ============================================================
+         MARCA — banda de cabecera y textos sobre marca
+         ============================================================ -->
+
+    <!-- Banda de cabecera: usar como Border en la parte superior de la
+         ventana. Ej:  <Border Style="{StaticResource E3g.Style.BrandBand}"> -->
+    <Style TargetType="Border" x:Key="E3g.Style.BrandBand">
+        <Setter Property="Background" Value="{DynamicResource E3g.Brush.Primary}" />
+        <Setter Property="Padding"    Value="20,14" />
+    </Style>
+
+    <!-- Linea fina degradada turquesa->verde, ponla justo bajo la banda -->
+    <Style TargetType="Border" x:Key="E3g.Style.BrandStripe">
+        <Setter Property="Height"     Value="3" />
+        <Setter Property="Background" Value="{DynamicResource E3g.Brush.BrandBand}" />
+    </Style>
+
+    <!-- Logo cuadrado "e3" -->
+    <Style TargetType="Border" x:Key="E3g.Style.BrandLogo">
+        <Setter Property="Width"        Value="34" />
+        <Setter Property="Height"       Value="34" />
+        <Setter Property="CornerRadius" Value="9" />
+        <Setter Property="Background"   Value="{DynamicResource E3g.Brush.Secondary}" />
+    </Style>
+
+    <Style TargetType="TextBlock" x:Key="E3g.Style.BrandTitle">
+        <Setter Property="FontSize"   Value="{DynamicResource E3g.Font.Size.Brand}" />
+        <Setter Property="FontWeight" Value="SemiBold" />
+        <Setter Property="Foreground" Value="{DynamicResource E3g.Brush.OnBrand}" />
+    </Style>
+    <Style TargetType="TextBlock" x:Key="E3g.Style.BrandSubtitle">
+        <Setter Property="FontSize"   Value="{DynamicResource E3g.Font.Size.BrandSub}" />
+        <Setter Property="Foreground" Value="{DynamicResource E3g.Brush.OnBrandMuted}" />
+    </Style>
+
+    <!-- Chip de modulo (icono/etiqueta sobre fondo de color suave) -->
+    <Style TargetType="Border" x:Key="E3g.Style.ModuleChip">
+        <Setter Property="CornerRadius" Value="12" />
+        <Setter Property="Width"        Value="48" />
+        <Setter Property="Height"       Value="48" />
+        <Setter Property="HorizontalAlignment" Value="Center" />
+    </Style>
+
+    <!-- ============================================================
+         BOTONES
+         ============================================================ -->
+
+    <!-- Estilo base implícito: font + colores Fluent. Sin ControlTemplate propio
+         para no interferir con el pipeline de Revit (usa el template WPF del sistema). -->
+    <Style TargetType="Button">
+        <Setter Property="FontFamily"      Value="{DynamicResource E3g.Font.Family}" />
+        <Setter Property="FontSize"        Value="{DynamicResource E3g.Font.Size.Body}" />
+        <Setter Property="Foreground"      Value="{DynamicResource E3g.Brush.Text}" />
+        <Setter Property="Padding"         Value="10,4" />
+        <Setter Property="Cursor"          Value="Hand" />
+    </Style>
+
+
+    <!-- Primario (marca, azul) -->
+    <Style TargetType="Button" x:Key="E3g.Style.Button.Primary">
+        <Setter Property="Background" Value="{DynamicResource E3g.Brush.Primary}" />
+        <Setter Property="Foreground" Value="{DynamicResource E3g.Brush.TextOnPrimary}" />
+        <Setter Property="FontFamily" Value="{DynamicResource E3g.Font.Family}" />
+        <Setter Property="FontSize"   Value="{DynamicResource E3g.Font.Size.Body}" />
+        <Setter Property="FontWeight" Value="SemiBold" />
+        <Setter Property="Padding"    Value="16,8" />
+        <Setter Property="BorderThickness" Value="0" />
+        <Setter Property="Cursor"     Value="Hand" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <Border x:Name="Bd"
+                            Background="{TemplateBinding Background}"
+                            CornerRadius="8"
+                            Padding="{TemplateBinding Padding}">
+                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="Bd" Property="Background" Value="{DynamicResource E3g.Brush.Accent}" />
+                        </Trigger>
+                        <Trigger Property="IsEnabled" Value="False">
+                            <Setter TargetName="Bd" Property="Opacity" Value="0.5" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!-- Accion (verde) — para CTA principal tipo "Exportar BC3" -->
+    <Style TargetType="Button" x:Key="E3g.Style.Button.Action">
+        <Setter Property="Background" Value="{DynamicResource E3g.Brush.Secondary}" />
+        <Setter Property="Foreground" Value="{DynamicResource E3g.Brush.TextOnPrimary}" />
+        <Setter Property="FontFamily" Value="{DynamicResource E3g.Font.Family}" />
+        <Setter Property="FontSize"   Value="{DynamicResource E3g.Font.Size.Body}" />
+        <Setter Property="FontWeight" Value="SemiBold" />
+        <Setter Property="Padding"    Value="18,9" />
+        <Setter Property="BorderThickness" Value="0" />
+        <Setter Property="Cursor"     Value="Hand" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <Border x:Name="Bd"
+                            Background="{TemplateBinding Background}"
+                            CornerRadius="8"
+                            Padding="{TemplateBinding Padding}">
+                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="Bd" Property="Opacity" Value="0.88" />
+                        </Trigger>
+                        <Trigger Property="IsEnabled" Value="False">
+                            <Setter TargetName="Bd" Property="Opacity" Value="0.5" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!-- Secundario (outline) -->
+    <Style TargetType="Button" x:Key="E3g.Style.Button.Secondary">
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="Foreground" Value="{DynamicResource E3g.Brush.Primary}" />
+        <Setter Property="FontFamily" Value="{DynamicResource E3g.Font.Family}" />
+        <Setter Property="FontSize"   Value="{DynamicResource E3g.Font.Size.Body}" />
+        <Setter Property="Padding"    Value="16,8" />
+        <Setter Property="BorderBrush" Value="{DynamicResource E3g.Brush.Primary}" />
+        <Setter Property="BorderThickness" Value="1" />
+        <Setter Property="Cursor"     Value="Hand" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <Border x:Name="Bd"
+                            Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            CornerRadius="8"
+                            Padding="{TemplateBinding Padding}">
+                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="Bd" Property="Background" Value="{DynamicResource E3g.Brush.SurfaceAlt}" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!-- ============================================================
+         Tarjeta de superficie (panel resumen, acento izquierdo verde)
+         ============================================================ -->
+    <Style TargetType="Border" x:Key="E3g.Style.Card">
+        <Setter Property="Background"   Value="{DynamicResource E3g.Brush.Card}" />
+        <Setter Property="CornerRadius" Value="10" />
+        <Setter Property="Padding"      Value="16" />
+        <Setter Property="BorderBrush"  Value="{DynamicResource E3g.Brush.Border}" />
+        <Setter Property="BorderThickness" Value="0.5" />
+    </Style>
+
+    <!-- ============================================================
+         CHROME / BARRA DE TITULO custom (Fluent Light)
+         Glifos Lucide (stroke 2, caps/joins redondeados), botones de
+         caption redondeados y anillo de foco azul.
+         ============================================================ -->
+
+    <!-- Glifo Lucide: el Stroke hereda el Foreground del Button contenedor -->
+    <Style x:Key="E3g.Style.LucideGlyph" TargetType="Path">
+        <Setter Property="StrokeThickness" Value="2" />
+        <Setter Property="StrokeStartLineCap" Value="Round" />
+        <Setter Property="StrokeEndLineCap" Value="Round" />
+        <Setter Property="StrokeLineJoin" Value="Round" />
+        <Setter Property="Stroke"
+                Value="{Binding Foreground, RelativeSource={RelativeSource AncestorType=Button}}" />
+    </Style>
+
+    <!-- Boton de caption (min / restaurar): redondeado, hover tinte azul -->
+    <Style x:Key="E3g.Style.CaptionButton" TargetType="Button">
+        <Setter Property="Width" Value="38" />
+        <Setter Property="Height" Value="30" />
+        <Setter Property="Margin" Value="3,0,0,0" />
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="BorderThickness" Value="0" />
+        <Setter Property="Foreground" Value="{DynamicResource E3g.Brush.TextMuted}" />
+        <Setter Property="Cursor" Value="Hand" />
+        <Setter Property="shell:WindowChrome.IsHitTestVisibleInChrome" Value="True" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <Border x:Name="Bd" Background="{TemplateBinding Background}" CornerRadius="8">
+                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="Bd" Property="Background" Value="{DynamicResource E3g.Brush.BrandTint}" />
+                            <Setter Property="Foreground" Value="{DynamicResource E3g.Brush.Primary}" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!-- Boton cerrar: hover rojo + glifo blanco -->
+    <Style x:Key="E3g.Style.CaptionButton.Close" TargetType="Button" BasedOn="{StaticResource E3g.Style.CaptionButton}">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <Border x:Name="Bd" Background="{TemplateBinding Background}" CornerRadius="8">
+                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="Bd" Property="Background" Value="{DynamicResource E3g.Brush.CaptionCloseHover}" />
+                            <Setter Property="Foreground" Value="#FFFFFF" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!-- Anillo de foco azul (FocusVisualStyle) -->
+    <Style x:Key="E3g.Style.FocusRing">
+        <Setter Property="Control.Template">
+            <Setter.Value>
+                <ControlTemplate>
+                    <Border BorderBrush="{DynamicResource E3g.Brush.Accent}" BorderThickness="1.5"
+                            CornerRadius="7" Margin="-2" SnapsToDevicePixels="True" />
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!-- ============================================================
+         TOOLBAR — botones planos por tono (azul/gris), con hover+pressed
+         ============================================================ -->
+
+    <!-- Primario: relleno azul -->
+    <Style x:Key="E3g.Style.Toolbar.Primary" TargetType="Button">
+        <Setter Property="Background" Value="{DynamicResource E3g.Brush.Primary}" />
+        <Setter Property="Foreground" Value="{DynamicResource E3g.Brush.TextOnPrimary}" />
+        <Setter Property="FontFamily" Value="{DynamicResource E3g.Font.Family}" />
+        <Setter Property="FontSize" Value="12" />
+        <Setter Property="FontWeight" Value="SemiBold" />
+        <Setter Property="Cursor" Value="Hand" />
+        <Setter Property="Margin" Value="0,0,6,0" />
+        <Setter Property="FocusVisualStyle" Value="{DynamicResource E3g.Style.FocusRing}" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <Border x:Name="Bd" Background="{TemplateBinding Background}" CornerRadius="6" Padding="13,6">
+                        <ContentPresenter VerticalAlignment="Center" />
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="Bd" Property="Background" Value="{DynamicResource E3g.Brush.PrimaryHover}" />
+                        </Trigger>
+                        <Trigger Property="IsPressed" Value="True">
+                            <Setter TargetName="Bd" Property="Background" Value="{DynamicResource E3g.Brush.PrimaryPressed}" />
+                        </Trigger>
+                        <Trigger Property="IsEnabled" Value="False">
+                            <Setter TargetName="Bd" Property="Opacity" Value="0.5" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!-- Tinte azul: accion secundaria destacada (no compite con el primario) -->
+    <Style x:Key="E3g.Style.Toolbar.Tint" TargetType="Button">
+        <Setter Property="Background" Value="{DynamicResource E3g.Brush.BrandTint}" />
+        <Setter Property="Foreground" Value="{DynamicResource E3g.Brush.Primary}" />
+        <Setter Property="FontFamily" Value="{DynamicResource E3g.Font.Family}" />
+        <Setter Property="FontSize" Value="12" />
+        <Setter Property="FontWeight" Value="SemiBold" />
+        <Setter Property="Cursor" Value="Hand" />
+        <Setter Property="Margin" Value="0,0,6,0" />
+        <Setter Property="FocusVisualStyle" Value="{DynamicResource E3g.Style.FocusRing}" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <Border x:Name="Bd" Background="{TemplateBinding Background}" CornerRadius="6" Padding="13,6">
+                        <ContentPresenter VerticalAlignment="Center" />
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="Bd" Property="Background" Value="{DynamicResource E3g.Brush.TintHover}" />
+                        </Trigger>
+                        <Trigger Property="IsPressed" Value="True">
+                            <Setter TargetName="Bd" Property="Background" Value="{DynamicResource E3g.Brush.TintPressed}" />
+                        </Trigger>
+                        <Trigger Property="IsEnabled" Value="False">
+                            <Setter TargetName="Bd" Property="Opacity" Value="0.5" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!-- Ghost gris: acciones neutras -->
+    <Style x:Key="E3g.Style.Toolbar.Ghost" TargetType="Button">
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="Foreground" Value="{DynamicResource E3g.Brush.Text}" />
+        <Setter Property="FontFamily" Value="{DynamicResource E3g.Font.Family}" />
+        <Setter Property="FontSize" Value="12" />
+        <Setter Property="Cursor" Value="Hand" />
+        <Setter Property="Margin" Value="0,0,6,0" />
+        <Setter Property="FocusVisualStyle" Value="{DynamicResource E3g.Style.FocusRing}" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <Border x:Name="Bd" Background="{TemplateBinding Background}" CornerRadius="6" Padding="13,6">
+                        <ContentPresenter VerticalAlignment="Center" />
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="Bd" Property="Background" Value="{DynamicResource E3g.Brush.GhostHover}" />
+                        </Trigger>
+                        <Trigger Property="IsPressed" Value="True">
+                            <Setter TargetName="Bd" Property="Background" Value="{DynamicResource E3g.Brush.GhostPressed}" />
+                        </Trigger>
+                        <Trigger Property="IsEnabled" Value="False">
+                            <Setter TargetName="Bd" Property="Opacity" Value="0.5" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+</ResourceDictionary>

@@ -1,0 +1,39 @@
+﻿E3G Saneamiento (CTE DB-HS5) - Revit 2026
+=========================================
+
+Requisitos
+- Revit 2026.5 o posterior (corre sobre .NET 10). Si tu Revit 2026 es más
+  antiguo, actualízalo desde Autodesk Access; el instalador lo comprueba.
+- Red de saneamiento con las UD acumuladas en "MC Discharge Unit Sum"
+  (MagiCAD). En pluviales ese mismo parámetro lleva la superficie de
+  recogida en m². Los aparatos llevan su UD en "MC Discharge Unit".
+
+Instalar
+1. Cierra Revit.
+2. Descomprime el ZIP completo en cualquier carpeta.
+3. Doble clic en Instalar.bat (no necesita permisos de administrador).
+4. Abre Revit 2026: pestaña "E3G BIM Tools" > panel Saneamiento.
+
+Primeros pasos
+1. Pestaña "Aparatos y ajustes":
+   - "Leer aparatos del modelo" y revisa que cada tipo de aparato cae en la
+     fila correcta de la tabla 4.1 (se puede cambiar en el desplegable).
+   - Pluviometría del proyecto: elige zona e isoyeta (Anejo B). Se guardan
+     dentro del .rvt; sin ellas se aplica 100 mm/h (f = 1).
+2. Pestaña "Verificación", modo "Automático":
+   - Selecciona tuberías (basta una parte: la red conectada se recorre sola)
+     y pulsa "Iniciar análisis".
+   - Cada tramo se clasifica (derivación, ramal, bajante, colector,
+     ventilación, arqueta) y se comprueba con su tabla del HS5.
+   - Solo se pintan los KO, con el color del diámetro exigido.
+   - Clic en una fila de la tabla selecciona el tramo en Revit (doble clic lo
+     encuadra); seleccionar en Revit marca sus filas.
+3. "Aplicar DN HS5" redimensiona los KO de diámetro; "Exportar informe" saca
+   un CSV para Excel; "Restaurar colores" quita la sobrescritura de color.
+
+Actualizar a una versión nueva
+- Ejecuta el Instalar.bat de la versión nueva: sustituye la anterior y
+  conserva tu mapeo de aparatos.
+
+Desinstalar
+- Doble clic en Desinstalar.bat y reinicia Revit.

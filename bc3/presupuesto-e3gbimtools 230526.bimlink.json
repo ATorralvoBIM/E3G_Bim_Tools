@@ -1,0 +1,76 @@
+﻿{
+  "Version": "1.0",
+  "Generator": "e3gbimtools.RevitBC3",
+  "Generated": "2026-05-23T20:10:19Z",
+  "Bc3File": "presupuesto-e3gbimtools 230526.bc3",
+  "IfcModel": "",
+  "Partidas": [
+    {
+      "Codigo": "03TNIRRCTRED11011.001",
+      "CodigoCatalogo": "03TNIRRCTRED11011",
+      "Resumen": "Tubería Niron Monocapa con PP-RCT RF: NIRON RED SDR 11/ Serie 5, D= 110 mm",
+      "Unidad": "m",
+      "Cantidad": 5.500274993125347,
+      "EsOverrideManual": false,
+      "Capitulo": "00",
+      "Subcapitulo": "01",
+      "Elementos": [
+        {
+          "IfcGuid": "01d$a7LEjAW8tTYcJkwmTj",
+          "OrigenGuid": "Parameter",
+          "ElementId": 690518,
+          "Cantidad": 5.500274993125347,
+          "SystemName": "10_20 6",
+          "LevelName": "S03"
+        }
+      ]
+    },
+    {
+      "Codigo": "03TNIRRCTRED11011.002",
+      "CodigoCatalogo": "03TNIRRCTRED11011",
+      "Resumen": "Tubería Niron Monocapa con PP-RCT RF: NIRON RED SDR 11/ Serie 5, D= 110 mm",
+      "Unidad": "m",
+      "Cantidad": 4.462864001601494,
+      "EsOverrideManual": false,
+      "Capitulo": "00",
+      "Subcapitulo": "01",
+      "Elementos": [
+        {
+          "IfcGuid": "3evGS0iVf78wLzyovWD4b9",
+          "OrigenGuid": "Parameter",
+          "ElementId": 759245,
+          "Cantidad": 4.462864001601494,
+          "SystemName": "10_20 2",
+          "LevelName": "S02"
+        }
+      ]
+    },
+    {
+      "Codigo": "03TNIRRCTRED11011.003",
+      "CodigoCatalogo": "03TNIRRCTRED11011",
+      "Resumen": "Tubería Niron Monocapa con PP-RCT RF: NIRON RED SDR 11/ Serie 5, D= 110 mm",
+      "Unidad": "m",
+      "Cantidad": 10.93816760417644,
+      "EsOverrideManual": false,
+      "Capitulo": "00",
+      "Subcapitulo": "02",
+      "Elementos": [
+        {
+          "IfcGuid": "1gonOXvuLE6OCmdLtnpkLh",
+          "OrigenGuid": "Parameter",
+          "ElementId": 759471,
+          "Cantidad": 10.93816760417644,
+          "SystemName": "10_20 4",
+          "LevelName": "S02"
+        }
+      ]
+    }
+  ],
+  "EstadisticasGuid": {
+    "TotalElementos": 3,
+    "DesdeParametro": 3,
+    "DesdeCalculo": 0,
+    "SinGuid": 0,
+    "CoberturaPorc": 100
+  }
+}

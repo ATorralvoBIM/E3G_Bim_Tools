@@ -1,0 +1,97 @@
+name: build
+
+# Pipeline CI/CD para e3gbimtools.  Se ejecuta automaticamente cuando:
+#   - Se hace push a la rama main
+#   - Se abre un Pull Request hacia main
+#   - Se ejecuta manualmente desde la pestania Actions de GitHub
+#
+# Sprint 0: solo compila para Revit 2025 (.NET 8).
+# Las otras versiones (2022-2024, 2026-2027) estan documentadas pero comentadas
+# hasta que tengamos paquetes NuGet de RevitAPI configurados o un runner
+# self-hosted con Revit instalado.
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:    # permite lanzarlo a mano desde GitHub
+
+jobs:
+  build:
+    name: Build (Revit 2025)
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup .NET 8
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
+
+      # Las DLLs de Revit no estan en este runner.  Para que CI pueda compilar,
+      # creamos stubs vacios temporales — esto solo valida que el codigo C# no
+      # tiene errores de sintaxis; NO valida que use la Revit API correctamente.
+      #
+      # TODO Sprint 0+: sustituir por restauracion de Nice3point.Revit.Api.RevitAPI
+      # via NuGet, o configurar un runner self-hosted con Revit 2025 instalado.
+      - name: Create dummy RevitAPI references
+        shell: pwsh
+        run: |
+          $stubDir = "$env:USERPROFILE\RevitStubs\2025"
+          New-Item -ItemType Directory -Force -Path $stubDir | Out-Null
+          # Crea dos DLLs vacias (suficientes para compile-time linking en este sprint).
+          # En sprints posteriores las cambiamos por las reales.
+          Set-Content -Path "$stubDir\RevitAPI.dll" -Value "" -NoNewline
+          Set-Content -Path "$stubDir\RevitAPIUI.dll" -Value "" -NoNewline
+          echo "RevitInstallDir=$stubDir\" | Out-File -FilePath $env:GITHUB_ENV -Append -Encoding utf8
+        # Comentado porque los stubs vacios no pasan compile-time. Mantenemos
+        # el step como referencia para cuando se complete el pipeline.
+        if: false
+
+      - name: Build solution (Revit 2025)
+        shell: pwsh
+        run: |
+          dotnet build e3gbimtools.sln `
+            -c Release `
+            /p:RevitVersion=2025 `
+            /p:RevitInstallDir="C:\Program Files\Autodesk\Revit 2025\" `
+            --nologo `
+            -v minimal
+        # Este step actualmente fallara en GitHub Actions porque el runner
+        # NO tiene Revit 2025 instalado.  Es esperado en Sprint 0.  La forma
+        # correcta de habilitarlo es:
+        #   a) Cambiar a un self-hosted runner con Revit 2025 instalado, o
+        #   b) Restaurar los paquetes Nice3point.Revit.Api.* via NuGet, o
+        #   c) Subir los RevitAPI.dll a un blob privado y descargarlos aqui.
+        continue-on-error: true
+
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v4
+        if: success() || failure()
+        with:
+          name: e3gbimtools-revit2025
+          path: |
+            src/e3gbimtools.DiTools/bin/Release/**/e3gbimtools.DiTools.dll
+            src/e3gbimtools.DiTools/bin/Release/**/e3gbimtools.DiTools.pdb
+            src/e3gbimtools.DiTools.Core/bin/Release/**/e3gbimtools.DiTools.Core.dll
+            src/e3gbimtools.DiTools.UI/bin/Release/**/e3gbimtools.DiTools.UI.dll
+            build/manifests/e3gbimtools.DiTools.2025.addin
+          if-no-files-found: warn
+
+  # Job stub para multi-version.  Se activa cuando tengamos resolucion
+  # NuGet o self-hosted runner con todas las versiones.
+  build-multi:
+    name: Build (todas las versiones)
+    runs-on: windows-latest
+    if: false   # deshabilitado hasta tener Revit references multi-version
+    strategy:
+      fail-fast: false
+      matrix:
+        revit: [2022, 2023, 2024, 2025, 2026, 2027]
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build for Revit ${{ matrix.revit }}
+        run: echo "Build for Revit ${{ matrix.revit }} - pending implementation"

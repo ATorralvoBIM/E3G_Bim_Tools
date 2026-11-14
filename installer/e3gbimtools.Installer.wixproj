@@ -1,0 +1,44 @@
+<Project Sdk="WixToolset.Sdk/5.0.0">
+
+  <!--
+       Instalador .msi (WiX Toolset v4/v5) para e3gbimtools.
+
+       Sprint 0: solo soporta Revit 2025.  Cuando esten disponibles
+       las builds para 2022 / 2023 / 2024 / 2026 / 2027 se anaden
+       mas Features.
+
+       Build local desde Visual Studio:
+         click derecho sobre el proyecto -> Compilar.
+
+       Build local desde PowerShell:
+         dotnet build installer/e3gbimtools.Installer.wixproj -c Release
+
+       Requiere WiX Toolset 5 instalado en la maquina (una sola vez):
+         dotnet tool install -g wix
+  -->
+
+  <PropertyGroup>
+    <OutputName>e3gbimtools-setup</OutputName>
+    <OutputType>Package</OutputType>
+    <InstallerPlatform>x64</InstallerPlatform>
+    <SuppressIces>ICE61;ICE91</SuppressIces>
+    <DefineConstants>PerUserInstall=true</DefineConstants>
+  </PropertyGroup>
+
+  <!-- Referenciamos los proyectos que componen el add-in para que
+       la build del instalador dispare primero su compilacion. -->
+  <ItemGroup>
+    <ProjectReference Include="..\src\e3gbimtools.DiTools\e3gbimtools.DiTools.csproj">
+      <Name>e3gbimtools.DiTools</Name>
+      <Private>True</Private>
+      <DoNotHarvest>true</DoNotHarvest>
+      <RefProjectOutputGroups>Binaries;Symbols</RefProjectOutputGroups>
+      <RefTargetDir>INSTALLFOLDER</RefTargetDir>
+    </ProjectReference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="WixToolset.UI.wixext" Version="5.0.0" />
+  </ItemGroup>
+
+</Project>

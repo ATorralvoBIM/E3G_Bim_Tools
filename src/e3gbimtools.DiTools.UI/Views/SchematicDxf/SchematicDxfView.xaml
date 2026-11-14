@@ -1,0 +1,241 @@
+<UserControl x:Class="E3G.BimTools.DiTools.UI.Views.SchematicDxf.SchematicDxfView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:leg="clr-namespace:E3G.BimTools.DiTools.UI.Views.DxfLegend"
+             Background="{DynamicResource E3g.Brush.Background}">
+
+    <!-- Esquema de principio desde DXF (pagina «Climatizacion» del panel MEP,
+         2026-11-12).  Pensada para el panel estrecho: tarjetas apiladas y
+         acciones fijas abajo.  Reutiliza el lector y el generador de «Leyenda
+         desde DXF» y dibuja el esquema vectorizado en una vista de dibujo. -->
+    <UserControl.Resources>
+        <Style TargetType="TextBlock" x:Key="Hint">
+            <Setter Property="Margin" Value="0,4,0,0" />
+            <Setter Property="FontSize" Value="10.5" />
+            <Setter Property="TextWrapping" Value="Wrap" />
+            <Setter Property="Foreground" Value="{DynamicResource E3g.Brush.TextMuted}" />
+        </Style>
+        <Style TargetType="TextBlock" x:Key="Titulo">
+            <Setter Property="FontSize" Value="12" />
+            <Setter Property="FontWeight" Value="SemiBold" />
+            <Setter Property="Margin" Value="0,0,0,6" />
+            <Setter Property="Foreground" Value="{DynamicResource E3g.Brush.Text}" />
+        </Style>
+        <Style TargetType="TextBlock" x:Key="Rotulo">
+            <Setter Property="FontSize" Value="10" />
+            <Setter Property="Margin" Value="0,0,0,2" />
+            <Setter Property="Foreground" Value="{DynamicResource E3g.Brush.TextMuted}" />
+        </Style>
+        <Style TargetType="Border" x:Key="Tarjeta">
+            <Setter Property="Background" Value="{DynamicResource E3g.Brush.Card}" />
+            <Setter Property="BorderBrush" Value="{DynamicResource E3g.Brush.Border}" />
+            <Setter Property="BorderThickness" Value="1" />
+            <Setter Property="CornerRadius" Value="8" />
+            <Setter Property="Padding" Value="10,8" />
+            <Setter Property="Margin" Value="0,0,0,8" />
+        </Style>
+    </UserControl.Resources>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+            <StackPanel x:Name="Cuerpo" Margin="10">
+
+                <StackPanel x:Name="Cabecera" Margin="2,0,0,10">
+                    <TextBlock Text="Climatización" FontSize="18" FontWeight="SemiBold"
+                               Foreground="{DynamicResource E3g.Brush.Text}" />
+                    <TextBlock Text="Esquema de principio de tuberías desde DXF / DWG" FontSize="11" TextWrapping="Wrap"
+                               Foreground="{DynamicResource E3g.Brush.TextMuted}" />
+                </StackPanel>
+
+                <!-- Archivo -->
+                <Border Style="{StaticResource Tarjeta}">
+                    <StackPanel>
+                        <TextBlock Text="Esquema DXF / DWG" Style="{StaticResource Titulo}" />
+                        <DockPanel>
+                            <Button DockPanel.Dock="Right" Content="Examinar…" Margin="6,0,0,0" Padding="12,4"
+                                    Click="OnBrowseClick" />
+                            <TextBox x:Name="FileBox" IsReadOnly="True" VerticalContentAlignment="Center" FontSize="11" />
+                        </DockPanel>
+                        <TextBlock x:Name="FileInfo" Style="{StaticResource Hint}"
+                                   Text="Elige el esquema de principio dibujado en AutoCAD (espacio modelo)." />
+                    </StackPanel>
+                </Border>
+
+                <!-- Interpretacion y estilo -->
+                <Border Style="{StaticResource Tarjeta}">
+                    <StackPanel>
+                        <TextBlock Text="Interpretación" Style="{StaticResource Titulo}" />
+                        <TextBlock x:Name="ProfileInfo" Style="{StaticResource Hint}" Margin="0,0,0,6"
+                                   Text="Perfiles disponibles: LG LATS. Daikin y Mitsubishi, próximamente." />
+                        <RadioButton x:Name="E3gRadio" Content="Estilo E3G (reinterpretado y compactado)" IsChecked="True"
+                                     FontSize="11" Checked="OnModeChanged" />
+                        <RadioButton x:Name="RawRadio" Content="Copia fiel del DXF" Margin="0,4,0,0" FontSize="11"
+                                     Checked="OnModeChanged" />
+                        <Grid x:Name="E3gOptions" Margin="0,8,0,0">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="1.3*" />
+                                <ColumnDefinition Width="6" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                            </Grid.RowDefinitions>
+                            <StackPanel Grid.ColumnSpan="3">
+                                <TextBlock Text="Formato del plano" Style="{StaticResource Rotulo}" />
+                                <ComboBox x:Name="FormatCombo" FontSize="11" DisplayMemberPath="Label"
+                                          SelectionChanged="OnStyleChanged"
+                                          ToolTip="El esquema se compacta y, si hace falta, se reduce para caber en el área útil del formato (sin márgenes ni cajetín)." />
+                            </StackPanel>
+                            <StackPanel Grid.Row="1" Grid.ColumnSpan="3" Margin="0,8,0,0">
+                                <TextBlock Text="Tipo de texto (del proyecto)" Style="{StaticResource Rotulo}" />
+                                <ComboBox x:Name="TextTypeCombo" FontSize="11" DisplayMemberPath="DisplayName"
+                                          SelectionChanged="OnStyleChanged"
+                                          ToolTip="Se usa tal cual: no se crean tipos nuevos ni se cambia su tamaño. Para la negrita y el título se buscan tipos de la misma fuente." />
+                                <TextBlock x:Name="TextTypeInfo" Style="{StaticResource Hint}" />
+                            </StackPanel>
+                            <CheckBox x:Name="CompactCheck" Grid.Row="2" Grid.ColumnSpan="3" Margin="0,8,0,0" FontSize="11"
+                                      IsChecked="True" Content="Compactar distancias (acortar tramos vacíos)"
+                                      Checked="OnStyleChanged" Unchecked="OnStyleChanged" />
+                        </Grid>
+                        <TextBlock x:Name="ComposeInfo" Style="{StaticResource Hint}" />
+                    </StackPanel>
+                </Border>
+
+                <!-- Vista previa -->
+                <Border Style="{StaticResource Tarjeta}">
+                    <StackPanel>
+                        <DockPanel Margin="0,0,0,6">
+                            <Button DockPanel.Dock="Right" Content="Encuadrar" Padding="8,1" FontSize="10.5"
+                                    Click="OnFitClick" />
+                            <TextBlock Text="Vista previa" Style="{StaticResource Titulo}" Margin="0" VerticalAlignment="Center" />
+                        </DockPanel>
+                        <Border Height="280" BorderThickness="1" CornerRadius="4"
+                                BorderBrush="{DynamicResource E3g.Brush.Border}" Background="White">
+                            <Grid>
+                                <leg:LegendPreview x:Name="Preview" />
+                                <TextBlock x:Name="PreviewHint" HorizontalAlignment="Center" VerticalAlignment="Center"
+                                           Foreground="{DynamicResource E3g.Brush.TextMuted}" FontStyle="Italic" FontSize="11"
+                                           IsHitTestVisible="False" Text="Carga un archivo para verlo aquí." />
+                            </Grid>
+                        </Border>
+                        <TextBlock Style="{StaticResource Hint}" Text="Rueda: zoom · Arrastrar: desplazar · Doble clic: encuadrar." />
+                    </StackPanel>
+                </Border>
+
+                <!-- Destino -->
+                <Border Style="{StaticResource Tarjeta}">
+                    <StackPanel>
+                        <TextBlock Text="Vista de destino" Style="{StaticResource Titulo}" />
+                        <RadioButton x:Name="NewViewRadio" Content="Nueva vista de dibujo" IsChecked="True" FontSize="11"
+                                     Checked="OnTargetModeChanged" />
+                        <TextBox x:Name="NewViewNameBox" Margin="18,4,0,0" FontSize="11"
+                                 ToolTip="Nombre de la vista de dibujo que se creará (si existe se añade un número)." />
+                        <RadioButton x:Name="ExistingViewRadio" Content="Vista existente" Margin="0,8,0,0" FontSize="11"
+                                     Checked="OnTargetModeChanged" />
+                        <ComboBox x:Name="ViewCombo" Margin="18,4,0,0" FontSize="11" DisplayMemberPath="DisplayName"
+                                  IsEnabled="False" SelectionChanged="OnOptionChanged" />
+
+                        <Grid Margin="0,10,0,0">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="6" />
+                                <ColumnDefinition Width="1.4*" />
+                            </Grid.ColumnDefinitions>
+                            <StackPanel>
+                                <TextBlock Text="Escala 1:" Style="{StaticResource Rotulo}" />
+                                <TextBox x:Name="ScaleBox" FontSize="11" Text="50" TextChanged="OnOptionChanged" />
+                            </StackPanel>
+                            <StackPanel Grid.Column="2">
+                                <TextBlock Text="Unidades del DXF" Style="{StaticResource Rotulo}" />
+                                <ComboBox x:Name="UnitsCombo" FontSize="11" DisplayMemberPath="Label"
+                                          ToolTip="Solo en copia fiel: en estilo E3G las medidas salen en mm de papel."
+                                          SelectionChanged="OnOptionChanged" />
+                            </StackPanel>
+                        </Grid>
+                        <TextBlock x:Name="PaperInfo" Style="{StaticResource Hint}" />
+                    </StackPanel>
+                </Border>
+
+                <!-- Capas -->
+                <Border Style="{StaticResource Tarjeta}">
+                    <StackPanel>
+                        <DockPanel Margin="0,0,0,4">
+                            <Button DockPanel.Dock="Right" Content="Ninguna" Padding="8,1" FontSize="10.5" Margin="4,0,0,0"
+                                    Click="OnNoLayersClick" />
+                            <Button DockPanel.Dock="Right" Content="Todas" Padding="8,1" FontSize="10.5"
+                                    Click="OnAllLayersClick" />
+                            <TextBlock Text="Capas" Style="{StaticResource Titulo}" Margin="0" VerticalAlignment="Center" />
+                        </DockPanel>
+                        <ListBox x:Name="LayersList" MaxHeight="220" BorderThickness="1"
+                                 BorderBrush="{DynamicResource E3g.Brush.BorderSubtle}" Background="Transparent"
+                                 ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+                            <ListBox.ItemTemplate>
+                                <DataTemplate>
+                                    <StackPanel Orientation="Horizontal">
+                                        <CheckBox IsChecked="{Binding IsIncluded, UpdateSourceTrigger=PropertyChanged}"
+                                                  VerticalAlignment="Center" Checked="OnLayerToggled" Unchecked="OnLayerToggled" />
+                                        <Border Width="11" Height="11" Margin="6,0,6,0" CornerRadius="2"
+                                                Background="{Binding Swatch}" BorderBrush="#40000000" BorderThickness="1"
+                                                VerticalAlignment="Center" />
+                                        <TextBlock Text="{Binding Name}" FontSize="11" VerticalAlignment="Center" />
+                                        <TextBlock Text="{Binding CountText}" FontSize="10.5" Margin="6,0,0,0" VerticalAlignment="Center"
+                                                   Foreground="{DynamicResource E3g.Brush.TextMuted}" />
+                                    </StackPanel>
+                                </DataTemplate>
+                            </ListBox.ItemTemplate>
+                        </ListBox>
+                        <TextBlock Style="{StaticResource Hint}"
+                                   Text="Se desmarcan solas las capas apagadas, las que no se imprimen y los marcos de ventana gráfica." />
+                    </StackPanel>
+                </Border>
+
+                <!-- Opciones -->
+                <Border Style="{StaticResource Tarjeta}">
+                    <StackPanel>
+                        <TextBlock Text="Opciones" Style="{StaticResource Titulo}" />
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="1.4*" />
+                                <ColumnDefinition Width="6" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <StackPanel>
+                                <TextBlock Text="Prefijo de estilos" Style="{StaticResource Rotulo}" />
+                                <TextBox x:Name="PrefixBox" FontSize="11" Text="E3G_ESQ" />
+                            </StackPanel>
+                            <StackPanel Grid.Column="2">
+                                <TextBlock Text="Ancho de texto" Style="{StaticResource Rotulo}" />
+                                <TextBox x:Name="WidthFactorBox" FontSize="11" Text="0,98"
+                                         ToolTip="Factor de anchura de los tipos de texto (0,98 iguala la longitud de las líneas de AutoCAD con Calibri)." />
+                            </StackPanel>
+                        </Grid>
+                        <CheckBox x:Name="ClearViewCheck" Margin="0,8,0,0" FontSize="11"
+                                  Content="Vaciar la vista existente antes" />
+                        <CheckBox x:Name="MoveToOriginCheck" Margin="0,6,0,0" FontSize="11" IsChecked="True"
+                                  Content="Llevar la esquina superior izquierda al origen" />
+                    </StackPanel>
+                </Border>
+            </StackPanel>
+        </ScrollViewer>
+
+        <!-- Estado y acciones: siempre a la vista. -->
+        <Border Grid.Row="1" Padding="10,8" BorderThickness="0,1,0,0"
+                BorderBrush="{DynamicResource E3g.Brush.Border}" Background="{DynamicResource E3g.Brush.Card}">
+            <StackPanel>
+                <TextBlock x:Name="StatusText" FontSize="11" TextWrapping="Wrap"
+                           Foreground="{DynamicResource E3g.Brush.TextMuted}"
+                           Text="Carga un esquema para empezar." />
+                <Button x:Name="GenerateButton" Content="Generar esquema" Padding="6,5" Margin="0,8,0,0"
+                        IsEnabled="False" Click="OnGenerateClick" Style="{DynamicResource E3g.Style.Button.Primary}"
+                        ToolTip="Dibuja el esquema con líneas, rellenos y textos nativos de Revit en la vista elegida." />
+            </StackPanel>
+        </Border>
+    </Grid>
+</UserControl>

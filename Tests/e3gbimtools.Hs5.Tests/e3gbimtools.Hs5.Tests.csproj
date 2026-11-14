@@ -1,0 +1,33 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!-- Tests del motor de tablas CTE DB-HS5. Hs5Tablas.cs no depende de la API
+       de Revit, así que se enlaza directamente desde src/e3gbimtools.Saneamiento
+       sin referenciarlo (el monolito de la raíz se retiró el 2026-11-07). -->
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <IsPackable>false</IsPackable>
+    <Nullable>disable</Nullable>
+    <RootNamespace>E3G.Saneamiento.Hs5.Tests</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Include="..\..\src\e3gbimtools.Saneamiento\Hs5\Hs5Tablas.cs" Link="Hs5\Hs5Tablas.cs" />
+    <Compile Include="..\..\src\e3gbimtools.Saneamiento\Hs5\Hs5Topologia.cs" Link="Hs5\Hs5Topologia.cs" />
+    <Compile Include="..\..\src\e3gbimtools.Saneamiento\Hs5\Hs5Evaluador.cs" Link="Hs5\Hs5Evaluador.cs" />
+    <Compile Include="..\..\src\e3gbimtools.Saneamiento\Hs5\Hs5Config.cs" Link="Hs5\Hs5Config.cs" />
+    <Compile Include="..\..\src\e3gbimtools.Saneamiento\Hs5\Hs5Aparatos.cs" Link="Hs5\Hs5Aparatos.cs" />
+    <Compile Include="..\..\src\e3gbimtools.Saneamiento\Aislamiento\RiteAislamiento.cs" Link="Aislamiento\RiteAislamiento.cs" />
+    <Compile Include="..\..\src\e3gbimtools.Saneamiento\Aislamiento\DeteccionFluido.cs" Link="Aislamiento\DeteccionFluido.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.NET.Test.Sdk"    Version="17.10.0" />
+    <PackageReference Include="xunit"                     Version="2.9.0" />
+    <PackageReference Include="xunit.runner.visualstudio" Version="2.8.2">
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+  </ItemGroup>
+
+</Project>
